@@ -1,0 +1,25 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Quarters {
+	public class QuartersEditor : MonoBehaviour {
+
+		public InputField codeInput;
+
+		public void CancelTapped() {
+			Destroy(this.gameObject);
+		}
+
+
+
+
+		public void AuthorizeTapped() {
+
+			Quarters.Instance.AuthorizationCodeReceived(codeInput.text);
+
+		}
+
+	}
+}

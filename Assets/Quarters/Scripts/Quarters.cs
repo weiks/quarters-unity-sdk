@@ -10,6 +10,11 @@ namespace Quarters {
 	public class Quarters {
 
 		public static Quarters Instance;
+
+		public delegate void OnAuthorizationStartDelegate();
+		public static event OnAuthorizationStartDelegate OnAuthorizationStart;
+
+
 	
 		public const string QUARTERS_URL = "https://pocketfulofquarters.com";
 		public const string API_URL = "https://api.dev.pocketfulofquarters.com/v1/";
@@ -20,6 +25,32 @@ namespace Quarters {
 		public Quarters() {
 			Instance = this;
 		}
+
+
+
+
+		public void Authorize() {
+
+			Debug.Log("Quarters: Authorize");
+
+			if (OnAuthorizationStart != null) OnAuthorizationStart();
+
+			if (Application.isEditor) {
+				GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
+			}
+			else {
+				Debug.LogError("Missing implementation here");
+			}
+				
+		}
+
+
+
+		public void AuthorizationCodeReceived(string code) {
+
+			Debug.Log("Quarters: Authorization code: " + code);
+		}
+
 
 
 
