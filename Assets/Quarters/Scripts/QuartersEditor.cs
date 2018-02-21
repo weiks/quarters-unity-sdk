@@ -18,6 +18,7 @@ namespace Quarters {
 		public void AuthorizeTapped() {
 
 			Quarters.Instance.AuthorizationCodeReceived(codeInput.text);
+			Destroy(this.gameObject);
 
 		}
 

@@ -13,14 +13,19 @@ namespace Quarters {
 
 		void Awake() {
 			DontDestroyOnLoad(this.gameObject);
-
-//			StartCoroutine(Quarters.Instance.GetRefreshToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ4WEJTT2RNb0FIZGxDNTI1QXpXc1RZQzRyRnQyIiwicmFuZG9tIjoiMWY3ZDEyMTAtMTFhMC0xMWU4LTk0YjgtOTFhMmJhN2M1OTcyIiwiYXBwSWQiOiJqUjNHaktIVVV0Um9JNmU4RFBzMiIsInRva2VuVHlwZSI6Imp3dDphdXRob3JpemF0aW9uX2NvZGUiLCJpYXQiOjE1MTg2MjQwMDUsImV4cCI6MTUxODYyNDA2NX0.uW1kJ7-yfmFH61CQX83HW32vHTsf74LxIcHWS6_0xM0"));
+			Init();
 		}
 
 
 
-		public static void Init() {
-			instance = new Quarters();
+		public void Init() {
+
+			GameObject quarters = new GameObject("Quarters");
+			quarters.transform.SetParent(this.transform);
+			DontDestroyOnLoad(quarters.gameObject);
+
+			instance = quarters.AddComponent<Quarters>();
+			instance.Init();
 		}
 
 
