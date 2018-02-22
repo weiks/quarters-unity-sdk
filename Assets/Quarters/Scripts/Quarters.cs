@@ -90,16 +90,13 @@ namespace Quarters {
 
 
 
-
-
-
 		public void Init() {
 			Instance = this;
 		}
 
 
 
-
+        #region high level calls
 
 		public void Authorize(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
 
@@ -113,16 +110,16 @@ namespace Quarters {
 			if (Application.isEditor) {
 				//spawn editor UI
 				GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
+                AuthorizeEditor();
 			}
 			else {
 				Debug.LogError("Missing implementation here");
+                //direct to the browser
+                AuthorizeExternal();
 			}
 
-
-			//direct to the browser
-			AuthorizeExternal();
-
 		}
+
 
 
 		public void GetUserDetails(OnUserDetailsSucessDelegate OnSuccessDelegate, OnUserDetailsFailedDelegate OnFailedDelegate) {
@@ -132,16 +129,23 @@ namespace Quarters {
 			StartCoroutine(GetUserDetails());
 		}
 
+        #endregion
 
 
 
 
+        private void AuthorizeEditor() {
+          
+            string url =  "https://dev.pocketfulofquarters.com/access-token?app_id=" + QuartersInit.APP_ID + "&app_key=" + QuartersInit.APP_KEY;
+            Application.OpenURL(url);
 
+        }
 
 
 
 		private void AuthorizeExternal() {
 
+            //temporary redirect
 			string redirectUrl = "www.google.com";
 
 			string url = "https://dev.pocketfulofquarters.com/oauth/authorize?response_type=code&client_id=" + QuartersInit.APP_ID + "&redirect_uri=" + redirectUrl + "&inline=true";
@@ -152,18 +156,37 @@ namespace Quarters {
 
 
 
+
+
 		public void AuthorizationCodeReceived(string code) {
 
 			Debug.Log("Quarters: Authorization code: " + code);
-			if (DoesHaveRefreshToken) {
-				//get access code right away
-			}
-			else {
-				StartCoroutine(GetRefreshToken(code));
-			}
-
+			StartCoroutine(GetRefreshToken(code));
+		
 		}
 
+
+        //used only in Editor
+        public void RefreshTokenReceived(string token) {
+
+            Debug.Log("Quarters: Refresh token: " + token);
+            RefreshToken = token;
+
+            StartCoroutine(GetAccessToken(delegate {
+                
+                OnAuthorizationSuccess();
+
+            }, delegate (string error) {
+                
+                OnAuthorizationFailed(error);
+
+            }));
+
+        }
+
+
+
+        #region api calls
 
 
 		public IEnumerator GetRefreshToken(string code) {
@@ -207,22 +230,98 @@ namespace Quarters {
 
 
 
-		private IEnumerator GetUserDetails() {
+        public IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
+
+            if (string.IsNullOrEmpty(RefreshToken)) {
+                Debug.LogError("Missing refresh token");
+                yield break;
+            }
+
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Content-Type", "application/json;charset=UTF-8");
+
+
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("grant_type", "refresh_token");
+            data.Add("refresh_token", RefreshToken);
+            data.Add("client_id", QuartersInit.APP_ID);
+            data.Add("client_secret", QuartersInit.APP_KEY);
+
+            string dataJson = JsonConvert.SerializeObject(data);
+            Debug.Log(dataJson);
+            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+
+
+            WWW www = new WWW(API_URL + "oauth/token", dataBytes, headers);
+            Debug.Log(www.url);
+
+            while (!www.isDone) yield return new WaitForEndOfFrame();
+
+            if (!string.IsNullOrEmpty(www.error)) {
+               
+                string error = www.error;
+                Debug.LogError(error);
+
+                if (error == Error.Unauthorized) {
+                    //dispose invalid refresh token
+                    RefreshToken = "";
+                }
+
+                OnFailed(www.error);
+
+                
+            }
+            else {
+                Debug.Log(www.text);
+
+                Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
+                //RefreshToken = responseData["refresh_token"];
+                AccessToken = responseData["access_token"];
+
+                OnSuccess();
+                
+            }
+        }
+
+
+
+
+
+        private IEnumerator GetUserDetails(bool isRetry = false) {
+
+            //AccessToken = "a";
 
 			Dictionary<string, string> headers = new Dictionary<string, string>();
-			headers.Add("Authorization", "Bearer " + accessToken);
+            headers.Add("Authorization", "Bearer " + AccessToken);
 
 			WWW www = new WWW(API_URL + "me", null, headers);
 			yield return www;
-			Debug.Log(www.error);
 
 			while (!www.isDone) yield return new WaitForEndOfFrame();
 
 			if (!string.IsNullOrEmpty(www.error)) {
 				Debug.LogError(www.error);
-				OnUserDetailsFailed(www.error);
+
+                if (!isRetry) {
+                    Debug.Log("Retrying");
+                    //refresh access code and retry this call in case access code expired
+                    StartCoroutine(GetAccessToken(delegate {
+
+                        StartCoroutine(GetUserDetails(true));
+
+                    }, delegate (string error) {
+
+                        OnUserDetailsFailed(www.error);
+
+                    }));
+                } 
+                else {
+                    OnUserDetailsFailed(www.error);
+                }
 			}
 			else {
+
 
 				Debug.Log(www.text);
 				CurrentUser = JsonConvert.DeserializeObject<User>(www.text);
@@ -233,6 +332,8 @@ namespace Quarters {
 		}
 
 
+
+        #endregion
 
 
 

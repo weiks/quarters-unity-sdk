@@ -17,7 +17,7 @@ namespace Quarters {
 
 		public void AuthorizeTapped() {
 
-			Quarters.Instance.AuthorizationCodeReceived(codeInput.text);
+            Quarters.Instance.RefreshTokenReceived(codeInput.text);
 			Destroy(this.gameObject);
 
 		}
