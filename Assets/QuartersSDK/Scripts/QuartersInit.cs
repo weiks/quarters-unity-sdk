@@ -5,14 +5,17 @@ using UnityEngine;
 namespace Quarters {
 	public class QuartersInit : MonoBehaviour {
 
-		public static string APP_ID = "jR3GjKHUUtRoI6e8DPs2";
-		public static string APP_KEY = "wfecoqrtyqrvne6l85dd07xvdkwtz06";
+        public static QuartersInit Instance;
+        public string APP_ID = "";
+        public string APP_KEY = "";
+
 
 		private static Quarters instance;
 
 
 		void Awake() {
 			DontDestroyOnLoad(this.gameObject);
+            Instance = this;
 			Init();
 		}
 

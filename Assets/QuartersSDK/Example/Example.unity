@@ -917,7 +917,7 @@ GameObject:
   - component: {fileID: 820603865}
   - component: {fileID: 820603868}
   m_Layer: 5
-  m_Name: ButtonAuthorize
+  m_Name: Authorize
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1149,7 +1149,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.07352942, g: 0.07352942, b: 0.07352942, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -1263,10 +1263,10 @@ RectTransform:
   m_Father: {fileID: 710456847}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -382.6, y: 192}
-  m_SizeDelta: {x: 258.8, y: 384}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -337.2, y: 0}
+  m_SizeDelta: {x: -674.3, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1624018582
 MonoBehaviour:

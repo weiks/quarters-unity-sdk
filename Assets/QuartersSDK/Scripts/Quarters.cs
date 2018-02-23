@@ -136,7 +136,7 @@ namespace Quarters {
 
         private void AuthorizeEditor() {
           
-            string url =  "https://dev.pocketfulofquarters.com/access-token?app_id=" + QuartersInit.APP_ID + "&app_key=" + QuartersInit.APP_KEY;
+            string url =  "https://dev.pocketfulofquarters.com/access-token?app_id=" + QuartersInit.Instance.APP_ID + "&app_key=" + QuartersInit.Instance.APP_KEY;
             Application.OpenURL(url);
 
         }
@@ -148,7 +148,7 @@ namespace Quarters {
             //temporary redirect
 			string redirectUrl = "www.google.com";
 
-			string url = "https://dev.pocketfulofquarters.com/oauth/authorize?response_type=code&client_id=" + QuartersInit.APP_ID + "&redirect_uri=" + redirectUrl + "&inline=true";
+            string url = "https://dev.pocketfulofquarters.com/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + redirectUrl + "&inline=true";
 			Application.OpenURL(url);
 
 		}
@@ -198,8 +198,8 @@ namespace Quarters {
 			Dictionary<string, string> data = new Dictionary<string, string>();
 			data.Add("grant_type", "authorization_code");
 			data.Add("code", code);
-			data.Add("client_id", QuartersInit.APP_ID);
-			data.Add("client_secret", QuartersInit.APP_KEY);
+            data.Add("client_id", QuartersInit.Instance.APP_ID);
+            data.Add("client_secret", QuartersInit.Instance.APP_KEY);
 
 			string dataJson = JsonConvert.SerializeObject(data);
 			Debug.Log(dataJson);
@@ -245,8 +245,8 @@ namespace Quarters {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add("grant_type", "refresh_token");
             data.Add("refresh_token", RefreshToken);
-            data.Add("client_id", QuartersInit.APP_ID);
-            data.Add("client_secret", QuartersInit.APP_KEY);
+            data.Add("client_id", QuartersInit.Instance.APP_ID);
+            data.Add("client_secret", QuartersInit.Instance.APP_KEY);
 
             string dataJson = JsonConvert.SerializeObject(data);
             Debug.Log(dataJson);
