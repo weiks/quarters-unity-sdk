@@ -113,7 +113,6 @@ namespace Quarters {
                 AuthorizeEditor();
 			}
 			else {
-				Debug.LogError("Missing implementation here");
                 //direct to the browser
                 AuthorizeExternal();
 			}
@@ -146,7 +145,7 @@ namespace Quarters {
 		private void AuthorizeExternal() {
 
             //temporary redirect
-			string redirectUrl = "www.google.com";
+            string redirectUrl = "quarters://";
 
             string url = "https://dev.pocketfulofquarters.com/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + redirectUrl + "&inline=true";
 			Application.OpenURL(url);

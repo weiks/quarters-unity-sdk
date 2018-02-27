@@ -16,11 +16,8 @@ public class QuartersInitEditor : Editor {
         EditorGUILayout.LabelField("Copy your App ID and App Key from your Quarters dashboard:");
         EditorGUILayout.Space();
 
-        quartersInit.APP_ID = EditorGUILayout.TextField("App ID:", quartersInit.APP_ID);
-        quartersInit.APP_KEY = EditorGUILayout.TextField("App key:", quartersInit.APP_KEY);
-      
+        base.DrawDefaultInspector();
 
-        //TODO Add missing fields inspector warrnings
 
 
     }

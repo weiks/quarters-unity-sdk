@@ -1149,7 +1149,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.07352942, g: 0.07352942, b: 0.07352942, a: 0}
+  m_BackGroundColor: {r: 0.18382353, g: 0.18382353, b: 0.18382353, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -1216,6 +1216,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9509de02ddf495b920686930ec4278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  APP_ID: jR3GjKHUUtRoI6e8DPs2
+  APP_KEY: wfecoqrtyqrvne6l85dd07xvdkwtz06
 --- !u!4 &1568195778
 Transform:
   m_ObjectHideFlags: 0
