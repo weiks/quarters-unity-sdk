@@ -5,6 +5,7 @@ using System;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 
 
 namespace Quarters {
@@ -30,6 +31,8 @@ namespace Quarters {
 
 		public const string QUARTERS_URL = "https://pocketfulofquarters.com";
 		public const string API_URL = "https://api.dev.pocketfulofquarters.com/v1/";
+
+        public const string URL_SCHEME = "quarters://";
 
 		private User currentUser = null;
 		public User CurrentUser {
@@ -144,10 +147,7 @@ namespace Quarters {
 
 		private void AuthorizeExternal() {
 
-            //temporary redirect
-            string redirectUrl = "quarters://";
-
-            string url = "https://dev.pocketfulofquarters.com/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + redirectUrl + "&inline=true";
+            string url = "https://dev.pocketfulofquarters.com/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
 			Application.OpenURL(url);
 
 		}
@@ -335,7 +335,47 @@ namespace Quarters {
         #endregion
 
 
+        #region Deep linking
 
+
+        void OnApplicationFocus( bool focusStatus ){
+            if (focusStatus) {
+                #if UNITY_ANDROID
+
+                string androidUrl = CustomUrlSchemeAndroid.GetLaunchedUrl(true);
+                CustomUrlSchemeAndroid.ClearSavedData();
+               
+                if (!string.IsNullOrEmpty(androidUrl)) {
+
+                    Debug.Log("Unity URL returned: " + androidUrl);
+
+                    //extract code from url param
+                    //TODO write proper URI parser for this
+                    string[] split = androidUrl.Split(new string[]{"code="}, StringSplitOptions.None);
+
+                    string code = split[1];
+
+
+
+                    AuthorizationCodeReceived(code);
+                }
+
+                #endif
+            }
+        }
+
+
+
+
+
+        #endregion
 
 	}
+
+
+
+
+
+
+
 }
