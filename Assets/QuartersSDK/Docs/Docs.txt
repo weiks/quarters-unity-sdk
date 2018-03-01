@@ -1,10 +1,13 @@
-Quarters Unity SDK - V0.1.0
+Quarters Unity SDK - V0.2.0
 
 Quarters SDK Unity integration:
 1. Create empty game object in first loaded scene
 2. Add QuartersInit component
 3. Create new Quarters App https://pocketfulofquarters.com/apps/new
 4. Copy your App ID and App key from Quarters dashboard to QuartersInit Unity Inspector
+
+
+
 
 Quarters SDK is now configured to use in your Unity Project.
 
@@ -18,6 +21,19 @@ RELEASE NOTES
 *************
 
 
+#####
+0.2.0
+- Added Android deep linking. Quarters SDK will now automatically handle URL schemes
+- Android support added for oauth calls outside the app
+- Basic Android Manifest added for handling linking, intents and permissions
+- Android support for Authorize call
+- Example - added simple on screen console
+
+
+#####
+
+
+#####
 0.1.0
 - Added simple authorization in editor
 - Refresh and access token are handled during Authorization
@@ -26,7 +42,15 @@ RELEASE NOTES
 
 
 Known issues:
-- QuartersInit App ID and App key arent serialised into Unity scene
+- QuartersInit App ID and App key arent serialised into Unity scene - fixed in 0.2.0
+
+#####
+
+
+
+
+
+
 
 
 

@@ -6,12 +6,6 @@
     android:installLocation="preferExternal"
     android:versionCode="1"
     android:versionName="1.0">
-    <supports-screens
-        android:smallScreens="true"
-        android:normalScreens="true"
-        android:largeScreens="true"
-        android:xlargeScreens="true"
-        android:anyDensity="true"/>
 
     <application
         android:theme="@style/UnityThemeSelector"
@@ -29,9 +23,8 @@
     </activity>
 
         
-         <activity android:name="org.westhill.customurlschemelauncher.CustomUrlSchemeLauncherActivity">
+     <activity android:name="org.westhill.customurlschemelauncher.CustomUrlSchemeLauncherActivity">
       <intent-filter>
-        <!-- *Set your custom scheme name (example url >> your.scheme.name://hostname?param1=999&param2=111 >> set is "your.scheme.name" ) -->
         <data android:scheme="quarters" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />

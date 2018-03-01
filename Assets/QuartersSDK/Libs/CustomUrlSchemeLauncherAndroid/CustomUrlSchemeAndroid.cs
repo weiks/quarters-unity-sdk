@@ -31,8 +31,6 @@ public static class CustomUrlSchemeAndroid
     /// </summary>
     public static string GetLaunchedUrl(bool clearDataAfterGet = true)
     {
-		Debug.Log("Get Launched URL");
-
         return GetPlayerPrefString(KEY_URL, clearDataAfterGet);
     }
 
