@@ -836,6 +836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   authorizedOnlyButtons:
   - {fileID: 747649683}
+  - {fileID: 622663560}
   debugConsole: {fileID: 1128978615}
 --- !u!114 &710456844
 MonoBehaviour:

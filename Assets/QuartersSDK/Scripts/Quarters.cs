@@ -23,10 +23,14 @@ namespace Quarters {
 		public OnAuthorizationFailedDelegate OnAuthorizationFailed;
 
 		public delegate void OnUserDetailsSucessDelegate(User user);
-		public OnUserDetailsSucessDelegate OnUserDetailsSucess;
 
 		public delegate void OnUserDetailsFailedDelegate(string error);
-		public OnUserDetailsFailedDelegate OnUserDetailsFailed;
+
+        public delegate void OnAccountsSuccessDelegate(List<User.Account> accounts);
+        public OnAccountsSuccessDelegate OnAccountsSuccess;
+
+        public delegate void OnAccountsFailedDelegate(string error);
+        public OnAccountsFailedDelegate OnAccountsFailed;
 
 
 		public const string QUARTERS_URL = "https://pocketfulofquarters.com";
@@ -125,10 +129,8 @@ namespace Quarters {
 
 
 		public void GetUserDetails(OnUserDetailsSucessDelegate OnSuccessDelegate, OnUserDetailsFailedDelegate OnFailedDelegate) {
-			this.OnUserDetailsSucess = OnSuccessDelegate;
-			this.OnUserDetailsFailed = OnFailedDelegate;
 
-			StartCoroutine(GetUserDetails());
+            StartCoroutine(GetUserDetailsCall(OnSuccessDelegate, OnFailedDelegate));
 		}
 
         #endregion
@@ -285,11 +287,7 @@ namespace Quarters {
 
 
 
-
-
-        private IEnumerator GetUserDetails(bool isRetry = false) {
-
-            //AccessToken = "a";
+        private IEnumerator GetUserDetailsCall(OnUserDetailsSucessDelegate OnSucess, OnUserDetailsFailedDelegate OnFailed, bool isRetry = false) {
 
 			Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Authorization", "Bearer " + AccessToken);
@@ -306,29 +304,76 @@ namespace Quarters {
                     Debug.Log("Retrying");
                     //refresh access code and retry this call in case access code expired
                     StartCoroutine(GetAccessToken(delegate {
-
-                        StartCoroutine(GetUserDetails(true));
+                       
+                        StartCoroutine(GetUserDetailsCall(OnSucess, OnFailed, true));
 
                     }, delegate (string error) {
-
-                        OnUserDetailsFailed(www.error);
-
+                        OnFailed(www.error);
                     }));
                 } 
                 else {
-                    OnUserDetailsFailed(www.error);
+                    OnFailed(www.error);
                 }
 			}
 			else {
 
-
 				Debug.Log(www.text);
 				CurrentUser = JsonConvert.DeserializeObject<User>(www.text);
-				OnUserDetailsSucess(CurrentUser);
-				
+                OnSucess(CurrentUser);
+			
 			}
-
 		}
+
+
+
+
+
+        //private IEnumerator GetAccounts(bool isRetry = false) {
+
+        //    // pull user details if dont exist
+        //    //if (CurrentUser == null) {
+        //    //    StartCoroutine(GetUserDetails());
+        //    //}
+
+
+
+        //    //Dictionary<string, string> headers = new Dictionary<string, string>();
+        //    //headers.Add("Authorization", "Bearer " + AccessToken);
+
+        //    //WWW www = new WWW(API_URL + "accounts", null, headers);
+        //    //yield return www;
+
+        //    //while (!www.isDone) yield return new WaitForEndOfFrame();
+
+        //    //if (!string.IsNullOrEmpty(www.error)) {
+        //    //    Debug.LogError(www.error);
+
+        //    //    if (!isRetry) {
+        //    //        Debug.Log("Retrying");
+        //    //        //refresh access code and retry this call in case access code expired
+        //    //        StartCoroutine(GetAccessToken(delegate {
+
+        //    //            StartCoroutine(GetUserDetails(true));
+
+        //    //        }, delegate (string error) {
+        //    //            OnUserDetailsFailed(www.error);
+        //    //        }));
+        //    //    } 
+        //    //    else {
+        //    //        OnUserDetailsFailed(www.error);
+        //    //    }
+        //    //}
+        //    //else {
+
+        //    //    Debug.Log(www.text);
+        //    //    CurrentUser = JsonConvert.DeserializeObject<User>(www.text);
+        //    //    OnUserDetailsSucess(CurrentUser);
+
+        //    //}
+
+        //}
+
+
 
 
 
