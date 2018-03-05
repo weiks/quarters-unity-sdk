@@ -23,14 +23,11 @@ namespace Quarters {
 		public OnAuthorizationFailedDelegate OnAuthorizationFailed;
 
 		public delegate void OnUserDetailsSucessDelegate(User user);
-
 		public delegate void OnUserDetailsFailedDelegate(string error);
 
         public delegate void OnAccountsSuccessDelegate(List<User.Account> accounts);
-        public OnAccountsSuccessDelegate OnAccountsSuccess;
-
         public delegate void OnAccountsFailedDelegate(string error);
-        public OnAccountsFailedDelegate OnAccountsFailed;
+
 
 
 		public const string QUARTERS_URL = "https://pocketfulofquarters.com";
@@ -129,9 +126,12 @@ namespace Quarters {
 
 
 		public void GetUserDetails(OnUserDetailsSucessDelegate OnSuccessDelegate, OnUserDetailsFailedDelegate OnFailedDelegate) {
-
             StartCoroutine(GetUserDetailsCall(OnSuccessDelegate, OnFailedDelegate));
 		}
+
+        public void GetAccounts(OnAccountsSuccessDelegate OnSuccessDelegate, OnAccountsFailedDelegate OnFailedDelegate) {
+            StartCoroutine(GetAccountsCall(OnSuccessDelegate, OnFailedDelegate));
+        }
 
         #endregion
 
@@ -328,50 +328,72 @@ namespace Quarters {
 
 
 
-        //private IEnumerator GetAccounts(bool isRetry = false) {
+        private IEnumerator GetAccountsCall(OnAccountsSuccessDelegate OnSucess, OnAccountsFailedDelegate OnFailed, bool isRetry = false) {
 
-        //    // pull user details if dont exist
-        //    //if (CurrentUser == null) {
-        //    //    StartCoroutine(GetUserDetails());
-        //    //}
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Authorization", "Bearer " + AccessToken);
 
 
+            //pull user details if dont exist
+            if (CurrentUser == null) {
+                bool isUserDetailsDone = false;
+                string getUserDetailsError = "";
 
-        //    //Dictionary<string, string> headers = new Dictionary<string, string>();
-        //    //headers.Add("Authorization", "Bearer " + AccessToken);
+                StartCoroutine(GetUserDetailsCall(delegate (User user) {
+                    //user details loaded
+                    isUserDetailsDone = true;
 
-        //    //WWW www = new WWW(API_URL + "accounts", null, headers);
-        //    //yield return www;
+                }, delegate (string userDetailsError) {
+                    OnFailed("Getting user details failed: " + userDetailsError);
+                    isUserDetailsDone = true;
+ 
+                }));
 
-        //    //while (!www.isDone) yield return new WaitForEndOfFrame();
+                while (!isUserDetailsDone) yield return new WaitForEndOfFrame();
 
-        //    //if (!string.IsNullOrEmpty(www.error)) {
-        //    //    Debug.LogError(www.error);
+                //error occured, break out of coroutine
+                if (!string.IsNullOrEmpty(getUserDetailsError)) yield break;
+            }
 
-        //    //    if (!isRetry) {
-        //    //        Debug.Log("Retrying");
-        //    //        //refresh access code and retry this call in case access code expired
-        //    //        StartCoroutine(GetAccessToken(delegate {
 
-        //    //            StartCoroutine(GetUserDetails(true));
 
-        //    //        }, delegate (string error) {
-        //    //            OnUserDetailsFailed(www.error);
-        //    //        }));
-        //    //    } 
-        //    //    else {
-        //    //        OnUserDetailsFailed(www.error);
-        //    //    }
-        //    //}
-        //    //else {
+            WWW www = new WWW(API_URL + "accounts", null, headers);
+            yield return www;
 
-        //    //    Debug.Log(www.text);
-        //    //    CurrentUser = JsonConvert.DeserializeObject<User>(www.text);
-        //    //    OnUserDetailsSucess(CurrentUser);
+            while (!www.isDone) yield return new WaitForEndOfFrame();
 
-        //    //}
+            if (!string.IsNullOrEmpty(www.error)) {
+                Debug.LogError(www.error);
 
-        //}
+                if (!isRetry) {
+                    Debug.Log("Retrying");
+                    //refresh access code and retry this call in case access code expired
+                    StartCoroutine(GetAccessToken(delegate {
+
+                        StartCoroutine(GetAccountsCall(OnSucess, OnFailed, true));
+
+                    }, delegate (string error) {
+                        OnFailed(www.error);
+                    }));
+                } 
+                else {
+                    OnFailed(www.error);
+                }
+            }
+            else {
+
+                Debug.Log(www.text);
+                CurrentUser.accounts = JsonConvert.DeserializeObject<List<User.Account>>(www.text);
+                OnSucess(CurrentUser.accounts);
+
+            }
+        }
+
+
+
+
+
+
 
 
 

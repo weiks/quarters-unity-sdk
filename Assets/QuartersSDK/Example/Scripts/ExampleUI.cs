@@ -70,5 +70,28 @@ namespace Quarters {
 		}
 
 
+
+
+        public void ButtonGetAccountsTapped() {
+            
+            Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
+
+                debugConsole.text += "\n";
+                debugConsole.text += "\nOnGetAccountsSuccess";
+                debugConsole.text += JsonConvert.SerializeObject(accounts, Formatting.Indented);
+
+                RefreshButtons();
+                
+            }, delegate (string error) {
+
+                debugConsole.text += "\n";
+                debugConsole.text += "\nOnGetAccountsFailed: " + error;
+
+                RefreshButtons();
+
+            });
+        }
+
+
 	}
 }
