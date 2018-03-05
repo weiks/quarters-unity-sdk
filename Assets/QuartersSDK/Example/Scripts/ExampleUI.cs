@@ -93,5 +93,28 @@ namespace Quarters {
         }
 
 
+
+
+        public void ButtonGetFirstAccountBalanceTapped() {
+
+            Quarters.Instance.GetAccountBalance(delegate (User.Account.Balance balance) {
+
+                debugConsole.text += "\n";
+                debugConsole.text += "\nOnGetAccountBalanceSuccess";
+                debugConsole.text += JsonConvert.SerializeObject(balance, Formatting.Indented);
+
+                RefreshButtons();
+
+            }, delegate (string error) {
+
+                debugConsole.text += "\n";
+                debugConsole.text += "\nOnGetAccountBalanceFailed: " + error;
+
+                RefreshButtons();
+
+            });
+        }
+
+
 	}
 }

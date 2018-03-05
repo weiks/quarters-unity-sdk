@@ -28,6 +28,9 @@ namespace Quarters {
         public delegate void OnAccountsSuccessDelegate(List<User.Account> accounts);
         public delegate void OnAccountsFailedDelegate(string error);
 
+        public delegate void OnAccountBalanceSuccessDelegate(User.Account.Balance balance);
+        public delegate void OnAccountBalanceFailedDelegate(string error);
+
 
 
 		public const string QUARTERS_URL = "https://pocketfulofquarters.com";
@@ -132,6 +135,11 @@ namespace Quarters {
         public void GetAccounts(OnAccountsSuccessDelegate OnSuccessDelegate, OnAccountsFailedDelegate OnFailedDelegate) {
             StartCoroutine(GetAccountsCall(OnSuccessDelegate, OnFailedDelegate));
         }
+
+        public void GetAccountBalance(OnAccountBalanceSuccessDelegate OnSuccessDelegate, OnAccountBalanceFailedDelegate OnFailedDelegate) {
+            StartCoroutine(GetAccountBalanceCall(OnSuccessDelegate, OnFailedDelegate));
+        }
+
 
         #endregion
 
@@ -346,7 +354,7 @@ namespace Quarters {
                 }, delegate (string userDetailsError) {
                     OnFailed("Getting user details failed: " + userDetailsError);
                     isUserDetailsDone = true;
- 
+                    getUserDetailsError = userDetailsError;
                 }));
 
                 while (!isUserDetailsDone) yield return new WaitForEndOfFrame();
@@ -354,8 +362,6 @@ namespace Quarters {
                 //error occured, break out of coroutine
                 if (!string.IsNullOrEmpty(getUserDetailsError)) yield break;
             }
-
-
 
             WWW www = new WWW(API_URL + "accounts", null, headers);
             yield return www;
@@ -388,6 +394,73 @@ namespace Quarters {
 
             }
         }
+
+
+
+
+        private IEnumerator GetAccountBalanceCall(OnAccountBalanceSuccessDelegate OnSucess, OnAccountBalanceFailedDelegate OnFailed, bool isRetry = false) {
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Authorization", "Bearer " + AccessToken);
+
+            bool areAccountsDone = false;
+            string accountsLoadingError = "";
+
+            if (CurrentUser == null || CurrentUser.accounts == null) {
+                Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
+                    //accounts loaded
+                    areAccountsDone = true;
+
+                }, delegate (string getAccountsError) {
+                    OnFailed("Getting user accounts failed: " + getAccountsError);
+                    areAccountsDone = true;
+                    accountsLoadingError = getAccountsError;
+                });
+
+                while (!areAccountsDone) yield return new WaitForEndOfFrame();
+
+                //error occured, break out of coroutine
+                if (!string.IsNullOrEmpty(accountsLoadingError)) yield break;
+            }
+
+            User.Account account = CurrentUser.accounts[0];
+
+            string url = API_URL + "accounts/" + account.address + "/balance";
+
+            WWW www = new WWW(url, null, headers);
+            yield return www;
+
+            while (!www.isDone) yield return new WaitForEndOfFrame();
+
+            if (!string.IsNullOrEmpty(www.error)) {
+                Debug.LogError(www.error);
+
+                if (!isRetry) {
+                    Debug.Log("Retrying");
+                    //refresh access code and retry this call in case access code expired
+                    StartCoroutine(GetAccessToken(delegate {
+
+                        StartCoroutine(GetAccountBalanceCall(OnSucess, OnFailed, true));
+
+                    }, delegate (string error) {
+                        OnFailed(www.error);
+                    }));
+                } 
+                else {
+                    OnFailed(www.error);
+                }
+            }
+            else {
+
+                Debug.Log(www.text);
+                account.balance = JsonConvert.DeserializeObject<User.Account.Balance>(www.text);
+                OnSucess(account.balance);
+
+            }
+
+        }
+
+
 
 
 

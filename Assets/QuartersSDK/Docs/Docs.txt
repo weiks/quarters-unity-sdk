@@ -20,6 +20,17 @@ Have a look at the Example scene for eample use of Quarters SDK
 RELEASE NOTES
 *************
 
+General notes:
+- only one account is currently supported by API, hence Get Accounts and Account balance calls are working with first returned account
+
+
+
+#####
+0.3.0
+- 
+
+
+#####
 
 #####
 0.2.0

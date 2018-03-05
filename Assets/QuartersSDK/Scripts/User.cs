@@ -19,6 +19,14 @@ namespace Quarters {
             public string address = "";
             public DateTime created = DateTime.MinValue;
             public string userId = "";
+            public Balance balance = null;
+
+            public class Balance {
+                public long quarters = 0;
+                public string formattedQuarters = "";
+                public long ethers = 0;
+                public string formattedEthers = "";
+            }
 
         }
 
