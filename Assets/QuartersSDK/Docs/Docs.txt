@@ -22,12 +22,19 @@ RELEASE NOTES
 
 General notes:
 - only one account is currently supported by API, hence Get Accounts and Account balance calls are working with first returned account
+- a  post authorization calls can be called at any time. There is no need for calling API in any order. Example: After Authorizing session
+GetAccountBalance can be called right away without need of calling GetUserDetail -> GetAccounts -> GetAccountBalance.
 
 
 
 #####
 0.3.0
-- 
+- added seamless support for GetAccounts call
+- added seamless support for GetAcdountBalance
+- basic one way support for Transfering quarters added
+
+known issues:
+- no deep linking with parameters support for TransferRequest. Doe to lack of API support for this functionality. Its coming in next release.
 
 
 #####

@@ -7,20 +7,26 @@ using Newtonsoft.Json;
 namespace Quarters {
 	public class ExampleUI : MonoBehaviour {
 
-		public List<Button> authorizedOnlyButtons = new List<Button>();
+        public List<CanvasGroup> authorizedOnlyUI = new List<CanvasGroup>();
         public Text debugConsole;
+
+        public InputField tokensInput;
+        public InputField descriptionInput;
 
 
 		void Awake() {
-			authorizedOnlyButtons.ForEach(b => b.interactable = false);
+			authorizedOnlyUI.ForEach(b => b.interactable = false);
 
             debugConsole.text = "Quarters SDK example";
             debugConsole.text += "\nUnauthorized";
 		}
 
 
-		private void RefreshButtons() {
-			authorizedOnlyButtons.ForEach(b => b.interactable = Quarters.Instance.IsAuthorized);
+        private void RefreshUI() {
+			authorizedOnlyUI.ForEach(b => b.interactable = Quarters.Instance.IsAuthorized);
+            if (Quarters.Instance.IsAuthorized) {
+                authorizedOnlyUI.ForEach(b => b.alpha = 1f);
+            }
 		}
 
 
@@ -56,7 +62,7 @@ namespace Quarters {
             debugConsole.text += "\n";
             debugConsole.text += "\nOnAuthorizationSuccess";
 
-			RefreshButtons();
+			RefreshUI();
 		}
 
 
@@ -66,7 +72,7 @@ namespace Quarters {
             debugConsole.text += "\n";
             debugConsole.text += "\nOnAuthorizationFailed: " + error;
 
-			RefreshButtons();
+			RefreshUI();
 		}
 
 
@@ -80,14 +86,14 @@ namespace Quarters {
                 debugConsole.text += "\nOnGetAccountsSuccess";
                 debugConsole.text += JsonConvert.SerializeObject(accounts, Formatting.Indented);
 
-                RefreshButtons();
+                RefreshUI();
                 
             }, delegate (string error) {
 
                 debugConsole.text += "\n";
                 debugConsole.text += "\nOnGetAccountsFailed: " + error;
 
-                RefreshButtons();
+                RefreshUI();
 
             });
         }
@@ -103,17 +109,37 @@ namespace Quarters {
                 debugConsole.text += "\nOnGetAccountBalanceSuccess";
                 debugConsole.text += JsonConvert.SerializeObject(balance, Formatting.Indented);
 
-                RefreshButtons();
+                RefreshUI();
 
             }, delegate (string error) {
 
                 debugConsole.text += "\n";
                 debugConsole.text += "\nOnGetAccountBalanceFailed: " + error;
 
-                RefreshButtons();
+                RefreshUI();
 
             });
         }
+
+
+        public void ButtonTransferTapped() {
+
+            TransferAPIRequest request = new TransferAPIRequest(int.Parse(tokensInput.text), descriptionInput.text, delegate (string transactionHash) {
+            
+                debugConsole.text += "\n";
+                debugConsole.text += "\nTransfer successful, transactionHash: " + transactionHash;
+
+            }, delegate (string error) {
+            
+                debugConsole.text += "\n";
+                debugConsole.text += "\nOnTransactionFailed: " + error;
+            });
+
+            Quarters.Instance.CreateTransfer(request);
+
+
+        }
+
 
 
 	}

@@ -32,6 +32,14 @@ namespace Quarters {
         public delegate void OnAccountBalanceFailedDelegate(string error);
 
 
+        //Transfer
+        public delegate void OnTransferRequestSuccessDelegate(TransferRequest transferRequest);
+        public delegate void OnTransferRequestFailedDelegate(string error);
+
+        public delegate void OnTransferSuccessDelegate(string transactionHash);
+        public delegate void OnTransferFailedDelegate(string error);
+
+        public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
 
 		public const string QUARTERS_URL = "https://pocketfulofquarters.com";
 		public const string API_URL = "https://api.dev.pocketfulofquarters.com/v1/";
@@ -141,6 +149,13 @@ namespace Quarters {
         }
 
 
+
+        public void CreateTransfer(TransferAPIRequest request) {
+
+            StartCoroutine(CreateTransferRequestCall(request));
+        }
+
+
         #endregion
 
 
@@ -161,6 +176,7 @@ namespace Quarters {
 			Application.OpenURL(url);
 
 		}
+
 
 
 
@@ -463,11 +479,56 @@ namespace Quarters {
 
 
 
+        private IEnumerator CreateTransferRequestCall(TransferAPIRequest request) {
+
+            Debug.Log("CreateTransferRequestCall");
+            
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Authorization", "Bearer " + AccessToken);
+            headers.Add("Content-Type", "application/json;charset=UTF-8");
+
+            Debug.Log(AccessToken);
+
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("tokens", request.tokens);
+            if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
+            data.Add("app_id", QuartersInit.Instance.APP_ID);
 
 
+            string dataJson = JsonConvert.SerializeObject(data);
+            Debug.Log(dataJson);
+            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
+            WWW www = new WWW(API_URL + "requests", dataBytes, headers);
+            Debug.Log(www.url);
 
+            while (!www.isDone) yield return new WaitForEndOfFrame();
+
+            if (!string.IsNullOrEmpty(www.error)) {
+                Debug.LogError(www.error);
+
+                request.failedDelegate("Creating transfer failed: " + www.error);
+            }
+            else {
+                Debug.Log(www.text);
+
+                string response = www.text;
+                Debug.Log("Response: " + response);
+
+                TransferRequest transferRequest = new TransferRequest(response);
+
+                request.requestId = transferRequest.id;
+                currentTransferAPIRequests.Add(request);
+
+                //continue outh forward
+                string url = QUARTERS_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
+                Application.OpenURL(url);
+
+
+                //OnSucess(transferRequest);
+            }
+        }
 
 
 
@@ -489,15 +550,28 @@ namespace Quarters {
 
                     Debug.Log("Unity URL returned: " + androidUrl);
 
-                    //extract code from url param
-                    //TODO write proper URI parser for this
-                    string[] split = androidUrl.Split(new string[]{"code="}, StringSplitOptions.None);
+                    //blindcode as unable to test this without API update
+                    if (androidUrl.Contains("code=")) {
+                        //extract code from url param
+                        //TODO write proper URI parser for this
+                        string[] split = androidUrl.Split(new string[]{"code="}, StringSplitOptions.None);
 
-                    string code = split[1];
+                        string code = split[1];
+                        AuthorizationCodeReceived(code);
+                    }
+                    else if (androidUrl.Contains("request_id=")) {
 
+                        string[] split = androidUrl.Split(new string[]{"request_id="}, StringSplitOptions.None);
+                        string transferId = split[1];
 
-
-                    AuthorizationCodeReceived(code);
+                        //transfer request
+                        //get request from ongoing
+                        TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
+                        //call delegates
+                        //TODO once API support this feature call correct delegate based on redirect parameters
+                        //all requests are validated positivelly currently
+                        transferRequest.successDelegate("");
+                    }
                 }
 
                 #endif
