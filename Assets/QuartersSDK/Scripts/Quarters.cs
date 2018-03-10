@@ -522,7 +522,7 @@ namespace Quarters {
                 currentTransferAPIRequests.Add(request);
 
                 //continue outh forward
-                string url = QUARTERS_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
+                string url = QUARTERS_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=https://www.google.com";
                 Application.OpenURL(url);
 
 
@@ -550,14 +550,16 @@ namespace Quarters {
 
                     Debug.Log("Unity URL returned: " + androidUrl);
 
-                    //blindcode as unable to test this without API update
-                    if (androidUrl.Contains("code=")) {
-                        //extract code from url param
-                        //TODO write proper URI parser for this
-                        string[] split = androidUrl.Split(new string[]{"code="}, StringSplitOptions.None);
+                    Dictionary<string, string> urlParams = androidUrl.ParseURI();
 
-                        string code = split[1];
-                        AuthorizationCodeReceived(code);
+                    //blindcode as unable to test this without API update
+                    if (urlParams.ContainsKey("code")) {
+                        ////extract code from url param
+                        ////TODO write proper URI parser for this
+                        //string[] split = androidUrl.Split(new string[]{"code="}, StringSplitOptions.None);
+
+                        //string code = split[1];
+                        AuthorizationCodeReceived(urlParams["code"]);
                     }
                     else if (androidUrl.Contains("request_id=")) {
 

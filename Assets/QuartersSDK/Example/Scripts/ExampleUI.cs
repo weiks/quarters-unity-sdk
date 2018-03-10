@@ -22,7 +22,10 @@ namespace Quarters {
 		}
 
 
-        private void RefreshUI() {
+
+
+
+		private void RefreshUI() {
 			authorizedOnlyUI.ForEach(b => b.interactable = Quarters.Instance.IsAuthorized);
             if (Quarters.Instance.IsAuthorized) {
                 authorizedOnlyUI.ForEach(b => b.alpha = 1f);
