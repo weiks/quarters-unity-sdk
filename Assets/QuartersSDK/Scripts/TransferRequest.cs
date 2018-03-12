@@ -44,6 +44,7 @@ namespace Quarters {
         public string requestId = "";
         public int tokens = 0;
         public string description = "";
+        public string txId = "";
 
         public Quarters.OnTransferSuccessDelegate successDelegate;
         public Quarters.OnTransferFailedDelegate failedDelegate;

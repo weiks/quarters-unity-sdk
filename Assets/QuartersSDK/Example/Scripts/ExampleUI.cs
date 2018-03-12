@@ -131,12 +131,16 @@ namespace Quarters {
             
                 debugConsole.text += "\n";
                 debugConsole.text += "\nTransfer successful, transactionHash: " + transactionHash;
+                Debug.Log("Console: " + debugConsole.text);
 
             }, delegate (string error) {
             
                 debugConsole.text += "\n";
                 debugConsole.text += "\nOnTransactionFailed: " + error;
+                Debug.Log("Console: " + debugConsole.text);
             });
+
+
 
             Quarters.Instance.CreateTransfer(request);
 

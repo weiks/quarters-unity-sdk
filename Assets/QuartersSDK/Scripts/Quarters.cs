@@ -519,10 +519,11 @@ namespace Quarters {
                 TransferRequest transferRequest = new TransferRequest(response);
 
                 request.requestId = transferRequest.id;
+                Debug.Log("request id is: " + transferRequest.id);
                 currentTransferAPIRequests.Add(request);
 
                 //continue outh forward
-                string url = QUARTERS_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=https://www.google.com";
+                string url = QUARTERS_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
                 Application.OpenURL(url);
 
 
@@ -554,25 +555,40 @@ namespace Quarters {
 
                     //blindcode as unable to test this without API update
                     if (urlParams.ContainsKey("code")) {
-                        ////extract code from url param
-                        ////TODO write proper URI parser for this
-                        //string[] split = androidUrl.Split(new string[]{"code="}, StringSplitOptions.None);
-
                         //string code = split[1];
                         AuthorizationCodeReceived(urlParams["code"]);
                     }
-                    else if (androidUrl.Contains("request_id=")) {
+                    else if (androidUrl.Contains("requestId=")) {
 
-                        string[] split = androidUrl.Split(new string[]{"request_id="}, StringSplitOptions.None);
-                        string transferId = split[1];
+                        string transferId = urlParams["requestId"];
 
-                        //transfer request
+                        foreach (TransferAPIRequest r in currentTransferAPIRequests) {
+                            Debug.Log("Current requests id: " + r.requestId);
+                        }
+
                         //get request from ongoing
                         TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
-                        //call delegates
-                        //TODO once API support this feature call correct delegate based on redirect parameters
-                        //all requests are validated positivelly currently
-                        transferRequest.successDelegate("");
+                        if (transferRequest == null) {
+                            Debug.LogError("Transfer id is invalid: " + transferId);
+                            transferRequest.failedDelegate("Invalid transfer id: " + transferId);
+                        }
+
+                        if (urlParams.ContainsKey("error")) {
+                            //all requests are validated positivelly currently
+                            transferRequest.failedDelegate(urlParams["error"]);
+                        }
+                        else {
+
+                            transferRequest.txId = urlParams["txId"];
+                            Debug.Log("tx id:" + transferRequest.txId);
+
+                            transferRequest.successDelegate(transferRequest.txId);
+                        }
+
+                        currentTransferAPIRequests.Remove(transferRequest);
+                    }
+                    else {
+                        Debug.Log("NOT IMPLEMENTED URL: " + androidUrl);
                     }
                 }
 
