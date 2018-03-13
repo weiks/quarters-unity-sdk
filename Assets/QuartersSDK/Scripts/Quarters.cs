@@ -599,6 +599,20 @@ namespace Quarters {
 
 
 
+		#if UNITY_IOS
+
+		public void DeepLink (string url) {
+
+			Debug.Log("iOS deep link url: " + url);
+
+		}
+
+
+
+		#endif
+
+
+
 
         #endregion
 
