@@ -543,55 +543,7 @@ namespace Quarters {
         void OnApplicationFocus( bool focusStatus ){
             if (focusStatus) {
                 #if UNITY_ANDROID
-
-                string androidUrl = CustomUrlSchemeAndroid.GetLaunchedUrl(true);
-                CustomUrlSchemeAndroid.ClearSavedData();
-               
-                if (!string.IsNullOrEmpty(androidUrl)) {
-
-                    Debug.Log("Unity URL returned: " + androidUrl);
-
-                    Dictionary<string, string> urlParams = androidUrl.ParseURI();
-
-                    //blindcode as unable to test this without API update
-                    if (urlParams.ContainsKey("code")) {
-                        //string code = split[1];
-                        AuthorizationCodeReceived(urlParams["code"]);
-                    }
-                    else if (androidUrl.Contains("requestId=")) {
-
-                        string transferId = urlParams["requestId"];
-
-                        foreach (TransferAPIRequest r in currentTransferAPIRequests) {
-                            Debug.Log("Current requests id: " + r.requestId);
-                        }
-
-                        //get request from ongoing
-                        TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
-                        if (transferRequest == null) {
-                            Debug.LogError("Transfer id is invalid: " + transferId);
-                            transferRequest.failedDelegate("Invalid transfer id: " + transferId);
-                        }
-
-                        if (urlParams.ContainsKey("error")) {
-                            //all requests are validated positivelly currently
-                            transferRequest.failedDelegate(urlParams["error"]);
-                        }
-                        else {
-
-                            transferRequest.txId = urlParams["txId"];
-                            Debug.Log("tx id:" + transferRequest.txId);
-
-                            transferRequest.successDelegate(transferRequest.txId);
-                        }
-
-                        currentTransferAPIRequests.Remove(transferRequest);
-                    }
-                    else {
-                        Debug.Log("NOT IMPLEMENTED URL: " + androidUrl);
-                    }
-                }
-
+                ProcessDeepLink();
                 #endif
             }
         }
@@ -604,15 +556,76 @@ namespace Quarters {
 		public void DeepLink (string url) {
 
 			Debug.Log("iOS deep link url: " + url);
-
+            ProcessDeepLink(url);
 		}
 
 
 
 		#endif
 
+        private void ProcessDeepLink(string url = "") {
+
+            string linkUrl = url;
+
+            #if UNITY_ANDROID
+           
+            linkUrl = CustomUrlSchemeAndroid.GetLaunchedUrl(true);
+            CustomUrlSchemeAndroid.ClearSavedData();
+
+            #endif
 
 
+            #if UNITY_IOS
+                //there is no link override on iOS
+            #endif
+
+
+            if (!string.IsNullOrEmpty(linkUrl)) {
+
+                Debug.Log("Unity URL returned: " + linkUrl);
+
+                Dictionary<string, string> urlParams = linkUrl.ParseURI();
+
+                //blindcode as unable to test this without API update
+                if (urlParams.ContainsKey("code")) {
+                    //string code = split[1];
+                    AuthorizationCodeReceived(urlParams["code"]);
+                }
+                else if (linkUrl.Contains("requestId=")) {
+
+                    string transferId = urlParams["requestId"];
+
+                    foreach (TransferAPIRequest r in currentTransferAPIRequests) {
+                        Debug.Log("Current requests id: " + r.requestId);
+                    }
+
+                    //get request from ongoing
+                    TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
+                    if (transferRequest == null) {
+                        Debug.LogError("Transfer id is invalid: " + transferId);
+                        transferRequest.failedDelegate("Invalid transfer id: " + transferId);
+                    }
+
+                    if (urlParams.ContainsKey("error")) {
+                        //all requests are validated positivelly currently
+                        transferRequest.failedDelegate(urlParams["error"]);
+                    }
+                    else {
+
+                        transferRequest.txId = urlParams["txId"];
+                        Debug.Log("tx id:" + transferRequest.txId);
+
+                        transferRequest.successDelegate(transferRequest.txId);
+                    }
+
+                    currentTransferAPIRequests.Remove(transferRequest);
+                }
+                else {
+                    Debug.Log("NOT IMPLEMENTED URL: " + linkUrl);
+                }
+            }
+
+        }
 
         #endregion
 

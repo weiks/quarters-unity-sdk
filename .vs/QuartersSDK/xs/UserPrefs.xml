@@ -1,10 +1,9 @@
 ﻿<Properties StartupConfiguration="{973AEB65-1D6B-A18E-30D6-FC5E986F40DB}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Scripts/Quarters.cs">
     <Files>
-      <File FileName="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs" Line="27" Column="9" />
-      <File FileName="Assets/QuartersSDK/Scripts/TransferRequest.cs" Line="1" Column="1" />
-      <File FileName="Assets/QuartersSDK/Scripts/Util/URIParser.cs" Line="27" Column="68" />
-      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="567" Column="54" />
+      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="567" Column="26" />
+      <File FileName="Assets/QuartersSDK/Editor/UrlTypesPostProcessor.cs" Line="27" Column="30" />
+      <File FileName="Assets/QuartersSDK/Editor/Plist.cs" Line="34" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
