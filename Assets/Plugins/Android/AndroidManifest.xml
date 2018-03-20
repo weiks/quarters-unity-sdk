@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Set package name below. Use same package name from Player Settings. example package="com.quarters.example" -->
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.unity3d.player"
+
+    package="com.quarters.example"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="preferExternal"
     android:versionCode="1"
@@ -22,10 +25,11 @@
       </intent-filter>
     </activity>
 
-        
+
+    <!-- Set android:scheme name below. Use same package name from Player Settings. example package="com.quarters.example" -->
      <activity android:name="org.westhill.customurlschemelauncher.CustomUrlSchemeLauncherActivity">
       <intent-filter>
-        <data android:scheme="quarters" />
+        <data android:scheme="com.quarters.example" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
         <action android:name="android.intent.action.VIEW" />

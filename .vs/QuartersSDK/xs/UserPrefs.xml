@@ -1,9 +1,12 @@
 ﻿<Properties StartupConfiguration="{973AEB65-1D6B-A18E-30D6-FC5E986F40DB}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Scripts/Quarters.cs">
     <Files>
-      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="567" Column="26" />
-      <File FileName="Assets/QuartersSDK/Editor/UrlTypesPostProcessor.cs" Line="27" Column="30" />
-      <File FileName="Assets/QuartersSDK/Editor/Plist.cs" Line="34" Column="18" />
+      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="334" Column="34" />
+      <File FileName="Assets/QuartersSDK/Scripts/QuartersInit.cs" Line="31" Column="16" />
+      <File FileName="Assets/QuartersSDK/Editor/UrlTypesPostProcessor.cs" Line="31" Column="32" />
+      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="33" Column="68" />
+      <File FileName="Assets/QuartersSDK/Docs/Docs.txt" Line="35" Column="1" />
+      <File FileName="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs" Line="63" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

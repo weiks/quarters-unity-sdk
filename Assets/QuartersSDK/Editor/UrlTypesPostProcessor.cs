@@ -32,7 +32,7 @@ namespace AssemblyCSharpEditor
                 dict["CFBundleURLTypes"] = new List<object> {
                     new Dictionary<string,object> {
                         { "CFBundleURLName", PlayerSettings.iPhoneBundleIdentifier },
-                        { "CFBundleURLSchemes", new List<object> { "quarters" } }
+                        { "CFBundleURLSchemes", new List<object> { PlayerSettings.iPhoneBundleIdentifier } }
                     }
                 };
 

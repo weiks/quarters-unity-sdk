@@ -44,7 +44,20 @@ namespace Quarters {
 		public const string QUARTERS_URL = "https://pocketfulofquarters.com";
 		public const string API_URL = "https://api.dev.pocketfulofquarters.com/v1/";
 
-        public const string URL_SCHEME = "quarters://";
+        public string URL_SCHEME  {
+            get {
+                return Application.identifier + "://";
+            }
+        }
+
+
+        private Dictionary<string, string> AuthorizationHeader {
+            get { 
+                Dictionary<string, string> result = new Dictionary<string, string>();
+                result.Add("Content-Type", "application/json;charset=UTF-8");
+                return result;
+            }
+        }
 
 		private User currentUser = null;
 		public User CurrentUser {
@@ -216,10 +229,6 @@ namespace Quarters {
 
 		public IEnumerator GetRefreshToken(string code) {
 
-			Dictionary<string, string> headers = new Dictionary<string, string>();
-			headers.Add("Content-Type", "application/json;charset=UTF-8");
-
-
 			Dictionary<string, string> data = new Dictionary<string, string>();
 			data.Add("grant_type", "authorization_code");
 			data.Add("code", code);
@@ -231,7 +240,7 @@ namespace Quarters {
 			byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
-			WWW www = new WWW(API_URL + "oauth/token", dataBytes, headers);
+            WWW www = new WWW(API_URL + "oauth/token", dataBytes, AuthorizationHeader);
 			Debug.Log(www.url);
 
 			while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -261,12 +270,6 @@ namespace Quarters {
                 Debug.LogError("Missing refresh token");
                 yield break;
             }
-
-
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("Content-Type", "application/json;charset=UTF-8");
-
-
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add("grant_type", "refresh_token");
             data.Add("refresh_token", RefreshToken);
@@ -278,7 +281,7 @@ namespace Quarters {
             byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
-            WWW www = new WWW(API_URL + "oauth/token", dataBytes, headers);
+            WWW www = new WWW(API_URL + "oauth/token", dataBytes, AuthorizationHeader);
             Debug.Log(www.url);
 
             while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -313,10 +316,10 @@ namespace Quarters {
 
         private IEnumerator GetUserDetailsCall(OnUserDetailsSucessDelegate OnSucess, OnUserDetailsFailedDelegate OnFailed, bool isRetry = false) {
 
-			Dictionary<string, string> headers = new Dictionary<string, string>();
+            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
             headers.Add("Authorization", "Bearer " + AccessToken);
 
-			WWW www = new WWW(API_URL + "me", null, headers);
+            WWW www = new WWW(API_URL + "me", null, headers);
 			yield return www;
 
 			while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -354,9 +357,8 @@ namespace Quarters {
 
         private IEnumerator GetAccountsCall(OnAccountsSuccessDelegate OnSucess, OnAccountsFailedDelegate OnFailed, bool isRetry = false) {
 
-            Dictionary<string, string> headers = new Dictionary<string, string>();
+            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
             headers.Add("Authorization", "Bearer " + AccessToken);
-
 
             //pull user details if dont exist
             if (CurrentUser == null) {
@@ -416,9 +418,6 @@ namespace Quarters {
 
         private IEnumerator GetAccountBalanceCall(OnAccountBalanceSuccessDelegate OnSucess, OnAccountBalanceFailedDelegate OnFailed, bool isRetry = false) {
 
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("Authorization", "Bearer " + AccessToken);
-
             bool areAccountsDone = false;
             string accountsLoadingError = "";
 
@@ -443,7 +442,7 @@ namespace Quarters {
 
             string url = API_URL + "accounts/" + account.address + "/balance";
 
-            WWW www = new WWW(url, null, headers);
+            WWW www = new WWW(url, null, AuthorizationHeader);
             yield return www;
 
             while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -483,11 +482,9 @@ namespace Quarters {
 
             Debug.Log("CreateTransferRequestCall");
             
-            Dictionary<string, string> headers = new Dictionary<string, string>();
+            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
             headers.Add("Authorization", "Bearer " + AccessToken);
-            headers.Add("Content-Type", "application/json;charset=UTF-8");
 
-            Debug.Log(AccessToken);
 
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("tokens", request.tokens);

@@ -1,11 +1,13 @@
-Quarters Unity SDK - V0.2.0
+Quarters Unity SDK - V0.5.0
 
 Quarters SDK Unity integration:
 1. Create empty game object in first loaded scene
 2. Add QuartersInit component
 3. Create new Quarters App https://pocketfulofquarters.com/apps/new
 4. Copy your App ID and App key from Quarters dashboard to QuartersInit Unity Inspector
-
+5. Setup deep linking depending on used platform:
+    5.1 Android: In Plugins/AndroidManifest.xml swap your package name, instead of "com.quarters.example" enter your real package name from Player Settings. (this need to be done in two places in AndroidManifest)
+    5.2 iOS: this is handled by post process, no additional steps are needed on iOS 
 
 
 
@@ -25,6 +27,14 @@ General notes:
 - a  post authorization calls can be called at any time. There is no need for calling API in any order. Example: After Authorizing session
 GetAccountBalance can be called right away without need of calling GetUserDetail -> GetAccounts -> GetAccountBalance.
 
+
+
+#####
+0.5.0
+- Deep linking is now dynamic. Multiple apps using Quarters SDK are now supported on single Android or iOS device
+
+
+#####
 
 
 #####
