@@ -1,21 +1,102 @@
 Quarters Unity SDK - V0.5.0
 
-Quarters SDK Unity integration:
-1. Create empty game object in first loaded scene
-2. Add QuartersInit component
-3. Create new Quarters App https://pocketfulofquarters.com/apps/new
-4. Copy your App ID and App key from Quarters dashboard to QuartersInit Unity Inspector
-5. Setup deep linking depending on used platform:
-    5.1 Android: In Plugins/AndroidManifest.xml swap your package name, instead of "com.quarters.example" enter your real package name from Player Settings. (this need to be done in two places in AndroidManifest)
-    5.2 iOS: this is handled by post process, no additional steps are needed on iOS 
+
+
+###############################
+
+Supported platforms:
+iOS
+Android
+
+Configuration
+Follow Getting Started guide to create your Quarter App.
+https://weiks.github.io/quarters-docs/getting-started/
+
+
+Unity integration
+Import Quarters SDK from Unity Asset Store
+Add QuartersSDK/Prefab/QuartersInit.prefab to your first scene
+Copy your APP_ID and APP_KEY to QuartersInit inspector 
 
 
 
-Quarters SDK is now configured to use in your Unity Project.
+Platform specific setup
 
--------
+iOS
+No platform specific setup is needed for iOS. Deep linking setup is handled automatically by a post process
 
-Have a look at the Example scene for eample use of Quarters SDK
+Android
+Quarters Unity SDK requires Android manifest changes to enable deep linking on Android platform.
+
+Assets/Plugins/AndroidManifest.xml swap your package name, instead of "com.quarters.example" enter your real package name from Player Settings. (this need to be done in two places in AndroidManifest)
+
+If your project contain Android Manifest already, manual manifest will be required.
+
+
+
+#################################
+
+
+Authorization
+----
+Before you can use Quarters API you must authorise users session.
+
+
+Example:
+
+using Quarters;
+
+Quarters.Instance.Authorize(OnAuthorizationSuccess, OnAuthorizationFailed);
+
+ public void OnAuthorizationSuccess() {
+	Debug.Log("OnAuthorizationSuccess"); }   public void OnAuthorizationFailed(string error) { 	Debug.LogError("OnAuthorizationFailed: " + error);  } 
+Quarters is using OAuth in external browser. This means your user will be sent outside the app for OAuth in the browser. After successful or failed authorisation user is seamlessly deep linked back to the app.
+
+
+Get User Details
+----
+Get user details can be only called after successful authorization. Success delegate returns User object with basic user details.
+
+
+Example:
+
+Quarters.Instance.GetUserDetails(delegate(User user) { 	Debug.Log("User loaded");  } , delegate (string error) { 	Debug.LogError("Cannot load the user details: " + error);  } );  
+
+
+Get accounts
+----
+Get account can be only called after successful authorization. On success delegate will be called with a list of user accounts. (Note: only one user account is currently supported by the API)
+
+
+Example:
+----
+Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) { 
+//success                  }, delegate (string error) { 
+//failed  });
+Get Account Balance
+----
+Get account balance can be only called after successful authorization. On success delegate is fired with User.Account.Balance object
+
+
+Example:
+
+Quarters.Instance.GetAccountBalance(delegate (User.Account.Balance balance) {  }, delegate (string error) {   }); 
+
+
+Transfer
+----
+Transfer request can be only called after successful authorization. This call allows to charge user quarters that will be transferred to your Quarters app. Transfer request is done through external browser, similar to Authorize call. On Success transaction hash is returned. Please note it can take up to 3 minutes for your transfer to appear.
+
+
+Example:
+
+TransferAPIRequest request = new TransferAPIRequest(int.Parse(tokensInput.text), descriptionInput.text, delegate (string transactionHash) {             
+//success  }, delegate (string error) {
+
+//failed              }); 
+//start transfer Quarters.Instance.CreateTransfer(request);  
+
+ 
 
 
 *************
