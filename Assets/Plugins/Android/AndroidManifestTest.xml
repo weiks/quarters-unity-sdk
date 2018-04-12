@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--AUTO GENERATED MANIFEST FILE FROM AndroidManifestGenerator. DONT MODIFY HERE.-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.quarters.exampletest" android:versionCode="1" android:versionName="1.0">
+  <application>
+    <activity android:name="org.westhill.customurlschemelauncher.CustomUrlSchemeLauncherActivity">
+      <intent-filter>
+        <data android:scheme="com.quarters.exampletest" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <action android:name="android.intent.action.VIEW" />
+      </intent-filter>
+    </activity>
+  </application>
+</manifest>

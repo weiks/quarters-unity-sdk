@@ -39,6 +39,12 @@ namespace AssemblyCSharpEditor
                 // write plist
                 Plist.writeXml(dict, plistPath);
             }
+
+			else if (buildTarget == BuildTarget.Android) {
+
+				Debug.Log("Android post process");
+
+			}
         }
 
 

@@ -186,6 +186,7 @@ namespace Quarters {
 		private void AuthorizeExternal() {
 
             string url = "https://dev.pocketfulofquarters.com/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
+			Debug.Log(url);
 			Application.OpenURL(url);
 
 		}

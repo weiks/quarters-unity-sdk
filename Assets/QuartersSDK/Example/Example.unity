@@ -2935,12 +2935,12 @@ Prefab:
     - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
         type: 2}
       propertyPath: APP_ID
-      value: 
+      value: wfecoqrtyqrvne6l85dd07xvdkwtz06
       objectReference: {fileID: 0}
     - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
         type: 2}
       propertyPath: APP_KEY
-      value: 
+      value: xk9q9fdxhbu65lyplqhwqe29klduvtoj9izi0g4wgrdy56b1ddle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fda49cb785be4592a669bda56f10447, type: 2}

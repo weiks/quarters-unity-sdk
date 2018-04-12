@@ -4,7 +4,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="com.quarters.example"
+    package="com.quarters.exampleTest"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="preferExternal"
     android:versionCode="1"
@@ -29,7 +29,7 @@
     <!-- Set android:scheme name below. Use same package name from Player Settings. example package="com.quarters.example" -->
      <activity android:name="org.westhill.customurlschemelauncher.CustomUrlSchemeLauncherActivity">
       <intent-filter>
-        <data android:scheme="com.quarters.example" />
+        <data android:scheme="com.quarters.exampleTest" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
         <action android:name="android.intent.action.VIEW" />
