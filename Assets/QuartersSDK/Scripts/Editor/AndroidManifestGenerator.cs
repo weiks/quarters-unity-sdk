@@ -6,7 +6,7 @@ using System.Xml;
 public class AndroidManifestGenerator  {
 
 
-	static string path = Application.dataPath + "/Plugins/Android/AndroidManifestTest.xml";
+	static string path = Application.dataPath + "/Plugins/Android/AndroidManifest.xml";
 
 		
 
@@ -14,6 +14,7 @@ public class AndroidManifestGenerator  {
 	private static void GenerateManifest() {
 		Debug.Log("Generating Quaters Android Manifest at path: " + path);
 		SaveManifest(Application.identifier.ToLower(), path);
+		UnityEditor.AssetDatabase.Refresh();
 	}
 
 
@@ -23,7 +24,6 @@ public class AndroidManifestGenerator  {
 	
 	public static void SaveManifest (string _packageName, string _versionCode, string _versionName, string _path)
 	{
-//			return;
 
 		// Settings
 		XmlWriterSettings _settings 	= new XmlWriterSettings();
@@ -56,10 +56,46 @@ public class AndroidManifestGenerator  {
 						WriteApplicationProperties(_xmlWriter);
 					}
 
+
+					//main launcher activity
+					_xmlWriter.WriteStartElement("activity");
+					{
+						_xmlWriter.WriteAttributeString("android:name", "com.unity3d.player.UnityPlayerNativeActivity");
+
+						_xmlWriter.WriteStartElement("meta-data");
+						_xmlWriter.WriteAttributeString("android:name", "android.app.lib_name");
+						_xmlWriter.WriteAttributeString("android:value", "unity");
+						_xmlWriter.WriteEndElement();
+
+						_xmlWriter.WriteStartElement("meta-data");
+						_xmlWriter.WriteAttributeString("android:name", "unityplayer.ForwardNativeEventsToDalvik");
+						_xmlWriter.WriteAttributeString("android:value", "true");
+						_xmlWriter.WriteEndElement();
+
+						//intent filter
+						_xmlWriter.WriteStartElement("intent-filter");
+						{
+
+							_xmlWriter.WriteStartElement("action");
+							_xmlWriter.WriteAttributeString("android:name", "android.intent.action.MAIN");
+							_xmlWriter.WriteEndElement();
+
+							_xmlWriter.WriteStartElement("category");
+							_xmlWriter.WriteAttributeString("android:name", "android.intent.category.LAUNCHER");
+							_xmlWriter.WriteEndElement();
+
+
+						}
+						_xmlWriter.WriteEndElement();
+
+
+
+					}
+					_xmlWriter.WriteEndElement();
 					
 
 
-						//deep link
+						//Quarters deep linking activity
 						_xmlWriter.WriteStartElement("activity");
 						{
 							_xmlWriter.WriteAttributeString("android:name", "org.westhill.customurlschemelauncher.CustomUrlSchemeLauncherActivity");
@@ -102,6 +138,7 @@ public class AndroidManifestGenerator  {
 			}
 			_xmlWriter.WriteEndDocument();
 		}
+
 	}
 
 
@@ -195,34 +232,6 @@ public class AndroidManifestGenerator  {
 		_xmlWriter.WriteEndElement();
 	}
 	
-//		protected void WriteUsesPermission (XmlWriter _xmlWriter, string _name, Feature[] _features = null, string _comment = null)
-//		{
-//			if (_comment != null)
-//				_xmlWriter.WriteComment(_comment);
-//			
-//			_xmlWriter.WriteStartElement("uses-permission");
-//			{
-//				_xmlWriter.WriteAttributeString("android:name", 			_name);
-//			}
-//			_xmlWriter.WriteEndElement();
-//			
-//			if (_features != null)
-//			{
-//				int				_count		= _features.Length;
-//				
-//				for (int _iter = 0; _iter < _count; _iter++)
-//				{
-//					Feature		_curFeature	= _features[_iter];
-//					
-//					_xmlWriter.WriteStartElement("uses-feature");
-//					{
-//						_xmlWriter.WriteAttributeString("android:name", 	_curFeature.Name);
-//						_xmlWriter.WriteAttributeString("android:required", _curFeature.Required ? "true" : "false");
-//					}
-//					_xmlWriter.WriteEndElement();
-//				}
-//			}
-//		}
-	
+
 
 }

@@ -42,7 +42,7 @@ namespace AssemblyCSharpEditor
 
 			else if (buildTarget == BuildTarget.Android) {
 
-				Debug.Log("Android post process");
+//				Debug.Log("Android post process");
 
 			}
         }

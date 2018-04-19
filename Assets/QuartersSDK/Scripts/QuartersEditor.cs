@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Quarters {
+namespace QuartersSDK {
 	public class QuartersEditor : MonoBehaviour {
 
 		public InputField codeInput;

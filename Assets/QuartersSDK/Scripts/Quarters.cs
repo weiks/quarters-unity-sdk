@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 
 
-namespace Quarters {
+namespace QuartersSDK {
 	public class Quarters : MonoBehaviour {
 
 		public static Quarters Instance;

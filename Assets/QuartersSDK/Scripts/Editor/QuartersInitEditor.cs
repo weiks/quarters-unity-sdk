@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Quarters;
+using QuartersSDK;
 
 [CustomEditor(typeof(QuartersInit))]
 public class QuartersInitEditor : Editor {

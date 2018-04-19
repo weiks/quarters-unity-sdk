@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Quarters {
+namespace QuartersSDK {
 	public class QuartersInit : MonoBehaviour {
 
         public static QuartersInit Instance;
@@ -22,6 +22,10 @@ namespace Quarters {
 
 
 		public void Init() {
+
+			if (string.IsNullOrEmpty(APP_ID)) Debug.LogError("Quarters App Id is empty");
+			if (string.IsNullOrEmpty(APP_KEY)) Debug.LogError("Quarters App key is empty");
+
 
 			GameObject quarters = new GameObject("Quarters");
 			quarters.transform.SetParent(this.transform);

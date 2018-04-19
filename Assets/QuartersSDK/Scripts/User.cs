@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace Quarters {
+namespace QuartersSDK {
 	public class User {
 
 		public string id = "";

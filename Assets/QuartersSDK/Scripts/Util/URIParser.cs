@@ -2,38 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class URIParser {
 
-    public static Dictionary<string, string> ParseURI(this string escapedURL) {
+namespace QuartersSDK {
+	public static class URIParser {
 
-        Dictionary<string, string> result = new Dictionary<string, string>();
+	    public static Dictionary<string, string> ParseURI(this string escapedURL) {
 
-        //unescape URL
-        string unescapedURL = WWW.UnEscapeURL(escapedURL);
+	        Dictionary<string, string> result = new Dictionary<string, string>();
 
-        if (unescapedURL.Contains("?")) {
-            string[] urlParamsSplit = unescapedURL.Split('?');
+	        //unescape URL
+	        string unescapedURL = WWW.UnEscapeURL(escapedURL);
 
-            if (urlParamsSplit.Length > 1) {
+	        if (unescapedURL.Contains("?")) {
+	            string[] urlParamsSplit = unescapedURL.Split('?');
 
-                if (unescapedURL.Contains("&")) {
-                    string[] parameters = urlParamsSplit[1].Split('&');
+	            if (urlParamsSplit.Length > 1) {
 
-                    foreach (string p in parameters) {
+	                if (unescapedURL.Contains("&")) {
+	                    string[] parameters = urlParamsSplit[1].Split('&');
 
-                        string[] pSplit = p.Split('=');
+	                    foreach (string p in parameters) {
 
-                        KeyValuePair<string, string> parameter = new KeyValuePair<string, string>(pSplit[0], pSplit[1]);
-                        result.Add(parameter.Key, parameter.Value);
-                    }
+	                        string[] pSplit = p.Split('=');
 
-                }
-            }
-        }
+	                        KeyValuePair<string, string> parameter = new KeyValuePair<string, string>(pSplit[0], pSplit[1]);
+	                        result.Add(parameter.Key, parameter.Value);
+	                    }
 
-        return result;
-       
-    }
+	                }
+	            }
+	        }
+
+	        return result;
+	       
+	    }
+	}
 }
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 
-namespace Quarters {
+namespace QuartersSDK {
     public class TransferRequest {
 
         public string id = "";
