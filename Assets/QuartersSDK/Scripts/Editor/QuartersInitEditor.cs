@@ -5,7 +5,7 @@ using UnityEditor;
 using QuartersSDK;
 
 [CustomEditor(typeof(QuartersInit))]
-public class QuartersInitEditor : Editor {
+public class QuartersInitEditor : UnityEditor.Editor {
 
 
     public override void OnInspectorGUI() {
