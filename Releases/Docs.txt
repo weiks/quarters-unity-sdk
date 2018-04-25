@@ -1,4 +1,4 @@
-Quarters Unity SDK - V0.6.0
+Quarters Unity SDK - V0.5.0
 
 
 
@@ -26,7 +26,9 @@ iOS
 No platform specific setup is needed for iOS. Deep linking setup is handled automatically by a post process
 
 Android
-In Unity top menu go Quarters/Android/Generate Android Manifest. Android Manifest will automatically generate enabling deep linking.
+Quarters Unity SDK requires Android manifest changes to enable deep linking on Android platform.
+
+Assets/Plugins/AndroidManifest.xml swap your package name, instead of "com.quarters.example" enter your real package name from Player Settings. (this need to be done in two places in AndroidManifest)
 
 If your project contain Android Manifest already, manual manifest will be required.
 
@@ -42,7 +44,7 @@ Before you can use Quarters API you must authorise users session.
 
 Example:
 
-using QuartersSDK;
+using Quarters;
 
 Quarters.Instance.Authorize(OnAuthorizationSuccess, OnAuthorizationFailed);
 
@@ -58,8 +60,6 @@ Get user details can be only called after successful authorization. Success dele
 
 Example:
 
-using QuartersSDK;
-
 Quarters.Instance.GetUserDetails(delegate(User user) { 	Debug.Log("User loaded");  } , delegate (string error) { 	Debug.LogError("Cannot load the user details: " + error);  } );  
 
 
@@ -70,9 +70,6 @@ Get account can be only called after successful authorization. On success delega
 
 Example:
 ----
-
-using QuartersSDK;
-
 Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) { 
 //success                  }, delegate (string error) { 
 //failed  });
@@ -83,8 +80,6 @@ Get account balance can be only called after successful authorization. On succes
 
 Example:
 
-using QuartersSDK;
-
 Quarters.Instance.GetAccountBalance(delegate (User.Account.Balance balance) {  }, delegate (string error) {   }); 
 
 
@@ -94,8 +89,6 @@ Transfer request can be only called after successful authorization. This call al
 
 
 Example:
-
-using QuartersSDK;
 
 TransferAPIRequest request = new TransferAPIRequest(int.Parse(tokensInput.text), descriptionInput.text, delegate (string transactionHash) {             
 //success  }, delegate (string error) {
@@ -115,15 +108,6 @@ General notes:
 - a  post authorization calls can be called at any time. There is no need for calling API in any order. Example: After Authorizing session
 GetAccountBalance can be called right away without need of calling GetUserDetail -> GetAccounts -> GetAccountBalance.
 
-
-
-#####
-0.6.0
-- Added automated Android Manifest Generation in Quarters/Android/Generate Android Manifest
-- Android package name can now contain uppercase characters
-
-
-#####
 
 
 #####
