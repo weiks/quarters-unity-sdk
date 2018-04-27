@@ -7,6 +7,11 @@ namespace QuartersSDK {
 
         public static string Unauthorized = "401 Unauthorized";
 
-
     }
+
+	public enum Environment {
+		development,
+		production
+	}
+
 }

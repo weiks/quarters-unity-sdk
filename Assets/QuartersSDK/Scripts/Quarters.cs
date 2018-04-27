@@ -41,8 +41,18 @@ namespace QuartersSDK {
 
         public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
 
-		public const string QUARTERS_URL = "https://pocketfulofquarters.com";
-		public const string API_URL = "https://api.dev.pocketfulofquarters.com/v1/";
+		public static string QUARTERS_URL {
+			get {
+				return "https://" + (QuartersInit.Instance.environment == Environment.development ? "dev." : "") + "pocketfulofquarters.com";
+			}
+		}
+
+		public static string API_URL {
+			get {
+				return "https://api." + (QuartersInit.Instance.environment == Environment.development ? "dev." : "") + "pocketfulofquarters.com/v1";
+			}
+		}
+
 
         public string URL_SCHEME  {
             get {
@@ -176,7 +186,7 @@ namespace QuartersSDK {
 
         private void AuthorizeEditor() {
           
-            string url =  "https://dev.pocketfulofquarters.com/access-token?app_id=" + QuartersInit.Instance.APP_ID + "&app_key=" + QuartersInit.Instance.APP_KEY;
+			string url =  QUARTERS_URL + "/access-token?app_id=" + QuartersInit.Instance.APP_ID + "&app_key=" + QuartersInit.Instance.APP_KEY;
             Application.OpenURL(url);
 
         }
@@ -185,7 +195,7 @@ namespace QuartersSDK {
 
 		private void AuthorizeExternal() {
 
-            string url = "https://dev.pocketfulofquarters.com/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
+			string url = QUARTERS_URL + "/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
 			Debug.Log(url);
 			Application.OpenURL(url);
 
@@ -241,7 +251,7 @@ namespace QuartersSDK {
 			byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
-            WWW www = new WWW(API_URL + "oauth/token", dataBytes, AuthorizationHeader);
+            WWW www = new WWW(API_URL + "/oauth/token", dataBytes, AuthorizationHeader);
 			Debug.Log(www.url);
 
 			while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -282,7 +292,7 @@ namespace QuartersSDK {
             byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
-            WWW www = new WWW(API_URL + "oauth/token", dataBytes, AuthorizationHeader);
+            WWW www = new WWW(API_URL + "/oauth/token", dataBytes, AuthorizationHeader);
             Debug.Log(www.url);
 
             while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -320,7 +330,7 @@ namespace QuartersSDK {
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
             headers.Add("Authorization", "Bearer " + AccessToken);
 
-            WWW www = new WWW(API_URL + "me", null, headers);
+            WWW www = new WWW(API_URL + "/me", null, headers);
 			yield return www;
 
 			while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -382,7 +392,7 @@ namespace QuartersSDK {
                 if (!string.IsNullOrEmpty(getUserDetailsError)) yield break;
             }
 
-            WWW www = new WWW(API_URL + "accounts", null, headers);
+            WWW www = new WWW(API_URL + "/accounts", null, headers);
             yield return www;
 
             while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -441,7 +451,7 @@ namespace QuartersSDK {
 
             User.Account account = CurrentUser.accounts[0];
 
-            string url = API_URL + "accounts/" + account.address + "/balance";
+            string url = API_URL + "/accounts/" + account.address + "/balance";
 
             WWW www = new WWW(url, null, AuthorizationHeader);
             yield return www;
@@ -498,7 +508,7 @@ namespace QuartersSDK {
             byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
-            WWW www = new WWW(API_URL + "requests", dataBytes, headers);
+            WWW www = new WWW(API_URL + "/requests", dataBytes, headers);
             Debug.Log(www.url);
 
             while (!www.isDone) yield return new WaitForEndOfFrame();

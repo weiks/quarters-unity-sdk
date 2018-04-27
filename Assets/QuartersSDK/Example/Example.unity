@@ -358,7 +358,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 485918169}
         m_MethodName: ButtonGetFirstAccountBalanceTapped
         m_Mode: 1
         m_Arguments:
@@ -1178,7 +1178,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 485918169}
         m_MethodName: ButtonGetAccountsTapped
         m_Mode: 1
         m_Arguments:
@@ -1914,10 +1914,10 @@ RectTransform:
   m_Father: {fileID: 1773134936}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 10, y: 0}
-  m_SizeDelta: {x: 639, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 10, y: -10}
+  m_SizeDelta: {x: 638.7593, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1128978614
 MonoBehaviour:
@@ -2878,7 +2878,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15, y: 0.0000034858597}
+  m_AnchoredPosition: {x: 15, y: 0.000022523065}
   m_SizeDelta: {x: -30, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1773134937
@@ -3176,6 +3176,16 @@ Prefab:
     - target: {fileID: 4558843478924128, guid: 6fda49cb785be4592a669bda56f10447, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
+        type: 2}
+      propertyPath: APP_ID
+      value: tkBzKdk8R8ExNB8caNtu
+      objectReference: {fileID: 0}
+    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
+        type: 2}
+      propertyPath: APP_KEY
+      value: bm8owvtdkaasl3570rxy6ly330r5lzlnl
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fda49cb785be4592a669bda56f10447, type: 2}
