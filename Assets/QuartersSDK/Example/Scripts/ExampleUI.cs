@@ -126,6 +126,35 @@ public class ExampleUI : MonoBehaviour {
     }
 
 
+
+
+    public void ButtonGetAccountRewardTapped() {
+
+        Quarters.Instance.AwardQuarters(2, delegate {
+
+            Debug.Log("Quarters awarded");
+        
+
+        }, delegate (string error) {
+
+            debugConsole.text += "\n";
+            debugConsole.text += "\nOnAwardQuartersFailed: " + error;
+
+            RefreshUI();
+
+        });
+
+    }
+
+
+
+
+
+
+
+
+
+
     public void ButtonTransferTapped() {
 
         TransferAPIRequest request = new TransferAPIRequest(int.Parse(tokensInput.text), descriptionInput.text, delegate (string transactionHash) {

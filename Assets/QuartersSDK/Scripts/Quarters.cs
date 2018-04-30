@@ -9,7 +9,7 @@ using System.Linq;
 
 
 namespace QuartersSDK {
-	public class Quarters : MonoBehaviour {
+	public partial class Quarters : MonoBehaviour {
 
 		public static Quarters Instance;
 
