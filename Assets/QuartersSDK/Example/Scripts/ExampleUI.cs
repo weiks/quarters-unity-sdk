@@ -130,11 +130,12 @@ public class ExampleUI : MonoBehaviour {
 
     public void ButtonGetAccountRewardTapped() {
 
+        #if QUARTERS_MODULE_PLAYFAB
+
         Quarters.Instance.AwardQuarters(2, delegate {
 
             Debug.Log("Quarters awarded");
         
-
         }, delegate (string error) {
 
             debugConsole.text += "\n";
@@ -143,6 +144,10 @@ public class ExampleUI : MonoBehaviour {
             RefreshUI();
 
         });
+
+        #else
+        Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
+        #endif
 
     }
 

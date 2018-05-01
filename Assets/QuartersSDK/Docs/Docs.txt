@@ -116,6 +116,16 @@ GetAccountBalance can be called right away without need of calling GetUserDetail
 
 
 #####
+0.8.0
+- 
+
+
+#####
+
+
+
+
+#####
 0.7.0
 - Quarters UI added
 - Editor scripts are now inheriting from UnityEditor.Editor to avoid potential conflicts with custom Editor namespace

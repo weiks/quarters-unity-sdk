@@ -1,0 +1,68 @@
+var TRANSFER_URL = "https://api.pocketfulofquarters.com";
+var SERVER_TOKEN = ""; //ENTER SERVER TOKEN HERE
+var APP_ADDRESS = ""; //ENTER APP ADDRESS HERE
+
+
+//PlayFab Cloud script handler
+handlers.AwardQuarters = function (args, context) {
+    var result = AwardQuarters(args);
+    return result;
+};
+
+
+
+function AwardQuarters (args) {
+
+    var amount = args["amount"];
+    var user = args["userId"];
+
+    if (SERVER_TOKEN == "") {
+        log.error("Missing SERVER_TOKEN parameter");
+        return;
+    }
+    if (APP_ADDRESS == "") {
+        log.error("Missing APP_ADDRESS parameter");
+        return;
+    }
+    if (amount == undefined || amount == null) {
+        log.error("Missing amount parameter");
+        return;
+    }
+    if (user == undefined || user == null) {
+        log.error("Missing user parameter");
+        return;
+    }
+
+    log.info("Award " + amount + " quarters to user: " + user);
+
+
+    var requestAuthorized = true;
+    
+    /*
+       ######## ENTER YOUR CUSTOM LOGIC HERE,
+       BY DEFAULT EVERY AWARD REQUEST IS ACCEPTED
+
+    */
+
+
+    if (!requestAuthorized) return { error: "Award Quarters request not authorized by game server" };
+
+    var postData = {
+        "amount": amount,
+        "user": user
+    };
+
+    var url = TRANSFER_URL + "/v1/accounts/" + APP_ADDRESS + "/transfer";
+
+    var headers = {
+        'Authorization': 'Bearer ' + SERVER_TOKEN,
+        'Content-Type': 'application/json;charset=UTF-8'
+    };
+
+    var contentType = "application/json";
+    var contentBody = JSON.stringify(postData);
+    var response = http.request(url, "post", contentBody, contentType, headers);
+
+    return response;
+}
+

@@ -7,19 +7,39 @@ using Newtonsoft.Json;
 
 namespace QuartersSDK {
     public partial class Quarters : MonoBehaviour {
-
-
-        public delegate void OnAwardQuartersSuccessDelegate();
+        
+        public delegate void OnAwardQuartersSuccessDelegate(string transactionHash);
         public delegate void OnAwardQuartersFailedDelegate(string error);
 
 
         public void AwardQuarters(int expectedAmount, OnAwardQuartersSuccessDelegate OnSuccessDelegate, OnAwardQuartersFailedDelegate OnFailedDelegate) {
             StartCoroutine(AwardQuartersCall(expectedAmount, OnSuccessDelegate, OnFailedDelegate));
         }
-  
 
-        private IEnumerator AwardQuartersCall(int expectedAward, OnAwardQuartersSuccessDelegate OnSucess, OnAwardQuartersFailedDelegate OnFailed) {
 
+		private void Start() {
+            
+            LoginWithCustomIDRequest loginRequest = new LoginWithCustomIDRequest();
+            loginRequest.TitleId = "30F7";
+            loginRequest.CustomId = "quartersTest";
+            loginRequest.CreateAccount = true;
+
+
+            PlayFabClientAPI.LoginWithCustomID(loginRequest, delegate(LoginResult result) {
+
+                Debug.Log(result.PlayFabId);
+
+            }, delegate (PlayFabError error){
+
+                Debug.LogError(error.ErrorMessage);
+            });
+
+		}
+
+
+
+		private IEnumerator AwardQuartersCall(int expectedAward, OnAwardQuartersSuccessDelegate OnSucess, OnAwardQuartersFailedDelegate OnFailed) { 
+            
             //pull user details if dont exist
             if (CurrentUser == null) {
                 bool isUserDetailsDone = false;
@@ -41,32 +61,57 @@ namespace QuartersSDK {
                 if (!string.IsNullOrEmpty(getUserDetailsError)) yield break;
             }
 
-
-
             
             ExecuteCloudScriptRequest request = new ExecuteCloudScriptRequest();
             request.FunctionName = "AwardQuarters";
             request.GeneratePlayStreamEvent = true;
-            request.FunctionParameter = JsonConvert.SerializeObject(new {
+            request.FunctionParameter = new {
                 amount = expectedAward,
                 userId = Quarters.Instance.CurrentUser.id
-            });
+            };
 
 
             PlayFabClientAPI.ExecuteCloudScript(request, delegate(ExecuteCloudScriptResult result) {
-            
-                Debug.Log(JsonConvert.SerializeObject(result.FunctionResult));
 
-                //TODO check for error
+                bool errorOccured = false;
+                //catch Playfab and cloud script errors
+                if (result.Error != null) {
+                    Debug.LogError("Quarters PlayFab Error: " + result.Error.Error);
+                    Debug.LogError("Quarters PlayFab Error: " + result.Error.Message);
+                    Debug.LogError("Quarters PlayFab Error: " + result.Error.StackTrace);
+                    OnFailed(result.Error.Message);
+                    errorOccured = true;
+                }
 
-                OnSucess();
+
+                foreach (LogStatement logStatement in result.Logs) {
+                    if (logStatement.Level == "Error") {
+                        Debug.LogError("Quarters PlayFab Error: " + logStatement.Message);
+                        OnFailed("Playfab error: " + logStatement);
+                        errorOccured = true;
+                    }
+                    else Debug.Log("Quarters PlayFab " + logStatement.Message);
+                }
+
+                if (!errorOccured) {
+
+                    Hashtable ht = JsonConvert.DeserializeObject<Hashtable>(result.FunctionResult.ToString());
+
+                    if (ht.ContainsKey("txId")) {
+                        OnSucess((string)ht["txId"]);
+                    }
+                    else {
+                        Debug.Log(JsonConvert.SerializeObject(result.FunctionResult));
+                        OnFailed("Unknown error");
+                    }
+                }
+
 
             }, delegate(PlayFabError error) {
                 Debug.LogError(JsonConvert.SerializeObject(error.ErrorMessage));
             });
 
         }
-
 
     }
 }
