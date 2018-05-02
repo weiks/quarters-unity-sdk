@@ -74,7 +74,9 @@ using QuartersSDK;
 Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) { 
 //success                  }, delegate (string error) { 
 //failed  });
-Get Account Balance
+
+
+Get Account Balance
 ----
 Get account balance can be only called after successful authorization. On success delegate is fired with User.Account.Balance object
 
@@ -117,7 +119,8 @@ GetAccountBalance can be called right away without need of calling GetUserDetail
 
 #####
 0.8.0
-- 
+- Added PlayFab module
+- Supporting Playfab server side Quarters apps to user transfers
 
 
 #####

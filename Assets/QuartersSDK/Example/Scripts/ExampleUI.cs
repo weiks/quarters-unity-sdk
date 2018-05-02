@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using QuartersSDK;
+#if QUARTERS_MODULE_PLAYFAB
+using PlayFab;
+using PlayFab.ClientModels;
+#endif
 
 
 public class ExampleUI : MonoBehaviour {
@@ -132,18 +136,35 @@ public class ExampleUI : MonoBehaviour {
 
         #if QUARTERS_MODULE_PLAYFAB
 
-        Quarters.Instance.AwardQuarters(2, delegate {
+        //login user to playfab title using device id
+        LoginWithCustomIDRequest loginRequest = new LoginWithCustomIDRequest();
+        loginRequest.CustomId = SystemInfo.deviceUniqueIdentifier;
+        loginRequest.CreateAccount = true;
 
-            Debug.Log("Quarters awarded");
-        
-        }, delegate (string error) {
 
-            debugConsole.text += "\n";
-            debugConsole.text += "\nOnAwardQuartersFailed: " + error;
+        PlayFabClientAPI.LoginWithCustomID(loginRequest, delegate(LoginResult result) {
 
-            RefreshUI();
+            Debug.Log("Playfab user logged in: " + result.PlayFabId);
 
+            //Request 2 quarters from Playfab Cloud build
+            Quarters.Instance.AwardQuarters(2, delegate(string transactionHash) {
+
+                Debug.Log("Quarters awarded: " + transactionHash);
+
+            }, delegate (string error) {
+
+                debugConsole.text += "\n";
+                debugConsole.text += "\nOnAwardQuartersFailed: " + error;
+
+                RefreshUI();
+
+            });
+
+        }, delegate (PlayFabError error){
+            Debug.LogError(error.ErrorMessage);
         });
+
+
 
         #else
         Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");

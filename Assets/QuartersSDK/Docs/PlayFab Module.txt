@@ -7,8 +7,11 @@ This allows custom logic to be injected to the PlayFab server to verify if trans
 ###############################
 
 Prerequisites:
-PlayFab SDK must me installed prior to module instalation
-https://api.playfab.com/sdks/unity
+- PlayFab SDK must me installed prior to module instalation
+  https://api.playfab.com/sdks/unity
+
+- Playfab Title
+
 
 ###############################
 
@@ -63,25 +66,40 @@ Authorization is for this transaction is granted or declined by Cloud Script.
 
 *** client side ***
 
-
 using QuartersSDK;
+using PlayFab;
+using PlayFab.ClientModels;
 
-Quarters.Instance.AwardQuarters(2, delegate {
 
-        Debug.Log("Quarters awarded");
-        
+//login user to playfab title using device id
+LoginWithCustomIDRequest loginRequest = new LoginWithCustomIDRequest();
+loginRequest.CustomId = SystemInfo.deviceUniqueIdentifier;
+loginRequest.CreateAccount = true;
+
+
+PlayFabClientAPI.LoginWithCustomID(loginRequest, delegate(LoginResult result) {
+
+    Debug.Log("Playfab user logged in: " + result.PlayFabId);
+
+    //Request 2 quarters from Playfab Cloud build
+    Quarters.Instance.AwardQuarters(2, delegate(string transactionHash) {
+
+        Debug.Log("Quarters awarded: " + transactionHash);
+
+
     }, delegate (string error) {
 
         Debug.LogError(error);
 
+    });
+
+}, delegate (PlayFabError error){
+    Debug.LogError(error.ErrorMessage);
 });
 
 
+
 ***
-
-
-
-
 
 
 
@@ -132,7 +150,7 @@ function AwardQuarters (args) {
        BY DEFAULT EVERY AWARD REQUEST IS ACCEPTED
 
 
-       var shouldReceiveDailyBonus = !DidReceivedBonusToday(userId);
+       var shouldReceiveDailyBonus = !DidReceivedBonusToday(userId); //DidReceivedBonusToday could be a custom logic method checking Playfab user data
 
        if (shouldReceiveDailyBonus == false) {
            log.error("Daily bonus already given today");

@@ -51,6 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9509de02ddf495b920686930ec4278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  APP_ID: jR3GjKHUUtRoI6e8DPs2
-  APP_KEY: wfecoqrtyqrvne6l85dd07xvdkwtz06
+  APP_ID: 
+  APP_KEY: 
   environment: 1
