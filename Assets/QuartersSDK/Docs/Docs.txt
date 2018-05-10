@@ -1,4 +1,4 @@
-Quarters Unity SDK - V0.7.0
+Quarters Unity SDK - V0.8.1
 
 ###############################
 
@@ -115,6 +115,14 @@ General notes:
 - a post authorization calls can be called at any time. There is no need for calling API in any order. Example: After Authorizing session
 GetAccountBalance can be called right away without need of calling GetUserDetail -> GetAccounts -> GetAccountBalance.
 
+
+
+#####
+0.8.1
+- Fixed out of range exception when calling GetAccountBalance right after GetUserDetails
+
+
+#####
 
 
 #####

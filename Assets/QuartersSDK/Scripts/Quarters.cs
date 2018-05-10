@@ -432,7 +432,7 @@ namespace QuartersSDK {
             bool areAccountsDone = false;
             string accountsLoadingError = "";
 
-            if (CurrentUser == null || CurrentUser.accounts == null) {
+            if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
                 Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
                     //accounts loaded
                     areAccountsDone = true;
