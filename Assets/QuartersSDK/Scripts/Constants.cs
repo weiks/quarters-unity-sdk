@@ -14,4 +14,8 @@ namespace QuartersSDK {
 		production
 	}
 
+
+    public static class Constants {
+        public const string REFRESH_TOKEN_KEY = "QuartersRefreshToken";
+    }
 }

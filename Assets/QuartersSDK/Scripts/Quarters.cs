@@ -12,6 +12,7 @@ namespace QuartersSDK {
 	public partial class Quarters : MonoBehaviour {
 
 		public static Quarters Instance;
+        public QuartersSession session;
 
 		public delegate void OnAuthorizationStartDelegate();
 		public static event OnAuthorizationStartDelegate OnAuthorizationStart;
@@ -81,52 +82,18 @@ namespace QuartersSDK {
 		}
 
 
-		public bool DoesHaveRefreshToken {
-			get {
-				return !string.IsNullOrEmpty(refreshToken);
-			}
-		}
+	
 
-		public bool DoesHaveAccessToken {
-			get {
-				return !string.IsNullOrEmpty(accessToken);
-			}
-		}
+        public bool IsAuthorized {
+            get {
+                if (session != null) {
+                    return session.IsAuthorized;
+                } else return false;
+            }
+        }
 
 
-		#region tokens
-
-		private string refreshToken = "";
-		public string RefreshToken {
-			get {
-				return refreshToken;
-			}
-			set {
-				refreshToken = value;
-			}
-		}
-
-
-		private string accessToken = "";
-		public string AccessToken {
-			get {
-				return accessToken;
-			}
-			set {
-				accessToken = value;
-			}
-		}
-
-		#endregion
-
-
-		public bool IsAuthorized {
-			get {
-				return DoesHaveRefreshToken;
-			}
-		}
-
-
+		
 
 		public void Init() {
 			Instance = this;
@@ -138,10 +105,18 @@ namespace QuartersSDK {
 
 		public void Authorize(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
 
+            session = new QuartersSession();
+
 			this.OnAuthorizationSuccess = OnSuccessDelegate;
 			this.OnAuthorizationFailed = OnFailedDelegate;
 
-			Debug.Log("Quarters: Authorize");
+            if (IsAuthorized) {
+                this.OnAuthorizationSuccess();
+                return;
+            }
+
+
+			Debug.Log("Quarters: Authorize new session");
 
 			if (OnAuthorizationStart != null) OnAuthorizationStart();
 
@@ -156,6 +131,21 @@ namespace QuartersSDK {
 			}
 
 		}
+
+
+        public void Deauthorize() {
+            this.session.Invalidate();
+            this.session = null;
+            CurrentUser = null;
+
+            //clean up delegates
+            OnAuthorizationStart = null;
+            OnAuthorizationSuccess = null;
+            OnAuthorizationFailed = null;
+            currentTransferAPIRequests = new List<TransferAPIRequest>();
+        }
+
+
 
 
 
@@ -219,7 +209,7 @@ namespace QuartersSDK {
         public void RefreshTokenReceived(string token) {
 
             Debug.Log("Quarters: Refresh token: " + token);
-            RefreshToken = token;
+            session.RefreshToken = token;
 
             StartCoroutine(GetAccessToken(delegate {
                 
@@ -265,8 +255,8 @@ namespace QuartersSDK {
 				Debug.Log(www.text);
 
 				Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
-				RefreshToken = responseData["refresh_token"];
-				AccessToken = responseData["access_token"];
+				session.RefreshToken = responseData["refresh_token"];
+                session.AccessToken = responseData["access_token"];
 
 				OnAuthorizationSuccess();
 			}
@@ -277,13 +267,13 @@ namespace QuartersSDK {
 
         public IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
 
-            if (string.IsNullOrEmpty(RefreshToken)) {
+            if (!session.DoesHaveRefreshToken) {
                 Debug.LogError("Missing refresh token");
                 yield break;
             }
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add("grant_type", "refresh_token");
-            data.Add("refresh_token", RefreshToken);
+            data.Add("refresh_token", session.RefreshToken);
             data.Add("client_id", QuartersInit.Instance.APP_ID);
             data.Add("client_secret", QuartersInit.Instance.APP_KEY);
 
@@ -304,7 +294,7 @@ namespace QuartersSDK {
 
                 if (error == Error.Unauthorized) {
                     //dispose invalid refresh token
-                    RefreshToken = "";
+                    session.RefreshToken = "";
                 }
 
                 OnFailed(www.error);
@@ -316,7 +306,7 @@ namespace QuartersSDK {
 
                 Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
                 //RefreshToken = responseData["refresh_token"];
-                AccessToken = responseData["access_token"];
+                session.AccessToken = responseData["access_token"];
 
                 OnSuccess();
                 
@@ -328,7 +318,7 @@ namespace QuartersSDK {
         private IEnumerator GetUserDetailsCall(OnUserDetailsSucessDelegate OnSucess, OnUserDetailsFailedDelegate OnFailed, bool isRetry = false) {
 
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + AccessToken);
+            headers.Add("Authorization", "Bearer " + session.AccessToken);
 
             WWW www = new WWW(API_URL + "/me", null, headers);
 			yield return www;
@@ -336,10 +326,8 @@ namespace QuartersSDK {
 			while (!www.isDone) yield return new WaitForEndOfFrame();
 
 			if (!string.IsNullOrEmpty(www.error)) {
-				Debug.LogError(www.error);
-
+				
                 if (!isRetry) {
-                    Debug.Log("Retrying");
                     //refresh access code and retry this call in case access code expired
                     StartCoroutine(GetAccessToken(delegate {
                        
@@ -350,6 +338,7 @@ namespace QuartersSDK {
                     }));
                 } 
                 else {
+                    Debug.LogError(www.error);
                     OnFailed(www.error);
                 }
 			}
@@ -369,7 +358,7 @@ namespace QuartersSDK {
         private IEnumerator GetAccountsCall(OnAccountsSuccessDelegate OnSucess, OnAccountsFailedDelegate OnFailed, bool isRetry = false) {
 
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + AccessToken);
+            headers.Add("Authorization", "Bearer " + session.AccessToken);
 
             //pull user details if dont exist
             if (CurrentUser == null) {
@@ -398,10 +387,8 @@ namespace QuartersSDK {
             while (!www.isDone) yield return new WaitForEndOfFrame();
 
             if (!string.IsNullOrEmpty(www.error)) {
-                Debug.LogError(www.error);
 
                 if (!isRetry) {
-                    Debug.Log("Retrying");
                     //refresh access code and retry this call in case access code expired
                     StartCoroutine(GetAccessToken(delegate {
 
@@ -412,6 +399,7 @@ namespace QuartersSDK {
                     }));
                 } 
                 else {
+                    Debug.LogError(www.error);
                     OnFailed(www.error);
                 }
             }
@@ -459,10 +447,8 @@ namespace QuartersSDK {
             while (!www.isDone) yield return new WaitForEndOfFrame();
 
             if (!string.IsNullOrEmpty(www.error)) {
-                Debug.LogError(www.error);
-
+                
                 if (!isRetry) {
-                    Debug.Log("Retrying");
                     //refresh access code and retry this call in case access code expired
                     StartCoroutine(GetAccessToken(delegate {
 
@@ -473,6 +459,7 @@ namespace QuartersSDK {
                     }));
                 } 
                 else {
+                    Debug.LogError(www.error);
                     OnFailed(www.error);
                 }
             }
@@ -494,7 +481,7 @@ namespace QuartersSDK {
             Debug.Log("CreateTransferRequestCall");
             
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + AccessToken);
+            headers.Add("Authorization", "Bearer " + session.AccessToken);
 
 
             Dictionary<string, object> data = new Dictionary<string, object>();

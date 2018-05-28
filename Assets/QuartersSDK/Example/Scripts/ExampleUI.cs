@@ -13,17 +13,19 @@ using PlayFab.ClientModels;
 public class ExampleUI : MonoBehaviour {
 
     public List<CanvasGroup> authorizedOnlyUI = new List<CanvasGroup>();
+    public List<CanvasGroup> unAuthorizedOnlyUI = new List<CanvasGroup>();
     public Text debugConsole;
 
     public InputField tokensInput;
     public InputField descriptionInput;
 
 
-	void Awake() {
-		authorizedOnlyUI.ForEach(b => b.interactable = false);
+	void Start() {
 
         debugConsole.text = "Quarters SDK example";
         debugConsole.text += "\nUnauthorized";
+
+        RefreshUI();
 	}
 
 
@@ -32,9 +34,18 @@ public class ExampleUI : MonoBehaviour {
 
 	private void RefreshUI() {
 		authorizedOnlyUI.ForEach(b => b.interactable = Quarters.Instance.IsAuthorized);
+        unAuthorizedOnlyUI.ForEach(b => b.interactable = !Quarters.Instance.IsAuthorized);
+
+
         if (Quarters.Instance.IsAuthorized) {
             authorizedOnlyUI.ForEach(b => b.alpha = 1f);
+            unAuthorizedOnlyUI.ForEach(b => b.alpha = 0.4f);
         }
+        else {
+            authorizedOnlyUI.ForEach(b => b.alpha = 0.4f);
+            unAuthorizedOnlyUI.ForEach(b => b.alpha = 1f);
+        }
+
 	}
 
 
@@ -44,6 +55,11 @@ public class ExampleUI : MonoBehaviour {
 	public void ButtonAuthorizeTapped() {
 		Quarters.Instance.Authorize(OnAuthorizationSuccess, OnAuthorizationFailed);
 	}
+
+    public void ButtonDeauthorizeTapped() {
+        Quarters.Instance.Deauthorize();
+        RefreshUI();
+    }
 
 	public void ButtonGetUserDetailsTapped() {
 		Quarters.Instance.GetUserDetails(delegate(User user) {
