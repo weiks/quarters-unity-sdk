@@ -120,15 +120,15 @@ namespace QuartersSDK {
 
 			if (OnAuthorizationStart != null) OnAuthorizationStart();
 
-			if (Application.isEditor) {
-				//spawn editor UI
-				GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
-                AuthorizeEditor();
-			}
-			else {
+			//if (Application.isEditor) {
+			//	//spawn editor UI
+			//	GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
+   //             AuthorizeEditor();
+			//}
+			//else {
                 //direct to the browser
                 AuthorizeExternal();
-			}
+			//}
 
 		}
 
@@ -187,7 +187,16 @@ namespace QuartersSDK {
 
 			string url = QUARTERS_URL + "/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
 			Debug.Log(url);
-			Application.OpenURL(url);
+
+            bool useWebView = true;
+
+            if (useWebView) {
+                //TODO add callbacks
+                QuartersWebView.OpenURL(url);
+            }
+            else {
+			    Application.OpenURL(url);
+            }
 
 		}
 

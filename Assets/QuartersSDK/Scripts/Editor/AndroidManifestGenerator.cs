@@ -46,7 +46,7 @@ public class AndroidManifestGenerator  {
 				_xmlWriter.WriteAttributeString("xmlns:android", 		"http://schemas.android.com/apk/res/android");
 				_xmlWriter.WriteAttributeString("package", 				_packageName);
 				_xmlWriter.WriteAttributeString("android:versionCode", 	_versionCode);
-				_xmlWriter.WriteAttributeString("android:versionName", 	_versionName);
+                _xmlWriter.WriteAttributeString("android:hardwareAccelerated", 	"true");
 				{
 					//********************
 					// Application
@@ -61,6 +61,8 @@ public class AndroidManifestGenerator  {
 					_xmlWriter.WriteStartElement("activity");
 					{
 						_xmlWriter.WriteAttributeString("android:name", "com.unity3d.player.UnityPlayerNativeActivity");
+                        _xmlWriter.WriteAttributeString("android:label",  "@string/app_name");
+                        _xmlWriter.WriteAttributeString("android:label",  "@string/app_name");
 
 						_xmlWriter.WriteStartElement("meta-data");
 						_xmlWriter.WriteAttributeString("android:name", "android.app.lib_name");
@@ -134,8 +136,23 @@ public class AndroidManifestGenerator  {
 
 					_xmlWriter.WriteEndElement();
 				}
+
+                //permissions
+                _xmlWriter.WriteStartElement("uses-permission");
+                {
+                    _xmlWriter.WriteAttributeString("android:name", "android.permission.INTERNET");
+
+                }
+                _xmlWriter.WriteEndElement();
+
+
+
+
+
 				_xmlWriter.WriteEndElement();
 			}
+
+
 			_xmlWriter.WriteEndDocument();
 		}
 
@@ -219,7 +236,7 @@ public class AndroidManifestGenerator  {
 		_xmlWriter.WriteEndElement();
 	}
 	
-	protected static void WritePermission (XmlWriter _xmlWriter, string _name, string _protectionLevel, string _comment = null)
+    protected static void WritePermission (XmlWriter _xmlWriter, string _name, string _protectionLevel = null, string _comment = null)
 	{
 		if (_comment != null)
 			_xmlWriter.WriteComment(_comment);
@@ -227,7 +244,9 @@ public class AndroidManifestGenerator  {
 		_xmlWriter.WriteStartElement("permission");
 		{
 			_xmlWriter.WriteAttributeString("android:name", 			_name);
-			_xmlWriter.WriteAttributeString("android:protectionLevel", 	_protectionLevel);
+            if (_protectionLevel != null ) {
+			    _xmlWriter.WriteAttributeString("android:protectionLevel", 	_protectionLevel);
+            }
 		}
 		_xmlWriter.WriteEndElement();
 	}

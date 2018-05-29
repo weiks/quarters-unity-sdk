@@ -54,6 +54,7 @@ public class ExampleUI : MonoBehaviour {
 
 	public void ButtonAuthorizeTapped() {
 		Quarters.Instance.Authorize(OnAuthorizationSuccess, OnAuthorizationFailed);
+
 	}
 
     public void ButtonDeauthorizeTapped() {
