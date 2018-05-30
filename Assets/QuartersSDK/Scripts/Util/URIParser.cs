@@ -36,6 +36,17 @@ namespace QuartersSDK {
 	        return result;
 	       
 	    }
+
+
+        public static bool IsDeepLink(this string url) {
+
+            bool result = false;
+            if (url.Contains(Application.identifier.ToLower())) {
+                result = url.StartsWith(Application.identifier.ToLower());
+            }
+
+            return result;
+        }
 	}
 }
 

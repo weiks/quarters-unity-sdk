@@ -103,7 +103,13 @@ namespace QuartersSDK {
 
         #region high level calls
 
-		public void Authorize(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
+        public void Authorize(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate, bool forceExternalBrowser = false) {
+
+            if (!forceExternalBrowser && Application.platform == RuntimePlatform.WindowsEditor) {
+                Debug.LogWarning("Quarters: WebView is not supported in Unity Editor on Windows. Falling back to forcing external browser. You can safely ignore this message");
+                forceExternalBrowser = true;
+            }
+
 
             session = new QuartersSession();
 
@@ -120,15 +126,15 @@ namespace QuartersSDK {
 
 			if (OnAuthorizationStart != null) OnAuthorizationStart();
 
-			//if (Application.isEditor) {
-			//	//spawn editor UI
-			//	GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
-   //             AuthorizeEditor();
-			//}
-			//else {
+            if (Application.isEditor && forceExternalBrowser) {
+				//spawn editor UI
+				GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
+                AuthorizeEditor();
+			}
+			else {
                 //direct to the browser
                 AuthorizeExternal();
-			//}
+			}
 
 		}
 
@@ -183,18 +189,19 @@ namespace QuartersSDK {
 
 
 
-		private void AuthorizeExternal() {
+        private void AuthorizeExternal(bool forceExternalBrowser = false) {
 
 			string url = QUARTERS_URL + "/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
 			Debug.Log(url);
 
-            bool useWebView = true;
 
-            if (useWebView) {
-                //TODO add callbacks
+            if (!forceExternalBrowser) {
+                //web view authentication
                 QuartersWebView.OpenURL(url);
+                QuartersWebView.OnDeepLink = DeepLink;
             }
             else {
+                //external authentication
 			    Application.OpenURL(url);
             }
 
@@ -554,18 +561,13 @@ namespace QuartersSDK {
 
 
 
-
-		#if UNITY_IOS
-
 		public void DeepLink (string url) {
 
-			Debug.Log("iOS deep link url: " + url);
+			Debug.Log("Deep link url: " + url);
             ProcessDeepLink(url);
 		}
 
 
-
-		#endif
 
         private void ProcessDeepLink(string url = "") {
 

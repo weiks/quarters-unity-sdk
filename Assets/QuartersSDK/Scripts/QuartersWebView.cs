@@ -5,6 +5,9 @@ using UnityEngine;
 namespace QuartersSDK {
     public class QuartersWebView : MonoBehaviour {
 
+        public delegate void OnDeepLinkDelegate(string url);
+        public static OnDeepLinkDelegate OnDeepLink;
+
 
         public static QuartersWebView OpenURL(string url) {
             
@@ -16,14 +19,17 @@ namespace QuartersSDK {
             webView.Load(url);
             webView.Show();
 
-            webView.OnPageFinished += (UniWebView view, int statusCode, string u) => {
 
-                Debug.Log(u);
+            webView.OnPageStarted += (UniWebView view, string u) => {
+                if (u.IsDeepLink()) {
+                    //deep link opened
+                    if (OnDeepLink != null) OnDeepLink(u);
+                    webView.Hide();
+                }
 
             };
 
             return quartersWebView;
-
         }
 
 
