@@ -2,7 +2,7 @@
 <!--AUTO GENERATED MANIFEST FILE FROM AndroidManifestGenerator. DONT MODIFY HERE.-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.quarters.example" android:versionCode="1" android:hardwareAccelerated="true">
   <application>
-    <activity android:name="com.unity3d.player.UnityPlayerNativeActivity" android:label="@string/app_name" android:label="@string/app_name">
+    <activity android:name="com.unity3d.player.UnityPlayerNativeActivity" android:label="@string/app_name">
       <meta-data android:name="android.app.lib_name" android:value="unity" />
       <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
       <intent-filter>

@@ -62,7 +62,7 @@ public class AndroidManifestGenerator  {
 					{
 						_xmlWriter.WriteAttributeString("android:name", "com.unity3d.player.UnityPlayerNativeActivity");
                         _xmlWriter.WriteAttributeString("android:label",  "@string/app_name");
-                        _xmlWriter.WriteAttributeString("android:label",  "@string/app_name");
+
 
 						_xmlWriter.WriteStartElement("meta-data");
 						_xmlWriter.WriteAttributeString("android:name", "android.app.lib_name");

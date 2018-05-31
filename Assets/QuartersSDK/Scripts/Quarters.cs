@@ -191,6 +191,8 @@ namespace QuartersSDK {
 
         private void AuthorizeExternal(bool forceExternalBrowser = false) {
 
+            Debug.Log("OAuth authorization");
+
 			string url = QUARTERS_URL + "/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
 			Debug.Log(url);
 
@@ -492,7 +494,9 @@ namespace QuartersSDK {
 
 
 
-        private IEnumerator CreateTransferRequestCall(TransferAPIRequest request) {
+        private IEnumerator CreateTransferRequestCall(TransferAPIRequest request, bool forceExternalBrowser = false) {
+
+            if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Quarters: Transfers with external browser arent supported in Unity editor");
 
             Debug.Log("CreateTransferRequestCall");
             
@@ -535,10 +539,16 @@ namespace QuartersSDK {
 
                 //continue outh forward
                 string url = QUARTERS_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
-                Application.OpenURL(url);
 
-
-                //OnSucess(transferRequest);
+                if (!forceExternalBrowser) {
+                    //web view authentication
+                    QuartersWebView.OpenURL(url);
+                    QuartersWebView.OnDeepLink = DeepLink;
+                }
+                else {
+                    //external authentication
+                    Application.OpenURL(url);
+                }
             }
         }
 
