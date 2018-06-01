@@ -5,7 +5,7 @@ using UnityEngine;
 namespace QuartersSDK {
     public class QuartersWebView : MonoBehaviour {
 
-        public delegate void OnDeepLinkDelegate(string url);
+        public delegate void OnDeepLinkDelegate(string url, bool isExternalBrowser);
         public static OnDeepLinkDelegate OnDeepLink;
 
         public delegate void OnCancelledDelegate();
@@ -25,19 +25,22 @@ namespace QuartersSDK {
             SetFrameSize(webView);
 
             webView.Load(url);
-            webView.Show();
+            webView.Show(false, UniWebViewTransitionEdge.Bottom);
 
 
             webView.OnPageStarted += (UniWebView view, string u) => {
+
+                Debug.Log("OnPageStarted " + u);
                 if (u.IsDeepLink()) {
                     //deep link opened
-                    if (OnDeepLink != null) OnDeepLink(u);
-                    webView.Hide();
+                    if (OnDeepLink != null) OnDeepLink(u, isExternalBrowser: false);
+                    webView.Hide(false);
                 }
                 else {
                     if (u != url) {
+                        //external link, open external browser instead and invalidate this webview
                         webView.Stop();
-                        //external link, open external browser instead
+                        webView.Hide();
                         Application.OpenURL(u);
                     }
                 }

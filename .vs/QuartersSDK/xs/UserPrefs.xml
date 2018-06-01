@@ -1,12 +1,8 @@
 ﻿<Properties StartupConfiguration="{973AEB65-1D6B-A18E-30D6-FC5E986F40DB}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Plugins/Android/AndroidManifest.xml">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Docs/Docs.txt">
     <Files>
-      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="202" Column="37" />
-      <File FileName="Assets/QuartersSDK/Scripts/QuartersWebView.cs" Line="27" Column="31" />
-      <File FileName="Assets/QuartersSDK/Scripts/Util/URIParser.cs" Line="19" Column="46" />
-      <File FileName="Assets/QuartersSDK/Libs/UniWebView/Script/UniWebView.cs" Line="131" Column="65" />
-      <File FileName="Assets/QuartersSDK/Scripts/Editor/AndroidManifestGenerator.cs" Line="65" Column="25" />
-      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="1" Column="1" />
+      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="106" Column="130" />
+      <File FileName="Assets/QuartersSDK/Docs/Docs.txt" Line="45" Column="77" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

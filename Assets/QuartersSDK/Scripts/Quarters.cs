@@ -564,29 +564,32 @@ namespace QuartersSDK {
         void OnApplicationFocus( bool focusStatus ){
             if (focusStatus) {
                 #if UNITY_ANDROID
-                ProcessDeepLink();
+                ProcessDeepLink(true);
                 #endif
             }
         }
 
 
 
-		public void DeepLink (string url) {
+		public void DeepLink (string url, bool isExternalBrowser) {
 
 			Debug.Log("Deep link url: " + url);
-            ProcessDeepLink(url);
+            ProcessDeepLink(isExternalBrowser, url);
 		}
 
 
 
-        private void ProcessDeepLink(string url = "") {
+        private void ProcessDeepLink(bool isExternalBrowser, string url = "") {
 
             string linkUrl = url;
 
             #if UNITY_ANDROID
            
-            linkUrl = CustomUrlSchemeAndroid.GetLaunchedUrl(true);
-            CustomUrlSchemeAndroid.ClearSavedData();
+            //overriden linkUrl if deep link comes from external browser, due to limitations of Android plugins implementation
+            if (isExternalBrowser) {
+                linkUrl = CustomUrlSchemeAndroid.GetLaunchedUrl(true);
+                CustomUrlSchemeAndroid.ClearSavedData();
+            }
 
             #endif
 
