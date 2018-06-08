@@ -15,7 +15,7 @@ namespace QuartersSDK {
 	}
 
 
-    public static class Constants {
+    public static partial class Constants {
         public const string REFRESH_TOKEN_KEY = "QuartersRefreshToken";
     }
 }

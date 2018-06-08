@@ -1,7 +1,8 @@
 ﻿<Properties StartupConfiguration="{973AEB65-1D6B-A18E-30D6-FC5E986F40DB}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Modules/InAppPurchases/QuartersIAP.cs">
     <Files>
-      <File FileName="Assets/QuartersSDK/Modules/InAppPurchases/QuartersIAP.cs" Line="26" Column="1" />
+      <File FileName="Assets/QuartersSDK/Modules/InAppPurchases/QuartersIAP.cs" Line="122" Column="51" />
+      <File FileName="Assets/QuartersSDK/Modules/InAppPurchases/Constants.cs" Line="11" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
