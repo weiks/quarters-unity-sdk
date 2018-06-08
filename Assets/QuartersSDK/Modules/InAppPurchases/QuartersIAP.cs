@@ -3,9 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using Newtonsoft.Json;
+using PlayFab;
+using PlayFab.ClientModels;
 
 namespace QuartersSDK {
     public class QuartersIAP : MonoBehaviour, IStoreListener  {
+
+        public static QuartersIAP Instance;
+
+        public void Awake() {
+            Instance = this;
+        }
+
 
         /// <summary>
         /// Loaded product lists with definitions and meta data. Can be used to populate UI Shop with ready to purchase products
@@ -121,20 +130,20 @@ namespace QuartersSDK {
 
 
         public void BuyProduct(Product product, PurchaseSucessfull purchaseSucessfullDelegate, PurchaseFailed purchaseFailedDelegate ) {
-                if (!IsQuartersProduct(product)) return;
+            if (!IsQuartersProduct(product)) return;
 
-                Debug.Log("Buying Quarters: " + product.definition.storeSpecificId);
+            Debug.Log("Buying Quarters: " + product.definition.storeSpecificId);
 
-                #if UNITY_IOS || UNITY_ANDROID
+            #if UNITY_IOS || UNITY_ANDROID
 
-                    this.PurchaseSucessfullDelegate = purchaseSucessfullDelegate;
-                    this.PurchaseFailedDelegate = purchaseFailedDelegate;
-                    controller.InitiatePurchase(product);
+                this.PurchaseSucessfullDelegate = purchaseSucessfullDelegate;
+                this.PurchaseFailedDelegate = purchaseFailedDelegate;
+                controller.InitiatePurchase(product);
 
-                #elif
-                    Debug.LogError("Purchasing quarters through IAP is not supported on this platform
-                #endif
-            }
+            #elif
+                Debug.LogError("Purchasing quarters through IAP is not supported on this platform
+            #endif
+        }
 
 
 
@@ -142,31 +151,62 @@ namespace QuartersSDK {
          
 
 
-            public void OnPurchaseFailed (Product i, PurchaseFailureReason p) {
+        public void OnPurchaseFailed (Product i, PurchaseFailureReason p) {
 
-                Debug.Log("OnPurchaseFailed : " + p.ToString());
-                Debug.Log(JsonConvert.SerializeObject(i));
+            Debug.Log("OnPurchaseFailed : " + p.ToString());
+            Debug.Log(JsonConvert.SerializeObject(i));
 
-                ProductMetadata metaData = i.metadata;
+            ProductMetadata metaData = i.metadata;
 
-                if (this.PurchaseFailedDelegate != null) this.PurchaseFailedDelegate(p.ToString());
+            if (this.PurchaseFailedDelegate != null) this.PurchaseFailedDelegate(p.ToString());
 
-            }
-
-
-
-
-
-            public PurchaseProcessingResult ProcessPurchase (PurchaseEventArgs e){
-
-                //TODO validate purchase with playfab
+        }
 
 
 
 
 
-                return PurchaseProcessingResult.Complete;
-            }
+        public PurchaseProcessingResult ProcessPurchase (PurchaseEventArgs e){
+
+            #if UNITY_IOS
+            //TODO add callbacks here
+            VerifyAppleTransaction(e.purchasedProduct);
+
+
+
+            #endif
+
+
+
+
+
+
+            return PurchaseProcessingResult.Pending;
+        }
+
+
+
+
+
+
+
+        public void VerifyAppleTransaction(Product product) {
+            ExecuteCloudScriptRequest request = new ExecuteCloudScriptRequest();
+            request.FunctionName = "VerifyApplePurchase";
+            request.FunctionParameter = new {
+                Product = product
+            };
+
+
+            PlayFabClientAPI.ExecuteCloudScript(request, delegate(ExecuteCloudScriptResult result) {
+
+                Debug.Log(JsonConvert.SerializeObject(result.FunctionResult.ToString()));
+
+
+            }, delegate(PlayFabError error) {
+                PurchaseFailedDelegate("Failed to verify receipt: " + error);
+            });
+        }
 
 
 

@@ -34,6 +34,14 @@ namespace QuartersSDK {
 
 			instance = quarters.AddComponent<Quarters>();
 			instance.Init();
+
+            #if QUARTERS_MODULE_PLAYFAB
+            GameObject quartersIAP = new GameObject("QuartersIAP");
+            quartersIAP.transform.SetParent(this.transform);
+            DontDestroyOnLoad(quartersIAP.gameObject);
+            quartersIAP.AddComponent<QuartersIAP>();
+            #endif
+
 		}
 
 
