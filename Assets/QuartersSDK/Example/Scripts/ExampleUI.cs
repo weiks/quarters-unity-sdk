@@ -214,13 +214,37 @@ public class ExampleUI : MonoBehaviour {
 
 
         #else
-                Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
+            Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
         #endif
 
     }
      
 
 
+
+
+    public void ButtonBuyIAPTapped() {
+
+        #if QUARTERS_MODULE_PLAYFAB
+        //test purchase of first initialized product
+        QuartersIAP.Instance.BuyProduct(QuartersIAP.Instance.products[0], (Product product) => {
+            
+            Debug.Log("Purchase complete");
+
+
+        },(string error) => {
+            Debug.LogError("Purchase error: " + error);
+        });
+
+
+
+
+
+        #else
+            Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
+        #endif
+
+    }
 
 
 

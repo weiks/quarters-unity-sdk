@@ -140,7 +140,7 @@ namespace QuartersSDK {
                 this.PurchaseFailedDelegate = purchaseFailedDelegate;
                 controller.InitiatePurchase(product);
 
-            #elif
+            #else
                 Debug.LogError("Purchasing quarters through IAP is not supported on this platform
             #endif
         }
@@ -168,6 +168,9 @@ namespace QuartersSDK {
 
         public PurchaseProcessingResult ProcessPurchase (PurchaseEventArgs e){
 
+
+            Debug.Log("ProcessPurchase");
+
             #if UNITY_IOS
             //TODO add callbacks here
             VerifyAppleTransaction(e.purchasedProduct);
@@ -191,19 +194,43 @@ namespace QuartersSDK {
 
 
         public void VerifyAppleTransaction(Product product) {
+
             ExecuteCloudScriptRequest request = new ExecuteCloudScriptRequest();
             request.FunctionName = "VerifyApplePurchase";
+
+
+            //due to mysterious serialisation issues trimming product data to only needed
             request.FunctionParameter = new {
-                Product = product
+                UseSandbox = true,
+                Receipt = product.receipt,
+                ProductId = product.definition.id,
+                TransactionId = product.transactionID
             };
 
 
             PlayFabClientAPI.ExecuteCloudScript(request, delegate(ExecuteCloudScriptResult result) {
 
-                Debug.Log(JsonConvert.SerializeObject(result.FunctionResult.ToString()));
+                foreach (LogStatement log in result.Logs) {
+                    Debug.Log("CLOUD SCRIPT: " + log.Message);
+                }
+
+                if (result.Error != null) {
+                    Debug.LogError(result.Error.Message);
+                    Debug.LogError(result.Error.StackTrace);
+                }
+                else {
+                    Debug.Log(result.FunctionResult.ToString());
+                }
+
+
 
 
             }, delegate(PlayFabError error) {
+
+                Debug.LogError(error.Error.ToString());
+                Debug.LogError(error.ErrorMessage);
+                Debug.LogError(error.ErrorDetails);
+
                 PurchaseFailedDelegate("Failed to verify receipt: " + error);
             });
         }
