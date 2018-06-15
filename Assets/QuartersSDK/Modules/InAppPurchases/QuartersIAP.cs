@@ -180,10 +180,6 @@ namespace QuartersSDK {
             #endif
 
 
-
-
-
-
             return PurchaseProcessingResult.Pending;
         }
 
@@ -201,6 +197,7 @@ namespace QuartersSDK {
 
             //due to mysterious serialisation issues trimming product data to only needed
             request.FunctionParameter = new {
+                UserId = Quarters.Instance.CurrentUser.id,
                 UseSandbox = true,
                 Receipt = product.receipt,
                 ProductId = product.definition.id,
@@ -217,9 +214,28 @@ namespace QuartersSDK {
                 if (result.Error != null) {
                     Debug.LogError(result.Error.Message);
                     Debug.LogError(result.Error.StackTrace);
+                    if (PurchaseFailedDelegate != null) PurchaseFailedDelegate(result.Error.Message);
                 }
                 else {
                     Debug.Log(result.FunctionResult.ToString());
+
+                    Hashtable resultData = JsonConvert.DeserializeObject<Hashtable>(result.FunctionResult.ToString());
+
+                    string status = (string)resultData["Status"];
+                    if (status == "Success") {
+                        //at this point Quarters are already awarded on the server side
+                        if (PurchaseSucessfullDelegate != null) PurchaseSucessfullDelegate(product);
+                    }
+                    else {
+                        //error
+                        string errorMessage = (string)resultData["ErrorMessage"];
+                        Debug.Log(resultData["ErrorCode"].GetType());
+                        int errorCode = (int)(long)resultData["ErrorCode"];
+
+                        if (PurchaseFailedDelegate != null) PurchaseFailedDelegate("Playfab receipt validation failed: " + errorMessage);
+                    }
+
+              
                 }
 
 

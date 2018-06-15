@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{973AEB65-1D6B-A18E-30D6-FC5E986F40DB}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Modules/InAppPurchases/QuartersIAP.cs">
     <Files>
-      <File FileName="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs" Line="230" Column="34" />
-      <File FileName="Assets/QuartersSDK/Modules/InAppPurchases/QuartersIAP.cs" Line="222" Column="1" />
-      <File FileName="Assets/PlayFabSdk/Client/PlayFabClientAPI.cs" Line="187" Column="14" />
-      <File FileName="Assets/PlayFabSdk/Client/PlayFabClientModels.cs" Line="1180" Column="18" />
-      <File FileName="Assets/PlayFabSdk/Shared/Internal/SimpleJson.cs" Line="1160" Column="14" />
+      <File FileName="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs" Line="236" Column="1" />
+      <File FileName="Assets/QuartersSDK/Modules/InAppPurchases/QuartersIAP.cs" Line="220" Column="1" />
+      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="12" Column="23" />
+      <File FileName="Assets/QuartersSDK/Modules/PlayFab/Quarters.cs" Line="9" Column="26" />
+      <File FileName="Assets/QuartersSDK/Scripts/Constants.cs" Line="18" Column="33" />
+      <File FileName="Assets/QuartersSDK/Modules/InAppPurchases/Constants.cs" Line="7" Column="29" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
