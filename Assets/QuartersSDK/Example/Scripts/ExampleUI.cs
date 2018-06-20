@@ -200,7 +200,6 @@ public class ExampleUI : MonoBehaviour {
 
         List<string> testProducts = new List<string>();
         testProducts.Add(4 + Constants.QUARTERS_PRODUCT_KEY);
-        testProducts.Add(6 + Constants.QUARTERS_PRODUCT_KEY);
         testProducts.Add(8 + Constants.QUARTERS_PRODUCT_KEY);
 
         QuartersIAP.Instance.Initialize(testProducts, delegate(Product[] products) {
