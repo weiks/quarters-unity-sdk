@@ -150,9 +150,8 @@ public class ExampleUI : MonoBehaviour {
 
 
 
-    public void ButtonGetAccountRewardTapped() {
 
-        #if QUARTERS_MODULE_PLAYFAB
+    private void LoginWithCustomId(System.Action OnComplete) {
 
         //login user to playfab title using device id
         LoginWithCustomIDRequest loginRequest = new LoginWithCustomIDRequest();
@@ -164,6 +163,24 @@ public class ExampleUI : MonoBehaviour {
 
             Debug.Log("Playfab user logged in: " + result.PlayFabId);
 
+            OnComplete();
+
+        }, delegate (PlayFabError error){
+            Debug.LogError(error.ErrorMessage);
+        });
+
+
+    }
+
+
+
+    public void ButtonGetAccountRewardTapped() {
+
+        #if QUARTERS_MODULE_PLAYFAB
+
+        //user must be logged with playfab to call any cloud script code
+        LoginWithCustomId(delegate {
+            
             //Request 2 quarters from Playfab Cloud build
             Quarters.Instance.AwardQuarters(2, delegate(string transactionHash) {
 
@@ -177,13 +194,11 @@ public class ExampleUI : MonoBehaviour {
                 RefreshUI();
 
             });
-
-        }, delegate (PlayFabError error){
-            Debug.LogError(error.ErrorMessage);
         });
 
+           
 
-
+       
         #else
         Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
         #endif
@@ -198,19 +213,23 @@ public class ExampleUI : MonoBehaviour {
 
         #if QUARTERS_MODULE_PLAYFAB
 
-        List<string> testProducts = new List<string>();
-        testProducts.Add(4 + Constants.QUARTERS_PRODUCT_KEY);
-        testProducts.Add(8 + Constants.QUARTERS_PRODUCT_KEY);
+        //user must be logged with playfab to call any cloud script code
+        LoginWithCustomId(delegate {
 
-        QuartersIAP.Instance.Initialize(testProducts, delegate(Product[] products) {
-        
+            List<string> testProducts = new List<string>();
+            testProducts.Add(4 + Constants.QUARTERS_PRODUCT_KEY);
+            testProducts.Add(8 + Constants.QUARTERS_PRODUCT_KEY);
+
+            QuartersIAP.Instance.Initialize(testProducts, delegate(Product[] products) {
+            
 
 
-        }, delegate(InitializationFailureReason reason) {
-        
-            Debug.LogError(reason.ToString());
+            }, delegate(InitializationFailureReason reason) {
+            
+                Debug.LogError(reason.ToString());
+            });
+
         });
-
 
         #else
             Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
@@ -234,8 +253,6 @@ public class ExampleUI : MonoBehaviour {
         },(string error) => {
             Debug.LogError("Purchase error: " + error);
         });
-
-
 
 
 
