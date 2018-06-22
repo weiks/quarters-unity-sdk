@@ -172,13 +172,9 @@ namespace QuartersSDK {
             Debug.Log("ProcessPurchase");
 
             #if UNITY_IOS
-            //TODO add callbacks here
             VerifyAppleTransaction(e.purchasedProduct);
 
-
-
             #endif
-
 
             return PurchaseProcessingResult.Pending;
         }
@@ -224,6 +220,7 @@ namespace QuartersSDK {
                     string status = (string)resultData["Status"];
                     if (status == "Success") {
                         //at this point Quarters are already awarded on the server side
+                        controller.ConfirmPendingPurchase(product);
                         if (PurchaseSucessfullDelegate != null) PurchaseSucessfullDelegate(product);
                     }
                     else {
