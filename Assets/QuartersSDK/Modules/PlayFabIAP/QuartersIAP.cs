@@ -36,7 +36,7 @@ namespace QuartersSDK {
         public delegate void OnInitializeFailedDelegate (InitializationFailureReason reason);
         public OnInitializeFailedDelegate OnInitializeFailedEvent;
 
-        public delegate void PurchaseSucessfull(Product product);
+        public delegate void PurchaseSucessfull(Product product, string txId);
         public event PurchaseSucessfull PurchaseSucessfullDelegate;
 
 
@@ -132,6 +132,12 @@ namespace QuartersSDK {
         public void BuyProduct(Product product, PurchaseSucessfull purchaseSucessfullDelegate, PurchaseFailed purchaseFailedDelegate ) {
             if (!IsQuartersProduct(product)) return;
 
+
+            if (products.Count == 0) {
+                Debug.LogError("No products loaded. Call QuartersIAP.Initialize first!");
+                return;
+            }
+
             Debug.Log("Buying Quarters: " + product.definition.storeSpecificId);
 
             #if UNITY_IOS || UNITY_ANDROID
@@ -181,10 +187,6 @@ namespace QuartersSDK {
 
 
 
-
-
-
-
         public void VerifyAppleTransaction(Product product) {
 
             ExecuteCloudScriptRequest request = new ExecuteCloudScriptRequest();
@@ -221,7 +223,9 @@ namespace QuartersSDK {
                     if (status == "Success") {
                         //at this point Quarters are already awarded on the server side
                         controller.ConfirmPendingPurchase(product);
-                        if (PurchaseSucessfullDelegate != null) PurchaseSucessfullDelegate(product);
+                        string txId = (string)resultData["TxId"];
+
+                        if (PurchaseSucessfullDelegate != null) PurchaseSucessfullDelegate(product, txId);
                     }
                     else {
                         //error

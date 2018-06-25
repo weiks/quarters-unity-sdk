@@ -244,27 +244,57 @@ public class ExampleUI : MonoBehaviour {
     public void ButtonBuyIAPTapped() {
 
         #if QUARTERS_MODULE_PLAYFAB
-        //test purchase of first initialized product
-        QuartersIAP.Instance.BuyProduct(QuartersIAP.Instance.products[0], (Product product) => {
-            
-            Debug.Log("Purchase complete");
+
+        if (Application.isEditor) Debug.LogError("Buying IAP is not supported in Unity Editor");
+
+        #if !UNITY_IOS
+            Debug.LogError("Buying IAP only supported on iOS at this moment");
+            return;
+        #endif
 
 
-        },(string error) => {
-            Debug.LogError("Purchase error: " + error);
+        if (QuartersIAP.Instance.products.Count == 0) {
+            Debug.LogError("No products loaded. Call QuartersIAP.Initialize first!");
+            return;
+        }
+
+
+        Quarters.Instance.GetUserDetails(delegate(User user) {
+            Debug.Log("User loaded");
+
+            debugConsole.text += "\n";
+            debugConsole.text += "\nUser loaded: ";
+            debugConsole.text += JsonConvert.SerializeObject(user, Formatting.Indented);
+
+            //test purchase of first initialized product
+            QuartersIAP.Instance.BuyProduct(QuartersIAP.Instance.products[0], (Product product, string txId) => {
+
+                Debug.Log("Purchase complete");
+                debugConsole.text += "\n";
+                debugConsole.text += "\nTransfer successful, transactionHash: " + txId;
+                Debug.Log("Console: " + debugConsole.text);
+
+
+            },(string error) => {
+                Debug.LogError("Purchase error: " + error);
+
+                debugConsole.text += "\n";
+                debugConsole.text += "\nOnTransactionFailed: " + error;
+                Debug.Log("Console: " + debugConsole.text);
+            });
+
+
+        }, delegate (string error) {
+            Debug.LogError("Cannot load the user details: " + error);
+            debugConsole.text += "\n";
+            debugConsole.text += "\nCannot load the user details:: " + error;
         });
-
-
 
         #else
             Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
         #endif
 
     }
-
-
-
-
 
 
 
