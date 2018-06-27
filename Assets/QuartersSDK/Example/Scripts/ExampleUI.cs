@@ -15,6 +15,7 @@ public class ExampleUI : MonoBehaviour {
 
     public List<CanvasGroup> authorizedOnlyUI = new List<CanvasGroup>();
     public List<CanvasGroup> unAuthorizedOnlyUI = new List<CanvasGroup>();
+    public List<CanvasGroup> playfabModuleOnlyUI = new List<CanvasGroup>();
     public Text debugConsole;
 
     public InputField tokensInput;
@@ -153,6 +154,8 @@ public class ExampleUI : MonoBehaviour {
 
     private void LoginWithCustomId(System.Action OnComplete) {
 
+        #if QUARTERS_MODULE_PLAYFAB
+
         //login user to playfab title using device id
         LoginWithCustomIDRequest loginRequest = new LoginWithCustomIDRequest();
         loginRequest.CustomId = SystemInfo.deviceUniqueIdentifier;
@@ -168,6 +171,11 @@ public class ExampleUI : MonoBehaviour {
         }, delegate (PlayFabError error){
             Debug.LogError(error.ErrorMessage);
         });
+
+
+        #else
+        Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
+        #endif
 
 
     }

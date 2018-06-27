@@ -5,6 +5,10 @@ PlayFab Module allows very simple way for the user to purchase Quarters using pl
 
 ###############################
 
+Suported platforms: iOS
+
+###############################
+
 Prerequisites:
 - QuartersPlayFabModule correctly configured and Playfab Title configured. If you havent done this step install QuartersSDK/Modules/PlayFab/PlayFabModule.unitypackage and follow the documentation.
 - Unity IAP Package https://docs.unity3d.com/Manual/UnityIAPSettingUp.html
