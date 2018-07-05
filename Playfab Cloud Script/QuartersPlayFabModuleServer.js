@@ -202,7 +202,106 @@ function ParseAppleError (errorCode) {
 
 
 
+handlers.VerifyGooglePurchase = function (args, context) {
 
+    var result = VerifyGooglePurchase(args);
+    return result;
+};
+
+
+
+
+
+function VerifyGooglePurchase (args) {
+
+    var result = {};
+
+    var user = args["UserId"];
+    var useSandbox = args["UseSandbox"];
+    var packageName = args["PackageName"];
+    var token = args["Token"];
+
+
+    log.info("VerifyGooglePurchase");
+    log.info("Product id:" + productId);
+    log.info("PackageName:" + packageName);
+    log.info("Token: " + token);
+
+
+    var url = "";
+    if (useSandbox) {
+        url = "https://sandbox.itunes.apple.com/verifyReceipt";
+    }
+    else {
+        url = "https://buy.itunes.apple.com/verifyReceipt";
+    }
+
+    var postData = {
+        "receipt-data": receipt
+    }
+
+    var contentType = "application/json";
+    var contentBody = JSON.stringify(postData);
+    var response = http.request(url, "post", contentBody, contentType, null);
+
+    var status = JSON.parse(response)["status"];
+
+    if (status == 0) {
+
+        var responseReceipt = JSON.parse(response)["receipt"];
+        log.info(responseReceipt);
+        var receiptPurchases = responseReceipt["in_app"];
+        log.info("in_app " + receiptPurchases);
+        log.info("receipt purchases count: " + receiptPurchases.length);
+
+        //parse amount from productId
+        var receiptProductId = receiptPurchases[0]["product_id"];
+        log.info(receiptProductId);
+
+
+        var quartersAmount = ParseQuartersAmount(receiptProductId);
+        log.info("quartersAmount " + quartersAmount);
+
+        //transaction is valid, award quarters
+        var transferPostData = {
+            "amount": quartersAmount,
+            "user": user
+        }
+
+        var transferUrl = TRANSFER_URL + "/v1/accounts/" + APP_ADDRESS + "/transfer";
+
+        var headers = {
+            'Authorization': 'Bearer ' + SERVER_TOKEN,
+            'Content-Type': 'application/json;charset=UTF-8'
+        };
+
+        var transferResponse = http.request(transferUrl, "post", JSON.stringify(transferPostData), "application/json", headers);
+        var transferData = JSON.parse(transferResponse);
+
+        if (transferData.hasOwnProperty('txId')) {
+
+            result = {
+                Status : "Success",
+                TxId : transferData.txId
+            };
+        }
+        else {
+            result = {
+                Status : "Error",
+                ErrorMessage : "Transfer failed"
+            };
+        }
+    }
+    else {
+        result = {
+            Status : "Error",
+            ErrorCode : status,
+            ErrorMessage : ParseAppleError(status)
+        };
+    }
+
+    return result;
+}
 
 
 

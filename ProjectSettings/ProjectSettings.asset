@@ -244,8 +244,8 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: Keystore/keystore.keystore
+  AndroidKeyaliasName: keystore
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   AndroidEnableTango: 0
@@ -557,7 +557,8 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    4: 
+    4: QUARTERS_MODULE_PLAYFAB
+    7: QUARTERS_MODULE_PLAYFAB
   platformArchitecture: {}
   scriptingBackend: {}
   incrementalIl2cppBuild: {}
