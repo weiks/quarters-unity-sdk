@@ -173,14 +173,19 @@ namespace QuartersSDK {
 
 
         public PurchaseProcessingResult ProcessPurchase (PurchaseEventArgs e){
+            
+            Debug.Log("ProcessPurchase: " + JsonConvert.SerializeObject(e));
 
-
-            Debug.Log("ProcessPurchase");
 
             #if UNITY_IOS
             VerifyAppleTransaction(e.purchasedProduct);
 
             #endif
+
+
+
+
+
 
             return PurchaseProcessingResult.Pending;
         }

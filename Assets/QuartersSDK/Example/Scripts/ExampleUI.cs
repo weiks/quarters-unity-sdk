@@ -255,11 +255,6 @@ public class ExampleUI : MonoBehaviour {
 
         if (Application.isEditor) Debug.LogError("Buying IAP is not supported in Unity Editor");
 
-        #if !UNITY_IOS
-            Debug.LogError("Buying IAP only supported on iOS at this moment");
-            return;
-        #endif
-
 
         if (QuartersIAP.Instance.products.Count == 0) {
             Debug.LogError("No products loaded. Call QuartersIAP.Initialize first!");

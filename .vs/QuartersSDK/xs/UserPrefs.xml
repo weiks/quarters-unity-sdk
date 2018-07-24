@@ -1,15 +1,10 @@
 ﻿<Properties StartupConfiguration="{973AEB65-1D6B-A18E-30D6-FC5E986F40DB}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Modules/PlayFabIAP/QuartersIAP.cs">
     <Files>
-      <File FileName="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs" Line="222" Column="36" />
-      <File FileName="Assets/QuartersSDK/Docs/PlayFab IAP Module.txt" Line="39" Column="22" />
-      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="114" Column="13" />
-      <File FileName="Assets/QuartersSDK/Docs/Docs.txt" Line="170" Column="84" />
-      <File FileName="Assets/QuartersSDK/Scripts/QuartersSession.cs" Line="20" Column="23" />
-      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="1" Column="1" />
-      <File FileName="Assets/QuartersSDK/Scripts/Editor/AndroidManifestGenerator.cs" Line="32" Column="31" />
-      <File FileName="Assets/QuartersSDK/Modules/PlayFab/QuartersPlayFabModuleServer.txt" Line="1" Column="1" />
-      <File FileName="Assets/QuartersSDK/Docs/PlayFab Module.txt" Line="22" Column="50" />
+      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="23" Column="12" />
+      <File FileName="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs" Line="228" Column="56" />
+      <File FileName="Assets/QuartersSDK/Modules/PlayFabIAP/Constants.cs" Line="7" Column="30" />
+      <File FileName="Assets/QuartersSDK/Modules/PlayFabIAP/QuartersIAP.cs" Line="182" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
