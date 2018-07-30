@@ -8,8 +8,10 @@ namespace QuartersSDK {
         public static QuartersInit Instance;
         public string APP_ID = "";
         public string APP_KEY = "";
+        public string SERVER_API_TOKEN = "";
 		public Environment environment = Environment.production;
 
+        public string testRecipt = "";
 
 		private static Quarters instance;
 

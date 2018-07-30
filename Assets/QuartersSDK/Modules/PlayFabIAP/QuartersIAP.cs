@@ -5,6 +5,8 @@ using UnityEngine.Purchasing;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace QuartersSDK {
     public class QuartersIAP : MonoBehaviour, IStoreListener  {
@@ -174,21 +176,104 @@ namespace QuartersSDK {
 
         public PurchaseProcessingResult ProcessPurchase (PurchaseEventArgs e){
             
-            Debug.Log("ProcessPurchase: " + JsonConvert.SerializeObject(e));
+            Debug.Log("ProcessPurchase: " + e.purchasedProduct.definition.id);
+            //Debug.Log("transaction id: " + JsonConvert.SerializeObject(e.purchasedProduct.transactionID));
+            //Debug.Log("receipt: " + JsonConvert.SerializeObject(e.purchasedProduct.receipt));
 
+           
 
-            #if UNITY_IOS
-            VerifyAppleTransaction(e.purchasedProduct);
-
-            #endif
-
-
+            StartCoroutine(VerifyPurchase(e));
 
 
 
 
             return PurchaseProcessingResult.Pending;
         }
+
+
+
+ 
+
+
+        void Update() {
+            if (Input.GetKeyDown("t")) {
+                StartCoroutine(VerifyPurchase());
+            }
+        }
+
+
+
+        public IEnumerator VerifyPurchase(PurchaseEventArgs e = null) {
+
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("x-api-key", QuartersInit.Instance.APP_KEY);
+
+
+            string url = Quarters.API_URL + "/apps/" + QuartersInit.Instance.APP_ID + "/verifyReceipt/unity";
+
+            Dictionary<string, object> data = new Dictionary<string, object>();
+
+            Hashtable receiptHt = JsonConvert.DeserializeObject<Hashtable>(Regex.Unescape(e.purchasedProduct.receipt));
+
+
+            data.Add("receipt", receiptHt);
+            data.Add("user", Quarters.Instance.CurrentUser.id);
+
+
+            //storing receipt data for debugging
+            string fileName = Application.persistentDataPath + "/" + Random.Range(0, 100000).ToString() + ".json";
+            Debug.Log(fileName);
+
+            if (File.Exists(fileName)) {
+                Debug.Log(fileName + " already exists.");
+
+            }
+            var sr = File.CreateText(fileName);
+
+
+            sr.WriteLine (JsonConvert.SerializeObject(data));
+            sr.Close();
+
+           
+        
+
+            string dataJson = JsonConvert.SerializeObject(data);
+            Debug.Log(dataJson);
+            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+
+
+            WWW www = new WWW(url, dataBytes, headers);
+            Debug.Log(www.url);
+
+            while (!www.isDone) yield return new WaitForEndOfFrame();
+
+            if (!string.IsNullOrEmpty(www.error)) {
+                Debug.LogError(www.error);
+
+
+
+                if (PurchaseFailedDelegate != null) PurchaseFailedDelegate(www.error);
+            }
+            else {
+                Debug.Log(www.text);
+
+
+                //if (PurchaseSucessfullDelegate != null) PurchaseSucessfullDelegate(product, txId);
+
+                //consume product
+                controller.ConfirmPendingPurchase(e.purchasedProduct);
+
+            }
+
+
+        }
+
+
+
+
+
+
 
 
 
