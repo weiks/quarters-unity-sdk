@@ -155,10 +155,6 @@ namespace QuartersSDK {
 
 
 
-
-         
-
-
         public void OnPurchaseFailed (Product i, PurchaseFailureReason p) {
 
             Debug.Log("OnPurchaseFailed : " + p.ToString());
@@ -177,51 +173,43 @@ namespace QuartersSDK {
         public PurchaseProcessingResult ProcessPurchase (PurchaseEventArgs e){
             
             Debug.Log("ProcessPurchase: " + e.purchasedProduct.definition.id);
-            //Debug.Log("transaction id: " + JsonConvert.SerializeObject(e.purchasedProduct.transactionID));
-            //Debug.Log("receipt: " + JsonConvert.SerializeObject(e.purchasedProduct.receipt));
-
-           
 
             StartCoroutine(VerifyPurchase(e));
-
-
-
 
             return PurchaseProcessingResult.Pending;
         }
 
 
 
- 
-
-
-        void Update() {
-            if (Input.GetKeyDown("t")) {
-                StartCoroutine(VerifyPurchase());
-            }
-        }
-
-
 
         public IEnumerator VerifyPurchase(PurchaseEventArgs e = null) {
 
+            Debug.Log("Verify purchase");
 
             Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("x-api-key", QuartersInit.Instance.APP_KEY);
+            headers.Add("Content-Type", "application/json;charset=UTF-8");
+            headers.Add("x-api-key", QuartersInit.Instance.SERVER_API_TOKEN);
 
 
             string url = Quarters.API_URL + "/apps/" + QuartersInit.Instance.APP_ID + "/verifyReceipt/unity";
 
+
+            Dictionary<string, string> receiptData = JsonConvert.DeserializeObject<Dictionary<string, string>>(e.purchasedProduct.receipt);
+
+
+            Hashtable receipt = new Hashtable();
+            receipt.Add("Store", receiptData["Store"]);
+            receipt.Add("TransactionID", receiptData["TransactionID"]);
+            receipt.Add("Payload", receiptData["Payload"]);
+
+
+  
             Dictionary<string, object> data = new Dictionary<string, object>();
-
-            Hashtable receiptHt = JsonConvert.DeserializeObject<Hashtable>(Regex.Unescape(e.purchasedProduct.receipt));
-
-
-            data.Add("receipt", receiptHt);
+            data.Add("receipt", receipt);
             data.Add("user", Quarters.Instance.CurrentUser.id);
 
 
-            //storing receipt data for debugging
+
             string fileName = Application.persistentDataPath + "/" + Random.Range(0, 100000).ToString() + ".json";
             Debug.Log(fileName);
 
@@ -235,8 +223,7 @@ namespace QuartersSDK {
             sr.WriteLine (JsonConvert.SerializeObject(data));
             sr.Close();
 
-           
-        
+
 
             string dataJson = JsonConvert.SerializeObject(data);
             Debug.Log(dataJson);
@@ -251,98 +238,28 @@ namespace QuartersSDK {
             if (!string.IsNullOrEmpty(www.error)) {
                 Debug.LogError(www.error);
 
-
-
                 if (PurchaseFailedDelegate != null) PurchaseFailedDelegate(www.error);
             }
             else {
                 Debug.Log(www.text);
-
-
-                //if (PurchaseSucessfullDelegate != null) PurchaseSucessfullDelegate(product, txId);
+                Hashtable resultData = JsonConvert.DeserializeObject<Hashtable>(www.text);
 
                 //consume product
-                controller.ConfirmPendingPurchase(e.purchasedProduct);
+
+                if (resultData.ContainsKey("txId")) {
+                    string txId = (string)resultData["txId"];
+                    Debug.Log("Consume product");
+                    controller.ConfirmPendingPurchase(e.purchasedProduct);
+
+                    if (PurchaseSucessfullDelegate != null) PurchaseSucessfullDelegate(e.purchasedProduct, txId);
+                }
+                else {
+                    if (PurchaseFailedDelegate != null) PurchaseFailedDelegate(www.text);
+                }
 
             }
 
-
         }
-
-
-
-
-
-
-
-
-
-        public void VerifyAppleTransaction(Product product) {
-
-            ExecuteCloudScriptRequest request = new ExecuteCloudScriptRequest();
-            request.FunctionName = "VerifyApplePurchase";
-
-
-            //due to mysterious serialisation issues trimming product data to only needed
-            request.FunctionParameter = new {
-                UserId = Quarters.Instance.CurrentUser.id,
-                UseSandbox = true,
-                Receipt = product.receipt,
-                ProductId = product.definition.id,
-                TransactionId = product.transactionID
-            };
-
-
-            PlayFabClientAPI.ExecuteCloudScript(request, delegate(ExecuteCloudScriptResult result) {
-
-                foreach (LogStatement log in result.Logs) {
-                    Debug.Log("CLOUD SCRIPT: " + log.Message);
-                }
-
-                if (result.Error != null) {
-                    Debug.LogError(result.Error.Message);
-                    Debug.LogError(result.Error.StackTrace);
-                    if (PurchaseFailedDelegate != null) PurchaseFailedDelegate(result.Error.Message);
-                }
-                else {
-                    Debug.Log(result.FunctionResult.ToString());
-
-                    Hashtable resultData = JsonConvert.DeserializeObject<Hashtable>(result.FunctionResult.ToString());
-
-                    string status = (string)resultData["Status"];
-                    if (status == "Success") {
-                        //at this point Quarters are already awarded on the server side
-                        controller.ConfirmPendingPurchase(product);
-                        string txId = (string)resultData["TxId"];
-
-                        if (PurchaseSucessfullDelegate != null) PurchaseSucessfullDelegate(product, txId);
-                    }
-                    else {
-                        //error
-                        string errorMessage = (string)resultData["ErrorMessage"];
-                        Debug.Log(resultData["ErrorCode"].GetType());
-                        int errorCode = (int)(long)resultData["ErrorCode"];
-
-                        if (PurchaseFailedDelegate != null) PurchaseFailedDelegate("Playfab receipt validation failed: " + errorMessage);
-                    }
-
-              
-                }
-
-
-
-
-            }, delegate(PlayFabError error) {
-
-                Debug.LogError(error.Error.ToString());
-                Debug.LogError(error.ErrorMessage);
-                Debug.LogError(error.ErrorDetails);
-
-                PurchaseFailedDelegate("Failed to verify receipt: " + error);
-            });
-        }
-
-
 
 
 

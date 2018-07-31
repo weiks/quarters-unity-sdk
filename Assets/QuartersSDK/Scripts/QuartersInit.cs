@@ -11,7 +11,6 @@ namespace QuartersSDK {
         public string SERVER_API_TOKEN = "";
 		public Environment environment = Environment.production;
 
-        public string testRecipt = "";
 
 		private static Quarters instance;
 
@@ -28,6 +27,7 @@ namespace QuartersSDK {
 
 			if (string.IsNullOrEmpty(APP_ID)) Debug.LogError("Quarters App Id is empty");
 			if (string.IsNullOrEmpty(APP_KEY)) Debug.LogError("Quarters App key is empty");
+            if (string.IsNullOrEmpty(SERVER_API_TOKEN)) Debug.LogError("Quarters Server Token key is empty");
 
 
 			GameObject quarters = new GameObject("Quarters");

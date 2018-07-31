@@ -1,11 +1,8 @@
 ﻿<Properties StartupConfiguration="{973AEB65-1D6B-A18E-30D6-FC5E986F40DB}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Modules/PlayFabIAP/QuartersIAP.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Libs/JsonDotNet/Source/JsonTextReader.cs">
     <Files>
-      <File FileName="Assets/QuartersSDK/Modules/PlayFabIAP/QuartersIAP.cs" Line="220" Column="13" />
-      <File FileName="Assets/QuartersSDK/Scripts/QuartersInit.cs" Line="19" Column="17" />
-      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="339" Column="73" />
-      <File FileName="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs" Line="273" Column="38" />
-      <File FileName="Assets/QuartersSDK/Docs/PlayFab IAP Module.txt" Line="99" Column="25" />
+      <File FileName="Assets/QuartersSDK/Modules/IAP/QuartersIAP.cs" Line="209" Column="13" />
+      <File FileName="Assets/QuartersSDK/Libs/JsonDotNet/Source/JsonTextReader.cs" Line="516" Column="48" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
