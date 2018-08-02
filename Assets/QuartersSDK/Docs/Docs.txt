@@ -116,6 +116,12 @@ General notes:
 GetAccountBalance can be called right away without need of calling GetUserDetail -> GetAccounts -> GetAccountBalance.
 
 
+#####
+0.12.0
+- easier to integrate iOS and Android In App Purchases
+
+#####
+
 
 #####
 0.11.0

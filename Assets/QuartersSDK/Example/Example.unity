@@ -2181,7 +2181,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: PlayFab, In App Purchases modules and PlayFabSDK required
+  m_Text: IAP Module and Unity IAP required
 --- !u!222 &810569614
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2451,7 +2451,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: PlayFab, In App Purchases modules and PlayFabSDK required
+  m_Text: IAP Module and Unity IAP required
 --- !u!222 &1001903925
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3228,8 +3228,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 232055651}
   m_HandleRect: {fileID: 232055650}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3991,7 +3991,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15, y: 0.00002277563}
+  m_AnchoredPosition: {x: 15, y: -0.000005335095}
   m_SizeDelta: {x: -30, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1773134937
