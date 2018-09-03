@@ -17,5 +17,6 @@ namespace QuartersSDK {
 
     public static partial class Constants {
         public const string REFRESH_TOKEN_KEY = "QuartersRefreshToken";
+        public const string GUEST_TOKEN_KEY = "QuartersGuestToken";
     }
 }

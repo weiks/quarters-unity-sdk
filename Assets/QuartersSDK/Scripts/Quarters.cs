@@ -103,6 +103,28 @@ namespace QuartersSDK {
 
         #region high level calls
 
+        public void AuthorizeGuest(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
+
+            session = new QuartersSession();
+
+            this.OnAuthorizationSuccess = OnSuccessDelegate;
+            this.OnAuthorizationFailed = OnFailedDelegate;
+
+            if (IsAuthorized) {
+                this.OnAuthorizationSuccess();
+                return;
+            }
+
+            if (OnAuthorizationStart != null) OnAuthorizationStart();
+
+            //create new guest account
+            StartCoroutine(CreateNewGuestUser());
+
+        }
+
+
+
+
         public void Authorize(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate, bool forceExternalBrowser = false) {
 
             if (!forceExternalBrowser && Application.platform == RuntimePlatform.WindowsEditor) {
@@ -121,12 +143,9 @@ namespace QuartersSDK {
                 return;
             }
 
-
-			Debug.Log("Quarters: Authorize new session");
-
 			if (OnAuthorizationStart != null) OnAuthorizationStart();
 
-            if (Application.isEditor && forceExternalBrowser) {
+            if (Application.isEditor && forceExternalBrowser) { 
 				//spawn editor UI
 				GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
                 AuthorizeEditor();
@@ -137,6 +156,38 @@ namespace QuartersSDK {
 			}
 
 		}
+
+
+
+        public void LoginSignUp(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate, bool forceExternalBrowser = false) {
+
+            string url =  QUARTERS_URL + "/guest?token=" + session.GuestToken + "&redirect_uri=" + URL_SCHEME + "&inline=true";
+
+            if (Application.isEditor && forceExternalBrowser) {
+                
+                //spawn editor UI
+                Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
+
+                Application.OpenURL(url);
+            }
+            else {
+               //direct to the browser
+                if (!forceExternalBrowser) {
+                    //web view authentication
+                    QuartersWebView.OpenURL(url);
+                    QuartersWebView.OnDeepLink = DeepLink;
+                }
+                else {
+                    //external authentication
+                    Application.OpenURL(url);
+                }
+            }
+
+        }
+
+
+
+
 
 
         public void Deauthorize() {
@@ -179,7 +230,7 @@ namespace QuartersSDK {
 
 
 
-
+        //TODO change for new guest to signup/login flow
         private void AuthorizeEditor() {
           
 			string url =  QUARTERS_URL + "/access-token?app_id=" + QuartersInit.Instance.APP_ID + "&app_key=" + QuartersInit.Instance.APP_KEY;
@@ -206,13 +257,7 @@ namespace QuartersSDK {
                 //external authentication
 			    Application.OpenURL(url);
             }
-
 		}
-
-
-
-
-
 
 
 		public void AuthorizationCodeReceived(string code) {
@@ -244,6 +289,44 @@ namespace QuartersSDK {
 
 
         #region api calls
+
+
+        public IEnumerator CreateNewGuestUser() {
+
+            Debug.Log("Create new guest account");
+
+            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
+            headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
+
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            string dataJson = JsonConvert.SerializeObject(data);
+            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+
+
+            WWW www = new WWW(API_URL + "/new-guest", dataBytes, headers);
+            Debug.Log(www.url);
+
+            while (!www.isDone) yield return new WaitForEndOfFrame();
+
+            if (!string.IsNullOrEmpty(www.error)) {
+                Debug.LogError("Create new guest account failed: " + www.error);
+                OnAuthorizationFailed(www.error);
+
+            }
+            else {
+                Debug.Log(www.text);
+
+                //deserialize
+                Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
+                session.GuestToken = responseData["access_token"];
+                OnAuthorizationSuccess();
+
+            }
+
+        }
+
+
+
 
 
 		public IEnumerator GetRefreshToken(string code) {
@@ -455,6 +538,11 @@ namespace QuartersSDK {
                 if (!string.IsNullOrEmpty(accountsLoadingError)) yield break;
             }
 
+            if (CurrentUser.accounts.Count < 1) {
+                OnFailed("User account not loaded");
+                yield break;
+            }
+
             User.Account account = CurrentUser.accounts[0];
 
             string url = API_URL + "/accounts/" + account.address + "/balance";
@@ -581,6 +669,8 @@ namespace QuartersSDK {
 
         private void ProcessDeepLink(bool isExternalBrowser, string url = "") {
 
+            if (url != null) Debug.Log("Process deep link: " + url);
+
             string linkUrl = url;
 
             #if UNITY_ANDROID
@@ -605,7 +695,6 @@ namespace QuartersSDK {
 
                 Dictionary<string, string> urlParams = linkUrl.ParseURI();
 
-                //blindcode as unable to test this without API update
                 if (urlParams.ContainsKey("code")) {
                     //string code = split[1];
                     AuthorizationCodeReceived(urlParams["code"]);

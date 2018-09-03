@@ -11,6 +11,7 @@ namespace QuartersSDK {
 		public string displayName = "";
 		public string email = "";
 		public bool emailVerified = false;
+        public bool isGuest = false;
 	
         public List<Account> accounts = new List<Account>();
 

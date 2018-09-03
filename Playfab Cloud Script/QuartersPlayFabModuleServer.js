@@ -1,6 +1,6 @@
-var TRANSFER_URL = "https://api.pocketfulofquarters.com";
-var SERVER_TOKEN = "xk9q9fdxhbu65lyplqhwqe29klduvtoj9izi0g4wgrdy56b1ddle"; //ENTER SERVER TOKEN HERE
-var APP_ADDRESS = "0x1e2aa0184dcde9502568593d6c5da68966a3275a"; //ENTER APP ADDRESS HERE
+var TRANSFER_URL = "https://api.dev.pocketfulofquarters.com";
+var SERVER_TOKEN = "prfl0jgcdbgc5ozteswmt88148xj0ogrmnexl354qrgsavwaf4a41u6"; //ENTER SERVER TOKEN HERE
+var APP_ADDRESS = "0xe0332d5b7f6012194e6921d67aee8c7a3ad472bd"; //ENTER APP ADDRESS HERE
 
 
 //PlayFab Cloud script handler

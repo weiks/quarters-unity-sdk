@@ -5,13 +5,29 @@ using UnityEngine;
 namespace QuartersSDK {
     public class QuartersSession {
 
+        public bool IsGuestSession {
+            get {
+                return !string.IsNullOrEmpty(GuestToken);
+            }
+        }
+
+
+        public string GuestToken {
+            get {
+                return PlayerPrefs.GetString(Constants.GUEST_TOKEN_KEY, "");
+            }
+            set {
+                PlayerPrefs.SetString(Constants.GUEST_TOKEN_KEY, value);
+            }
+        }
+
 
         public string RefreshToken {
             get {
                 return PlayerPrefs.GetString(Constants.REFRESH_TOKEN_KEY, "");
             }
             set {
-                this.PersistSession(value);
+                PlayerPrefs.SetString(Constants.REFRESH_TOKEN_KEY, value);
             }
         }
 
@@ -19,7 +35,10 @@ namespace QuartersSDK {
         private string accessToken = "";
         public string AccessToken {
             get {
-                return accessToken;
+                if (IsGuestSession) return GuestToken;
+                else {
+                    return accessToken;
+                }
             }
             set {
                 accessToken = value;
@@ -42,18 +61,19 @@ namespace QuartersSDK {
 
         public bool IsAuthorized {
             get {
-                return DoesHaveRefreshToken;
+                if (IsGuestSession) return true;
+                else {
+                    return DoesHaveRefreshToken;
+                }
             }
         }
 
 
 
-        private void PersistSession(string token) {
-            PlayerPrefs.SetString(Constants.REFRESH_TOKEN_KEY, token);
-        }
 
         public void Invalidate() {
             PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN_KEY);
+            PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
         }
 
 

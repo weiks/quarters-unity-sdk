@@ -52,7 +52,10 @@ public class ExampleUI : MonoBehaviour {
 
 
 
+    public void ButtonAuthorizeGuestTapped() {
+        Quarters.Instance.AuthorizeGuest(OnAuthorizationSuccess, OnAuthorizationFailed);
 
+    }
 
 	public void ButtonAuthorizeTapped() {
 		Quarters.Instance.Authorize(OnAuthorizationSuccess, OnAuthorizationFailed);
@@ -63,6 +66,13 @@ public class ExampleUI : MonoBehaviour {
         Quarters.Instance.Deauthorize();
         RefreshUI();
     }
+
+
+    public void ButtonLoginSigupTapped() {
+        Quarters.Instance.LoginSignUp(null, null);
+    }
+
+
 
 	public void ButtonGetUserDetailsTapped() {
 		Quarters.Instance.GetUserDetails(delegate(User user) {
@@ -219,7 +229,7 @@ public class ExampleUI : MonoBehaviour {
 
     public void ButtonInitializeTapped() {
 
-        #if QUARTERS_MODULE_PLAYFAB
+        #if QUARTERS_MODULE_IAP
 
         //user must be logged with playfab to call any cloud script code
         LoginWithCustomId(delegate {
@@ -251,7 +261,7 @@ public class ExampleUI : MonoBehaviour {
 
     public void ButtonBuyIAPTapped() {
 
-        #if QUARTERS_MODULE_PLAYFAB
+        #if QUARTERS_MODULE_IAP
 
         if (Application.isEditor) Debug.LogError("Buying IAP is not supported in Unity Editor");
 
