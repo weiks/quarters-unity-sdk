@@ -328,7 +328,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Login / SignUp
+  m_Text: Sign Up
 --- !u!222 &216437456
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1073,14 +1073,14 @@ MonoBehaviour:
   - {fileID: 221422422}
   - {fileID: 1341852468}
   - {fileID: 491636941}
-  - {fileID: 530123950}
-  - {fileID: 1003449855}
-  - {fileID: 539649842}
   - {fileID: 845774399}
+  - {fileID: 539649842}
   unAuthorizedOnlyUI:
   - {fileID: 820603868}
   - {fileID: 475752215}
   playfabModuleOnlyUI: []
+  authorizedGuestOnlyUI:
+  - {fileID: 845774399}
   debugConsole: {fileID: 1128978615}
   tokensInput: {fileID: 490022744}
   descriptionInput: {fileID: 1730094639}
@@ -2547,7 +2547,7 @@ GameObject:
   - component: {fileID: 845774400}
   - component: {fileID: 845774399}
   m_Layer: 5
-  m_Name: Login/SignUp
+  m_Name: SignUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2642,7 +2642,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 485918169}
-        m_MethodName: ButtonLoginSigupTapped
+        m_MethodName: ButtonSigupTapped
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3667,8 +3667,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 232055651}
   m_HandleRect: {fileID: 232055650}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4431,7 +4431,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15, y: -0.00013302687}
+  m_AnchoredPosition: {x: 15, y: -0.00016733752}
   m_SizeDelta: {x: -30, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1773134937

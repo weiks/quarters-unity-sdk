@@ -69,9 +69,12 @@ namespace QuartersSDK {
         }
 
 
+        public void InvalidateGuestToken() {
+            PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
+        }
 
 
-        public void Invalidate() {
+        public static void Invalidate() {
             PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN_KEY);
             PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
         }

@@ -77,7 +77,6 @@ namespace QuartersSDK {
 			}
 			set {
 				currentUser = value;
-				Debug.Log("Quarters: User details loaded");
 			}
 		}
 
@@ -106,6 +105,11 @@ namespace QuartersSDK {
         public void AuthorizeGuest(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
 
             session = new QuartersSession();
+
+            if (!string.IsNullOrEmpty(session.RefreshToken)) {
+                Debug.LogError("Authorization error. Registered user session exist. Use Authorize User call instead, or Deauthorize Quarters user first");
+                return;
+            }
 
             this.OnAuthorizationSuccess = OnSuccessDelegate;
             this.OnAuthorizationFailed = OnFailedDelegate;
@@ -159,9 +163,9 @@ namespace QuartersSDK {
 
 
 
-        public void LoginSignUp(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate, bool forceExternalBrowser = false) {
+        public void SignUp(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate, bool forceExternalBrowser = false) {
 
-            string url =  QUARTERS_URL + "/guest?token=" + session.GuestToken + "&redirect_uri=" + URL_SCHEME + "&inline=true";
+            string url =  QUARTERS_URL + "/guest?token=" + session.GuestToken + "&redirect_uri=" + URL_SCHEME + "&inline=trueresponse_type=code&client_id=" + QuartersInit.Instance.APP_ID;
 
             if (Application.isEditor && forceExternalBrowser) {
                 
@@ -186,12 +190,8 @@ namespace QuartersSDK {
         }
 
 
-
-
-
-
         public void Deauthorize() {
-            this.session.Invalidate();
+            QuartersSession.Invalidate();
             this.session = null;
             CurrentUser = null;
 
@@ -200,8 +200,9 @@ namespace QuartersSDK {
             OnAuthorizationSuccess = null;
             OnAuthorizationFailed = null;
             currentTransferAPIRequests = new List<TransferAPIRequest>();
-        }
 
+            Debug.Log("Quarters user deauthorized");
+        }
 
 
 
@@ -263,6 +264,16 @@ namespace QuartersSDK {
 		public void AuthorizationCodeReceived(string code) {
 
 			Debug.Log("Quarters: Authorization code: " + code);
+
+            if (session.IsGuestSession) {
+                //real user authorisation, conversion from guest to real user. Invalidate and destroy guest token
+                session.InvalidateGuestToken();
+            }
+
+
+
+
+
 			StartCoroutine(GetRefreshToken(code));
 		
 		}
@@ -330,6 +341,8 @@ namespace QuartersSDK {
 
 
 		public IEnumerator GetRefreshToken(string code) {
+
+            Debug.Log("Get refresh token");
 
 			Dictionary<string, string> data = new Dictionary<string, string>();
 			data.Add("grant_type", "authorization_code");

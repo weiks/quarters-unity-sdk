@@ -16,6 +16,7 @@ public class ExampleUI : MonoBehaviour {
     public List<CanvasGroup> authorizedOnlyUI = new List<CanvasGroup>();
     public List<CanvasGroup> unAuthorizedOnlyUI = new List<CanvasGroup>();
     public List<CanvasGroup> playfabModuleOnlyUI = new List<CanvasGroup>();
+    public List<CanvasGroup> authorizedGuestOnlyUI = new List<CanvasGroup>();
     public Text debugConsole;
 
     public InputField tokensInput;
@@ -48,6 +49,16 @@ public class ExampleUI : MonoBehaviour {
             unAuthorizedOnlyUI.ForEach(b => b.alpha = 1f);
         }
 
+     
+        //guest mode only
+        authorizedGuestOnlyUI.ForEach(b => b.interactable = Quarters.Instance.IsAuthorized && Quarters.Instance.session.IsGuestSession);
+        if (Quarters.Instance.IsAuthorized && Quarters.Instance.session.IsGuestSession) {
+            authorizedGuestOnlyUI.ForEach(b => b.alpha = 1f);
+        }
+        else {
+            authorizedGuestOnlyUI.ForEach(b => b.alpha = 0.4f);
+        }
+
 	}
 
 
@@ -68,8 +79,8 @@ public class ExampleUI : MonoBehaviour {
     }
 
 
-    public void ButtonLoginSigupTapped() {
-        Quarters.Instance.LoginSignUp(null, null);
+    public void ButtonSigupTapped() {
+        Quarters.Instance.SignUp(null, null);
     }
 
 
