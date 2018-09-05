@@ -35,18 +35,38 @@ If your project contain Android Manifest already, manual manifest will be requir
 
 Authorization
 ----
-Before you can use Quarters API you must authorise users session.
+Before you can use Quarters API you must authorize users session. From version 0.20.0 Quarters Unity SDK support guest mode. This allows to authorize user as guest and give full access
+to Quarters features. Guest users can be converted to email users through Quarters.SignUp method. This workflow is required by Apple to conform to their user guidelines.
 
 
 Example:
 
 using QuartersSDK;
 
-Quarters.Instance.Authorize(OnAuthorizationSuccess, OnAuthorizationFailed);
+Quarters.Instance.AuthorizeGuest(OnAuthorizationSuccess, OnAuthorizationFailed);
 
  public void OnAuthorizationSuccess() {
-	Debug.Log("OnAuthorizationSuccess"); }   public void OnAuthorizationFailed(string error) { 	Debug.LogError("OnAuthorizationFailed: " + error);  } 
-Quarters is using OAuth in external browser. This means your user will be sent outside the app for OAuth in the browser. After successful or failed authorisation user is seamlessly deep linked back to the app.
+	Debug.Log("OnAuthorizationSuccess"); }   public void OnAuthorizationFailed(string error) { 	Debug.LogError("OnAuthorizationFailed: " + error);  }
+
+----
+From this point user is able to buy, spend and get rewarded with Quarters. At some point user should be prompted by the app for signing up to create password protected Quarters account.
+Only fully signed up users are able to use Quarters account between apps.
+
+Example of converting guest user to signed up account:
+
+Quarters.Instance.SignUp(OnAuthorizationSuccess, OnAuthorizationFailed);
+
+public void OnAuthorizationSuccess() {
+    Debug.Log("OnAuthorizationSuccess");
+}
+
+
+public void OnAuthorizationFailed(string error) {
+    Debug.LogError("OnAuthorizationFailed: " + error);
+
+}
+ 
+
 
 
 Get User Details
@@ -112,8 +132,13 @@ RELEASE NOTES
 
 General notes:
 - only one account is currently supported by API, hence Get Accounts and Account balance calls are working with first returned account
-- a post authorization calls can be called at any time. There is no need for calling API in any order. Example: After Authorizing session
-GetAccountBalance can be called right away without need of calling GetUserDetail -> GetAccounts -> GetAccountBalance.
+
+
+#####
+0.20.0
+- added guest mode for frictionless authentication
+
+#####
 
 
 #####

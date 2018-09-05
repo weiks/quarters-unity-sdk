@@ -80,7 +80,7 @@ public class ExampleUI : MonoBehaviour {
 
 
     public void ButtonSigupTapped() {
-        Quarters.Instance.SignUp(null, null);
+        Quarters.Instance.SignUp(OnAuthorizationSuccess, OnAuthorizationFailed);
     }
 
 
@@ -261,7 +261,7 @@ public class ExampleUI : MonoBehaviour {
         });
 
         #else
-            Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
+        Debug.LogError("Quarters module: IAP, is not enabled. Add Quarters IAP module");
         #endif
 
     }
@@ -315,7 +315,7 @@ public class ExampleUI : MonoBehaviour {
         });
 
         #else
-            Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
+        Debug.LogError("Quarters module: IAP, is not enabled. Add Quarters IAP module");
         #endif
 
     }

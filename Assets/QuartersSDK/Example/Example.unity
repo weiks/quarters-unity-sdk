@@ -1075,6 +1075,7 @@ MonoBehaviour:
   - {fileID: 491636941}
   - {fileID: 845774399}
   - {fileID: 539649842}
+  - {fileID: 1003449855}
   unAuthorizedOnlyUI:
   - {fileID: 820603868}
   - {fileID: 475752215}
@@ -3667,7 +3668,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 232055651}
   m_HandleRect: {fileID: 232055650}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4431,7 +4432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15, y: -0.00016733752}
+  m_AnchoredPosition: {x: 15, y: -0.0001000682}
   m_SizeDelta: {x: -30, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1773134937
@@ -4729,21 +4730,6 @@ Prefab:
     - target: {fileID: 4558843478924128, guid: 6fda49cb785be4592a669bda56f10447, type: 2}
       propertyPath: m_RootOrder
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 2}
-      propertyPath: APP_ID
-      value: tkBzKdk8R8ExNB8caNtu
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 2}
-      propertyPath: APP_KEY
-      value: bm8owvtdkaasl3570rxy6ly330r5lzlnl
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 2}
-      propertyPath: SERVER_API_TOKEN
-      value: prfl0jgcdbgc5ozteswmt88148xj0ogrmnexl354qrgsavwaf4a41u6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fda49cb785be4592a669bda56f10447, type: 2}

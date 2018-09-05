@@ -557,8 +557,8 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    4: QUARTERS_MODULE_PLAYFAB
-    7: QUARTERS_MODULE_PLAYFAB
+    4: 
+    7: 
   platformArchitecture: {}
   scriptingBackend: {}
   incrementalIl2cppBuild: {}
