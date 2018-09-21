@@ -604,7 +604,7 @@ namespace QuartersSDK {
             if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Quarters: Transfers with external browser arent supported in Unity editor");
 
             Debug.Log("CreateTransferRequestCall");
-            
+
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
             headers.Add("Authorization", "Bearer " + session.AccessToken);
 
@@ -614,9 +614,7 @@ namespace QuartersSDK {
             if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
             data.Add("app_id", QuartersInit.Instance.APP_ID);
 
-            if (session.IsGuestSession) {
-                data.Add("firebase_token", session.GuestFirebaseToken);
-            }
+
 
 
             string dataJson = JsonConvert.SerializeObject(data);
@@ -649,6 +647,12 @@ namespace QuartersSDK {
                 //continue outh forward
                 string url = QUARTERS_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
 
+                if (session.IsGuestSession) {
+                    url += "&firebase_token=" + session.GuestFirebaseToken;
+                }
+
+                Debug.Log("Transfer authorization url: " + url);
+
                 if (!forceExternalBrowser) {
                     //web view authentication
                     QuartersWebView.OpenURL(url);
@@ -660,6 +664,8 @@ namespace QuartersSDK {
                 }
             }
         }
+
+
 
 
 
