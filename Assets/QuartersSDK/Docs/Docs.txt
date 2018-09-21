@@ -135,6 +135,19 @@ General notes:
 
 
 #####
+0.20.2
+- fixed transfer issues when using guest account
+
+#####
+
+#####
+0.20.1
+- fixed issue with missing signup callbacks
+
+#####
+
+
+#####
 0.20.0
 - added guest mode for frictionless authentication
 

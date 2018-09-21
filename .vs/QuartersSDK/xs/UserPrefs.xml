@@ -1,13 +1,15 @@
 ﻿<Properties StartupConfiguration="{973AEB65-1D6B-A18E-30D6-FC5E986F40DB}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Scripts/User.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/QuartersSDK/Docs/IAP Module.txt">
     <Files>
-      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="15" Column="25" />
-      <File FileName="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs" Line="55" Column="40" />
-      <File FileName="Assets/QuartersSDK/Scripts/QuartersSession.cs" Line="49" Column="21" />
-      <File FileName="Assets/QuartersSDK/Docs/Docs.txt" Line="8" Column="1" />
-      <File FileName="Assets/QuartersSDK/Docs/IAP Module.txt" Line="31" Column="46" />
-      <File FileName="Assets/QuartersSDK/Scripts/QuartersEditor.cs" Line="1" Column="1" />
-      <File FileName="Assets/QuartersSDK/Scripts/User.cs" Line="7" Column="15" />
+      <File FileName="Assets/QuartersSDK/Scripts/Quarters.cs" Line="273" Column="34" />
+      <File FileName="Assets/QuartersSDK/Scripts/QuartersSession.cs" Line="86" Column="9" />
+      <File FileName="Assets/QuartersSDK/Scripts/Constants.cs" Line="21" Column="49" />
+      <File FileName="Assets/QuartersSDK/Scripts/TransferRequest.cs" Line="43" Column="18" />
+      <File FileName="Assets/QuartersSDK/Example/Scripts/ExampleUI.cs" Line="343" Column="37" />
+      <File FileName="Assets/QuartersSDK/Scripts/User.cs" Line="17" Column="9" />
+      <File FileName="Assets/QuartersSDK/Docs/Docs.txt" Line="174" Column="1" />
+      <File FileName="Assets/QuartersSDK/Docs/PlayFab Module.txt" Line="80" Column="11" />
+      <File FileName="Assets/QuartersSDK/Docs/IAP Module.txt" Line="28" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

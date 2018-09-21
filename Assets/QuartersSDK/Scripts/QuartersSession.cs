@@ -21,6 +21,15 @@ namespace QuartersSDK {
             }
         }
 
+        public string GuestFirebaseToken {
+            get {
+                return PlayerPrefs.GetString(Constants.GUEST_FIREBASE_TOKEN, "");
+            }
+            set {
+                PlayerPrefs.SetString(Constants.GUEST_FIREBASE_TOKEN, value);
+            }
+        }
+
 
         public string RefreshToken {
             get {
@@ -69,14 +78,16 @@ namespace QuartersSDK {
         }
 
 
-        public void InvalidateGuestToken() {
+        public void InvalidateGuestSession() {
             PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
+            PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
         }
 
 
         public static void Invalidate() {
             PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN_KEY);
             PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
+            PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
         }
 
 

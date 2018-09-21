@@ -270,7 +270,7 @@ namespace QuartersSDK {
 
             if (session.IsGuestSession) {
                 //real user authorisation, conversion from guest to real user. Invalidate and destroy guest token
-                session.InvalidateGuestToken();
+                session.InvalidateGuestSession();
             }
 
 
@@ -333,6 +333,7 @@ namespace QuartersSDK {
                 //deserialize
                 Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
                 session.GuestToken = responseData["access_token"];
+                session.GuestFirebaseToken = responseData["firebase_token"];
                 OnAuthorizationSuccess();
 
             }
@@ -612,6 +613,10 @@ namespace QuartersSDK {
             data.Add("tokens", request.tokens);
             if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
             data.Add("app_id", QuartersInit.Instance.APP_ID);
+
+            if (session.IsGuestSession) {
+                data.Add("firebase_token", session.GuestFirebaseToken);
+            }
 
 
             string dataJson = JsonConvert.SerializeObject(data);

@@ -45,6 +45,7 @@ namespace QuartersSDK {
         public int tokens = 0;
         public string description = "";
         public string txId = "";
+        public string firebaseToken = "";
 
         public Quarters.OnTransferSuccessDelegate successDelegate;
         public Quarters.OnTransferFailedDelegate failedDelegate;
@@ -55,12 +56,13 @@ namespace QuartersSDK {
             this.failedDelegate = failedDelegate;
         }
 
-        public TransferAPIRequest (int tokens, string description, Quarters.OnTransferSuccessDelegate successDelegate, Quarters.OnTransferFailedDelegate failedDelegate) {
+        public TransferAPIRequest(int tokens, string description, Quarters.OnTransferSuccessDelegate successDelegate, Quarters.OnTransferFailedDelegate failedDelegate) {
             this.tokens = tokens;
             this.description = description;
             this.successDelegate = successDelegate;
             this.failedDelegate = failedDelegate;
         }
+
 
 
 
