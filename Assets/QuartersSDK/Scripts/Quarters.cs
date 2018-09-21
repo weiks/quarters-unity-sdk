@@ -167,6 +167,9 @@ namespace QuartersSDK {
 
             string url =  QUARTERS_URL + "/guest?token=" + session.GuestToken + "&redirect_uri=" + URL_SCHEME + "&inline=trueresponse_type=code&client_id=" + QuartersInit.Instance.APP_ID;
 
+            this.OnAuthorizationSuccess = OnSuccessDelegate;
+            this.OnAuthorizationFailed = OnFailedDelegate;
+
             if (Application.isEditor && forceExternalBrowser) {
                 
                 //spawn editor UI
