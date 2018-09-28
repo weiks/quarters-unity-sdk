@@ -15,6 +15,7 @@ namespace QuartersSDK {
         public bool useAutoapproval = false;
 
 
+
 		private static Quarters instance;
 
 
@@ -55,3 +56,4 @@ namespace QuartersSDK {
 
 	}
 }
+

@@ -224,11 +224,14 @@ namespace QuartersSDK {
 
 
         public void CreateTransfer(TransferAPIRequest request) {
-            StartCoroutine(CreateTransferRequestCall(request));
-        }
+            if (QuartersInit.Instance.useAutoapproval) {
+                StartCoroutine(CreateAutoApprovedTransferCall(request));
+            }
+            else {
+                //normal transfer
+                StartCoroutine(CreateTransferRequestCall(request));
+            }
 
-        public void CreateAutoApprovedTransfer(TransferAPIRequest request) {
-            StartCoroutine(CreateAutoApprovedTransferCall(request));
         }
 
 
