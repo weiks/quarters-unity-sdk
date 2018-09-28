@@ -34,11 +34,10 @@ namespace QuartersSDK {
 
 
         //Transfer
-        public delegate void OnTransferRequestSuccessDelegate(TransferRequest transferRequest);
-        public delegate void OnTransferRequestFailedDelegate(string error);
-
         public delegate void OnTransferSuccessDelegate(string transactionHash);
         public delegate void OnTransferFailedDelegate(string error);
+
+
 
         public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
 
@@ -225,8 +224,11 @@ namespace QuartersSDK {
 
 
         public void CreateTransfer(TransferAPIRequest request) {
-
             StartCoroutine(CreateTransferRequestCall(request));
+        }
+
+        public void CreateAutoApprovedTransfer(TransferAPIRequest request) {
+            StartCoroutine(CreateAutoApprovedTransferCall(request));
         }
 
 
@@ -662,6 +664,107 @@ namespace QuartersSDK {
                     //external authentication
                     Application.OpenURL(url);
                 }
+            }
+        }
+
+
+
+
+        private IEnumerator CreateAutoApprovedTransferCall(TransferAPIRequest request) {
+        
+            Debug.Log("CreateAutoApprovedTransfer");
+
+            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
+            headers.Add("Authorization", "Bearer " + session.AccessToken);
+
+
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("tokens", request.tokens);
+            if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
+            data.Add("app_id", QuartersInit.Instance.APP_ID);
+
+
+            string dataJson = JsonConvert.SerializeObject(data);
+            Debug.Log(dataJson);
+            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+
+
+            WWW www = new WWW(API_URL + "/requests", dataBytes, headers);
+            Debug.Log(www.url);
+
+            while (!www.isDone) yield return new WaitForEndOfFrame();
+
+            if (!string.IsNullOrEmpty(www.error)) {
+                Debug.LogError(www.error);
+
+                request.failedDelegate("Creating transfer failed: " + www.error);
+            }
+            else {
+                Debug.Log(www.text);
+
+                string response = www.text;
+                Debug.Log("Response: " + response);
+
+                TransferRequest transferRequest = new TransferRequest(response);
+
+                request.requestId = transferRequest.id;
+                Debug.Log("request id is: " + transferRequest.id);
+                currentTransferAPIRequests.Add(request);
+
+                StartCoroutine(AutoApproveTransfer(request));
+
+
+            }
+        }
+
+
+
+
+
+        private IEnumerator AutoApproveTransfer(TransferAPIRequest request) {
+
+            Debug.Log("AutoApproveTransfer");
+
+            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
+            headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
+
+
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("clientId", QuartersInit.Instance.APP_ID);
+            data.Add("userId", CurrentUser.userId);
+            data.Add("address", CurrentUser.accounts[0].address);
+
+
+            string dataJson = JsonConvert.SerializeObject(data);
+            Debug.Log(dataJson);
+            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+
+
+            WWW www = new WWW(API_URL + "/requests/" + request.requestId + "/autoApprove", dataBytes, headers);
+            Debug.Log(www.url);
+            Debug.Log(dataJson);
+
+            while (!www.isDone) yield return new WaitForEndOfFrame();
+
+            if (!string.IsNullOrEmpty(www.error)) {
+                Debug.LogError(www.error);
+
+                request.failedDelegate("Auto approve failed: " + www.error);
+            }
+            else {
+                Debug.Log(www.text);
+
+                string response = www.text;
+                Debug.Log("Autoapprove response: " + response);
+
+                Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string,string>>(response);
+
+                request.txId = responseData["txId"];
+
+                Debug.Log("Autoapproved request txId is: " + request.txId);
+
+                request.successDelegate(request.txId);
+
             }
         }
 

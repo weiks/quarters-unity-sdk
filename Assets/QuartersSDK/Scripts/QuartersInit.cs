@@ -6,10 +6,13 @@ namespace QuartersSDK {
 	public class QuartersInit : MonoBehaviour {
 
         public static QuartersInit Instance;
+        [Header("Your quarters app:")]
         public string APP_ID = "";
         public string APP_KEY = "";
         public string SERVER_API_TOKEN = "";
 		public Environment environment = Environment.production;
+        [Header("Configuration:")]
+        public bool useAutoapproval = false;
 
 
 		private static Quarters instance;

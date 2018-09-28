@@ -347,5 +347,28 @@ public class ExampleUI : MonoBehaviour {
 
 
 
+    public void ButtonAutoApprovedTransferTapped() {
+
+        TransferAPIRequest request = new TransferAPIRequest(int.Parse(tokensInput.text), descriptionInput.text, delegate (string transactionHash) {
+
+            debugConsole.text += "\n";
+            debugConsole.text += "\nAutoapproved transfer successful, transactionHash: " + transactionHash;
+            Debug.Log("Console: " + debugConsole.text);
+
+        }, delegate (string error) {
+
+            debugConsole.text += "\n";
+            debugConsole.text += "\nAutoapproved OnTransactionFailed: " + error;
+            Debug.Log("Console: " + debugConsole.text);
+        });
+
+
+
+        Quarters.Instance.CreateAutoApprovedTransfer(request);
+
+
+    }
+
+
 }
 
