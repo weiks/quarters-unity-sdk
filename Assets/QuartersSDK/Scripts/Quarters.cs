@@ -700,7 +700,8 @@ namespace QuartersSDK {
             if (!string.IsNullOrEmpty(www.error)) {
                 Debug.LogError(www.error);
 
-                request.failedDelegate("Creating transfer failed: " + www.error);
+                //failed, fallback to normal request
+                StartCoroutine(CreateTransferRequestCall(request));
             }
             else {
                 Debug.Log(www.text);
@@ -752,7 +753,7 @@ namespace QuartersSDK {
             if (!string.IsNullOrEmpty(www.error)) {
                 Debug.LogError(www.error);
 
-                request.failedDelegate("Auto approve failed: " + www.error);
+                StartCoroutine(CreateTransferRequestCall(request));
             }
             else {
                 Debug.Log(www.text);

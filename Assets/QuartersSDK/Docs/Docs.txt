@@ -135,6 +135,13 @@ General notes:
 
 
 #####
+0.21.0
+- added support for auto aprooval (approved developers only)
+
+#####
+
+
+#####
 0.20.2
 - fixed transfer issues when using guest account
 
