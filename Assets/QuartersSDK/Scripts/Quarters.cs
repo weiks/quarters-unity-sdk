@@ -751,9 +751,15 @@ namespace QuartersSDK {
             while (!www.isDone) yield return new WaitForEndOfFrame();
 
             if (!string.IsNullOrEmpty(www.error)) {
-                Debug.LogError(www.error);
+                if (www.error.StartsWith("40")) {
+                    //fallback to normal transfer automatically
+                    StartCoroutine(CreateTransferRequestCall(request));
+                }
+                else {
+                    Debug.LogError(www.error);
+                    request.failedDelegate(www.error);
+                }
 
-                StartCoroutine(CreateTransferRequestCall(request));
             }
             else {
                 Debug.Log(www.text);
