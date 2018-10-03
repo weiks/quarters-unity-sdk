@@ -32,6 +32,8 @@ namespace QuartersSDK {
         public delegate void OnAccountBalanceSuccessDelegate(User.Account.Balance balance);
         public delegate void OnAccountBalanceFailedDelegate(string error);
 
+        public delegate void OnAccounRewardSuccessDelegate(User.Account.Reward reward);
+        public delegate void OnAccountRewardFailedDelegate(string error);
 
         //Transfer
         public delegate void OnTransferSuccessDelegate(string transactionHash);
@@ -219,6 +221,10 @@ namespace QuartersSDK {
 
         public void GetAccountBalance(OnAccountBalanceSuccessDelegate OnSuccessDelegate, OnAccountBalanceFailedDelegate OnFailedDelegate) {
             StartCoroutine(GetAccountBalanceCall(OnSuccessDelegate, OnFailedDelegate));
+        }
+
+        public void GetAccountReward(OnAccounRewardSuccessDelegate OnSuccessDelegate, OnAccountRewardFailedDelegate OnFailedDelegate) {
+            StartCoroutine(GetAccountRewardCall(OnSuccessDelegate, OnFailedDelegate));
         }
 
 
@@ -604,6 +610,75 @@ namespace QuartersSDK {
 
 
 
+        private IEnumerator GetAccountRewardCall(OnAccounRewardSuccessDelegate OnSucess, OnAccountRewardFailedDelegate OnFailed, bool isRetry = false) {
+
+            bool areAccountsDone = false;
+            string accountsLoadingError = "";
+
+            if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
+                Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
+                    //accounts loaded
+                    areAccountsDone = true;
+
+                }, delegate (string getAccountsError) {
+                    OnFailed("Getting user accounts failed: " + getAccountsError);
+                    areAccountsDone = true;
+                    accountsLoadingError = getAccountsError;
+                });
+
+                while (!areAccountsDone) yield return new WaitForEndOfFrame();
+
+                //error occured, break out of coroutine
+                if (!string.IsNullOrEmpty(accountsLoadingError)) yield break;
+            }
+
+            if (CurrentUser.accounts.Count < 1) {
+                OnFailed("User account not loaded");
+                yield break;
+            }
+
+            User.Account account = CurrentUser.accounts[0];
+
+            string url = API_URL + "/accounts/" + account.address + "/rewards";
+
+            WWW www = new WWW(url, null, AuthorizationHeader);
+            yield return www;
+
+            while (!www.isDone) yield return new WaitForEndOfFrame();
+
+            if (!string.IsNullOrEmpty(www.error)) {
+
+                if (!isRetry) {
+                    //refresh access code and retry this call in case access code expired
+                    StartCoroutine(GetAccessToken(delegate {
+
+                        StartCoroutine(GetAccountRewardCall(OnSucess, OnFailed, true));
+
+                    }, delegate (string error) {
+                        OnFailed(www.error);
+                    }));
+                }
+                else {
+                    Debug.LogError(www.error);
+                    OnFailed(www.error);
+                }
+            }
+            else {
+
+                Debug.Log(www.text);
+                account.reward = JsonConvert.DeserializeObject<User.Account.Reward>(www.text);
+                OnSucess(account.reward);
+
+            }
+
+        }
+
+
+
+
+
+
+
         private IEnumerator CreateTransferRequestCall(TransferAPIRequest request, bool forceExternalBrowser = false) {
 
             if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Quarters: Transfers with external browser arent supported in Unity editor");
@@ -740,7 +815,7 @@ namespace QuartersSDK {
 
 
             string dataJson = JsonConvert.SerializeObject(data);
-            Debug.Log(dataJson);
+
             byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
@@ -751,9 +826,25 @@ namespace QuartersSDK {
             while (!www.isDone) yield return new WaitForEndOfFrame();
 
             if (!string.IsNullOrEmpty(www.error)) {
+                Debug.LogError(www.error);
+                Debug.Log(www.text);
                 if (www.error.StartsWith("40")) {
-                    //fallback to normal transfer automatically
-                    StartCoroutine(CreateTransferRequestCall(request));
+
+                    //bad request check for reason
+                    if (www.error.StartsWith("400") && !string.IsNullOrEmpty(www.text)) {
+                        //bad request, possibly out of quarters
+                        Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
+                        if (responseData.ContainsKey("message")) {
+                            request.failedDelegate(responseData["message"]);
+                        }
+                        else {
+                            StartCoroutine(CreateTransferRequestCall(request));
+                        }
+                    }
+                    else {
+                        //fallback to normal transfer automatically
+                        StartCoroutine(CreateTransferRequestCall(request));
+                    }
                 }
                 else {
                     Debug.LogError(www.error);

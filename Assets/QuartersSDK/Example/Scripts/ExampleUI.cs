@@ -171,6 +171,27 @@ public class ExampleUI : MonoBehaviour {
 
 
 
+    public void ButtonGetAccountRewardTapped() {
+
+        Quarters.Instance.GetAccountReward(delegate (User.Account.Reward balance) {
+
+            debugConsole.text += "\n";
+            debugConsole.text += "\nOnGetAccountRewardSuccess";
+            debugConsole.text += JsonConvert.SerializeObject(balance, Formatting.Indented);
+
+            RefreshUI();
+
+        }, delegate (string error) {
+
+            debugConsole.text += "\n";
+            debugConsole.text += "\nOnGetAccountRewardFailed: " + error;
+
+            RefreshUI();
+
+        });
+    }
+
+
 
 
     private void LoginWithCustomId(System.Action OnComplete) {
@@ -203,7 +224,7 @@ public class ExampleUI : MonoBehaviour {
 
 
 
-    public void ButtonGetAccountRewardTapped() {
+    public void ButtonAwardQuartersTapped() {
 
         #if QUARTERS_MODULE_PLAYFAB
 
@@ -329,13 +350,12 @@ public class ExampleUI : MonoBehaviour {
         
             debugConsole.text += "\n";
             debugConsole.text += "\nTransfer successful, transactionHash: " + transactionHash;
-            Debug.Log("Console: " + debugConsole.text);
 
         }, delegate (string error) {
         
             debugConsole.text += "\n";
             debugConsole.text += "\nOnTransactionFailed: " + error;
-            Debug.Log("Console: " + debugConsole.text);
+            Debug.LogError(error);
         });
 
 

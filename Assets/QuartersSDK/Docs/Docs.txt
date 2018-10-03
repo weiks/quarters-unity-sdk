@@ -105,7 +105,28 @@ Example:
 
 using QuartersSDK;
 
-Quarters.Instance.GetAccountBalance(delegate (User.Account.Balance balance) {  }, delegate (string error) {   }); 
+Quarters.Instance.GetAccountBalance(delegate (User.Account.Balance balance) {  }, delegate (string error) {   });
+
+
+
+
+Get Account Reward
+----
+Get account reward can be only called after successful authorization. On success delegate is fired with User.Account.Reward object
+
+
+Example:
+
+using QuartersSDK;
+
+
+Quarters.Instance.GetAccountReward(delegate (User.Account.Reward balance) {
+
+}, delegate (string error) {
+
+});
+
+
 
 
 Transfer
@@ -132,6 +153,14 @@ RELEASE NOTES
 
 General notes:
 - only one account is currently supported by API, hence Get Accounts and Account balance calls are working with first returned account
+
+
+#####
+0.21.1
+- better handling of out of balance errors
+- added bonus quarters support
+
+#####
 
 
 #####

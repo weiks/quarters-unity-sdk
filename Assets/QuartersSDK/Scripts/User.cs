@@ -20,12 +20,29 @@ namespace QuartersSDK {
             public DateTime created = DateTime.MinValue;
             public string userId = "";
             public Balance balance = null;
+            public Reward reward = null;
+
+            public long AvailableQuarters {
+                get {
+                    long result = 0;
+                    if (balance != null) result += balance.quarters;
+                    if (reward != null) result += reward.rewardAmount;
+
+                    return result;
+                }
+            }
+
 
             public class Balance {
                 public long quarters = 0;
                 public string formattedQuarters = "";
                 public long ethers = 0;
                 public string formattedEthers = "";
+            }
+
+            public class Reward {
+                public long rewardAmount = 0;
+                public string rewardAmountFormatted = "";
             }
 
         }
