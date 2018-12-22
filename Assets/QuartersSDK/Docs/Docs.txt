@@ -156,6 +156,12 @@ General notes:
 
 
 #####
+0.21.2
+- fixed compilation issues when Standalone platform is set
+- changed IAP naming conventions
+
+
+#####
 0.21.1
 - better handling of out of balance errors
 - added bonus quarters support
@@ -165,7 +171,7 @@ General notes:
 
 #####
 0.21.0
-- added support for auto aprooval (approved developers only)
+- added support for auto approval (approved developers only)
 
 #####
 
