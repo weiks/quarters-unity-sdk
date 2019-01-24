@@ -8,11 +8,13 @@ using System;
 using System.Linq;
 
 
+
 namespace QuartersSDK {
 	public partial class Quarters : MonoBehaviour {
 
 		public static Quarters Instance;
         public QuartersSession session;
+        
 
 		public delegate void OnAuthorizationStartDelegate();
 		public static event OnAuthorizationStartDelegate OnAuthorizationStart;
@@ -38,6 +40,8 @@ namespace QuartersSDK {
         //Transfer
         public delegate void OnTransferSuccessDelegate(string transactionHash);
         public delegate void OnTransferFailedDelegate(string error);
+        
+        
 
 
 
@@ -58,7 +62,11 @@ namespace QuartersSDK {
 
         public string URL_SCHEME  {
             get {
+                #if UNITY_WEBGL
+                return QuartersInit.Instance.APP_ID + "://";
+                #else
                 return Application.identifier + "://";
+                #endif
             }
         }
 
@@ -262,7 +270,6 @@ namespace QuartersSDK {
 			string url = QUARTERS_URL + "/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
 			Debug.Log(url);
 
-
             if (!forceExternalBrowser) {
                 //web view authentication
                 QuartersWebView.OpenURL(url);
@@ -283,9 +290,6 @@ namespace QuartersSDK {
                 //real user authorisation, conversion from guest to real user. Invalidate and destroy guest token
                 session.InvalidateGuestSession();
             }
-
-
-
 
 
 			StartCoroutine(GetRefreshToken(code));
@@ -888,13 +892,15 @@ namespace QuartersSDK {
             }
         }
 
-
-
+        
+  
+        
 		public void DeepLink (string url, bool isExternalBrowser) {
 
 			Debug.Log("Deep link url: " + url);
             ProcessDeepLink(isExternalBrowser, url);
 		}
+
 
 
 
@@ -925,6 +931,10 @@ namespace QuartersSDK {
                 Debug.Log("Unity URL returned: " + linkUrl);
 
                 Dictionary<string, string> urlParams = linkUrl.ParseURI();
+
+                foreach (KeyValuePair<string,string> urlParam in urlParams) {
+                    Debug.Log(urlParam.Key + ":" + urlParam.Value);
+                }
 
                 if (urlParams.ContainsKey("code")) {
                     //string code = split[1];

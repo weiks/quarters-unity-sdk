@@ -1,9 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 namespace QuartersSDK {
     public class QuartersWebView : MonoBehaviour {
+        
+#if UNITY_WEBGL
+        [DllImport("__Internal")]
+        private static extern void OpenWebView(string url);
+
+        [DllImport("__Internal")]
+        private static extern void CloseWebView();
+#endif
 
         public delegate void OnDeepLinkDelegate(string url, bool isExternalBrowser);
         public static OnDeepLinkDelegate OnDeepLink;
@@ -11,40 +20,31 @@ namespace QuartersSDK {
         public delegate void OnCancelledDelegate();
         public static OnCancelledDelegate OnCancelled;
 
+        private static string LastOpenedUrl = "";
+
 
         public static QuartersWebView OpenURL(string url) {
 
             //UniWebViewLogger.Instance.LogLevel = UniWebViewLogger.Level.Verbose;
-
             Debug.Log("Web view open url: " + url);
+            
             
             GameObject webViewGO= new GameObject("QuartersWebView");
             QuartersWebView quartersWebView = webViewGO.AddComponent<QuartersWebView>();
 
+            
+#if UNITY_WEBGL && !UNITY_EDITOR
+            //webGL plugin show webview
+            LastOpenedUrl = url;
+            OpenWebView(url);
+#else
+  
             UniWebView webView = webViewGO.AddComponent<UniWebView>();
             SetFrameSize(webView);
 
             webView.Load(url);
             webView.Show(false, UniWebViewTransitionEdge.Bottom);
-
-
-            webView.OnPageStarted += (UniWebView view, string u) => {
-
-                Debug.Log("OnPageStarted " + u);
-                if (u.IsDeepLink()) {
-                    //deep link opened
-                    if (OnDeepLink != null) OnDeepLink(u, isExternalBrowser: false);
-                    webView.Hide(false);
-                }
-                else {
-                    if (u != url) {
-                        //external link, open external browser instead and invalidate this webview
-                        webView.Stop();
-                        webView.Hide();
-                        Application.OpenURL(u);
-                    }
-                }
-            };
+            webView.OnPageStarted += quartersWebView.OnUrlOpenWebView;
 
 
             //handle autorotation
@@ -53,11 +53,66 @@ namespace QuartersSDK {
             };
 
             webView.OnShouldClose += ShouldClose;
-
+#endif
 
             return quartersWebView;
         }
 
+
+
+        public void OnUrlOpenWebView(UniWebView webView, string url) {
+            
+            Debug.Log("OnUrlOpenWebView " + url);
+            if (url.IsDeepLink()) {
+                //deep link opened
+                if (OnDeepLink != null) OnDeepLink(url, isExternalBrowser: false);
+                webView.Hide(false);
+            }
+            else {
+                if (url != url) {
+                    //external link, open external browser instead and invalidate this webview
+                    webView.Stop();
+                    webView.Hide();
+                    Application.OpenURL(url);
+                }
+            }
+            
+        }
+
+        
+        
+        
+        #region WebGL plugin events
+        
+#if UNITY_WEBGL
+        public void OnUrlOpen(string url) {
+            
+            if (LastOpenedUrl == url) return;
+            
+            Debug.Log("OnUrlOpenWebGL " + url);
+            if (url.IsDeepLink()) {
+                //deep link opened
+                if (OnDeepLink != null) OnDeepLink(url, isExternalBrowser: false);
+                CloseWebView();
+            }
+            else {
+                if (url != url) {
+                    //external link, open external browser instead and invalidate this webview
+                    Application.OpenURL(url);
+                }
+            }
+            
+        }
+
+        
+        public void OnWebViewClosed() {
+            Debug.Log("OnWebViewClosed");
+        }
+
+#endif
+        #endregion
+        
+        
 
 
         //Should close is handling other than browser controlled actions, like back button on Android
@@ -72,10 +127,11 @@ namespace QuartersSDK {
         }
 
 
-
         private static void SetFrameSize(UniWebView webView) {
             webView.Frame = new Rect(0, 0, Screen.width, Screen.height);
         }
+
+
 
     }
 

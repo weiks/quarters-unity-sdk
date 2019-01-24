@@ -41,9 +41,20 @@ namespace QuartersSDK {
         public static bool IsDeepLink(this string url) {
 
             bool result = false;
+            
+            
+            #if UNITY_WEBGL
+	        string appId = QuartersInit.Instance.APP_ID;
+	        
+	        if (url.Contains(appId.ToLower())) {
+		        result = url.StartsWith(appId.ToLower());
+	        }
+	        
+	        #else
             if (url.Contains(Application.identifier.ToLower())) {
                 result = url.StartsWith(Application.identifier.ToLower());
             }
+			#endif
 
             return result;
         }
