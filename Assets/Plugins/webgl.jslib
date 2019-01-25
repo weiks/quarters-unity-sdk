@@ -1,16 +1,43 @@
 mergeInto(LibraryManager.library, {
 
   OpenWebView: function (url) {
-    window.addEventListener('message', function (event) {
+    var receiveMessage = function (event) {
+      if (!/https:\/\/(\w+\.)?pocketfulofquarters.com/.test(event.origin)) {
+        return;
+      }
+
       if (event.data.callback && event.data.url) {
         window.WebViewUrl = event.data.url;
         SendMessage('QuartersWebView', event.data.callback, event.data.url);
-      }
-    }, false);
+      } else {
+        if (event.source && event.source.close) {
+          event.source.close();
+        }
 
-    var iframeURL = Pointer_stringify(url);
+        var data = JSON.parse(event.data);
+
+        if (data.frameId) {
+          var frameEl = document.getElementById(data.frameId);
+          if (frameEl) {
+            document.body.removeChild(frameEl);
+            document.body.removeChild(this.WebViewButton);
+            SendMessage('QuartersWebView', 'OnWebViewClosed', this.WebViewUrl);
+          }
+        }
+
+        SendMessage('QuartersWebView', 'OnWebViewReceivedData', event.data);
+
+        window.removeEventListener('message', receiveMessage);
+      }
+    }
+
+    window.addEventListener('message', receiveMessage, false);
+
+    var frameId = 'quarters_iframe_' + Date.now();
+    var iframeURL = Pointer_stringify(url) + '&frame_id=' + frameId;
     var f = document.createElement('iframe');
     f.setAttribute('src', iframeURL);
+    f.setAttribute('id', frameId);
     f.setAttribute(
       'style',
       'position: fixed; width: 60%; height: 90%; top: 5%; left: 20%; z-index: 1000; border: 0 none transparent; background-color: white; box-shadow: 0 0 22px 0 black; border-radius: 11px'

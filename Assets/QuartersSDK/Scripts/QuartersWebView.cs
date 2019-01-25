@@ -109,6 +109,10 @@ namespace QuartersSDK {
             Debug.Log("OnWebViewClosed");
         }
 
+        public void OnWebViewReceivedData(string data) {
+            Debug.Log("OnWebViewReceivedData " + data);
+        }
+
 #endif
         #endregion
         
