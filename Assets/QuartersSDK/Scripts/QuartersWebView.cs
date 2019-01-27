@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
 
 namespace QuartersSDK {
     public class QuartersWebView : MonoBehaviour {
@@ -16,6 +17,9 @@ namespace QuartersSDK {
 
         public delegate void OnDeepLinkDelegate(string url, bool isExternalBrowser);
         public static OnDeepLinkDelegate OnDeepLink;
+        
+        public delegate void OnDeepLinkWebGLDelegate(Dictionary<string, string> webViewData);
+        public static OnDeepLinkWebGLDelegate OnDeepLinkWebGL;
 
         public delegate void OnCancelledDelegate();
         public static OnCancelledDelegate OnCancelled;
@@ -87,20 +91,21 @@ namespace QuartersSDK {
 #if UNITY_WEBGL
         public void OnUrlOpen(string url) {
             
-            if (LastOpenedUrl == url) return;
-            
-            Debug.Log("OnUrlOpenWebGL " + url);
-            if (url.IsDeepLink()) {
-                //deep link opened
-                if (OnDeepLink != null) OnDeepLink(url, isExternalBrowser: false);
-                CloseWebView();
-            }
-            else {
-                if (url != url) {
-                    //external link, open external browser instead and invalidate this webview
-                    Application.OpenURL(url);
-                }
-            }
+//            if (LastOpenedUrl == url) return;
+//            
+//            Debug.Log("On Url Open Web GL is deep link: " + url.IsDeepLink() + " " + url);
+//            
+//            if (url.IsDeepLink()) {
+//                //deep link opened
+//                if (OnDeepLink != null) OnDeepLink(url, isExternalBrowser: false);
+//                CloseWebView();
+//            }
+//            else {
+//                if (url != url) {
+//                    //external link, open external browser instead and invalidate this webview
+//                    Application.OpenURL(url);
+//                }
+//            }
             
         }
 
@@ -111,10 +116,13 @@ namespace QuartersSDK {
 
         public void OnWebViewReceivedData(string data) {
             Debug.Log("OnWebViewReceivedData " + data);
+
+            Dictionary<string, string> webViewData = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
+            if (OnDeepLinkWebGL != null) OnDeepLinkWebGL(webViewData);
         }
 
 #endif
-        #endregion
+#endregion
         
         
 

@@ -60,7 +60,7 @@ namespace QuartersSDK {
 		}
 
 
-        public string URL_SCHEME  {
+        public static string URL_SCHEME  {
             get {
                 #if UNITY_WEBGL
                 return QuartersInit.Instance.APP_ID + "://";
@@ -192,6 +192,7 @@ namespace QuartersSDK {
                     //web view authentication
                     QuartersWebView.OpenURL(url);
                     QuartersWebView.OnDeepLink = DeepLink;
+                    QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
                 }
                 else {
                     //external authentication
@@ -274,6 +275,7 @@ namespace QuartersSDK {
                 //web view authentication
                 QuartersWebView.OpenURL(url);
                 QuartersWebView.OnDeepLink = DeepLink;
+                QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
             }
             else {
                 //external authentication
@@ -741,6 +743,7 @@ namespace QuartersSDK {
                     //web view authentication
                     QuartersWebView.OpenURL(url);
                     QuartersWebView.OnDeepLink = DeepLink;
+                    QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
                 }
                 else {
                     //external authentication
@@ -898,81 +901,72 @@ namespace QuartersSDK {
 		public void DeepLink (string url, bool isExternalBrowser) {
 
 			Debug.Log("Deep link url: " + url);
-            ProcessDeepLink(isExternalBrowser, url);
-		}
+
+            if (string.IsNullOrEmpty(url)) {
+                
+#if UNITY_ANDROID
+                //overriden url if deep link comes from external browser, due to limitations of Android plugins implementation
+                if (isExternalBrowser) {
+                    url = CustomUrlSchemeAndroid.GetLaunchedUrl(true);
+                    CustomUrlSchemeAndroid.ClearSavedData();
+                }
+#endif
+  
+                Dictionary<string, string> urlParams = url.ParseURI();
+                ProcessDeepLink(isExternalBrowser, urlParams);
+            }
+        }
 
 
+        public void DeepLinkWebGL(Dictionary<string, string> urlParams) {
+            ProcessDeepLink(false, urlParams);
+        }
 
 
-        private void ProcessDeepLink(bool isExternalBrowser, string url = "") {
+        private void ProcessDeepLink(bool isExternalBrowser, Dictionary<string, string> urlParams) {
 
-            if (url != null) Debug.Log("Process deep link: " + url);
 
-            string linkUrl = url;
-
-            #if UNITY_ANDROID
-           
-            //overriden linkUrl if deep link comes from external browser, due to limitations of Android plugins implementation
-            if (isExternalBrowser) {
-                linkUrl = CustomUrlSchemeAndroid.GetLaunchedUrl(true);
-                CustomUrlSchemeAndroid.ClearSavedData();
+            foreach (KeyValuePair<string,string> urlParam in urlParams) {
+                Debug.Log(urlParam.Key + ":" + urlParam.Value);
             }
 
-            #endif
+            if (urlParams.ContainsKey("code")) {
+                //string code = split[1];
+                AuthorizationCodeReceived(urlParams["code"]);
+            }
+            else if (urlParams.ContainsKey("requestId=")) {
 
+                string transferId = urlParams["requestId"];
 
-            #if UNITY_IOS
-                //there is no link override on iOS
-            #endif
-
-
-            if (!string.IsNullOrEmpty(linkUrl)) {
-
-                Debug.Log("Unity URL returned: " + linkUrl);
-
-                Dictionary<string, string> urlParams = linkUrl.ParseURI();
-
-                foreach (KeyValuePair<string,string> urlParam in urlParams) {
-                    Debug.Log(urlParam.Key + ":" + urlParam.Value);
+                foreach (TransferAPIRequest r in currentTransferAPIRequests) {
+                    Debug.Log("Current requests id: " + r.requestId);
                 }
 
-                if (urlParams.ContainsKey("code")) {
-                    //string code = split[1];
-                    AuthorizationCodeReceived(urlParams["code"]);
+                //get request from ongoing
+                TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
+                if (transferRequest == null) {
+                    Debug.LogError("Transfer id is invalid: " + transferId);
+                    transferRequest.failedDelegate("Invalid transfer id: " + transferId);
                 }
-                else if (linkUrl.Contains("requestId=")) {
 
-                    string transferId = urlParams["requestId"];
-
-                    foreach (TransferAPIRequest r in currentTransferAPIRequests) {
-                        Debug.Log("Current requests id: " + r.requestId);
-                    }
-
-                    //get request from ongoing
-                    TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
-                    if (transferRequest == null) {
-                        Debug.LogError("Transfer id is invalid: " + transferId);
-                        transferRequest.failedDelegate("Invalid transfer id: " + transferId);
-                    }
-
-                    if (urlParams.ContainsKey("error")) {
-                        //all requests are validated positivelly currently
-                        transferRequest.failedDelegate(urlParams["error"]);
-                    }
-                    else {
-
-                        transferRequest.txId = urlParams["txId"];
-                        Debug.Log("tx id:" + transferRequest.txId);
-
-                        transferRequest.successDelegate(transferRequest.txId);
-                    }
-
-                    currentTransferAPIRequests.Remove(transferRequest);
+                if (urlParams.ContainsKey("error")) {
+                    //all requests are validated positivelly currently
+                    transferRequest.failedDelegate(urlParams["error"]);
                 }
                 else {
-                    Debug.Log("NOT IMPLEMENTED URL: " + linkUrl);
+
+                    transferRequest.txId = urlParams["txId"];
+                    Debug.Log("tx id:" + transferRequest.txId);
+
+                    transferRequest.successDelegate(transferRequest.txId);
                 }
+
+                currentTransferAPIRequests.Remove(transferRequest);
             }
+//            else {
+//                Debug.Log("NOT IMPLEMENTED URL: " + linkUrl);
+//            }
+            
 
         }
 
