@@ -60,7 +60,7 @@ public class AndroidManifestGenerator  {
 					//main launcher activity
 					_xmlWriter.WriteStartElement("activity");
 					{
-						_xmlWriter.WriteAttributeString("android:name", "com.unity3d.player.UnityPlayerNativeActivity");
+						_xmlWriter.WriteAttributeString("android:name", "com.unity3d.player.UnityPlayerActivity");
                         _xmlWriter.WriteAttributeString("android:label",  "@string/app_name");
 
 

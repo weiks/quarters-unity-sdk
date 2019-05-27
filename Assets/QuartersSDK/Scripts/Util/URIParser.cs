@@ -30,6 +30,13 @@ namespace QuartersSDK {
 	                    }
 
 	                }
+	                else {
+		                //single parameter
+		                string[] pSplit = urlParamsSplit[1].Split('=');
+
+		                KeyValuePair<string, string> parameter = new KeyValuePair<string, string>(pSplit[0], pSplit[1]);
+		                result.Add(parameter.Key, parameter.Value);
+	                }
 	            }
 	        }
 

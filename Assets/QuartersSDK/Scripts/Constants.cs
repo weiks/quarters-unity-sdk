@@ -10,6 +10,7 @@ namespace QuartersSDK {
     }
 
 	public enum Environment {
+        sandbox,
 		development,
 		production
 	}

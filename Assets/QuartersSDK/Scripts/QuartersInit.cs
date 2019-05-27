@@ -10,6 +10,7 @@ namespace QuartersSDK {
         public string APP_ID = "";
         public string APP_KEY = "";
         public string SERVER_API_TOKEN = "";
+        public string ETHEREUM_ADDRESS = "";
 		public Environment environment = Environment.production;
         [Header("Configuration:")]
         public bool useAutoapproval = false;
@@ -41,7 +42,7 @@ namespace QuartersSDK {
 			instance = quarters.AddComponent<Quarters>();
 			instance.Init();
 
-            #if QUARTERS_MODULE_PLAYFAB
+            #if QUARTERS_IAP
             GameObject quartersIAP = new GameObject("QuartersIAP");
             quartersIAP.transform.SetParent(this.transform);
             DontDestroyOnLoad(quartersIAP.gameObject);

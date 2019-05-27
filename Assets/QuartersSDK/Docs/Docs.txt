@@ -5,6 +5,7 @@ Quarters Unity SDK
 Supported platforms:
 iOS
 Android
+WebGL
 
 Configuration
 Follow Getting Started guide to create your Quarter App.
@@ -26,7 +27,7 @@ No platform specific setup is needed for iOS. Deep linking setup is handled auto
 Android
 In Unity top menu go Quarters/Android/Generate Android Manifest. Android Manifest will automatically generate enabling deep linking.
 
-If your project contain Android Manifest already, manual manifest will be required.
+If your project contain Android Manifest already, manual manifest merge will be required.
 
 
 
@@ -156,6 +157,17 @@ General notes:
 
 
 #####
+0.30
+- added WebGL support
+- added Quarters awarding on client side
+- removed PlayFab module due to PlayFab external API limits
+- fixed issues with Android Manifest and latest versions of Unity
+- added support for .NET 4.X scripting runtime
+- fixed issues with IAP Module not initializing correctly when PlayFab module wasn't used
+- added Quarters sandbox environment
+
+
+#####
 0.21.2
 - fixed compilation issues when Standalone platform is set
 - changed IAP naming conventions
@@ -241,7 +253,7 @@ false
 #####
 0.8.0
 - Added PlayFab module
-- Supporting Playfab server side Quarters apps to user transfers
+- Supporting PlayFab server side Quarters apps to user transfers
 
 
 #####

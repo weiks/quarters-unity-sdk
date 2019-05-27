@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using QuartersSDK;
-#if QUARTERS_MODULE_PLAYFAB
-using PlayFab;
-using PlayFab.ClientModels;
+#if QUARTERS_IAP
 using UnityEngine.Purchasing;
 #endif
 
@@ -194,64 +192,29 @@ public class ExampleUI : MonoBehaviour {
 
 
 
-    private void LoginWithCustomId(System.Action OnComplete) {
 
-        #if QUARTERS_MODULE_PLAYFAB
-
-        //login user to playfab title using device id
-        LoginWithCustomIDRequest loginRequest = new LoginWithCustomIDRequest();
-        loginRequest.CustomId = SystemInfo.deviceUniqueIdentifier;
-        loginRequest.CreateAccount = true;
-
-
-        PlayFabClientAPI.LoginWithCustomID(loginRequest, delegate(LoginResult result) {
-
-            Debug.Log("Playfab user logged in: " + result.PlayFabId);
-
-            OnComplete();
-
-        }, delegate (PlayFabError error){
-            Debug.LogError(error.ErrorMessage);
-        });
-
-
-        #else
-        Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
-        #endif
-
-
-    }
 
 
 
     public void ButtonAwardQuartersTapped() {
-
-        #if QUARTERS_MODULE_PLAYFAB
-
-        //user must be logged with playfab to call any cloud script code
-        LoginWithCustomId(delegate {
+        
             
-            //Request 2 quarters from Playfab Cloud build
-            Quarters.Instance.AwardQuarters(2, delegate(string transactionHash) {
+        //Request 2 quarters from Playfab Cloud build
+        Quarters.Instance.AwardQuarters(10, delegate(string transactionHash) {
 
-                Debug.Log("Quarters awarded: " + transactionHash);
+            Debug.Log("Quarters awarded: " + transactionHash);
 
-            }, delegate (string error) {
+        }, delegate (string error) {
 
-                debugConsole.text += "\n";
-                debugConsole.text += "\nOnAwardQuartersFailed: " + error;
+            debugConsole.text += "\n";
+            debugConsole.text += "\nOnAwardQuartersFailed: " + error;
 
-                RefreshUI();
+            RefreshUI();
 
-            });
         });
+ 
 
-           
 
-       
-        #else
-        Debug.LogError("Quarters module: Playfab, is not enabled. Add QUARTERS_MODULE_PLAYFAB scripting define in Player settings");
-        #endif
 
     }
 

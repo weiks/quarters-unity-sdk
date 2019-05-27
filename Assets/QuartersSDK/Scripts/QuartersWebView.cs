@@ -112,6 +112,7 @@ namespace QuartersSDK {
         
         public void OnWebViewClosed() {
             Debug.Log("OnWebViewClosed");
+            if (OnCancelled != null) OnCancelled();
         }
 
         public void OnWebViewReceivedData(string data) {

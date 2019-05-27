@@ -6,7 +6,9 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 
 namespace QuartersSDK {
@@ -41,21 +43,30 @@ namespace QuartersSDK {
         public delegate void OnTransferSuccessDelegate(string transactionHash);
         public delegate void OnTransferFailedDelegate(string error);
         
+        public delegate void OnAwardQuartersSuccessDelegate(string transactionHash);
+        public delegate void OnAwardQuartersFailedDelegate(string error);
         
-
-
+        
 
         public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
 
 		public static string QUARTERS_URL {
 			get {
-				return "https://" + (QuartersInit.Instance.environment == Environment.development ? "dev." : "") + "pocketfulofquarters.com";
-			}
+                Environment environment = QuartersInit.Instance.environment;
+                if (environment == Environment.production) return "https://pocketfulofquarters.com";
+                else if (environment == Environment.development) return "https://dev.pocketfulofquarters.com";
+                else if (environment == Environment.sandbox) return "https://sandbox.pocketfulofquarters.com";
+                return null;
+            }
 		}
 
 		public static string API_URL {
 			get {
-				return "https://api." + (QuartersInit.Instance.environment == Environment.development ? "dev." : "") + "pocketfulofquarters.com/v1";
+                Environment environment = QuartersInit.Instance.environment;
+                if (environment == Environment.production) return "https://api.pocketfulofquarters.com/v1";
+                else if (environment == Environment.development) return "https://api.dev.pocketfulofquarters.com/v1";
+                else if (environment == Environment.sandbox) return "https://api.sandbox.pocketfulofquarters.com/v1";
+                return null;
 			}
 		}
 
@@ -193,6 +204,11 @@ namespace QuartersSDK {
                     QuartersWebView.OpenURL(url);
                     QuartersWebView.OnDeepLink = DeepLink;
                     QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+                    QuartersWebView.OnCancelled += delegate {
+                        //webview was closed
+                        OnFailedDelegate("User canceled");
+                        QuartersWebView.OnCancelled = null;
+                    };
                 }
                 else {
                     //external authentication
@@ -201,7 +217,7 @@ namespace QuartersSDK {
             }
 
         }
-
+        
 
         public void Deauthorize() {
             QuartersSession.Invalidate();
@@ -316,6 +332,78 @@ namespace QuartersSDK {
             }));
 
         }
+        
+         public void AwardQuarters(int expectedAmount, OnAwardQuartersSuccessDelegate OnSuccessDelegate, OnAwardQuartersFailedDelegate OnFailedDelegate) {
+            StartCoroutine(AwardQuartersCall(expectedAmount, OnSuccessDelegate, OnFailedDelegate));
+        }
+
+        
+        private IEnumerator AwardQuartersCall(int expectedAward, OnAwardQuartersSuccessDelegate OnSucess, OnAwardQuartersFailedDelegate OnFailed) { 
+            
+            //pull user details if dont exist
+            if (CurrentUser == null) {
+                bool isUserDetailsDone = false;
+                string getUserDetailsError = "";
+
+                StartCoroutine(GetUserDetailsCall(delegate (User user) {
+                    //user details loaded
+                    isUserDetailsDone = true;
+
+                }, delegate (string userDetailsError) {
+                    OnFailed("Getting user details failed: " + userDetailsError);
+                    isUserDetailsDone = true;
+                    getUserDetailsError = userDetailsError;
+                }));
+
+                while (!isUserDetailsDone) yield return new WaitForEndOfFrame();
+
+                //error occured, break out of coroutine
+                if (!string.IsNullOrEmpty(getUserDetailsError)) yield break;
+            }
+
+
+            string url = Quarters.API_URL + "/accounts/" + QuartersInit.Instance.ETHEREUM_ADDRESS + "/transfer";
+            Debug.Log(url);
+            
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data.Add("amount", expectedAward);
+            data.Add("user", Quarters.Instance.CurrentUser.userId);
+
+            string dataJson = JsonConvert.SerializeObject(data);
+            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+            
+            Dictionary<string, string> header = new Dictionary<string, string>();
+            header.Add("Authorization", QuartersInit.Instance.SERVER_API_TOKEN);
+            header.Add("Content-Type", "application/json;charset=UTF-8");
+            
+            WWW www = new WWW(url, dataBytes, header);
+
+
+            while (!www.isDone) {
+                yield return new WaitForEndOfFrame();
+            }
+
+            Debug.Log(www.text);
+
+            if (!string.IsNullOrEmpty(www.error)) {
+                Debug.LogError(www.text);
+                OnFailed(www.error + " " + www.text);
+            }
+            else {
+                
+                Hashtable ht = JsonConvert.DeserializeObject<Hashtable>(www.text);
+
+                    if (ht.ContainsKey("txId")) {
+                        OnSucess((string)ht["txId"]);
+                    }
+                    else {
+                        Debug.Log(JsonConvert.SerializeObject(www.text));
+                        OnFailed("Unknown error");
+                    }
+            }
+ 
+
+        }
 
 
 
@@ -404,6 +492,7 @@ namespace QuartersSDK {
 
             if (!session.DoesHaveRefreshToken) {
                 Debug.LogError("Missing refresh token");
+                OnFailed("Missing refresh token");
                 yield break;
             }
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -744,6 +833,10 @@ namespace QuartersSDK {
                     QuartersWebView.OpenURL(url);
                     QuartersWebView.OnDeepLink = DeepLink;
                     QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+                    QuartersWebView.OnCancelled += delegate {
+                        request.failedDelegate("User canceled");
+                        QuartersWebView.OnCancelled = null;
+                    };
                 }
                 else {
                     //external authentication
@@ -827,13 +920,14 @@ namespace QuartersSDK {
 
 
             WWW www = new WWW(API_URL + "/requests/" + request.requestId + "/autoApprove", dataBytes, headers);
+            Debug.Log(JsonConvert.SerializeObject(headers));
             Debug.Log(www.url);
             Debug.Log(dataJson);
 
             while (!www.isDone) yield return new WaitForEndOfFrame();
 
             if (!string.IsNullOrEmpty(www.error)) {
-                Debug.LogError(www.error);
+//                Debug.LogError(www.error);
                 Debug.Log(www.text);
                 if (www.error.StartsWith("40")) {
 
@@ -890,7 +984,7 @@ namespace QuartersSDK {
         void OnApplicationFocus( bool focusStatus ){
             if (focusStatus) {
                 #if UNITY_ANDROID
-                ProcessDeepLink(true);
+//                ProcessDeepLink(true);
                 #endif
             }
         }
@@ -902,7 +996,7 @@ namespace QuartersSDK {
 
 			Debug.Log("Deep link url: " + url);
 
-            if (string.IsNullOrEmpty(url)) {
+            if (!string.IsNullOrEmpty(url)) {
                 
 #if UNITY_ANDROID
                 //overriden url if deep link comes from external browser, due to limitations of Android plugins implementation
@@ -927,14 +1021,14 @@ namespace QuartersSDK {
 
 
             foreach (KeyValuePair<string,string> urlParam in urlParams) {
-                Debug.Log(urlParam.Key + ":" + urlParam.Value);
+                Debug.Log(urlParam.Key + " : " + urlParam.Value);
             }
 
             if (urlParams.ContainsKey("code")) {
                 //string code = split[1];
                 AuthorizationCodeReceived(urlParams["code"]);
             }
-            else if (urlParams.ContainsKey("requestId=")) {
+            else if (urlParams.ContainsKey("requestId")) {
 
                 string transferId = urlParams["requestId"];
 
@@ -963,10 +1057,14 @@ namespace QuartersSDK {
 
                 currentTransferAPIRequests.Remove(transferRequest);
             }
-//            else {
-//                Debug.Log("NOT IMPLEMENTED URL: " + linkUrl);
-//            }
-            
+            else if (urlParams.ContainsKey("cancel")) {
+                if (urlParams["cancel"] == "true") {
+                    
+                    currentTransferAPIRequests[0].failedDelegate("User canceled");
+                }
+            }
+
+
 
         }
 
