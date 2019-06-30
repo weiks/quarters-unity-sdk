@@ -3979,7 +3979,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 232055651}
   m_HandleRect: {fileID: 232055650}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4796,7 +4796,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15, y: 0.00007185603}
+  m_AnchoredPosition: {x: 15, y: -0.000016834183}
   m_SizeDelta: {x: -30, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1773134937
@@ -5127,6 +5127,26 @@ PrefabInstance:
     - target: {fileID: 4558843478924128, guid: 6fda49cb785be4592a669bda56f10447, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
+        type: 3}
+      propertyPath: APP_ID
+      value: RlwakovxMiVYDnIdiR3b
+      objectReference: {fileID: 0}
+    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
+        type: 3}
+      propertyPath: APP_KEY
+      value: rw15eixfasnnj04w7xpdp7icfu5qzoy
+      objectReference: {fileID: 0}
+    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
+        type: 3}
+      propertyPath: SERVER_API_TOKEN
+      value: g3hvn72mlzvr2bxhx6absqieyylhhh1ca4wz0l0gcr6eclcgby98w4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
+        type: 3}
+      propertyPath: ETHEREUM_ADDRESS
+      value: 0x306da547f0f77d6e8844120276b652e664431760
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fda49cb785be4592a669bda56f10447, type: 3}
