@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using QuartersSDK;
-#if QUARTERS_IAP
+#if QUARTERS_MODULE_IAP
 using UnityEngine.Purchasing;
 #endif
 
@@ -226,23 +226,16 @@ public class ExampleUI : MonoBehaviour {
 
         #if QUARTERS_MODULE_IAP
 
-        //user must be logged with playfab to call any cloud script code
-        LoginWithCustomId(delegate {
+        List<string> testProducts = new List<string>();
+        testProducts.Add(Application.identifier + ".100" + Constants.QUARTERS_PRODUCT_KEY);
 
-            List<string> testProducts = new List<string>();
-            testProducts.Add(4 + Constants.QUARTERS_PRODUCT_KEY);
-            testProducts.Add(8 + Constants.QUARTERS_PRODUCT_KEY);
+        QuartersIAP.Instance.Initialize(testProducts, delegate(Product[] products) {
 
-            QuartersIAP.Instance.Initialize(testProducts, delegate(Product[] products) {
-            
-
-
-            }, delegate(InitializationFailureReason reason) {
-            
-                Debug.LogError(reason.ToString());
-            });
-
+        }, delegate(InitializationFailureReason reason) {
+        
+            Debug.LogError(reason.ToString());
         });
+
 
         #else
         Debug.LogError("Quarters module: IAP, is not enabled. Add Quarters IAP module");
@@ -258,7 +251,10 @@ public class ExampleUI : MonoBehaviour {
 
         #if QUARTERS_MODULE_IAP
 
-        if (Application.isEditor) Debug.LogError("Buying IAP is not supported in Unity Editor");
+        if (Application.isEditor) {
+            Debug.LogError("Buying IAP is not supported in Unity Editor, test on iOS or Android device");
+            return;
+        }
 
 
         if (QuartersIAP.Instance.products.Count == 0) {

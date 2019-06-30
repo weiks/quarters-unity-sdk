@@ -489,6 +489,14 @@ namespace QuartersSDK {
 
 
         public IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
+            
+            Debug.Log("Get Access token");
+            
+            //skip call for guest users
+            if (session.IsGuestSession) {
+                OnSuccess();
+                yield break;
+            }
 
             if (!session.DoesHaveRefreshToken) {
                 Debug.LogError("Missing refresh token");
@@ -901,6 +909,31 @@ namespace QuartersSDK {
 
 
         private IEnumerator AutoApproveTransfer(TransferAPIRequest request) {
+            
+            bool areAccountsDone = false;
+            string accountsLoadingError = "";
+            
+            if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
+                Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
+                    //accounts loaded
+                    areAccountsDone = true;
+
+                }, delegate (string getAccountsError) {
+                    request.failedDelegate("Getting user accounts failed: " + getAccountsError);
+                    areAccountsDone = true;
+                    accountsLoadingError = getAccountsError;
+                });
+
+                while (!areAccountsDone) yield return new WaitForEndOfFrame();
+
+                //error occured, break out of coroutine
+                if (!string.IsNullOrEmpty(accountsLoadingError)) yield break;
+            }
+
+            if (CurrentUser.accounts.Count < 1) {
+                request.failedDelegate("User account not loaded");
+                yield break;
+            }
 
             Debug.Log("AutoApproveTransfer");
 
@@ -927,7 +960,6 @@ namespace QuartersSDK {
             while (!www.isDone) yield return new WaitForEndOfFrame();
 
             if (!string.IsNullOrEmpty(www.error)) {
-//                Debug.LogError(www.error);
                 Debug.Log(www.text);
                 if (www.error.StartsWith("40")) {
 
