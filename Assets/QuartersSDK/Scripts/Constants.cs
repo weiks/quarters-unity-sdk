@@ -5,7 +5,7 @@ using UnityEngine;
 namespace QuartersSDK {
     public static class Error {
 
-        public static string UNAUTHORIZED_ERROR = "401 UNAUTHORIZED_ERROR";
+        public static string UNAUTHORIZED_ERROR = "401 Unauthorized";
 
     }
 
