@@ -268,6 +268,11 @@ namespace QuartersSDK {
 
         #endregion
 
+        
+        
+        
+        
+        
 
 
         //TODO change for new guest to signup/login flow
@@ -540,7 +545,9 @@ namespace QuartersSDK {
                 //RefreshToken = responseData["refresh_token"];
                 session.AccessToken = responseData["access_token"];
 
-                OnSuccess();
+//                session.AccessToken = "aa";
+
+                if (OnSuccess != null) OnSuccess();
                 
             }
         }
@@ -797,7 +804,7 @@ namespace QuartersSDK {
 
 
 
-        private IEnumerator CreateTransferRequestCall(TransferAPIRequest request, bool forceExternalBrowser = false) {
+        private IEnumerator CreateTransferRequestCall(TransferAPIRequest request, bool isRetry = false, bool forceExternalBrowser = false) {
 
             if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Quarters: Transfers with external browser arent supported in Unity editor");
 
@@ -826,9 +833,24 @@ namespace QuartersSDK {
             while (!www.isDone) yield return new WaitForEndOfFrame();
 
             if (!string.IsNullOrEmpty(www.error)) {
-                Debug.LogError(www.error);
+                Debug.Log(www.error);
 
-                request.failedDelegate("Creating transfer failed: " + www.error);
+                if (www.error == Constants.UNAUTHORIZED_ERROR && !isRetry) {
+                    //token expired
+                    StartCoroutine(GetAccessToken(delegate {
+                        
+                        StartCoroutine(CreateTransferRequestCall(request, true, forceExternalBrowser));
+                        
+                    }, delegate(string error) {
+                        request.failedDelegate(error);
+                    }));
+                }
+                else {
+                    request.failedDelegate("Creating transfer failed: " + www.error);
+                }
+          
+                
+               
             }
             else {
                 Debug.Log(www.text);
@@ -871,16 +893,13 @@ namespace QuartersSDK {
 
 
 
-        private IEnumerator CreateAutoApprovedTransferCall(TransferAPIRequest request) {
+        private IEnumerator CreateAutoApprovedTransferCall(TransferAPIRequest request, bool isRetry = false) {
         
             Debug.Log("CreateAutoApprovedTransfer");
-
-
+            
             if (string.IsNullOrEmpty(session.AccessToken)) {
                 yield return StartCoroutine(GetAccessToken(null, null));
             }
-            
-            
             
 
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
@@ -905,11 +924,28 @@ namespace QuartersSDK {
 
             while (!www.isDone) yield return new WaitForEndOfFrame();
 
+            
             if (!string.IsNullOrEmpty(www.error)) {
-                Debug.LogError(www.error);
+                Debug.Log(www.error);
 
-                //failed, fallback to normal request
-                StartCoroutine(CreateTransferRequestCall(request));
+                if (www.error == Constants.UNAUTHORIZED_ERROR && !isRetry) {
+                
+                    //token expired
+                    StartCoroutine(GetAccessToken(delegate {
+                        
+                        StartCoroutine(CreateAutoApprovedTransferCall(request, true));
+                        
+                    }, delegate(string error) {
+                        request.failedDelegate(error);
+                    }));
+                  
+                }
+                else {
+                    //failed, fallback to normal request
+                    StartCoroutine(CreateTransferRequestCall(request, true));
+                }
+                
+           
             }
             else {
                 Debug.Log(www.text);

@@ -10,6 +10,8 @@ namespace QuartersSDK {
             }
         }
 
+        public static string UNAUTHORIZED_ERROR = "401 Unauthorized";
+
 
     }
 }
