@@ -304,6 +304,8 @@ public class ExampleUI : MonoBehaviour {
 
 
     public void ButtonTransferTapped() {
+        
+        Debug.Log("ButtonTransferTapped");
 
         TransferAPIRequest request = new TransferAPIRequest(int.Parse(tokensInput.text), descriptionInput.text, delegate (string transactionHash) {
         

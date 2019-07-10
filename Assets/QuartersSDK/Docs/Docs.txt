@@ -156,6 +156,11 @@ General notes:
 - only one account is currently supported by API, hence Get Accounts and Account balance calls are working with first returned account
 
 #####
+0.40
+- automated access token handling
+- fixed issue with NRE thrown when transfer is requested before account data is loaded
+
+#####
 0.30.2
 - fixed issues with IAP
   improved transferring flow when account isnt loaded yet
