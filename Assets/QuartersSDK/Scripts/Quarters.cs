@@ -529,7 +529,7 @@ namespace QuartersSDK {
                 string error = www.error;
                 Debug.LogError(error);
 
-                if (error == Error.Unauthorized) {
+                if (error == Error.UNAUTHORIZED_ERROR) {
                     //dispose invalid refresh token
                     session.RefreshToken = "";
                 }
@@ -835,7 +835,7 @@ namespace QuartersSDK {
             if (!string.IsNullOrEmpty(www.error)) {
                 Debug.Log(www.error);
 
-                if (www.error == Constants.UNAUTHORIZED_ERROR && !isRetry) {
+                if (www.error == Error.UNAUTHORIZED_ERROR && !isRetry) {
                     //token expired
                     StartCoroutine(GetAccessToken(delegate {
                         
@@ -928,7 +928,7 @@ namespace QuartersSDK {
             if (!string.IsNullOrEmpty(www.error)) {
                 Debug.Log(www.error);
 
-                if (www.error == Constants.UNAUTHORIZED_ERROR && !isRetry) {
+                if (www.error == Error.UNAUTHORIZED_ERROR && !isRetry) {
                 
                     //token expired
                     StartCoroutine(GetAccessToken(delegate {

@@ -5,10 +5,12 @@ using UnityEngine;
 namespace QuartersSDK {
     public static class Error {
 
-        public static string Unauthorized = "401 Unauthorized";
+        public static string UNAUTHORIZED_ERROR = "401 UNAUTHORIZED_ERROR";
 
     }
 
+    
+    
 	public enum Environment {
         sandbox,
 		development,
