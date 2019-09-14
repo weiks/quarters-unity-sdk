@@ -232,8 +232,7 @@ namespace QuartersSDK {
 
             sr.WriteLine (JsonConvert.SerializeObject(data));
             sr.Close();
-
-
+            
 
             string dataJson = JsonConvert.SerializeObject(data);
             Debug.Log(dataJson);
@@ -247,8 +246,21 @@ namespace QuartersSDK {
 
             if (!string.IsNullOrEmpty(www.error)) {
                 Debug.LogError(www.error);
+                
+                Hashtable errorData = JsonConvert.DeserializeObject<Hashtable>(www.text);
 
-                if (PurchaseFailedDelegate != null) PurchaseFailedDelegate(www.error);
+                if (errorData.Contains("processed")) {
+                    if (www.text.Contains("Error: Already Processed")) {
+                        Debug.Log("Consuming already processed transaction: ");
+                        controller.ConfirmPendingPurchase(e.purchasedProduct);
+                        if (PurchaseFailedDelegate != null) PurchaseFailedDelegate("Transaction as already processed, please try again.");
+                    }
+                }
+                
+                else {
+                    if (PurchaseFailedDelegate != null) PurchaseFailedDelegate(www.error);
+                }
+
             }
             else {
                 Debug.Log(www.text);

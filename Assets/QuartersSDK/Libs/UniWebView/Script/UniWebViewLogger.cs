@@ -8,8 +8,8 @@
 //  used for the purchase. 
 //
 //  This asset and all corresponding files (such as source code) are provided on an 
-//  “as is” basis, without warranty of any kind, express of implied, including but not l
-//  imited to the warranties of merchantability, fitness for a particular purpose, and 
+//  “as is” basis, without warranty of any kind, express of implied, including but not 
+//  limited to the warranties of merchantability, fitness for a particular purpose, and 
 //  noninfringement. In no event shall the authors or copyright holders be liable for any 
 //  claim, damages or other liability, whether in action of contract, tort or otherwise, 
 //  arising from, out of or in connection with the software or the use of other dealing in the software.

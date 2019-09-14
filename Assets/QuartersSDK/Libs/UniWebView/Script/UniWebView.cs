@@ -8,8 +8,8 @@
 //  used for the purchase. 
 //
 //  This asset and all corresponding files (such as source code) are provided on an 
-//  “as is” basis, without warranty of any kind, express of implied, including but not l
-//  imited to the warranties of merchantability, fitness for a particular purpose, and 
+//  “as is” basis, without warranty of any kind, express of implied, including but not
+//  limited to the warranties of merchantability, fitness for a particular purpose, and 
 //  noninfringement. In no event shall the authors or copyright holders be liable for any 
 //  claim, damages or other liability, whether in action of contract, tort or otherwise, 
 //  arising from, out of or in connection with the software or the use of other dealing in the software.
@@ -119,16 +119,16 @@ public class UniWebView: MonoBehaviour {
     public event KeyCodeReceivedDelegate OnKeyCodeReceived;
 
     /// <summary>
-    /// Delegate for oreintation changed event.
+    /// Delegate for orientation changed event.
     /// </summary>
     /// <param name="webView">The web view component which raises this event.</param>
     /// <param name="orientation">The screen orientation for current state.</param>
-    public delegate void OreintationChangedDelegate(UniWebView webView, ScreenOrientation orientation);
+    public delegate void OrientationChangedDelegate(UniWebView webView, ScreenOrientation orientation);
     /// <summary>
-    /// Raised when the screen oreintation is changed. It is a good time to set the web view frame if you 
-    /// need to support multiple oreintations in your game.
+    /// Raised when the screen orientation is changed. It is a good time to set the web view frame if you 
+    /// need to support multiple orientations in your game.
     /// </summary>
-    public event OreintationChangedDelegate OnOreintationChanged;
+    public event OrientationChangedDelegate OnOrientationChanged;
 
     /// <summary>
     /// Delegate for content loading terminated event.
@@ -147,17 +147,29 @@ public class UniWebView: MonoBehaviour {
 
     private bool isPortrait;
     [SerializeField]
+
+    #pragma warning disable 0649 
     private string urlOnStart;
     [SerializeField]
     private bool showOnStart = false;
+
+    [SerializeField]
+    private bool fullScreen;
+
+    [SerializeField]
+    private bool useToolbar;
+
+        
+    [SerializeField]
+    private UniWebViewToolbarPosition toolbarPosition;
+
+    #pragma warning restore 0649
 
     // Action callback holders
     private Dictionary<String, Action> actions = new Dictionary<String, Action>();
     private Dictionary<String, Action<UniWebViewNativeResultPayload>> payloadActions = new Dictionary<String, Action<UniWebViewNativeResultPayload>>();
 
-    [SerializeField]
-    private bool fullScreen;
-
+    
     [SerializeField]
     private Rect frame;
     /// <summary>
@@ -191,12 +203,6 @@ public class UniWebView: MonoBehaviour {
             UpdateFrame();
         }
     }
-
-    [SerializeField]
-    private bool useToolbar;
-    
-    [SerializeField]
-    private UniWebViewToolbarPosition toolbarPosition;
 
     private bool started;
 
@@ -234,6 +240,10 @@ public class UniWebView: MonoBehaviour {
             var bottomRight = worldCorners[3];
 
             var canvas = referenceRectTransform.GetComponentInParent<Canvas>();
+            if (canvas == null) {
+                return frame;
+            }
+
             switch (canvas.renderMode) {
                 case RenderMode.ScreenSpaceOverlay:
                     break;
@@ -297,8 +307,8 @@ public class UniWebView: MonoBehaviour {
         var newIsPortrait = Screen.height >= Screen.width;
         if (isPortrait != newIsPortrait) {
             isPortrait = newIsPortrait;
-            if (OnOreintationChanged != null) {
-                OnOreintationChanged(this, isPortrait ? ScreenOrientation.Portrait : ScreenOrientation.Landscape);
+            if (OnOrientationChanged != null) {
+                OnOrientationChanged(this, isPortrait ? ScreenOrientation.Portrait : ScreenOrientation.Landscape);
             }
             if (referenceRectTransform != null) {
                 UpdateFrame();
@@ -332,8 +342,12 @@ public class UniWebView: MonoBehaviour {
     /// Whether UniWebView should skip encoding the url or not. If set to `false`, UniWebView will try to encode the url parameter before
     /// loading it. Otherwise, your original url string will be used as the url if it is valid. Default is `false`.
     /// </param>
-    public void Load(string url, bool skipEncoding = false) {
-        UniWebViewInterface.Load(listener.Name, url, skipEncoding);
+    /// <param name="readAccessURL">
+    /// The URL to allow read access to. This parameter is only used when loading from the filesystem in iOS, and passed
+    /// to `loadFileURL:allowingReadAccessToURL:` method of WebKit. By default, the parent folder of the `url` parameter will be read accessible.
+    /// </param>
+    public void Load(string url, bool skipEncoding = false, string readAccessURL = null) {
+        UniWebViewInterface.Load(listener.Name, url, skipEncoding, readAccessURL);
     }
 
     /// <summary>
@@ -962,6 +976,73 @@ public class UniWebView: MonoBehaviour {
     }
 
     /// <summary>
+    /// Sets whether file access from file URLs is allowed.
+    /// 
+    /// By setting with `true`, access to file URLs inside the web view will be enabled and you could access sub-resources or 
+    /// make cross origin requests from local HTML files. This method only works on iOS. The file accessing from file URLs on
+    /// Android is available by default.
+    /// </summary>
+    /// <param name="flag">Whether the file access from file URLs is allowed or not.</param>
+    public void SetAllowFileAccessFromFileURLs(bool flag) {
+        #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN
+        UniWebViewInterface.SetAllowFileAccessFromFileURLs(listener.name, flag);
+        #endif
+    }
+
+    /// <summary>
+    /// Sets whether a prompt alert should be displayed for collection username and password when the web view receives an
+    /// HTTP authentication challenge (HTTP Basic or HTTP Digest) from server.
+    /// 
+    /// By setting with `false`, no prompt will be shown and the user cannot login with input credentials. In this case,
+    /// you can only access this page by providing username and password through the URL like: "http://username:password@example.com".
+    /// If the username and password does not match, normally an error with 401 as status code would be returned (this behavior depends
+    /// on the server implementation). If set with `true`, a prompt will be shown when there is no credentials provided or it is not
+    /// correct in the URL.
+    /// 
+    /// Default is `true`.
+    /// </summary>
+    /// <param name="flag">Whether a prompt alert should be shown for HTTP authentication challenge or not.</param>
+    public void SetAllowHTTPAuthPopUpWindow(bool flag) {
+        UniWebViewInterface.SetAllowHTTPAuthPopUpWindow(listener.name, flag);
+    }
+
+    /// <summary>
+    /// Sets whether a callout (context) menu should be displayed when user long tapping on certain web view content.
+    /// 
+    /// When enabled, when user long presses an image or link in the web page, a context menu would be show up to ask 
+    /// user's action. On iOS, it is a action sheet to ask whether opening the target link or saving the image. On 
+    /// Android it is a pop up dialog to ask whether saving the image to local disk. On iOS, the preview page triggered 
+    /// by force touch on iOS is also considered as a callout menu.
+    /// 
+    /// Default is `true`, means that the callout menu will be displayed. Call this method with `false` to disable 
+    /// it on the web view.
+    /// </summary>
+    /// <param name="enabled">
+    /// Whether a callout menu should be displayed when user long pressing or force touching a certain web page element.
+    /// </param>
+    public void SetCalloutEnabled(bool enabled) {
+        UniWebViewInterface.SetCalloutEnabled(listener.name, enabled);
+    }
+
+    /// <summary>
+    /// Sets whether the drag interaction should be enabled on iOS.
+    /// 
+    /// From iOS 11, the iPad web view supports the drag interaction when user long presses an image, link or text.
+    /// Setting this to `false` would disable the drag feather on the web view.
+    /// 
+    /// This method only works on iOS. It does nothing on Android or macOS editor. Default is `true`, which means
+    /// drag interaction on iPad is enabled.
+    /// </summary>
+    /// <param name="enabled">
+    /// Whether the drag interaction should be enabled.
+    /// </param>
+    public void SetDragInteractionEnabled(bool enabled) {
+        #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN
+        UniWebViewInterface.SetDragInteractionEnabled(listener.name, enabled);
+        #endif
+    }
+
+    /// <summary>
     /// Prints current page.
     /// 
     /// By calling this method, a native print preview panel will be brought up on iOS and Android. 
@@ -1087,4 +1168,11 @@ public class UniWebView: MonoBehaviour {
             OnWebContentProcessTerminated(this);
         }
     }
+
+    [Obsolete("OreintationChangedDelegate is a typo and deprecated. Use `OrientationChangedDelegate` instead.", true)]
+    public delegate void OreintationChangedDelegate(UniWebView webView, ScreenOrientation orientation);
+
+    [Obsolete("OnOreintationChanged is a typo and deprecated. Use `OnOrientationChanged` instead.", true)]
+    #pragma warning disable CS0067
+    public event OrientationChangedDelegate OnOreintationChanged;
 }

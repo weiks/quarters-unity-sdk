@@ -9,7 +9,7 @@ public class UniWebViewInterface {
     public static void SetLogLevel(int level) { CheckPlatform(); }
     public static void Init(string name, int x, int y, int width, int height) { CheckPlatform(); }
     public static void Destroy(string name) { CheckPlatform(); }
-    public static void Load(string name, string url, bool skipEncoding) { CheckPlatform(); }
+    public static void Load(string name, string url, bool skipEncoding, string readAccessURL) { CheckPlatform(); }
     public static void LoadHTMLString(string name, string html, string baseUrl, bool skipEncoding) { CheckPlatform(); }
     public static void Reload(string name) { CheckPlatform(); }
     public static void Stop(string name) { CheckPlatform(); }
@@ -55,7 +55,10 @@ public class UniWebViewInterface {
     public static void SetShowToolbar(string name, bool show, bool animated, bool onTop, bool adjustInset) { CheckPlatform(); }
     public static void SetToolbarDoneButtonText(string name, string text) { CheckPlatform(); }
     public static void SetWebContentsDebuggingEnabled(bool enabled) { CheckPlatform(); }
+    public static void SetAllowHTTPAuthPopUpWindow(string name, bool flag) { CheckPlatform(); }
     public static void Print(string name) { CheckPlatform(); }
+    public static void SetCalloutEnabled(string name, bool flag) { CheckPlatform(); }
+    public static void SetDragInteractionEnabled(string name, bool flag) { CheckPlatform(); }
     
     public static void CheckPlatform() {
         if (!alreadyLoggedWarning) {

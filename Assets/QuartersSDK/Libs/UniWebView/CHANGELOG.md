@@ -1,6 +1,145 @@
 # Release Note
 
-### 3.6.1
+### 3.13.2 (29 Aug, 2019)
+
+#### Fix
+
+* An unintended symbol link to deprecated UIWebView on iOS. This prevents the deprecation warning when submitting an app to the App Store.
+
+### 3.13.1 (17 Aug, 2019)
+
+#### Fix
+
+* Enabled app cache support for web view on Android.
+
+### 3.13.0 (11 Jun, 2019)
+
+::: warning
+From 3.13.0, UniWebView supports from Unity 2017.3. This would help to reduce some legacy code and achieve more stable behaviors.
+If you need to continue use UniWebView 3 on Unity 5.6, Unity 2017.1 or Unity 2017.2, please keep to use UniWebView 3.12.1 or earlier.
+:::
+
+#### Add
+
+* Support on Android for uploading multiple files at the same time.
+
+#### Fix
+
+* The `RawMessage` of `UniWebViewMessage` is now not escaped any more. It will return exactly the original URL it receives. Meanwhile, the values in `Args` keep escaped as is.
+* An issue on iPad that the customized "Done" button text might be truncated in some cases.
+
+### 3.12.1 (26 Apr, 2019)
+
+####  Fix
+
+* An issue that web content does not go back to its original position after keyboard dismissed on iOS.
+* A crash when dismissing the web view on iOS 9 devices.
+* An issue causes some files cannot be selected when uploading with a form and the file chooser.
+
+### 3.12.0 (10 Apr, 2019)
+
+#### Add
+
+* Now you can use `SetDragInteractionEnabled` to disable the drag interaction on iPad running iOS 11 or above.
+
+#### Fix
+
+* A issue which causes the non-fullscreen web view position moving in some cases when soft keyboard is showing up.
+
+### 3.11.0 (27 Mar, 2019)
+
+#### Add
+
+* Add `SetCalloutEnabled` method to control the behavior when the user taps an image or link with long press or force touch gesture. Now you can choose not to display the context callout menu.
+
+#### Fix
+
+* Now the navigation bar on Android will automatically hide immediately when the soft keyboard dismissed.
+* A workaround for regression on iOS 12 which causes selecting input fields in forms does not trigger the web view auto scrolling.
+
+### 3.10.2 (28 Feb, 2019)
+
+#### Fix
+
+* Fix a crash when selecting files from Downloads folder on certain Android devices when uploading.
+* Support showing web view in cutout mode in Android. Now UniWebView will follow the cutout render setting.
+
+### 3.10.1 (15 Feb, 2019)
+
+#### Fix
+
+* An issue that lack of a placeholder method which causes code not compile on Windows.
+
+### 3.10.0 (9 Feb, 2019)
+
+#### Add
+
+* A method to turn off automatically prompt alert showing when received an HTTP auth challenge from server. Use `SetAllowHTTPAuthPopUpWindow` to control the behavior.
+* Support open third party app with links of corresponding URL schemes. Now you can use a link to open other apps as long as it was registered.
+
+#### Fix
+
+* Performance issues when using some sync getter APIs on Android native side.
+
+### 3.9.2 (10 Jan, 2019)
+
+#### Fix
+
+* A problem that `SetZoomEnabled` not works correctly on iOS 12.
+* Now `CanGoBack`, `CanGoForward` and `Url` getters also work for single page app page.
+
+### 3.9.1 (18 Dec, 2018)
+
+#### Fix
+
+* A potential issue causes file chooser not response correctly when user dismiss the permission prompt without choosing.
+* Remove JavaScript Interface support for suppressing security warning from Google.
+
+### 3.9.0 (30 Nov, 2018)
+
+#### Add
+
+* A parameter for `Load` method to customize the read access URL for local file loading. It helps to load local resources under a different URL other than the current load page.
+
+#### Fix
+
+* A problem that read access URL not encoded correctly when special characters contained.
+* An issue causes crash when changing screen orientation by code when closing the web view with a toolbar displayed.
+
+### 3.8.1 (24 Oct, 2018)
+
+#### Fix
+
+* Fix a potential crash when reference `RectTransform` is used to determine web view frame, while there is no cavans for some reason on the transform.
+
+### 3.8.0 (5 Sep, 2018)
+
+#### Add
+
+* A method to allow file access from file URLs. This could solve some problem when request in a cross origin way from local pages. However, by setting it to true may cause some potential security issue, so make your choice at the risk.
+
+#### Fix
+
+* A problem causing immersive mode flickering in Android 8.x.
+* Post request on back button would work correctly.
+
+### 3.7.1 (26 Jun, 2018)
+
+#### Fix
+
+* A typo on "OnOrientationChanged" event. It was "OnOreintationChanged" and now we correct this issue in both code and documentation.
+
+### 3.7.0 (14 Jun, 2018)
+
+::: danger
+From Unity 2018, Gradle is used as the default build system, so we updated the integration method to make UniWebView works better in the new build system. If you are upgrading UniWebView from an earlier version, please refer to the [Adapting to AAR File](https://docs.uniwebview.com/guide/adapting-to-aar-file.html) documentation.
+:::
+
+#### Add
+
+* Compatible with Unity 2018.1 and gradle build system. Please note that you need some migration if you want to upgrade from an earlier version.
+
+### 3.6.1 (26 Apr, 2018)
 
 #### Fix
 
@@ -212,7 +351,7 @@ UniWebView now requires Xcode 9 with iOS SDK 11 to build. If you are still using
 ### 3.0.0 (27 Jun, 2017)
 
 ::: danger
-3.0.0 is a major update of UniWebView. We rewote the whole software from scratch to bring your experience of using a web view in Unity to a next level. Be causion it is not compatible with UniWebView 2, there are quite a few breaking changes in this version. For migration from UniWebView 2 in detail, visit our [Migration Guide](http://docs.uniwebview.com/#/migration-guide) in documentation. To know the highlight of the version, check [this page](http://docs.uniwebview.com/#/version-highlight) for more.
+3.0.0 is a major update of UniWebView. We rewote the whole software from scratch to bring your experience of using a web view in Unity to a next level. Be causion it is not compatible with UniWebView 2, there are quite a few breaking changes in this version. For migration from UniWebView 2 in detail, visit our [Migration Guide](https://docs.uniwebview.com/#/migration-guide) in documentation. To know the highlight of the version, check [this page](https://docs.uniwebview.com/#/version-highlight) for more.
 :::
 
 #### Add
@@ -222,8 +361,8 @@ UniWebView now requires Xcode 9 with iOS SDK 11 to build. If you are still using
 * New pop-up style Unity Editor support on macOS. It is a fully functional tool for debugging purpose.
 * A brandly new way to setup bridging between Unity and Cocoa native. Now there is no message sending delay.
 * You can now set the position of toolbar to top or bottom on iOS.
-* A leveled logger to log all UniWebView related information. See [UniWebViewLogger](http://docs.uniwebview.com/#/latest/api/uniwebviewlogger.html) documentation for more.
-* Use a payload based callback API like transition and JavaScript related methods. It takes more data. See [UniWebViewNativeResultPayload](http://docs.uniwebview.com/#/latest/api/uniwebviewnativeresultpayload.html).
+* A leveled logger to log all UniWebView related information. See [UniWebViewLogger](https://docs.uniwebview.com/#/latest/api/uniwebviewlogger.html) documentation for more.
+* Use a payload based callback API like transition and JavaScript related methods. It takes more data. See [UniWebViewNativeResultPayload](https://docs.uniwebview.com/#/latest/api/uniwebviewnativeresultpayload.html).
 * SSL exception for white listed domain. It is useful for a untrusted certification but you still want to access.
 * A method to get current web view HTML content as a string.
 
@@ -571,7 +710,7 @@ The current Windows Phone 8 support (UniWebViewWP.dll) will be kept in later ver
 * A serialize issue which may cause editor crash in some occation.
 
 ::: danger
-Notice: This version is not compatible with Unity 4.x. If you need to use UniWebView on Unity 4.x, please use UniWebView 1.x instead. You can find more information about the earlier version on Asset Store: http://assetstore.unity3d.com/jp/#!/content/12476
+Notice: This version is not compatible with Unity 4.x. If you need to use UniWebView on Unity 4.x, please use UniWebView 1.x instead. You can find more information about the earlier version on Asset Store: https://assetstore.unity3d.com/jp/#!/content/12476
 :::
 
 ---
@@ -579,7 +718,7 @@ Notice: This version is not compatible with Unity 4.x. If you need to use UniWeb
 ### 1.9.0 (10 Feb, 2015)
 
 ::: warning
-1.9.x will be the last version support Unity 4.x. Due to the huge difference between Unity 4 and 5, we decide to make a major update as well. Please keep an eye on our website (http://uniwebview.onevcat.com) to know more information about Unity 5 compatible version.
+1.9.x will be the last version support Unity 4.x. Due to the huge difference between Unity 4 and 5, we decide to make a major update as well. Please keep an eye on our website (https://uniwebview.onevcat.com) to know more information about Unity 5 compatible version.
 :::
 
 #### Fix

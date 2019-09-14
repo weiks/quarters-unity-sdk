@@ -29,7 +29,7 @@ public class UniWebViewInterface {
         plugin.CallStatic("destroy", name);
     }
 
-    public static void Load(string name, string url, bool skipEncoding) {
+    public static void Load(string name, string url, bool skipEncoding, string readAccessURL) {
         CheckPlatform();
         plugin.CallStatic("load", name, url);
     }
@@ -278,9 +278,19 @@ public class UniWebViewInterface {
         plugin.CallStatic("showWebViewDialog", name, show);
     }
 
+    public static void SetAllowHTTPAuthPopUpWindow(string name, bool flag) {
+        CheckPlatform();
+        plugin.CallStatic("setAllowHTTPAuthPopUpWindow", name, flag);
+    }
+
     public static void Print(string name) {
         CheckPlatform();
         plugin.CallStatic("print", name);
+    }
+
+    public static void SetCalloutEnabled(string name, bool flag) {
+        CheckPlatform();
+        plugin.CallStatic("setCalloutEnabled", name, flag);
     }
 
     public static void CheckPlatform() {

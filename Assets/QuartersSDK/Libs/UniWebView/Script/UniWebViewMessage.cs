@@ -8,14 +8,21 @@
 //  used for the purchase. 
 //
 //  This asset and all corresponding files (such as source code) are provided on an 
-//  “as is” basis, without warranty of any kind, express of implied, including but not l
-//  imited to the warranties of merchantability, fitness for a particular purpose, and 
+//  “as is” basis, without warranty of any kind, express of implied, including but not 
+//  limited to the warranties of merchantability, fitness for a particular purpose, and 
 //  noninfringement. In no event shall the authors or copyright holders be liable for any 
 //  claim, damages or other liability, whether in action of contract, tort or otherwise, 
 //  arising from, out of or in connection with the software or the use of other dealing in the software.
 //
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+
+#if UNITY_2017_3_OR_NEWER
+using Net = UnityEngine.Networking.UnityWebRequest;
+#else
+using Net = UnityEngine.WWW;
+#endif
 
 /// <summary>
 /// A structure represents a message from webview.
@@ -54,7 +61,7 @@ public struct UniWebViewMessage {
     /// <param name="rawMessage">Raw message which will be parsed to a UniWebViewMessage.</param>
     public UniWebViewMessage(string rawMessage): this() {
         UniWebViewLogger.Instance.Debug("Try to parse raw message: " + rawMessage);
-        this.RawMessage = WWW.UnEscapeURL(rawMessage);
+        this.RawMessage = rawMessage;
         
         string[] schemeSplit = rawMessage.Split(new string[] {"://"}, System.StringSplitOptions.None);
         if (schemeSplit.Length >= 2) {
@@ -71,18 +78,18 @@ public struct UniWebViewMessage {
             
             string[] split = pathAndArgsString.Split("?"[0]);
             
-            this.Path = WWW.UnEscapeURL(split[0].TrimEnd('/'));
+            this.Path = Net.UnEscapeURL(split[0].TrimEnd('/'));
             this.Args = new Dictionary<string, string>();
             if (split.Length > 1) {
                 foreach (string pair in split[1].Split("&"[0])) {
                     string[] elems = pair.Split("="[0]);
                     if (elems.Length > 1) {
-                        var key = WWW.UnEscapeURL(elems[0]);
+                        var key = Net.UnEscapeURL(elems[0]);
                         if (Args.ContainsKey(key)) {
                             var existingValue = Args[key];
-                            Args[key] = existingValue + "," + WWW.UnEscapeURL(elems[1]);
+                            Args[key] = existingValue + "," + Net.UnEscapeURL(elems[1]);
                         } else {
-                            Args[key] = WWW.UnEscapeURL(elems[1]);
+                            Args[key] = Net.UnEscapeURL(elems[1]);
                         }
                         UniWebViewLogger.Instance.Debug("Get arg, key: " + key + " value: " + Args[key]);
                     }

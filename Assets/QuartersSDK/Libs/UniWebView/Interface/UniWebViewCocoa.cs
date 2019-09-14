@@ -8,8 +8,8 @@
 //  used for the purchase. 
 //
 //  This asset and all corresponding files (such as source code) are provided on an 
-//  “as is” basis, without warranty of any kind, express of implied, including but not l
-//  imited to the warranties of merchantability, fitness for a particular purpose, and 
+//  “as is” basis, without warranty of any kind, express of implied, including but not
+//  limited to the warranties of merchantability, fitness for a particular purpose, and 
 //  noninfringement. In no event shall the authors or copyright holders be liable for any 
 //  claim, damages or other liability, whether in action of contract, tort or otherwise, 
 //  arising from, out of or in connection with the software or the use of other dealing in the software.
@@ -95,10 +95,10 @@ public class UniWebViewInterface {
     }
 
     [DllImport(DllLib)]
-    private static extern void uv_load(string name, string url, bool skipEncoding);
-    public static void Load(string name, string url, bool skipEncoding) {
+    private static extern void uv_load(string name, string url, bool skipEncoding, string readAccessURL);
+    public static void Load(string name, string url, bool skipEncoding, string readAccessURL) {
         CheckPlatform();
-        uv_load(name, url, skipEncoding);
+        uv_load(name, url, skipEncoding, readAccessURL);
     }
 
     [DllImport(DllLib)]
@@ -425,10 +425,38 @@ public class UniWebViewInterface {
     }
 
     [DllImport(DllLib)]
+    private static extern void uv_setAllowFileAccessFromFileURLs(string name, bool flag);
+    public static void SetAllowFileAccessFromFileURLs(string name, bool flag) {
+        CheckPlatform();
+        uv_setAllowFileAccessFromFileURLs(name, flag);
+    }
+
+    [DllImport(DllLib)]
+    private static extern void uv_setAllowHTTPAuthPopUpWindow(string name, bool flag);
+    public static void SetAllowHTTPAuthPopUpWindow(string name, bool flag) {
+        CheckPlatform();
+        uv_setAllowHTTPAuthPopUpWindow(name, flag);
+    }
+
+    [DllImport(DllLib)]
     private static extern void uv_print(string name);
     public static void Print(string name) {
         CheckPlatform();
         uv_print(name);
+    }
+
+    [DllImport(DllLib)]
+    private static extern void uv_setCalloutEnabled(string name, bool flag);
+    public static void SetCalloutEnabled(string name, bool flag) {
+        CheckPlatform();
+        uv_setCalloutEnabled(name, flag);
+    }
+
+    [DllImport(DllLib)]
+    private static extern void uv_setDragInteractionEnabled(string name, bool flag);
+    public static void SetDragInteractionEnabled(string name, bool flag) {
+        CheckPlatform();
+        uv_setDragInteractionEnabled(name, flag);
     }
 
     public static void CheckPlatform() {

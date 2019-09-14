@@ -52,7 +52,7 @@ namespace QuartersSDK {
 
 
             //handle autorotation
-            webView.OnOreintationChanged += (view, orientation) => {
+            webView.OnOrientationChanged += (view, orientation) => {
                 SetFrameSize(webView);
             };
 

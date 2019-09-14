@@ -43,9 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9509de02ddf495b920686930ec4278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  APP_ID: 
-  APP_KEY: 
-  SERVER_API_TOKEN: 
-  ETHEREUM_ADDRESS: 
-  environment: 0
+  APP_ID: sn72ojS0VtM4SDObZbAr
+  APP_KEY: vx30bwmncmx4vl8heferjeqon6xzjch
+  SERVER_API_TOKEN: 6dz934boysy6mhgjjudvjlh83kide32jodfds6kbo9utuj020ztanb
+  ETHEREUM_ADDRESS: 0x979a67f51a20f43f6aef84a986ddfb59c69d007e
+  environment: 2
   useAutoapproval: 1

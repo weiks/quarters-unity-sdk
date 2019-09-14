@@ -252,7 +252,7 @@ public class ExampleUI : MonoBehaviour {
         #if QUARTERS_MODULE_IAP
 
         if (Application.isEditor) {
-            Debug.LogError("Buying IAP is not supported in Unity Editor, test on iOS or Android device");
+            Debug.LogError("Buying IAP is not supported in Unity Editor, please test on iOS or Android device");
             return;
         }
 
