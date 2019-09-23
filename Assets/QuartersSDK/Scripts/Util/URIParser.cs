@@ -58,8 +58,8 @@ namespace QuartersSDK {
 	        }
 	        
 	        #else
-            if (url.Contains(Application.identifier.ToLower())) {
-                result = url.StartsWith(Application.identifier.ToLower());
+            if (url.Contains(Quarters.URL_SCHEME)) {
+                result = url.StartsWith(Quarters.URL_SCHEME);
             }
 			#endif
 

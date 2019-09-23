@@ -73,11 +73,11 @@ namespace QuartersSDK {
 
         public static string URL_SCHEME  {
             get {
-                #if UNITY_WEBGL
-                return QuartersInit.Instance.APP_ID + "://";
-                #else
-                return Application.identifier + "://";
-                #endif
+//                #if UNITY_WEBGL
+//                return QuartersInit.Instance.APP_ID + "://";
+//                #else
+                return "https://" + Application.identifier;
+//                #endif
             }
         }
 
