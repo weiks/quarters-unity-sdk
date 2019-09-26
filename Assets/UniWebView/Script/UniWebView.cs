@@ -1123,7 +1123,6 @@ public class UniWebView: MonoBehaviour {
     }
 
     internal void InternalOnPageStarted(string url) {
-        Debug.Log("InternalOnPageStarted: " + url);
         if (OnPageStarted != null) {
             OnPageStarted(this, url);
         }
