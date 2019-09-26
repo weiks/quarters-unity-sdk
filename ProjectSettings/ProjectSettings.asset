@@ -599,7 +599,7 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   scriptingDefineSymbols:
-    4: QUARTERS_MODULE_IAP
+    4: 
     7: 
   platformArchitecture: {}
   scriptingBackend:

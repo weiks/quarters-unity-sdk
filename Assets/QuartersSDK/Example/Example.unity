@@ -3892,7 +3892,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 232055650}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999997
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4688,7 +4688,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15, y: 0.00003146152}
+  m_AnchoredPosition: {x: 15, y: -0.000008082275}
   m_SizeDelta: {x: -30, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1773134937
@@ -5014,31 +5014,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: APP_ID
-      value: jYxXjLfRPAT4gg4ykOmy
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: APP_KEY
-      value: 7xvoc37x2jxmo2vfdb90xnqarfja7ynap
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: SERVER_API_TOKEN
-      value: 8bzge0om7jjz67mo4xmqygjredrfij2ictmm52x558a5yg99uu6fik
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: ETHEREUM_ADDRESS
-      value: 0x98ea9b0cbeb963408e93bc64f75a5c0cbe929650
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: environment
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fda49cb785be4592a669bda56f10447, type: 3}
 --- !u!1 &1950239988
@@ -5358,7 +5333,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0.000043401553}
   m_SizeDelta: {x: 0, y: 1491.2}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &2040101843
