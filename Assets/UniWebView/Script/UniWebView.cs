@@ -45,7 +45,7 @@ public class UniWebView: MonoBehaviour {
     /// <param name="url">The url which the web view loaded.</param>
     public delegate void PageFinishedDelegate(UniWebView webView, int statusCode, string url);
     /// <summary>
-    /// Raised when the web view finished to load a url successully.
+    /// Raised when the web view finished to load a url successfully.
     /// 
     /// This method will be invoked when a valid response received from the url, regardless the response status.
     /// If a url loading fails before reaching to the server and getting a response, `OnPageErrorReceived` will be 
@@ -382,7 +382,7 @@ public class UniWebView: MonoBehaviour {
     /// </summary>
     public bool CanGoBack {
         get {
-            return UniWebViewInterface.CanGoBack(listener.name);
+            return UniWebViewInterface.CanGoBack(listener.Name);
         }
     }
 
@@ -391,7 +391,7 @@ public class UniWebView: MonoBehaviour {
     /// </summary>
     public bool CanGoForward {
         get {
-            return UniWebViewInterface.CanGoForward(listener.name);
+            return UniWebViewInterface.CanGoForward(listener.Name);
         }
     }
 
@@ -524,7 +524,9 @@ public class UniWebView: MonoBehaviour {
     /// Adds a url scheme to UniWebView message system interpreter.
     /// All following url navigation to this scheme will be sent as a message to UniWebView instead.
     /// </summary>
-    /// <param name="scheme">The url scheme to add. It should not contain "://" part. You could even add "http" and/or "https" to prevent all resource loading on the page. "uniwebview" is added by default. Nothing will happen if you try to add a dulplicated scheme.</param>
+    /// <param name="scheme">The url scheme to add. It should not contain "://" part. You could even add "http" and/or 
+    /// "https" to prevent all resource loading on the page. "uniwebview" is added by default. Nothing will happen if 
+    /// you try to add a duplicated scheme.</param>
     public void AddUrlScheme(string scheme) {
         if (scheme == null) {
             UniWebViewLogger.Instance.Critical("The scheme should not be null.");
@@ -592,7 +594,7 @@ public class UniWebView: MonoBehaviour {
     /// <summary>
     /// Sets a customized header field for web view requests.
     /// 
-    /// The header field will be used for all subsequence reqeust. 
+    /// The header field will be used for all subsequence request. 
     /// Pass `null` as value to unset a header field.
     /// 
     /// Some reserved headers like user agent are not be able to override by setting here, 
@@ -624,6 +626,23 @@ public class UniWebView: MonoBehaviour {
     /// <returns>The user agent string in use.</returns>
     public string GetUserAgent() {
         return UniWebViewInterface.GetUserAgent(listener.Name);
+    }
+
+    /// <summary>
+    /// Sets the adjustment behavior which indicates how safe area insets 
+    /// are added to the adjusted content inset. It is a wrapper of `contentInsetAdjustmentBehavior` on iOS.
+    /// 
+    /// It only works on iOS 11 and above. You need to call this method as soon as you create a web view,
+    /// before you call any other methods related to web view layout (like `Show` or `SetShowToolbar`).
+    /// </summary>
+    /// <param name="behavior">The behavior for determining the adjusted content offsets.</param>
+    public void SetContentInsetAdjustmentBehavior(
+        UniWebViewContentInsetAdjustmentBehavior behavior
+    )
+    {
+        #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN
+        UniWebViewInterface.SetContentInsetAdjustmentBehavior(listener.Name, behavior);
+        #endif
     }
 
     /// <summary>
@@ -815,10 +834,10 @@ public class UniWebView: MonoBehaviour {
     }
 
     /// <summary>
-    /// Sets whether the web view supports zoom guesture to change content size. 
-    /// Default is `false`, which means the zoom guesture is not supported.
+    /// Sets whether the web view supports zoom gesture to change content size. 
+    /// Default is `false`, which means the zoom gesture is not supported.
     /// </summary>
-    /// <param name="enabled">Whether the zoom guesture is allowed or not.</param>
+    /// <param name="enabled">Whether the zoom gesture is allowed or not.</param>
     public void SetZoomEnabled(bool enabled) {
         UniWebViewInterface.SetZoomEnabled(listener.Name, enabled);
     }
@@ -908,14 +927,16 @@ public class UniWebView: MonoBehaviour {
     /// You could choose to show or hide the tool bar. By configuring the `animated` and `onTop` 
     /// parameters, you can control the animating and position of the toolbar. If the toolbar is 
     /// overlapping with some part of your web view, pass `adjustInset` with `true` to have the 
-    /// web view reloacating itself to avoid the overlap.
+    /// web view relocating itself to avoid the overlap.
     /// 
     /// This method is only for iOS. The toolbar is hidden by default.
     /// </summary>
     /// <param name="show">Whether the toolbar should show or hide.</param>
     /// <param name="animated">Whether the toolbar state changing should be with animation. Default is `false`.</param>
-    /// <param name="onTop">Whether the toolbar should snap to top of screen or to bottom of screen. Default is `true`</param>
-    /// <param name="adjustInset">Whether the toolbar transition should also afjust web view position and size if overlapped. Default is `false`</param>
+    /// <param name="onTop">Whether the toolbar should snap to top of screen or to bottom of screen. 
+    /// Default is `true`</param>
+    /// <param name="adjustInset">Whether the toolbar transition should also adjust web view position and size
+    ///  if overlapped. Default is `false`</param>
     public void SetShowToolbar(bool show, bool animated = false, bool onTop = true, bool adjustInset = false) {
         #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN
         UniWebViewInterface.SetShowToolbar(listener.Name, show, animated, onTop, adjustInset);
@@ -959,14 +980,15 @@ public class UniWebView: MonoBehaviour {
     /// <param name="enabled">Whether the window could be able to be resized by cursor.</param>
     public void SetWindowUserResizeEnabled(bool enabled) {
         #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN
-        UniWebViewInterface.SetWindowUserResizeEnabled(listener.name, enabled);
+        UniWebViewInterface.SetWindowUserResizeEnabled(listener.Name, enabled);
         #endif
     }
 
     /// <summary>
     /// Gets the HTML content from current page by accessing its outerHTML with JavaScript.
     /// </summary>
-    /// <param name="handler">Called after the JavaScript executed. The parameter string is the content read from page.</param>
+    /// <param name="handler">Called after the JavaScript executed. The parameter string is the content read 
+    /// from page.</param>
     public void GetHTMLContent(Action<string> handler) {
         EvaluateJavaScript("document.documentElement.outerHTML", payload => {
             if (handler != null) {
@@ -978,14 +1000,14 @@ public class UniWebView: MonoBehaviour {
     /// <summary>
     /// Sets whether file access from file URLs is allowed.
     /// 
-    /// By setting with `true`, access to file URLs inside the web view will be enabled and you could access sub-resources or 
-    /// make cross origin requests from local HTML files. This method only works on iOS. The file accessing from file URLs on
-    /// Android is available by default.
+    /// By setting with `true`, access to file URLs inside the web view will be enabled and you could access 
+    /// sub-resources or make cross origin requests from local HTML files. This method only works on iOS. The file 
+    /// accessing from file URLs on Android is available by default.
     /// </summary>
     /// <param name="flag">Whether the file access from file URLs is allowed or not.</param>
     public void SetAllowFileAccessFromFileURLs(bool flag) {
         #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN
-        UniWebViewInterface.SetAllowFileAccessFromFileURLs(listener.name, flag);
+        UniWebViewInterface.SetAllowFileAccessFromFileURLs(listener.Name, flag);
         #endif
     }
 
@@ -1003,7 +1025,7 @@ public class UniWebView: MonoBehaviour {
     /// </summary>
     /// <param name="flag">Whether a prompt alert should be shown for HTTP authentication challenge or not.</param>
     public void SetAllowHTTPAuthPopUpWindow(bool flag) {
-        UniWebViewInterface.SetAllowHTTPAuthPopUpWindow(listener.name, flag);
+        UniWebViewInterface.SetAllowHTTPAuthPopUpWindow(listener.Name, flag);
     }
 
     /// <summary>
@@ -1021,7 +1043,7 @@ public class UniWebView: MonoBehaviour {
     /// Whether a callout menu should be displayed when user long pressing or force touching a certain web page element.
     /// </param>
     public void SetCalloutEnabled(bool enabled) {
-        UniWebViewInterface.SetCalloutEnabled(listener.name, enabled);
+        UniWebViewInterface.SetCalloutEnabled(listener.Name, enabled);
     }
 
     /// <summary>
@@ -1038,7 +1060,7 @@ public class UniWebView: MonoBehaviour {
     /// </param>
     public void SetDragInteractionEnabled(bool enabled) {
         #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS) && !UNITY_EDITOR_WIN
-        UniWebViewInterface.SetDragInteractionEnabled(listener.name, enabled);
+        UniWebViewInterface.SetDragInteractionEnabled(listener.Name, enabled);
         #endif
     }
 
@@ -1051,7 +1073,25 @@ public class UniWebView: MonoBehaviour {
     /// you can only initialize a print job from Unity by this method.
     /// </summary>
     public void Print() {
-        UniWebViewInterface.Print(listener.name);
+        UniWebViewInterface.Print(listener.Name);
+    }
+
+    /// <summary>
+    /// Scrolls the web view to a certain point.
+    /// 
+    /// Use 0 for both `x` and `y` value to scroll the web view to its origin.
+    /// In a normal vertical web page, it is equivalent as scrolling to top.
+    /// 
+    /// You can use the `animated` parameter to control whether scrolling the page with or without animation.
+    /// This parameter only works on iOS and Android. On macOS editor, the scrolling always happens without animation.
+    /// </summary>
+    /// <param name="x">X value of the target scrolling point.</param>
+    /// <param name="y">Y value of the target scrolling point.</param>
+    /// <param name="animated">If `true`, the scrolling happens with animation. Otherwise, it happens without
+    ///  animation and the content is set directly.
+    /// </param>
+    public void ScrollTo(int x, int y, bool animated) {
+        UniWebViewInterface.ScrollTo(listener.Name, x, y, animated);
     }
 
     void OnDestroy() {

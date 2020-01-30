@@ -46,7 +46,9 @@ public class UniWebViewInterface {
     #endif
 
     [DllImport(DllLib)]
-    private static extern void uv_connectMessageSender([MarshalAs(UnmanagedType.FunctionPtr)] UnitySendMessageDelegate sendMessageDelegate);
+    private static extern void uv_connectMessageSender(
+        [MarshalAs(UnmanagedType.FunctionPtr)] UnitySendMessageDelegate sendMessageDelegate
+    );
     static void ConnectMessageSender() {
         UniWebViewLogger.Instance.Info("Connecting to native side message sender.");
         CheckPlatform();
@@ -59,7 +61,9 @@ public class UniWebViewInterface {
         string method = Marshal.PtrToStringAuto(methodPtr);
         string parameters = Marshal.PtrToStringAuto(parameterPtr);
 
-        UniWebViewLogger.Instance.Verbose("Received message sent from native. Name: " + name + " Method: " + method + " Params: " + parameters);
+        UniWebViewLogger.Instance.Verbose(
+            "Received message sent from native. Name: " + name + " Method: " + method + " Params: " + parameters
+        );
 
         var listener = UniWebViewNativeListener.GetListener(name);
         if (listener) {
@@ -165,8 +169,12 @@ public class UniWebViewInterface {
     }
 
     [DllImport(DllLib)]
-    private static extern bool uv_animateTo(string name, int x, int y, int width, int height, float duration, float delay, string identifier);
-    public static bool AnimateTo(string name, int x, int y, int width, int height, float duration, float delay, string identifier) {
+    private static extern bool uv_animateTo(
+        string name, int x, int y, int width, int height, float duration, float delay, string identifier
+    );
+    public static bool AnimateTo(
+        string name, int x, int y, int width, int height, float duration, float delay, string identifier) 
+    {
         CheckPlatform();
         return uv_animateTo(name, x, y, width, height, duration, delay, identifier);
     }
@@ -234,6 +242,17 @@ public class UniWebViewInterface {
         return uv_getUserAgent(name);
     }
 
+
+    [DllImport(DllLib)]
+    private static extern void uv_setContentInsetAdjustmentBehavior(string name, int behavior);
+    public static void SetContentInsetAdjustmentBehavior(
+        string name, UniWebViewContentInsetAdjustmentBehavior behavior
+    ) 
+    {
+        CheckPlatform();
+        uv_setContentInsetAdjustmentBehavior(name, (int)behavior);
+    }
+
     [DllImport(DllLib)]
     private static extern void uv_setAllowAutoPlay(bool flag);
     public static void SetAllowAutoPlay(bool flag) {
@@ -254,7 +273,6 @@ public class UniWebViewInterface {
         CheckPlatform();
         uv_setAllowJavaScriptOpenWindow(flag);
     }
-
 
     [DllImport(DllLib)]
     private static extern void uv_setJavaScriptEnabled(bool flag);
@@ -446,6 +464,13 @@ public class UniWebViewInterface {
     }
 
     [DllImport(DllLib)]
+    private static extern void uv_scrollTo(string name, int x, int y, bool animated);
+    public static void ScrollTo(string name, int x, int y, bool animated) {
+        CheckPlatform();
+        uv_scrollTo(name, x, y, animated);
+    }
+
+    [DllImport(DllLib)]
     private static extern void uv_setCalloutEnabled(string name, bool flag);
     public static void SetCalloutEnabled(string name, bool flag) {
         CheckPlatform();
@@ -461,7 +486,9 @@ public class UniWebViewInterface {
 
     public static void CheckPlatform() {
         if (!correctPlatform) {
-            throw new System.InvalidOperationException("Method can only be performed on correct platform. Current: " + Application.platform);
+            throw new System.InvalidOperationException(
+                "Method can only be performed on correct platform. Current: " + Application.platform
+            );
         }
     }
 }

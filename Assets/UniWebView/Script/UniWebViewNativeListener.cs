@@ -134,7 +134,7 @@ public class UniWebViewNativeListener: MonoBehaviour {
 }
 
 /// <summary>
-/// A payload reveived from native side. It contains information to identify the message sender,
+/// A payload received from native side. It contains information to identify the message sender,
 /// as well as some necessary field to bring data from native side to Unity.
 /// </summary>
 [System.Serializable]

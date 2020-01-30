@@ -24,7 +24,7 @@ public class UniWebViewHelper {
     /// <summary>
     /// Get the local streaming asset path for a given file path related to the StreamingAssets folder.
     /// 
-    /// This method will help you to concat a URL string for a file under your StreamingAssets folder for different platforms.
+    /// This method will help you to create a URL string for a file under your StreamingAssets folder for different platforms.
     /// <param name="path">The relative path to the Assets/StreamingAssets of your file. 
     /// For example, if you placed a html file under Assets/StreamingAssets/www/index.html, you should pass `www/index.html` as parameter.
     /// </param>
@@ -44,7 +44,7 @@ public class UniWebViewHelper {
     /// <summary>
     /// Get the local persistent data path for a given file path related to the data folder of your host app.
     /// 
-    /// This method will help you to concat a URL string for a file under you stored in the `persistentDataPath`.
+    /// This method will help you to create a URL string for a file under you stored in the `persistentDataPath`.
     /// </summary>
     /// <param name="path">
     /// The relative path to the persistent data path of your file.
