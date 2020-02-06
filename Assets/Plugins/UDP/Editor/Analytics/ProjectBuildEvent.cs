@@ -1,7 +1,8 @@
+#if (UNITY_5_6_OR_NEWER && !UNITY_5_6_0)
+
 using UnityEditor;
 using UnityEditor.Callbacks;
 
-#if (UNITY_5_6_OR_NEWER && !UNITY_5_6_0)
 namespace UnityEngine.UDP.Editor.Analytics
 {
     public static class ProjectBuildEvent
@@ -9,13 +10,13 @@ namespace UnityEngine.UDP.Editor.Analytics
         [PostProcessBuildAttribute]
         public static void OnPostProcessBuild(BuildTarget target, string pathToBuildProject)
         {
-            if (target == BuildTarget.Android)
+            if (target == BuildTarget.Android && Common.TargetUDP())
             {
                 // Send to Analytics
                 EditorAnalyticsReqStruct reqStruct = new EditorAnalyticsReqStruct
                 {
                     eventName = EditorAnalyticsApi.k_ProjectBuildEventName,
-                    webRequest = EditorAnalyticsApi.ProjectBuildEvent(),
+                    webRequest = EditorAnalyticsApi.ProjectBuildEvent()
                 };
 
                 WebRequestQueue.Enqueue(reqStruct);
@@ -23,4 +24,5 @@ namespace UnityEngine.UDP.Editor.Analytics
         }
     }
 }
+
 #endif

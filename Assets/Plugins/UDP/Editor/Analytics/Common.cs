@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using UnityEngine.UDP.Common;
 
 namespace UnityEngine.UDP.Editor.Analytics
 {
@@ -15,7 +17,8 @@ namespace UnityEngine.UDP.Editor.Analytics
         private const string k_EventTypeValue = "editor";
         private const string k_UnityVersion = "unity_version";
         private const string k_SdkVersion = "sdk_version";
-        private const string k_DeviceId = "deviceID";
+        private const string k_DeviceId = "device_id";
+        private const string k_SdkDist = "sdk_dist";
 
         // specific keys
         public const string k_AppName = "app_name";
@@ -49,6 +52,7 @@ namespace UnityEngine.UDP.Editor.Analytics
                 {k_OrgId, GetOrganizationId()},
                 {k_UserId, GetUserId()},
                 {k_DeviceId, SystemInfo.deviceUniqueIdentifier},
+                {k_SdkDist, BuildConfig.SDK_DIST}
             };
 
             return dic;
@@ -98,6 +102,40 @@ namespace UnityEngine.UDP.Editor.Analytics
         {
             UInt64 timeStamp = (UInt64) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds);
             return timeStamp;
+        }
+
+        private const string UnityIAPBillingModeFile = "Assets/Plugins/UnityPurchasing/Resources/BillingMode.json";
+
+        // If UnityIAP exists, check Assets/Plugins/UnityPurchasing/Resources/BillingMode.json
+        // also, check the existence of UDP Setting.asset.
+        public static bool TargetUDP()
+        {
+            bool res = File.Exists(AppStoreSettings.appStoreSettingsAssetPath);
+
+            if (UnityIAPExists())
+            {
+                res = false; // set to false temporarily.
+
+                // if billingMode is target to UDP, set it to true;
+                if (File.Exists(UnityIAPBillingModeFile))
+                {
+                    string targetStoreJson = File.ReadAllText(UnityIAPBillingModeFile);
+                    if (targetStoreJson != null)
+                    {
+                        Debug.Log(targetStoreJson);
+                        var dic = MiniJson.JsonDecode(targetStoreJson);
+
+                        res &= (string) dic["androidStore"] == "UDP";
+                    }
+                }
+            }
+
+            return res;
+        }
+
+        private static bool UnityIAPExists()
+        {
+            return Utils.FindTypeByName("UnityEngine.Purchasing.StandardPurchasingModule") != null;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if (UNITY_5_6_OR_NEWER && !UNITY_5_6_0)
+
+using System;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -37,6 +39,7 @@ namespace UnityEngine.UDP.Editor
                 byte[] postDataBytes = Encoding.UTF8.GetBytes(postData);
                 request.uploadHandler = (UploadHandler) new UploadHandlerRaw(postDataBytes);
             }
+
             request.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
             // set content-type header
             request.SetRequestHeader("Content-Type", "application/json");
@@ -81,6 +84,7 @@ namespace UnityEngine.UDP.Editor
                 byte[] postDataBytes = Encoding.UTF8.GetBytes(postData);
                 request.uploadHandler = (UploadHandler) new UploadHandlerRaw(postDataBytes);
             }
+
             request.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
             // set content-type header
             request.SetRequestHeader("Content-Type", "application/json");
@@ -189,9 +193,10 @@ namespace UnityEngine.UDP.Editor
                         channel.thirdPartySettings[i].appKey = null;
                         channel.thirdPartySettings[i].appSecret = null;
                     }
+
                     if (channel.thirdPartySettings[i].appType.Equals("xiaomi"))
                     {
-                        channel.thirdPartySettings[i].extraProperties = null;    
+                        channel.thirdPartySettings[i].extraProperties = null;
                     }
                 }
             }
@@ -216,12 +221,14 @@ namespace UnityEngine.UDP.Editor
                     loaded = false;
                     return null;
                 }
+
                 if (updateRev == null)
                 {
                     Debug.LogError("Please get/generate Unity Client first.");
                     loaded = false;
                     return null;
                 }
+
                 client.rev = updateRev;
                 if (orgId == null)
                 {
@@ -229,6 +236,7 @@ namespace UnityEngine.UDP.Editor
                     loaded = false;
                     return null;
                 }
+
                 client.owner = orgId;
                 client.ownerType = "ORGANIZATION";
                 api = "/v1/oauth2/user-clients/" + unityClientInfo.ClientId;
@@ -248,6 +256,7 @@ namespace UnityEngine.UDP.Editor
             {
                 return null;
             }
+
             string token = tokenInfo.access_token;
             return asyncRequest(UnityWebRequest.kHttpVerbPUT, url,
                 "/v1/oauth2/user-clients/channel-secret?clientId=" + clientId, token, null);
@@ -340,7 +349,7 @@ namespace UnityEngine.UDP.Editor
         public static UnityWebRequest SearchStoreItem(String appItemSlug)
         {
             string api = "/v1/store/items/search?ownerId=" + orgId +
-                         "&ownerType=ORGANIZATION&start=0&count=20&type=IAP&masterItemSlug=" + appItemSlug;
+                         "&ownerType=ORGANIZATION&start=0&type=IAP&masterItemSlug=" + appItemSlug;
             string token = tokenInfo.access_token;
             return asyncRequest(UnityWebRequest.kHttpVerbGET, udpurl, api, token, null, false);
         }
@@ -360,3 +369,5 @@ namespace UnityEngine.UDP.Editor
         }
     }
 }
+
+#endif
