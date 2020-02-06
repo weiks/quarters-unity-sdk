@@ -176,7 +176,7 @@ namespace QuartersSDK {
 			}
 			else {
                 //direct to the browser
-                AuthorizeExternal();
+                AuthorizeWithWebView();
 			}
 
 		}
@@ -285,23 +285,18 @@ namespace QuartersSDK {
 
 
 
-        private void AuthorizeExternal(bool forceExternalBrowser = false) {
+        private void AuthorizeWithWebView() {
 
             Debug.Log("OAuth authorization");
 
 			string url = QUARTERS_URL + "/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
 			Debug.Log(url);
 
-            if (!forceExternalBrowser) {
-                //web view authentication
-                QuartersWebView.OpenURL(url);
-                QuartersWebView.OnDeepLink = DeepLink;
-                QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
-            }
-            else {
-                //external authentication
-			    Application.OpenURL(url);
-            }
+            //web view authentication
+            QuartersWebView.OpenURL(url);
+            QuartersWebView.OnDeepLink = DeepLink;
+            QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+       
 		}
 
 
