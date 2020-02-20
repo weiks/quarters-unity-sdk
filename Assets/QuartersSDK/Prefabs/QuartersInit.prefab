@@ -49,3 +49,4 @@ MonoBehaviour:
   ETHEREUM_ADDRESS: 0x979a67f51a20f43f6aef84a986ddfb59c69d007e
   environment: 2
   useAutoapproval: 1
+  CurrencyConfig: {fileID: 11400000, guid: 00660e5b63ccf49819edbae56355f384, type: 2}

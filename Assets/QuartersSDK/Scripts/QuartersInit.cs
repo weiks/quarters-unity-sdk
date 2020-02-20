@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using QuartersSDK.Currency;
 
 namespace QuartersSDK {
 	public class QuartersInit : MonoBehaviour {
@@ -15,7 +16,9 @@ namespace QuartersSDK {
         [Header("Configuration:")]
         public bool useAutoapproval = false;
 
-
+        public CurrencyConfig CurrencyConfig;
+        
+        
 
 		private static Quarters instance;
 
@@ -42,6 +45,10 @@ namespace QuartersSDK {
 			instance = quarters.AddComponent<Quarters>();
 			instance.Init();
 
+			//init currency
+			
+			
+			
             #if QUARTERS_MODULE_IAP
             GameObject quartersIAP = new GameObject("QuartersIAP");
             quartersIAP.transform.SetParent(this.transform);
@@ -50,9 +57,6 @@ namespace QuartersSDK {
             #endif
 
 		}
-
-
-
 
 
 	}

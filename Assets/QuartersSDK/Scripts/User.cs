@@ -38,6 +38,8 @@ namespace QuartersSDK {
                 public string formattedQuarters = "";
                 public long ethers = 0;
                 public string formattedEthers = "";
+                
+                //add delegate for easy refreshing?
             }
 
             public class Reward {
