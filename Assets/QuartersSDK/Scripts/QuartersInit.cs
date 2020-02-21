@@ -16,8 +16,8 @@ namespace QuartersSDK {
         [Header("Configuration:")]
         public bool useAutoapproval = false;
 
-        public CurrencyConfig CurrencyConfig;
-        
+        [SerializeField]
+        private CurrencyConfig CurrencyConfig;
         
 
 		private static Quarters instance;
@@ -43,6 +43,7 @@ namespace QuartersSDK {
 			DontDestroyOnLoad(quarters.gameObject);
 
 			instance = quarters.AddComponent<Quarters>();
+			instance.CurrencyConfig = this.CurrencyConfig;
 			instance.Init();
 
 			//init currency

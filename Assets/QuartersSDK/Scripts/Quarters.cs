@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using QuartersSDK.Currency;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -16,6 +17,8 @@ namespace QuartersSDK {
 
 		public static Quarters Instance;
         public QuartersSession session;
+        
+        public CurrencyConfig CurrencyConfig;
         
 
 		public delegate void OnAuthorizationStartDelegate();
