@@ -6,6 +6,9 @@ using QuartersSDK.UI;
 using QuartersSDK;
 
 public class AuthorizeView : UIView {
+
+	[SerializeField]
+	private UISegue segueToMainMenu;
 	
 	public override void ViewAppeared() {
 		base.ViewAppeared();
@@ -56,7 +59,7 @@ public class AuthorizeView : UIView {
 				Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
 					
 					ModalView.instance.HideActivity();
-					Debug.Log("All user data loaded");
+					segueToMainMenu.Perform();
 					
 				}, delegate(string getBalanceError) {
 					

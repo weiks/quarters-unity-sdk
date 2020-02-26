@@ -5,28 +5,66 @@ using System;
 
 namespace QuartersSDK {
 	public class User {
-    
-		public string userId = "";
+
+        public Action OnAccountsLoaded;
+
+        public string userId = "";
 		public string displayName = "";
 		public string email = "";
 		public bool emailVerified = false;
 
+        public bool IsGuestUser {
+            get {
+                return email.Contains("@guest");
+            }
+        }
+
         public List<Account> accounts = new List<Account>();
+
+        public Account MainAccount {
+            get {
+                if (accounts.Count > 0) {
+                    return accounts[0];
+                }
+                else return null;
+            }
+        }
 
 
         public class Account {
+            
+            public Action<long> OnAvailableCoinsUpdated;
+            
             public string id = "";
             public string address = "";
             public DateTime created = DateTime.MinValue;
             public string userId = "";
-            public Balance balance = null;
-            public Reward reward = null;
 
-            public long AvailableQuarters {
+            private Balance balance = null;
+
+            public Balance CurrentBalance {
+                get { return balance; }
+                set {
+                    balance = value;
+                    OnAvailableCoinsUpdated?.Invoke(AvailableCoins);
+                }
+            }
+
+            private Reward currentReward;
+            public Reward CurrentReward {
+                get { return currentReward; }
+                set {
+                    currentReward = value;
+                    OnAvailableCoinsUpdated?.Invoke(AvailableCoins);
+                }
+            }
+
+            
+            public long AvailableCoins {
                 get {
                     long result = 0;
-                    if (balance != null) result += balance.quarters;
-                    if (reward != null) result += reward.rewardAmount;
+                    if (CurrentBalance != null) result += CurrentBalance.quarters;
+                    if (CurrentReward != null) result += CurrentReward.rewardAmount;
 
                     return result;
                 }

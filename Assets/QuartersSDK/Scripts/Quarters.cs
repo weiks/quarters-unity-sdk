@@ -15,6 +15,8 @@ using UnityEditor;
 namespace QuartersSDK {
 	public partial class Quarters : MonoBehaviour {
 
+        public static Action<User> OnUserLoaded;
+
 		public static Quarters Instance;
         public QuartersSession session;
         
@@ -100,6 +102,7 @@ namespace QuartersSDK {
 			}
 			set {
 				currentUser = value;
+                OnUserLoaded?.Invoke(currentUser);
 			}
 		}
 
@@ -644,6 +647,7 @@ namespace QuartersSDK {
 
                 Debug.Log(www.text);
                 CurrentUser.accounts = JsonConvert.DeserializeObject<List<User.Account>>(www.text);
+                CurrentUser.OnAccountsLoaded?.Invoke();
                 OnSucess(CurrentUser.accounts);
 
             }
@@ -708,8 +712,8 @@ namespace QuartersSDK {
             else {
 
                 Debug.Log(www.text);
-                account.balance = JsonConvert.DeserializeObject<User.Account.Balance>(www.text);
-                OnSucess(account.balance);
+                account.CurrentBalance = JsonConvert.DeserializeObject<User.Account.Balance>(www.text);
+                OnSucess(account.CurrentBalance);
 
             }
 
@@ -774,8 +778,8 @@ namespace QuartersSDK {
             else {
 
                 Debug.Log(www.text);
-                account.reward = JsonConvert.DeserializeObject<User.Account.Reward>(www.text);
-                OnSucess(account.reward);
+                account.CurrentReward = JsonConvert.DeserializeObject<User.Account.Reward>(www.text);
+                OnSucess(account.CurrentReward);
 
             }
 
