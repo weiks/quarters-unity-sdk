@@ -11,11 +11,14 @@ namespace QuartersSDK.Currency {
     public class CurrencyConfig : ScriptableObject {
 
         public string Code;
-        public string DisplayName;
+        public string DisplayNameSingular;
+        public string DisplayNamePlural;
 
         public Sprite CurrencyLogo;
         public Sprite BrandLogo;
 
+        public Color BackgroundsColor;
+        public Color BrandColor;
 
         public CurrencyConfig(string json) {
             
