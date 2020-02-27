@@ -9,6 +9,7 @@ public class AuthorizeView : UIView {
 
 	[SerializeField]
 	private UISegue segueToMainMenu;
+
 	
 	public override void ViewAppeared() {
 		base.ViewAppeared();
@@ -22,13 +23,13 @@ public class AuthorizeView : UIView {
 		//quarters
 		if (!session.IsAuthorized) {
 			//first session
-			Quarters.Instance.AuthorizeGuest(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+			ModalView.instance.HideActivity();
 		}
 		else {
 			//not first session
 			if (session.IsGuestSession) {
 				//following session with guest mode display dialog
-				Quarters.Instance.AuthorizeGuest(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+				ModalView.instance.HideActivity();
 			}
 			else {
 				//email user
@@ -42,8 +43,9 @@ public class AuthorizeView : UIView {
 	private void QuartersAuthorizationFailed(string error) {
 
 		Debug.LogError("QuartersAuthorizationFailed: " + error);
-		ModalView.instance.ShowAlert("Quarters get balance error", error, new string[]{"Try again"}, null);
+		ModalView.instance.ShowAlert("Authorization failed", error, new string[]{"Try again"}, null);
 	}
+	
 	
 	
 	private void QuartersAuthorizationSuccess() {
@@ -59,8 +61,12 @@ public class AuthorizeView : UIView {
 				Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
 					
 					ModalView.instance.HideActivity();
-					segueToMainMenu.Perform();
 					
+					QuartersSession session = new QuartersSession();
+					if (!session.IsGuestSession) {
+						segueToMainMenu.Perform();
+					}
+
 				}, delegate(string getBalanceError) {
 					
 					ModalView.instance.ShowAlert("Quarters get balance error", getBalanceError, new string[]{"Try again"}, null);
@@ -80,5 +86,21 @@ public class AuthorizeView : UIView {
 	}
 
 
+	public void ButtonPlayAsGuestTapped() {
+		ModalView.instance.ShowActivity();
+		Quarters.Instance.AuthorizeGuest(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+	}
+	
+
+	public void ButtonSignUpTapped() {
+		ModalView.instance.ShowActivity();
+		Quarters.Instance.SignUp(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+	}
+
+	
+	public void ButtonLoginTapped() {
+		ModalView.instance.ShowActivity();
+		Quarters.Instance.Authorize(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+	}
 
 }

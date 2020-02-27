@@ -149,7 +149,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.25, y: -95.1}
+  m_AnchoredPosition: {x: 0.25, y: -95.09961}
   m_SizeDelta: {x: -0.5, y: 190.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &55004086
@@ -295,7 +295,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 68.899994, y: -24.339996}
+  m_AnchoredPosition: {x: 68.899414, y: -24.339996}
   m_SizeDelta: {x: -176.4, y: 51.520004}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &165490703
@@ -602,7 +602,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 333028744}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1533246588}
+        m_MethodName: ButtonSignUpTapped
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &333028744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1074,7 +1085,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 854937056}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1533246588}
+        m_MethodName: ButtonLoginTapped
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &854937056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1256,7 +1278,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 86.3, y: -0.000049591}
+  m_AnchoredPosition: {x: 86.299805, y: -0.000049591}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &891737375
@@ -1697,7 +1719,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1093003262}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1533246588}
+        m_MethodName: ButtonPlayAsGuestTapped
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1093003262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2327,7 +2360,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 300.4, y: 30.900002}
+  m_AnchoredPosition: {x: 300.4004, y: 30.900002}
   m_SizeDelta: {x: 286.6, y: 38.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1689766808
