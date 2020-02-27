@@ -51,8 +51,9 @@ public class AuthorizeView : UIView {
 	private void QuartersAuthorizationSuccess() {
 
 		Debug.Log("QuartersAuthorizationSuccess");
+		ModalView.instance.ShowActivity();
 		
-	
+		
 		//pull user details
 		Quarters.Instance.GetUserDetails(delegate(User quartersUser) {
 			
@@ -93,13 +94,11 @@ public class AuthorizeView : UIView {
 	
 
 	public void ButtonSignUpTapped() {
-		ModalView.instance.ShowActivity();
-		Quarters.Instance.SignUp(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+		ModalView.instance.ShowActivity();Quarters.Instance.SignUp(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
 	}
 
 	
 	public void ButtonLoginTapped() {
-		ModalView.instance.ShowActivity();
 		Quarters.Instance.Authorize(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
 	}
 
