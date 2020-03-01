@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using UIToolkit.UI;
+using QuartersSDK.UI;
 
 public class SubclassViewName : UIView {
  
