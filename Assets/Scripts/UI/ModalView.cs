@@ -18,11 +18,17 @@ public class ModalView : UIView {
 	public RectTransform alertRect;
 	public Image activityIcon;
 	public GameObject activityView;
+	
+	public RectTransform messageScrollContent;
+	public RectTransform messageScroll;
+	private float maxAlertHeight = 1500f;
 
     public AudioSource clickSFX;
 
     private List<Button> buttons = new List<Button>();
 
+    private Coroutine rebuildLayoutCoroutine;
+    
 	private CanvasGroup alertViewCanvasGroup {
 		get {
 			return alertRect.GetComponent<CanvasGroup>();
@@ -79,6 +85,9 @@ public class ModalView : UIView {
 		}
 
 
+		if (rebuildLayoutCoroutine != null) {
+			StopCoroutine(rebuildLayoutCoroutine);
+		}
 			
 		alertViewCanvasGroup.alpha = 1f;
 		alertViewCanvasGroup.interactable = true;
@@ -93,9 +102,25 @@ public class ModalView : UIView {
 		SetVisible(true);
 		ViewAppeared();
 
-		StartCoroutine(Fit());
+		
 
 	}
+	
+	
+	
+	private IEnumerator RebuildLayout() {
+		
+		yield return new WaitForEndOfFrame();
+		float alertHeight = Mathf.Clamp(this.message.rectTransform.sizeDelta.y + 590f, 10f, maxAlertHeight);
+		
+		alertRect.sizeDelta = new Vector2(alertRect.sizeDelta.x,  alertHeight);
+		
+		messageScroll.sizeDelta = new Vector2(messageScroll.sizeDelta.x,  alertHeight - 580f);
+		
+		messageScrollContent.sizeDelta = this.message.rectTransform.sizeDelta;
+	}
+
+
 
 
 	public void Hide(System.Action OnAnimationFinished = null) {
