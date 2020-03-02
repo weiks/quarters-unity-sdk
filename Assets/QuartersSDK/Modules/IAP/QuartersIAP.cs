@@ -142,11 +142,19 @@ namespace QuartersSDK {
 
 
         public void BuyProduct(Product product, PurchaseSucessfull purchaseSucessfullDelegate, PurchaseFailed purchaseFailedDelegate ) {
-            if (!IsQuartersProduct(product)) return;
+            
+            if (!IsQuartersProduct(product)) {
+                purchaseFailedDelegate("Incorrect product id");
+            }
+            
+            if (Application.isEditor) {
+                purchaseFailedDelegate("Buying IAP is not supported in Unity Editor, please test on iOS or Android device");
+                return;
+            }
 
 
             if (products.Count == 0) {
-                Debug.LogError("No products loaded. Call QuartersIAP.Initialize first!");
+                purchaseFailedDelegate("No products loaded. Call QuartersIAP.Initialize first!");
                 return;
             }
 
