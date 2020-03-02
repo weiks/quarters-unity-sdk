@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using QuartersSDK.UI;
 using QuartersSDK;
+using UnityEngine.Purchasing;
 
 public class AuthorizeView : UIView {
 
@@ -53,35 +54,44 @@ public class AuthorizeView : UIView {
 		Debug.Log("QuartersAuthorizationSuccess");
 		ModalView.instance.ShowActivity();
 		
-		
-		//pull user details
-		Quarters.Instance.GetUserDetails(delegate(User quartersUser) {
+		QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
 			
-			Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) {
-				
-				Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
+			//products loaded
+			Debug.Log("Quarters products loaded: " + products.Length);
+			
+			//pull user details
+			Quarters.Instance.GetUserDetails(delegate(User quartersUser) {
+				Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) {
+					Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
 					
-					ModalView.instance.HideActivity();
+						ModalView.instance.HideActivity();
 					
-					QuartersSession session = new QuartersSession();
-					if (!session.IsGuestSession) {
-						segueToMainMenu.Perform();
-					}
+						QuartersSession session = new QuartersSession();
+						if (!session.IsGuestSession) {
+							segueToMainMenu.Perform();
+						}
 
-				}, delegate(string getBalanceError) {
+					}, delegate(string getBalanceError) {
 					
-					ModalView.instance.ShowAlert("Quarters get balance error", getBalanceError, new string[]{"Try again"}, null);
+						ModalView.instance.ShowAlert("Quarters get balance error", getBalanceError, new string[]{"Try again"}, null);
+					});
+
+				}, delegate(string getAccountsError) {
+				
+					ModalView.instance.ShowAlert("Quarters get user accounts error", getAccountsError, new string[]{"Try again"}, null);
 				});
 
-			}, delegate(string getAccountsError) {
-				
-				ModalView.instance.ShowAlert("Quarters get user accounts error", getAccountsError, new string[]{"Try again"}, null);
-			});
-
-		}, delegate(string getUserDetailsError) {
+			}, delegate(string getUserDetailsError) {
 			
-			ModalView.instance.ShowAlert("Quarters user details error", getUserDetailsError, new string[]{"Try again"}, null);
-		} );
+				ModalView.instance.ShowAlert("Quarters user details error", getUserDetailsError, new string[]{"Try again"}, null);
+			} );
+			
+			
+			
+		}, delegate(InitializationFailureReason reason) {
+			ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[]{"Try again"}, null);
+		});
+		
 		
 		
 	}

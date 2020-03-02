@@ -20,12 +20,13 @@ namespace QuartersSDK.Currency {
         public Color BackgroundsColor;
         public Color BrandColor;
 
+        public List<string> IAPProductIds;
+        
         public CurrencyConfig(string json) {
             
             Assert.IsNotNull(json);
             Assert.IsFalse(json == String.Empty);
             
-        
         }
 
 

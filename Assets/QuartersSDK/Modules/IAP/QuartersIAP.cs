@@ -62,7 +62,7 @@ namespace QuartersSDK {
             return int.Parse(producId.Replace(Constants.QUARTERS_PRODUCT_KEY, ""));
         }
 
-
+        
 
         public void Initialize(List<string> productIds, OnProductsLoadedDelegate onProductsLoaded, OnInitializeFailedDelegate onInitializeFailed) {
 

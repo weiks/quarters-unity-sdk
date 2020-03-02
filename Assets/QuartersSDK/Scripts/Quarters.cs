@@ -19,9 +19,18 @@ namespace QuartersSDK {
 
 		public static Quarters Instance;
         public QuartersSession session;
-        
-        public CurrencyConfig CurrencyConfig;
-        
+
+        private CurrencyConfig currencyConfig;
+        public CurrencyConfig CurrencyConfig {
+            get { return currencyConfig; }
+            set {
+                currencyConfig = value;
+                OnCurrencyConfigLoaded?.Invoke(currencyConfig);
+            }
+        }
+
+        public delegate void OnCurrencyConfigLoadedDelegate (CurrencyConfig config);
+        public static OnCurrencyConfigLoadedDelegate OnCurrencyConfigLoaded; 
 
 		public delegate void OnAuthorizationStartDelegate();
 		public static event OnAuthorizationStartDelegate OnAuthorizationStart;

@@ -55,6 +55,7 @@ namespace QuartersSDK {
             quartersIAP.transform.SetParent(this.transform);
             DontDestroyOnLoad(quartersIAP.gameObject);
             quartersIAP.AddComponent<QuartersIAP>();
+            
             #endif
 
 		}

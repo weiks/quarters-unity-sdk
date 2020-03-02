@@ -19,3 +19,8 @@ MonoBehaviour:
   BrandLogo: {fileID: 21300000, guid: c4ecfec0e2efe4288b3a2bb4778e5070, type: 3}
   BackgroundsColor: {r: 0.16862746, g: 0.24705882, b: 0.5176471, a: 1}
   BrandColor: {r: 0.9607843, g: 0.8862745, b: 0.24313726, a: 0}
+  IAPProductIds:
+  - com.quarters.example.100
+  - com.quarters.example.400
+  - com.quarters.example.1000
+  - com.quarters.example.4000
