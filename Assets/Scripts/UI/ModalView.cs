@@ -23,9 +23,7 @@ public class ModalView : UIView {
 	public RectTransform messageScroll;
 	private float maxAlertHeight = 1500f;
 
-    public AudioSource clickSFX;
-
-    private List<Button> buttons = new List<Button>();
+	private List<Button> buttons = new List<Button>();
 
     private Coroutine rebuildLayoutCoroutine;
     
@@ -159,15 +157,12 @@ public class ModalView : UIView {
 
 
 	public void ButtonTapped(Button button) {
-
-        clickSFX.Play();
-
+		
         string buttonText = button.GetComponentInChildren<Text>().text;
 
 		Hide(delegate() {
             if (alertButtonDelegate != null) alertButtonDelegate(buttonText);
 		});
-
 
 	}
 
