@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 
 // using QuartersSDK.Currency;
 
-namespace QuartersSDK {
-	public class QuartersInit : MonoBehaviour {
+namespace CoinforgeSDK {
+	public class CoinforgeInit : MonoBehaviour {
 
 		public Action OnInitComplete;
 
-        public static QuartersInit Instance;
+        public static CoinforgeInit Instance;
         [Header("Your quarters app:")]
         public string APP_ID = "";
         public string APP_KEY = "";
@@ -25,7 +25,7 @@ namespace QuartersSDK {
         public string FirstScene;
         
 
-		private static Quarters instance;
+		private static Coinforge instance;
 
 
 		void Awake() {
@@ -39,33 +39,29 @@ namespace QuartersSDK {
 
 			this.OnInitComplete = OnInitComplete;
 			
-			Debug.Log("Quarters Init:");
+			Debug.Log("Coinforge Init:");
 
-			if (string.IsNullOrEmpty(APP_ID)) Debug.LogError("Quarters App Id is empty");
-			if (string.IsNullOrEmpty(APP_KEY)) Debug.LogError("Quarters App key is empty");
-            if (string.IsNullOrEmpty(SERVER_API_TOKEN)) Debug.LogError("Quarters Server Token key is empty");
+			if (string.IsNullOrEmpty(APP_ID)) Debug.LogError("Coinforge App Id is empty");
+			if (string.IsNullOrEmpty(APP_KEY)) Debug.LogError("Coinforge App key is empty");
+            if (string.IsNullOrEmpty(SERVER_API_TOKEN)) Debug.LogError("Coinforge Server Token key is empty");
 
 
-			GameObject quarters = new GameObject("Quarters");
+			GameObject quarters = new GameObject("Coinforge");
 			quarters.transform.SetParent(this.transform);
 			DontDestroyOnLoad(quarters.gameObject);
 
-			instance = quarters.AddComponent<Quarters>();
+			instance = quarters.AddComponent<Coinforge>();
 			instance.Init();
 
 			//init currency
 			
+            GameObject iap = new GameObject("CoinforgeIAP");
+            iap.transform.SetParent(this.transform);
+            DontDestroyOnLoad(iap.gameObject);
+            iap.AddComponent<CoinforgeIAP>();
+
 			
-			
-            #if QUARTERS_MODULE_IAP
-            GameObject quartersIAP = new GameObject("QuartersIAP");
-            quartersIAP.transform.SetParent(this.transform);
-            DontDestroyOnLoad(quartersIAP.gameObject);
-            quartersIAP.AddComponent<QuartersIAP>();
-            
-            #endif
-			
-			Debug.Log("QuartersInit complete");
+			Debug.Log("CoinforgeInit complete");
 			this.OnInitComplete?.Invoke();
 
 		}

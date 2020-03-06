@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 using UnityEngine.UI;
 
    
-[CreateAssetMenu(fileName = "DefaultCurrency", menuName = "Quarters/Currency", order = 1)]
+[CreateAssetMenu(fileName = "DefaultCurrency", menuName = "Coinforge/Currency", order = 1)]
 public class CurrencyConfig : ScriptableObject {
 
     public string APIBaseUrl;

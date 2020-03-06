@@ -1,6 +1,6 @@
 ﻿
 
-namespace QuartersSDK {
+namespace CoinforgeSDK {
     public static partial class Constants {
 
 

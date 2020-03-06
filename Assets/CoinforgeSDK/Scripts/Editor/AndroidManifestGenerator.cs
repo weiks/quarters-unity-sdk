@@ -10,7 +10,7 @@ public class AndroidManifestGenerator  {
 
 		
 
-	[MenuItem("Quarters/Android/Generate Android Manifest")]
+	[MenuItem("Coinforge/Android/Generate Android Manifest")]
 	private static void GenerateManifest() {
 		Debug.Log("Generating Quaters Android Manifest at path: " + path);
 		SaveManifest(Application.identifier.ToLower(), path);
@@ -97,7 +97,7 @@ public class AndroidManifestGenerator  {
 					
 
 
-						//Quarters deep linking activity
+						//Coinforge deep linking activity
 						_xmlWriter.WriteStartElement("activity");
 						{
 							_xmlWriter.WriteAttributeString("android:name", "org.westhill.customurlschemelauncher.CustomUrlSchemeLauncherActivity");

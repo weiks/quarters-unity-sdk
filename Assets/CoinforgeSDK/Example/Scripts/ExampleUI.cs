@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
-using QuartersSDK;
+using CoinforgeSDK;
 #if QUARTERS_MODULE_IAP
 using UnityEngine.Purchasing;
 #endif
@@ -23,7 +23,7 @@ public class ExampleUI : MonoBehaviour {
 
 	void Start() {
 
-        debugConsole.text = "Quarters SDK example";
+        debugConsole.text = "Coinforge SDK example";
         debugConsole.text += "\nUnauthorized";
 
         RefreshUI();
@@ -34,11 +34,11 @@ public class ExampleUI : MonoBehaviour {
 
 
 	private void RefreshUI() {
-		authorizedOnlyUI.ForEach(b => b.interactable = Quarters.Instance.IsAuthorized);
-        unAuthorizedOnlyUI.ForEach(b => b.interactable = !Quarters.Instance.IsAuthorized);
+		authorizedOnlyUI.ForEach(b => b.interactable = Coinforge.Instance.IsAuthorized);
+        unAuthorizedOnlyUI.ForEach(b => b.interactable = !Coinforge.Instance.IsAuthorized);
 
 
-        if (Quarters.Instance.IsAuthorized) {
+        if (Coinforge.Instance.IsAuthorized) {
             authorizedOnlyUI.ForEach(b => b.alpha = 1f);
             unAuthorizedOnlyUI.ForEach(b => b.alpha = 0.4f);
         }
@@ -49,8 +49,8 @@ public class ExampleUI : MonoBehaviour {
 
      
         //guest mode only
-        authorizedGuestOnlyUI.ForEach(b => b.interactable = Quarters.Instance.IsAuthorized && Quarters.Instance.session.IsGuestSession);
-        if (Quarters.Instance.IsAuthorized && Quarters.Instance.session.IsGuestSession) {
+        authorizedGuestOnlyUI.ForEach(b => b.interactable = Coinforge.Instance.IsAuthorized && Coinforge.Instance.session.IsGuestSession);
+        if (Coinforge.Instance.IsAuthorized && Coinforge.Instance.session.IsGuestSession) {
             authorizedGuestOnlyUI.ForEach(b => b.alpha = 1f);
         }
         else {
@@ -62,29 +62,29 @@ public class ExampleUI : MonoBehaviour {
 
 
     public void ButtonAuthorizeGuestTapped() {
-        Quarters.Instance.AuthorizeGuest(OnAuthorizationSuccess, OnAuthorizationFailed);
+        Coinforge.Instance.AuthorizeGuest(OnAuthorizationSuccess, OnAuthorizationFailed);
 
     }
 
 	public void ButtonAuthorizeTapped() {
-		Quarters.Instance.Authorize(OnAuthorizationSuccess, OnAuthorizationFailed);
+		Coinforge.Instance.Authorize(OnAuthorizationSuccess, OnAuthorizationFailed);
 
 	}
 
     public void ButtonDeauthorizeTapped() {
-        Quarters.Instance.Deauthorize();
+        Coinforge.Instance.Deauthorize();
         RefreshUI();
     }
 
 
     public void ButtonSigupTapped() {
-        Quarters.Instance.SignUp(OnAuthorizationSuccess, OnAuthorizationFailed);
+        Coinforge.Instance.SignUp(OnAuthorizationSuccess, OnAuthorizationFailed);
     }
 
 
 
 	public void ButtonGetUserDetailsTapped() {
-		Quarters.Instance.GetUserDetails(delegate(User user) {
+		Coinforge.Instance.GetUserDetails(delegate(User user) {
 			Debug.Log("User loaded");
 
             debugConsole.text += "\n";
@@ -126,7 +126,7 @@ public class ExampleUI : MonoBehaviour {
 
     public void ButtonGetAccountsTapped() {
         
-        Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
+        Coinforge.Instance.GetAccounts(delegate (List<User.Account> accounts) {
 
             debugConsole.text += "\n";
             debugConsole.text += "\nOnGetAccountsSuccess";
@@ -149,7 +149,7 @@ public class ExampleUI : MonoBehaviour {
 
     public void ButtonGetFirstAccountBalanceTapped() {
 
-        Quarters.Instance.GetAccountBalance(delegate (User.Account.Balance balance) {
+        Coinforge.Instance.GetAccountBalance(delegate (User.Account.Balance balance) {
 
             debugConsole.text += "\n";
             debugConsole.text += "\nOnGetAccountBalanceSuccess";
@@ -171,7 +171,7 @@ public class ExampleUI : MonoBehaviour {
 
     public void ButtonGetAccountRewardTapped() {
 
-        Quarters.Instance.GetAccountReward(delegate (User.Account.Reward balance) {
+        Coinforge.Instance.GetAccountReward(delegate (User.Account.Reward balance) {
 
             debugConsole.text += "\n";
             debugConsole.text += "\nOnGetAccountRewardSuccess";
@@ -200,9 +200,9 @@ public class ExampleUI : MonoBehaviour {
         
             
         //Request 2 quarters from Playfab Cloud build
-        Quarters.Instance.AwardQuarters(10, delegate(string transactionHash) {
+        Coinforge.Instance.Award(10, delegate(string transactionHash) {
 
-            Debug.Log("Quarters awarded: " + transactionHash);
+            Debug.Log("Coinforge awarded: " + transactionHash);
 
         }, delegate (string error) {
 
@@ -229,7 +229,7 @@ public class ExampleUI : MonoBehaviour {
         List<string> testProducts = new List<string>();
         testProducts.Add(Application.identifier + ".100" + Constants.QUARTERS_PRODUCT_KEY);
 
-        QuartersIAP.Instance.Initialize(testProducts, delegate(Product[] products) {
+        CoinforgeIAP.Instance.Initialize(testProducts, delegate(Product[] products) {
 
         }, delegate(InitializationFailureReason reason) {
         
@@ -238,7 +238,7 @@ public class ExampleUI : MonoBehaviour {
 
 
         #else
-        Debug.LogError("Quarters module: IAP, is not enabled. Add Quarters IAP module");
+        Debug.LogError("Coinforge module: IAP, is not enabled. Add Coinforge IAP module");
         #endif
 
     }
@@ -257,13 +257,13 @@ public class ExampleUI : MonoBehaviour {
         }
 
 
-        if (QuartersIAP.Instance.products.Count == 0) {
-            Debug.LogError("No products loaded. Call QuartersIAP.Initialize first!");
+        if (CoinforgeIAP.Instance.products.Count == 0) {
+            Debug.LogError("No products loaded. Call CoinforgeIAP.Initialize first!");
             return;
         }
 
 
-        Quarters.Instance.GetUserDetails(delegate(User user) {
+        Coinforge.Instance.GetUserDetails(delegate(User user) {
             Debug.Log("User loaded");
 
             debugConsole.text += "\n";
@@ -271,7 +271,7 @@ public class ExampleUI : MonoBehaviour {
             debugConsole.text += JsonConvert.SerializeObject(user, Formatting.Indented);
 
             //test purchase of first initialized product
-            QuartersIAP.Instance.BuyProduct(QuartersIAP.Instance.products[0], (Product product, string txId) => {
+            CoinforgeIAP.Instance.BuyProduct(CoinforgeIAP.Instance.products[0], (Product product, string txId) => {
 
                 Debug.Log("Purchase complete");
                 debugConsole.text += "\n";
@@ -295,7 +295,7 @@ public class ExampleUI : MonoBehaviour {
         });
 
         #else
-        Debug.LogError("Quarters module: IAP, is not enabled. Add Quarters IAP module");
+        Debug.LogError("Coinforge module: IAP, is not enabled. Add Coinforge IAP module");
         #endif
 
     }
@@ -321,7 +321,7 @@ public class ExampleUI : MonoBehaviour {
 
 
 
-        Quarters.Instance.CreateTransfer(request);
+        Coinforge.Instance.CreateTransfer(request);
 
 
     }

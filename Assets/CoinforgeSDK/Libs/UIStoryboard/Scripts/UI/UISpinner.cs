@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-namespace QuartersSDK.UI {
+namespace CoinforgeSDK.UI {
 	[RequireComponent(typeof(Image))]
 	public class UISpinner : MonoBehaviour {
 

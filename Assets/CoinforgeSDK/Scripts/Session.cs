@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace QuartersSDK {
-    public class QuartersSession {
+namespace CoinforgeSDK {
+    public class Session {
 
         public bool IsGuestSession {
             get {

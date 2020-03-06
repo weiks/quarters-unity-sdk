@@ -7,7 +7,7 @@ using UnityEditor;
 #endif
 
 
-namespace QuartersSDK.UI {
+namespace CoinforgeSDK.UI {
 	public class UIView : MonoBehaviour {
 
 		private Canvas[] canvases {

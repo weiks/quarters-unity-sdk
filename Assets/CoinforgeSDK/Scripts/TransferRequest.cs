@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 
-namespace QuartersSDK {
+namespace CoinforgeSDK {
     public class TransferRequest {
 
         public string id = "";
@@ -47,16 +47,16 @@ namespace QuartersSDK {
         public string txId = "";
         public string firebaseToken = "";
 
-        public Quarters.OnTransferSuccessDelegate successDelegate;
-        public Quarters.OnTransferFailedDelegate failedDelegate;
+        public Coinforge.OnTransferSuccessDelegate successDelegate;
+        public Coinforge.OnTransferFailedDelegate failedDelegate;
 
-        public TransferAPIRequest (int tokens, Quarters.OnTransferSuccessDelegate successDelegate, Quarters.OnTransferFailedDelegate failedDelegate) {
+        public TransferAPIRequest (int tokens, Coinforge.OnTransferSuccessDelegate successDelegate, Coinforge.OnTransferFailedDelegate failedDelegate) {
             this.tokens = tokens;
             this.successDelegate = successDelegate;
             this.failedDelegate = failedDelegate;
         }
 
-        public TransferAPIRequest(int tokens, string description, Quarters.OnTransferSuccessDelegate successDelegate, Quarters.OnTransferFailedDelegate failedDelegate) {
+        public TransferAPIRequest(int tokens, string description, Coinforge.OnTransferSuccessDelegate successDelegate, Coinforge.OnTransferFailedDelegate failedDelegate) {
             this.tokens = tokens;
             this.description = description;
             this.successDelegate = successDelegate;

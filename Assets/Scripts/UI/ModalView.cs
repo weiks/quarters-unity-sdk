@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using QuartersSDK;
-using QuartersSDK.UI;
+using CoinforgeSDK;
+using CoinforgeSDK.UI;
 using UnityEngine.EventSystems;
 
 public class ModalView : UIView {
@@ -170,7 +170,7 @@ public class ModalView : UIView {
 
 	public void ShowActivity() {
 
-		activityIcon.sprite = Quarters.Instance.CurrencyConfig.CurrencyLogo;
+		activityIcon.sprite = Coinforge.Instance.CurrencyConfig.CurrencyLogo;
 
 		ViewWillAppear();
 		SetVisible(true);

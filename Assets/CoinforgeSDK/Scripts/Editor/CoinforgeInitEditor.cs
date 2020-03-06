@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using QuartersSDK;
+using CoinforgeSDK;
 
-[CustomEditor(typeof(QuartersInit))]
-public class QuartersInitEditor : UnityEditor.Editor {
+[CustomEditor(typeof(CoinforgeInit))]
+public class CoinforgeInitEditor : UnityEditor.Editor {
 
 
     public override void OnInspectorGUI() {
         
-        QuartersInit quartersInit = (QuartersInit)target;
+        CoinforgeInit coinforgeInit = (CoinforgeInit)target;
 
         EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Copy your App ID and App Key from your Quarters dashboard:");
+        EditorGUILayout.LabelField("Copy your App ID and App Key from your Coinforge dashboard:");
         EditorGUILayout.Space();
 
         base.DrawDefaultInspector();

@@ -7,10 +7,10 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace QuartersSDK {
-    public class QuartersIAP : MonoBehaviour, IStoreListener  {
+namespace CoinforgeSDK {
+    public class CoinforgeIAP : MonoBehaviour, IStoreListener  {
 
-        public static QuartersIAP Instance;
+        public static CoinforgeIAP Instance;
 
         public void Awake() {
             Instance = this;
@@ -71,7 +71,7 @@ namespace QuartersSDK {
         }
         
 
-        public int ParseQuartersQuantity(Product product, CurrencyConfig config) {
+        public int ParseCoinsQuantity(Product product, CurrencyConfig config) {
             
             if (!IsCoinForgeProduct(product, config)) {
                 Debug.LogError("Trying to parse non Coinforge product quantity");
@@ -110,7 +110,7 @@ namespace QuartersSDK {
             UnityPurchasing.Initialize (this, builder);
 
 #else
-            Debug.LogError("Purchasing quarters through IAP is not supported on this platform");
+            Debug.LogError("Purchasing coins through IAP is not supported on this platform");
 #endif
             
             
@@ -167,7 +167,7 @@ namespace QuartersSDK {
 
         public void BuyProduct(Product product, PurchaseSucessfull purchaseSucessfullDelegate, PurchaseFailed purchaseFailedDelegate ) {
             
-            if (!IsCoinForgeProduct(product, Quarters.Instance.CurrencyConfig)) {
+            if (!IsCoinForgeProduct(product, Coinforge.Instance.CurrencyConfig)) {
                 purchaseFailedDelegate("Incorrect product id");
             }
             
@@ -178,11 +178,11 @@ namespace QuartersSDK {
 
 
             if (products.Count == 0) {
-                purchaseFailedDelegate("No products loaded. Call QuartersIAP.Initialize first!");
+                purchaseFailedDelegate("No products loaded. Call CoinforgeIAP.Initialize first!");
                 return;
             }
 
-            Debug.Log("Buying Quarters: " + product.definition.storeSpecificId);
+            Debug.Log("Buying Coinforge: " + product.definition.storeSpecificId);
 
             #if UNITY_IOS || UNITY_ANDROID
 
@@ -191,7 +191,7 @@ namespace QuartersSDK {
                 controller.InitiatePurchase(product);
 
             #else
-                Debug.LogError("Purchasing quarters through IAP is not supported on this platform");
+                Debug.LogError("Purchasing coins through IAP is not supported on this platform");
             #endif
         }
 
@@ -230,11 +230,11 @@ namespace QuartersSDK {
 
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Content-Type", "application/json;charset=UTF-8");
-            headers.Add("x-api-key", QuartersInit.Instance.SERVER_API_TOKEN);
+            headers.Add("x-api-key", CoinforgeInit.Instance.SERVER_API_TOKEN);
 
             Debug.Log("headers: " + JsonConvert.SerializeObject(headers));
 
-            string url = Quarters.Instance.API_URL + "/apps/" + QuartersInit.Instance.APP_ID + "/verifyReceipt/unity";
+            string url = Coinforge.Instance.API_URL + "/apps/" + CoinforgeInit.Instance.APP_ID + "/verifyReceipt/unity";
             Debug.Log("url " + url);
 
 
@@ -246,12 +246,12 @@ namespace QuartersSDK {
             receipt.Add("TransactionID", receiptData["TransactionID"]);
             receipt.Add("Payload", receiptData["Payload"]);
 
-            Debug.Log("CurrentUser: " + Quarters.Instance.CurrentUser);
+            Debug.Log("CurrentUser: " + Coinforge.Instance.CurrentUser);
 
   
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("receipt", receipt);
-            data.Add("user", Quarters.Instance.CurrentUser.userId);
+            data.Add("user", Coinforge.Instance.CurrentUser.userId);
             
 
             string dataJson = JsonConvert.SerializeObject(data);

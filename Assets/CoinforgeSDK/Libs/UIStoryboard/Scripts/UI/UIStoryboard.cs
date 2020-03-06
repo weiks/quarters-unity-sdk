@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace QuartersSDK.UI {
+namespace CoinforgeSDK.UI {
 	[System.Serializable]
 	public class UIStoryboard : MonoBehaviour {
 

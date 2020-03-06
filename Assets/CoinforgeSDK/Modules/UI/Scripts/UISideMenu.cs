@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using QuartersSDK;
-using QuartersSDK.UI;
+using CoinforgeSDK;
+using CoinforgeSDK.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Purchasing;
@@ -43,11 +43,11 @@ public class UISideMenu : MonoBehaviour {
     public void ShowMenu() {
         SetMenuAppearance(true, true);
         
-        QuartersSession session = new QuartersSession();
+        Session session = new Session();
         SignUpButton.gameObject.SetActive(session.IsGuestSession);
         LogoutButton.interactable = !session.IsGuestSession;
 
-        ShopButtonText.text = $"Buy " + Quarters.Instance.CurrencyConfig.DisplayNamePlural;
+        ShopButtonText.text = $"Buy " + Coinforge.Instance.CurrencyConfig.DisplayNamePlural;
     }
 
 
@@ -87,11 +87,11 @@ public class UISideMenu : MonoBehaviour {
 
 
     public void SignUpButtonTapped() {
-        ModalView.instance.ShowActivity();Quarters.Instance.SignUp(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+        ModalView.instance.ShowActivity();Coinforge.Instance.SignUp(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
     }
 
     public void LogoutButtonTapped() {
-        Quarters.Instance.Deauthorize();
+        Coinforge.Instance.Deauthorize();
 
         SceneManager.LoadScene(0);
     }
@@ -104,32 +104,32 @@ public class UISideMenu : MonoBehaviour {
         Debug.Log("QuartersAuthorizationSuccess");
         ModalView.instance.ShowActivity();
 		
-        QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
+        CoinforgeIAP.Instance.Initialize(Coinforge.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
 			
             //products loaded
-            Debug.Log("Quarters products loaded: " + products.Length);
+            Debug.Log("Coinforge products loaded: " + products.Length);
 			
             //pull user details
-            Quarters.Instance.GetUserDetails(delegate(User quartersUser) {
-                Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) {
-                    Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
+            Coinforge.Instance.GetUserDetails(delegate(User quartersUser) {
+                Coinforge.Instance.GetAccounts(delegate(List<User.Account> accounts) {
+                    Coinforge.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
 					
                         ModalView.instance.HideActivity();
                         
 
                     }, delegate(string getBalanceError) {
 					
-                        ModalView.instance.ShowAlert("Quarters get balance error", getBalanceError, new string[]{"Try again"}, null);
+                        ModalView.instance.ShowAlert("Coinforge get balance error", getBalanceError, new string[]{"Try again"}, null);
                     });
 
                 }, delegate(string getAccountsError) {
 				
-                    ModalView.instance.ShowAlert("Quarters get user accounts error", getAccountsError, new string[]{"Try again"}, null);
+                    ModalView.instance.ShowAlert("Coinforge get user accounts error", getAccountsError, new string[]{"Try again"}, null);
                 });
 
             }, delegate(string getUserDetailsError) {
 			
-                ModalView.instance.ShowAlert("Quarters user details error", getUserDetailsError, new string[]{"Try again"}, null);
+                ModalView.instance.ShowAlert("Coinforge user details error", getUserDetailsError, new string[]{"Try again"}, null);
             } );
 			
 			

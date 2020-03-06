@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace QuartersSDK.UI {
+namespace CoinforgeSDK.UI {
     public class UIUser : MonoBehaviour {
 
         public Image CurrencyLogo;
@@ -14,22 +14,22 @@ namespace QuartersSDK.UI {
 
 
         private void OnEnable() {
-            Quarters.OnUserLoaded += RefreshUser;
+            Coinforge.OnUserLoaded += RefreshUser;
 
-            if (Quarters.Instance.CurrentUser != null) {
-                RefreshUser(Quarters.Instance.CurrentUser);
+            if (Coinforge.Instance.CurrentUser != null) {
+                RefreshUser(Coinforge.Instance.CurrentUser);
             }
         }
         
         private void OnDisable() {
-            Quarters.OnUserLoaded -= RefreshUser;
+            Coinforge.OnUserLoaded -= RefreshUser;
         }
 
 
         
         private void RefreshUser(User user) {
             
-            CurrencyLogo.sprite = Quarters.Instance.CurrencyConfig.CurrencyLogo;
+            CurrencyLogo.sprite = Coinforge.Instance.CurrencyConfig.CurrencyLogo;
             
             if (user.IsGuestUser) {
                 UsernameText.text = "Guest";
@@ -38,17 +38,17 @@ namespace QuartersSDK.UI {
                 UsernameText.text = user.displayName;
             }
 
-            Quarters.Instance.CurrentUser.OnAccountsLoaded += AccountsLoaded;
+            Coinforge.Instance.CurrentUser.OnAccountsLoaded += AccountsLoaded;
             if (user.accounts.Count > 0) {
                 AccountsLoaded();
-                RefreshCoins(Quarters.Instance.CurrentUser.MainAccount.AvailableCoins);
+                RefreshCoins(Coinforge.Instance.CurrentUser.MainAccount.AvailableCoins);
             }
         }
 
         
         private void AccountsLoaded() {
            
-            Quarters.Instance.CurrentUser.MainAccount.OnAvailableCoinsUpdated += RefreshCoins;
+            Coinforge.Instance.CurrentUser.MainAccount.OnAvailableCoinsUpdated += RefreshCoins;
         }
         
         

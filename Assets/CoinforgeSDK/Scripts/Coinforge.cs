@@ -12,18 +12,18 @@ using UnityEditor;
 #endif
 
 
-namespace QuartersSDK {
-	public partial class Quarters : MonoBehaviour {
+namespace CoinforgeSDK {
+	public partial class Coinforge : MonoBehaviour {
 
         public static Action<User> OnUserLoaded;
 
-		public static Quarters Instance;
-        public QuartersSession session;
+		public static Coinforge Instance;
+        public Session session;
 
         private CurrencyConfig currencyConfig;
         public CurrencyConfig CurrencyConfig {
             get {
-                return QuartersInit.Instance.CurrencyConfig;
+                return CoinforgeInit.Instance.CurrencyConfig;
             }
         }
 
@@ -52,16 +52,16 @@ namespace QuartersSDK {
         public delegate void OnTransferSuccessDelegate(string transactionHash);
         public delegate void OnTransferFailedDelegate(string error);
         
-        public delegate void OnAwardQuartersSuccessDelegate(string transactionHash);
-        public delegate void OnAwardQuartersFailedDelegate(string error);
+        public delegate void OnAwardSuccessDelegate(string transactionHash);
+        public delegate void OnAwardFailedDelegate(string error);
         
         
 
         public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
 
-		public string QUARTERS_URL {
+		public string BASE_URL {
 			get {
-                Environment environment = QuartersInit.Instance.environment;
+                Environment environment = CoinforgeInit.Instance.environment;
                 if (environment == Environment.production) return $"https://{CurrencyConfig.APIBaseUrl}";
                 else if (environment == Environment.development) return $"https://dev.{CurrencyConfig.APIBaseUrl}";
                 else if (environment == Environment.sandbox) return $"https://sandbox.{CurrencyConfig.APIBaseUrl}";
@@ -71,7 +71,7 @@ namespace QuartersSDK {
 
 		public string API_URL {
 			get {
-                Environment environment = QuartersInit.Instance.environment;
+                Environment environment = CoinforgeInit.Instance.environment;
                 if (environment == Environment.production) return $"https://api.{CurrencyConfig.APIBaseUrl}/v1";
                 else if (environment == Environment.development) return $"https://api.dev.{CurrencyConfig.APIBaseUrl}/v1";
                 else if (environment == Environment.sandbox) return $"https://api.sandbox.{CurrencyConfig.APIBaseUrl}/v1";
@@ -83,7 +83,7 @@ namespace QuartersSDK {
         public static string URL_SCHEME  {
             get {
 //                #if UNITY_WEBGL
-//                return QuartersInit.Instance.APP_ID + "://";
+//                return CoinforgeInit.Instance.APP_ID + "://";
 //                #else
                 return "https://" + Application.identifier;
 //                #endif
@@ -136,10 +136,10 @@ namespace QuartersSDK {
 
         public void AuthorizeGuest(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
 
-            session = new QuartersSession();
+            session = new Session();
 
             if (!string.IsNullOrEmpty(session.RefreshToken)) {
-                Debug.LogError("Authorization error. Registered user session exist. Use Authorize User call instead, or Deauthorize Quarters user first");
+                Debug.LogError("Authorization error. Registered user session exist. Use Authorize User call instead, or Deauthorize Coinforge user first");
                 return;
             }
 
@@ -161,15 +161,11 @@ namespace QuartersSDK {
 
 
 
-        public void Authorize(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate, bool forceExternalBrowser = false) {
-
-            if (!forceExternalBrowser && Application.platform == RuntimePlatform.WindowsEditor) {
-                Debug.LogWarning("Quarters: WebView is not supported in Unity Editor on Windows. Falling back to forcing external browser. You can safely ignore this message");
-                forceExternalBrowser = true;
-            }
+        public void Authorize(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
 
 
-            session = new QuartersSession();
+
+            session = new Session();
 
 			this.OnAuthorizationSuccess = OnSuccessDelegate;
 			this.OnAuthorizationFailed = OnFailedDelegate;
@@ -181,15 +177,9 @@ namespace QuartersSDK {
 
 			if (OnAuthorizationStart != null) OnAuthorizationStart();
 
-            if (Application.isEditor && forceExternalBrowser) { 
-				//spawn editor UI
-				GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
-                AuthorizeEditor();
-			}
-			else {
-                //direct to the browser
-                AuthorizeWithWebView();
-			}
+
+            AuthorizeWithWebView();
+			
 
 		}
         
@@ -198,44 +188,31 @@ namespace QuartersSDK {
 
 
 
-        public void SignUp(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate, bool forceExternalBrowser = false) {
+        public void SignUp(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
 
-            string url =  QUARTERS_URL + "/guest?token=" + session.GuestToken + "&redirect_uri=" + URL_SCHEME + "&inline=trueresponse_type=code&client_id=" + QuartersInit.Instance.APP_ID;
+            string url =  BASE_URL + "/guest?token=" + session.GuestToken + "&redirect_uri=" + URL_SCHEME + "&inline=trueresponse_type=code&client_id=" + CoinforgeInit.Instance.APP_ID;
 
             this.OnAuthorizationSuccess = OnSuccessDelegate;
             this.OnAuthorizationFailed = OnFailedDelegate;
 
-            if (Application.isEditor && forceExternalBrowser) {
-                
-                //spawn editor UI
-                Instantiate<GameObject>(Resources.Load<GameObject>("QuartersEditor"));
 
-                Application.OpenURL(url);
-            }
-            else {
-               //direct to the browser
-                if (!forceExternalBrowser) {
-                    //web view authentication
-                    QuartersWebView.OpenURL(url);
-                    QuartersWebView.OnDeepLink = DeepLink;
-                    QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
-                    QuartersWebView.OnCancelled += delegate {
-                        //webview was closed
-                        OnFailedDelegate("User canceled");
-                        QuartersWebView.OnCancelled = null;
-                    };
-                }
-                else {
-                    //external authentication
-                    Application.OpenURL(url);
-                }
-            }
+            //web view authentication
+            CoinforgeWebView.OpenURL(url);
+            CoinforgeWebView.OnDeepLink = DeepLink;
+            CoinforgeWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+            CoinforgeWebView.OnCancelled += delegate {
+                //webview was closed
+                OnFailedDelegate("User canceled");
+                CoinforgeWebView.OnCancelled = null;
+            };
+       
+            
 
         }
         
 
         public void Deauthorize() {
-            QuartersSession.Invalidate();
+            Session.Invalidate();
             this.session = null;
             CurrentUser = null;
 
@@ -245,7 +222,7 @@ namespace QuartersSDK {
             OnAuthorizationFailed = null;
             currentTransferAPIRequests = new List<TransferAPIRequest>();
 
-            Debug.Log("Quarters user deauthorized");
+            Debug.Log("Coinforge user deauthorized");
         }
 
 
@@ -270,7 +247,7 @@ namespace QuartersSDK {
 
 
         public void CreateTransfer(TransferAPIRequest request) {
-            if (QuartersInit.Instance.useAutoapproval) {
+            if (CoinforgeInit.Instance.useAutoapproval) {
                 StartCoroutine(CreateAutoApprovedTransferCall(request));
             }
             else {
@@ -293,7 +270,7 @@ namespace QuartersSDK {
         //TODO change for new guest to signup/login flow
         private void AuthorizeEditor() {
           
-			string url =  QUARTERS_URL + "/access-token?app_id=" + QuartersInit.Instance.APP_ID + "&app_key=" + QuartersInit.Instance.APP_KEY;
+			string url =  BASE_URL + "/access-token?app_id=" + CoinforgeInit.Instance.APP_ID + "&app_key=" + CoinforgeInit.Instance.APP_KEY;
             Application.OpenURL(url);
 
         }
@@ -304,20 +281,20 @@ namespace QuartersSDK {
 
             Debug.Log("OAuth authorization");
 
-			string url = QUARTERS_URL + "/oauth/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
+			string url = BASE_URL + "/oauth/authorize?response_type=code&client_id=" + CoinforgeInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
 			Debug.Log(url);
 
             //web view authentication
-            QuartersWebView.OpenURL(url);
-            QuartersWebView.OnDeepLink = DeepLink;
-            QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+            CoinforgeWebView.OpenURL(url);
+            CoinforgeWebView.OnDeepLink = DeepLink;
+            CoinforgeWebView.OnDeepLinkWebGL = DeepLinkWebGL;
        
 		}
 
 
 		public void AuthorizationCodeReceived(string code) {
 
-			Debug.Log("Quarters: Authorization code: " + code);
+			Debug.Log("Coinforge: Authorization code: " + code);
 
             if (session.IsGuestSession) {
                 //real user authorisation, conversion from guest to real user. Invalidate and destroy guest token
@@ -333,7 +310,7 @@ namespace QuartersSDK {
         //used only in Editor
         public void RefreshTokenReceived(string token) {
 
-            Debug.Log("Quarters: Refresh token: " + token);
+            Debug.Log("Coinforge: Refresh token: " + token);
             session.RefreshToken = token;
 
             StartCoroutine(GetAccessToken(delegate {
@@ -348,12 +325,12 @@ namespace QuartersSDK {
 
         }
         
-         public void AwardQuarters(int expectedAmount, OnAwardQuartersSuccessDelegate OnSuccessDelegate, OnAwardQuartersFailedDelegate OnFailedDelegate) {
-            StartCoroutine(AwardQuartersCall(expectedAmount, OnSuccessDelegate, OnFailedDelegate));
+         public void Award(int expectedAmount, OnAwardSuccessDelegate OnSuccessDelegate, OnAwardFailedDelegate OnFailedDelegate) {
+            StartCoroutine(AwardCall(expectedAmount, OnSuccessDelegate, OnFailedDelegate));
         }
 
         
-        private IEnumerator AwardQuartersCall(int expectedAward, OnAwardQuartersSuccessDelegate OnSucess, OnAwardQuartersFailedDelegate OnFailed) { 
+        private IEnumerator AwardCall(int expectedAward, OnAwardSuccessDelegate OnSucess, OnAwardFailedDelegate OnFailed) { 
             
             //pull user details if dont exist
             if (CurrentUser == null) {
@@ -377,18 +354,18 @@ namespace QuartersSDK {
             }
 
 
-            string url = Quarters.Instance.API_URL + "/accounts/" + QuartersInit.Instance.ETHEREUM_ADDRESS + "/transfer";
+            string url = Coinforge.Instance.API_URL + "/accounts/" + CoinforgeInit.Instance.ETHEREUM_ADDRESS + "/transfer";
             Debug.Log(url);
             
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("amount", expectedAward);
-            data.Add("user", Quarters.Instance.CurrentUser.userId);
+            data.Add("user", Coinforge.Instance.CurrentUser.userId);
 
             string dataJson = JsonConvert.SerializeObject(data);
             byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
             
             Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add("Authorization", QuartersInit.Instance.SERVER_API_TOKEN);
+            header.Add("Authorization", CoinforgeInit.Instance.SERVER_API_TOKEN);
             header.Add("Content-Type", "application/json;charset=UTF-8");
             
             WWW www = new WWW(url, dataBytes, header);
@@ -430,7 +407,7 @@ namespace QuartersSDK {
             Debug.Log("Create new guest account");
 
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
+            headers.Add("Authorization", "Bearer " + CoinforgeInit.Instance.SERVER_API_TOKEN);
 
             Dictionary<string, object> data = new Dictionary<string, object>();
             string dataJson = JsonConvert.SerializeObject(data);
@@ -471,8 +448,8 @@ namespace QuartersSDK {
 			Dictionary<string, string> data = new Dictionary<string, string>();
 			data.Add("grant_type", "authorization_code");
 			data.Add("code", code);
-            data.Add("client_id", QuartersInit.Instance.APP_ID);
-            data.Add("client_secret", QuartersInit.Instance.APP_KEY);
+            data.Add("client_id", CoinforgeInit.Instance.APP_ID);
+            data.Add("client_secret", CoinforgeInit.Instance.APP_KEY);
 
 			string dataJson = JsonConvert.SerializeObject(data);
 			Debug.Log(dataJson);
@@ -521,8 +498,8 @@ namespace QuartersSDK {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add("grant_type", "refresh_token");
             data.Add("refresh_token", session.RefreshToken);
-            data.Add("client_id", QuartersInit.Instance.APP_ID);
-            data.Add("client_secret", QuartersInit.Instance.APP_KEY);
+            data.Add("client_id", CoinforgeInit.Instance.APP_ID);
+            data.Add("client_secret", CoinforgeInit.Instance.APP_KEY);
 
             string dataJson = JsonConvert.SerializeObject(data);
             Debug.Log(dataJson);
@@ -671,7 +648,7 @@ namespace QuartersSDK {
             string accountsLoadingError = "";
 
             if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
-                Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
+                Coinforge.Instance.GetAccounts(delegate (List<User.Account> accounts) {
                     //accounts loaded
                     areAccountsDone = true;
 
@@ -737,7 +714,7 @@ namespace QuartersSDK {
             string accountsLoadingError = "";
 
             if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
-                Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
+                Coinforge.Instance.GetAccounts(delegate (List<User.Account> accounts) {
                     //accounts loaded
                     areAccountsDone = true;
 
@@ -817,7 +794,7 @@ namespace QuartersSDK {
 
         private IEnumerator CreateTransferRequestCall(TransferAPIRequest request, bool isRetry = false, bool forceExternalBrowser = false) {
 
-            if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Quarters: Transfers with external browser arent supported in Unity editor");
+            if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Coinforge: Transfers with external browser arent supported in Unity editor");
 
             Debug.Log("CreateTransferRequestCall");
 
@@ -828,7 +805,7 @@ namespace QuartersSDK {
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("tokens", request.tokens);
             if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
-            data.Add("app_id", QuartersInit.Instance.APP_ID);
+            data.Add("app_id", CoinforgeInit.Instance.APP_ID);
 
 
 
@@ -876,7 +853,7 @@ namespace QuartersSDK {
                 AddOrSwapAPITransferRequest(request);
 
                 //continue outh forward
-                string url = QUARTERS_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
+                string url = BASE_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
 
                 if (session.IsGuestSession) {
                     url += "&firebase_token=" + session.GuestFirebaseToken;
@@ -886,12 +863,12 @@ namespace QuartersSDK {
 
                 if (!forceExternalBrowser) {
                     //web view authentication
-                    QuartersWebView.OpenURL(url);
-                    QuartersWebView.OnDeepLink = DeepLink;
-                    QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
-                    QuartersWebView.OnCancelled += delegate {
+                    CoinforgeWebView.OpenURL(url);
+                    CoinforgeWebView.OnDeepLink = DeepLink;
+                    CoinforgeWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+                    CoinforgeWebView.OnCancelled += delegate {
                         request.failedDelegate("User canceled");
-                        QuartersWebView.OnCancelled = null;
+                        CoinforgeWebView.OnCancelled = null;
                     };
                 }
                 else {
@@ -922,7 +899,7 @@ namespace QuartersSDK {
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("tokens", request.tokens);
             if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
-            data.Add("app_id", QuartersInit.Instance.APP_ID);
+            data.Add("app_id", CoinforgeInit.Instance.APP_ID);
 
 
             string dataJson = JsonConvert.SerializeObject(data);
@@ -987,7 +964,7 @@ namespace QuartersSDK {
             string accountsLoadingError = "";
             
             if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
-                Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
+                Coinforge.Instance.GetAccounts(delegate (List<User.Account> accounts) {
                     //accounts loaded
                     areAccountsDone = true;
 
@@ -1011,11 +988,11 @@ namespace QuartersSDK {
             Debug.Log("AutoApproveTransfer");
 
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
+            headers.Add("Authorization", "Bearer " + CoinforgeInit.Instance.SERVER_API_TOKEN);
 
 
             Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("clientId", QuartersInit.Instance.APP_ID);
+            data.Add("clientId", CoinforgeInit.Instance.APP_ID);
             data.Add("userId", CurrentUser.userId);
             data.Add("address", CurrentUser.accounts[0].address);
 
@@ -1038,7 +1015,7 @@ namespace QuartersSDK {
 
                     //bad request check for reason
                     if (www.error.StartsWith("400") && !string.IsNullOrEmpty(www.text)) {
-                        //bad request, possibly out of quarters
+                        //bad request, possibly out of coins
                         Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
                         if (responseData.ContainsKey("message")) {
                             request.failedDelegate(responseData["message"]);

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace QuartersSDK.UI {
+namespace CoinforgeSDK.UI {
 
 
 	public class UIList : MonoBehaviour {

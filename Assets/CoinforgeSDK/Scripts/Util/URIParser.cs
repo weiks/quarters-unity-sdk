@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace QuartersSDK {
+namespace CoinforgeSDK {
 	public static class URIParser {
 
 	    public static Dictionary<string, string> ParseURI(this string escapedURL) {
@@ -51,15 +51,15 @@ namespace QuartersSDK {
             
             
             #if UNITY_WEBGL
-	        string appId = QuartersInit.Instance.APP_ID;
+	        string appId = CoinforgeInit.Instance.APP_ID;
 	        
 	        if (url.Contains(appId.ToLower())) {
 		        result = url.StartsWith(appId.ToLower());
 	        }
 	        
 	        #else
-            if (url.Contains(Quarters.URL_SCHEME)) {
-                result = url.StartsWith(Quarters.URL_SCHEME);
+            if (url.Contains(Coinforge.URL_SCHEME)) {
+                result = url.StartsWith(Coinforge.URL_SCHEME);
             }
 			#endif
 

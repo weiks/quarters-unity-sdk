@@ -4,11 +4,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
-using QuartersSDK.UI;
+using CoinforgeSDK.UI;
 using UnityEditor.SceneManagement;
 
 
-namespace QuartersSDK.UI.Internal {
+namespace CoinforgeSDK.UI.Internal {
 	[CustomEditor(typeof(UIStoryboard))]
 	public class UIStoryboardEditor: Editor {
 

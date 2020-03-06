@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using QuartersSDK.UI;
-using QuartersSDK;
+using CoinforgeSDK.UI;
+using CoinforgeSDK;
 using UnityEngine.Purchasing;
 
 public class ShopView : UIView {
@@ -15,8 +15,8 @@ public class ShopView : UIView {
     public override void ViewWillAppear(UIView sourceView = null) {
         base.ViewWillAppear(sourceView);
         
-        ShopTitleText.text = $"Buy " + Quarters.Instance.CurrencyConfig.DisplayNamePlural;
-        productsList.Populate(new ArrayList(QuartersIAP.Instance.products));
+        ShopTitleText.text = $"Buy " + Coinforge.Instance.CurrencyConfig.DisplayNamePlural;
+        productsList.Populate(new ArrayList(CoinforgeIAP.Instance.products));
     }
 
 
@@ -24,7 +24,7 @@ public class ShopView : UIView {
     public void ProductButtonTapped(UIProductButton productButton) {
         
         ModalView.instance.ShowActivity();
-        QuartersIAP.Instance.BuyProduct(productButton.product, PurchaseSucessfullDelegate, PurchaseFailedDelegate);
+        CoinforgeIAP.Instance.BuyProduct(productButton.product, PurchaseSucessfullDelegate, PurchaseFailedDelegate);
         
     }
 
@@ -35,7 +35,7 @@ public class ShopView : UIView {
     private void PurchaseSucessfullDelegate(Product product, string txid) {
         
         //refresh balance
-        Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance newBalance) {
+        Coinforge.Instance.GetAccountBalance(delegate(User.Account.Balance newBalance) {
             
             ModalView.instance.HideActivity();
             

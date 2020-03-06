@@ -3,11 +3,11 @@ using UnityEditor;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using QuartersSDK.UI;
+using CoinforgeSDK.UI;
 using UnityEditor.SceneManagement;
 
 
-namespace QuartersSDK.UI.Internal {
+namespace CoinforgeSDK.UI.Internal {
 	[CustomEditor(typeof(UIView), true)]
 	public class UIViewEditor: Editor {
 

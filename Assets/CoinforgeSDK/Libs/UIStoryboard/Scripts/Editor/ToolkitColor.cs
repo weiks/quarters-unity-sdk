@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEditor;
 
-namespace QuartersSDK.UI.Internal {
+namespace CoinforgeSDK.UI.Internal {
 	public class ToolkitColor : MonoBehaviour {
 
 

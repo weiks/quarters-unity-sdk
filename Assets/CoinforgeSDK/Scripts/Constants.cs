@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace QuartersSDK {
+namespace CoinforgeSDK {
     public static class Error {
 
         public static string UNAUTHORIZED_ERROR = "401 Unauthorized";

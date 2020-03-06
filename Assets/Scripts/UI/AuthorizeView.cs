@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using QuartersSDK.UI;
-using QuartersSDK;
+using CoinforgeSDK.UI;
+using CoinforgeSDK;
 using UnityEngine.Purchasing;
 
 public class AuthorizeView : UIView {
@@ -12,13 +12,13 @@ public class AuthorizeView : UIView {
 	public override void ViewAppeared() {
 		base.ViewAppeared();
 		
-		QuartersInit.Instance.Init(delegate {
+		CoinforgeInit.Instance.Init(delegate {
 			
 			//show loading
 			ModalView.instance.ShowActivity();
 		
 		
-			QuartersSession session = new QuartersSession();
+			Session session = new Session();
 
 			//quarters
 			if (!session.IsAuthorized) {
@@ -33,7 +33,7 @@ public class AuthorizeView : UIView {
 				}
 				else {
 					//email user
-					Quarters.Instance.Authorize(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+					Coinforge.Instance.Authorize(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
 				}
 			}
 		});
@@ -60,13 +60,13 @@ public class AuthorizeView : UIView {
 		
 			
 			//pull user details
-			Quarters.Instance.GetUserDetails(delegate(User quartersUser) {
-				Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) {
-					Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
+			Coinforge.Instance.GetUserDetails(delegate(User quartersUser) {
+				Coinforge.Instance.GetAccounts(delegate(List<User.Account> accounts) {
+					Coinforge.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
 						
-						QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
+						CoinforgeIAP.Instance.Initialize(Coinforge.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
 						
-							QuartersInit.Instance.LoadMainScene();
+							CoinforgeInit.Instance.LoadMainScene();
 								
 						}, delegate(InitializationFailureReason reason) {
 							ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[]{"Try again"}, null);
@@ -74,17 +74,17 @@ public class AuthorizeView : UIView {
 
 					}, delegate(string getBalanceError) {
 					
-						ModalView.instance.ShowAlert("Quarters get balance error", getBalanceError, new string[]{"Try again"}, null);
+						ModalView.instance.ShowAlert("Coinforge get balance error", getBalanceError, new string[]{"Try again"}, null);
 					});
 
 				}, delegate(string getAccountsError) {
 				
-					ModalView.instance.ShowAlert("Quarters get user accounts error", getAccountsError, new string[]{"Try again"}, null);
+					ModalView.instance.ShowAlert("Coinforge get user accounts error", getAccountsError, new string[]{"Try again"}, null);
 				});
 
 			}, delegate(string getUserDetailsError) {
 			
-				ModalView.instance.ShowAlert("Quarters user details error", getUserDetailsError, new string[]{"Try again"}, null);
+				ModalView.instance.ShowAlert("Coinforge user details error", getUserDetailsError, new string[]{"Try again"}, null);
 			} );
 			
 			
@@ -97,18 +97,18 @@ public class AuthorizeView : UIView {
 
 	public void ButtonPlayAsGuestTapped() {
 		ModalView.instance.ShowActivity();
-		Quarters.Instance.AuthorizeGuest(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+		Coinforge.Instance.AuthorizeGuest(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
 	}
 	
 
 	public void ButtonSignUpTapped() {
 		
-		QuartersSession session = new QuartersSession();
+		Session session = new Session();
 
 		ModalView.instance.ShowActivity();
 		
-		Quarters.Instance.AuthorizeGuest(delegate {
-			Quarters.Instance.SignUp(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+		Coinforge.Instance.AuthorizeGuest(delegate {
+			Coinforge.Instance.SignUp(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
 		}, QuartersAuthorizationFailed);
 		
 		
@@ -116,7 +116,7 @@ public class AuthorizeView : UIView {
 
 	
 	public void ButtonLoginTapped() {
-		Quarters.Instance.Authorize(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+		Coinforge.Instance.Authorize(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
 	}
 
 }

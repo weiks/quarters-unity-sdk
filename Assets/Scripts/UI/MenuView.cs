@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using QuartersSDK.UI;
+using CoinforgeSDK.UI;
 
 public class MenuView : UIView {
 

@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
-using QuartersSDK.UI;
+using CoinforgeSDK.UI;
 
-namespace QuartersSDK.UI.Internal {
+namespace CoinforgeSDK.UI.Internal {
 	[CustomEditor(typeof(UISegue))]
 	public class UISegueEditor : Editor {
 

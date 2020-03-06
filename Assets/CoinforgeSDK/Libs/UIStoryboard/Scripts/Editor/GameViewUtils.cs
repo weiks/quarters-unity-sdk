@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace QuartersSDK.UI.Internal {
+namespace CoinforgeSDK.UI.Internal {
 	public static class GameViewUtils
 	{
 		static object gameViewSizesInstance;

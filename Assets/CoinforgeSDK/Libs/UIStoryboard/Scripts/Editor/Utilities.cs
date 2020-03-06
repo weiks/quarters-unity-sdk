@@ -4,7 +4,7 @@ using System.Collections;
 using System.IO;
 using System;
 
-namespace QuartersSDK.UI.Internal {
+namespace CoinforgeSDK.UI.Internal {
 	public class Utilities : Editor {
 
 

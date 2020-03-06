@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 
-namespace QuartersSDK.UI {
+namespace CoinforgeSDK.UI {
 	public class UISegue : MonoBehaviour {
 
 		public bool animatedTransition = false;

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using QuartersSDK;
-using QuartersSDK.UI;
+using CoinforgeSDK;
+using CoinforgeSDK.UI;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.UI;
@@ -17,9 +17,9 @@ public class UIProductButton : MonoBehaviour, IListCell {
 
         product = (Product)data;
 
-        CurrencyConfig config = Quarters.Instance.CurrencyConfig;
+        CurrencyConfig config = Coinforge.Instance.CurrencyConfig;
 
-        int quantity = QuartersIAP.Instance.ParseQuartersQuantity(product, config);
+        int quantity = CoinforgeIAP.Instance.ParseCoinsQuantity(product, config);
         string productDisplayName = quantity == 1 ? config.DisplayNameSingular : config.DisplayNamePlural;
         
         ButtonText.text = $"{product.metadata.localizedPriceString}  -  {quantity} {productDisplayName}";
