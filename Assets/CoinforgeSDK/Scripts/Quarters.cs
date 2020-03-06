@@ -59,22 +59,22 @@ namespace QuartersSDK {
 
         public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
 
-		public static string QUARTERS_URL {
+		public string QUARTERS_URL {
 			get {
                 Environment environment = QuartersInit.Instance.environment;
-                if (environment == Environment.production) return "https://pocketfulofquarters.com";
-                else if (environment == Environment.development) return "https://dev.pocketfulofquarters.com";
-                else if (environment == Environment.sandbox) return "https://sandbox.pocketfulofquarters.com";
+                if (environment == Environment.production) return $"https://{CurrencyConfig.APIBaseUrl}";
+                else if (environment == Environment.development) return $"https://dev.{CurrencyConfig.APIBaseUrl}";
+                else if (environment == Environment.sandbox) return $"https://sandbox.{CurrencyConfig.APIBaseUrl}";
                 return null;
             }
 		}
 
-		public static string API_URL {
+		public string API_URL {
 			get {
                 Environment environment = QuartersInit.Instance.environment;
-                if (environment == Environment.production) return "https://api.pocketfulofquarters.com/v1";
-                else if (environment == Environment.development) return "https://api.dev.pocketfulofquarters.com/v1";
-                else if (environment == Environment.sandbox) return "https://api.sandbox.pocketfulofquarters.com/v1";
+                if (environment == Environment.production) return $"https://api.{CurrencyConfig.APIBaseUrl}/v1";
+                else if (environment == Environment.development) return $"https://api.dev.{CurrencyConfig.APIBaseUrl}/v1";
+                else if (environment == Environment.sandbox) return $"https://api.sandbox.{CurrencyConfig.APIBaseUrl}/v1";
                 return null;
 			}
 		}
@@ -377,7 +377,7 @@ namespace QuartersSDK {
             }
 
 
-            string url = Quarters.API_URL + "/accounts/" + QuartersInit.Instance.ETHEREUM_ADDRESS + "/transfer";
+            string url = Quarters.Instance.API_URL + "/accounts/" + QuartersInit.Instance.ETHEREUM_ADDRESS + "/transfer";
             Debug.Log(url);
             
             Dictionary<string, object> data = new Dictionary<string, object>();

@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/CoinforgeSDK/Modules/UI/Scenes/SplashScene.unity
+    path: Assets/CoinforgeSDK/Modules/UI/Scenes/1.SplashScene.unity
     guid: 3ed41f52c832743e2aac765dbdd1390e
   - enabled: 1
     path: Assets/CoinforgeSDK/Modules/UI/Scenes/MainScene.unity

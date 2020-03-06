@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using QuartersSDK;
 using QuartersSDK.UI;
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -16,8 +17,12 @@ public class UIProductButton : MonoBehaviour, IListCell {
 
         product = (Product)data;
 
-        //TODO solve the parsing problem generic way
-        ButtonText.text = $"{product.metadata.localizedPrice} {product.definition.storeSpecificId}";
+        CurrencyConfig config = Quarters.Instance.CurrencyConfig;
+
+        int quantity = QuartersIAP.Instance.ParseQuartersQuantity(product, config);
+        string productDisplayName = quantity == 1 ? config.DisplayNameSingular : config.DisplayNamePlural;
+        
+        ButtonText.text = $"{product.metadata.localizedPriceString}  -  {quantity} {productDisplayName}";
         
     }
     
