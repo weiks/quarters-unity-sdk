@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using QuartersSDK.Currency;
+// using QuartersSDK.Currency;
 
 namespace QuartersSDK {
 	public class QuartersInit : MonoBehaviour {
+
+		public Action OnInitComplete;
 
         public static QuartersInit Instance;
         [Header("Your quarters app:")]
@@ -15,9 +18,8 @@ namespace QuartersSDK {
 		public Environment environment = Environment.production;
         [Header("Configuration:")]
         public bool useAutoapproval = false;
-
-        [SerializeField]
-        private CurrencyConfig CurrencyConfig;
+        
+        public CurrencyConfig CurrencyConfig;
         
 
 		private static Quarters instance;
@@ -26,12 +28,15 @@ namespace QuartersSDK {
 		void Awake() {
 			DontDestroyOnLoad(this.gameObject);
             Instance = this;
-			Init();
 		}
 
 
 
-		public void Init() {
+		public void Init(Action OnInitComplete) {
+
+			this.OnInitComplete = OnInitComplete;
+			
+			Debug.Log("Quarters Init:");
 
 			if (string.IsNullOrEmpty(APP_ID)) Debug.LogError("Quarters App Id is empty");
 			if (string.IsNullOrEmpty(APP_KEY)) Debug.LogError("Quarters App key is empty");
@@ -43,7 +48,6 @@ namespace QuartersSDK {
 			DontDestroyOnLoad(quarters.gameObject);
 
 			instance = quarters.AddComponent<Quarters>();
-			instance.CurrencyConfig = this.CurrencyConfig;
 			instance.Init();
 
 			//init currency
@@ -57,6 +61,9 @@ namespace QuartersSDK {
             quartersIAP.AddComponent<QuartersIAP>();
             
             #endif
+			
+			Debug.Log("QuartersInit complete");
+			this.OnInitComplete?.Invoke();
 
 		}
 

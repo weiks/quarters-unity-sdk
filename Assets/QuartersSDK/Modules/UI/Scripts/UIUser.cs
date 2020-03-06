@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+// using QuartersSDK.Currency;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,16 +15,17 @@ namespace QuartersSDK.UI {
 
         private void OnEnable() {
             Quarters.OnUserLoaded += RefreshUser;
-            CurrencyLogo.sprite = Quarters.Instance.CurrencyConfig.CurrencyLogo;
         }
-
+        
         private void OnDisable() {
             Quarters.OnUserLoaded -= RefreshUser;
-            
         }
-        
+
+
         
         private void RefreshUser(User user) {
+            
+            CurrencyLogo.sprite = Quarters.Instance.CurrencyConfig.CurrencyLogo;
             
             if (user.IsGuestUser) {
                 UsernameText.text = "Guest";

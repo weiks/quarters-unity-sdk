@@ -15,29 +15,36 @@ public class AuthorizeView : UIView {
 	public override void ViewAppeared() {
 		base.ViewAppeared();
 		
-		//show loading
-		ModalView.instance.ShowActivity();
+		QuartersInit.Instance.Init(delegate {
+			
+			//show loading
+			ModalView.instance.ShowActivity();
 		
 		
-		QuartersSession session = new QuartersSession();
+			QuartersSession session = new QuartersSession();
 
-		//quarters
-		if (!session.IsAuthorized) {
-			//first session
-			ModalView.instance.HideActivity();
-		}
-		else {
-			//not first session
-			if (session.IsGuestSession) {
-				//following session with guest mode display dialog
+			//quarters
+			if (!session.IsAuthorized) {
+				//first session
 				ModalView.instance.HideActivity();
 			}
 			else {
-				//email user
-				Quarters.Instance.Authorize(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+				//not first session
+				if (session.IsGuestSession) {
+					//following session with guest mode display dialog
+					ModalView.instance.HideActivity();
+				}
+				else {
+					//email user
+					Quarters.Instance.Authorize(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+				}
 			}
-		}
+		});
+
 	}
+	
+	
+	
 	
 	
 	//TODO add retrying coroutine to all error UX
@@ -48,7 +55,7 @@ public class AuthorizeView : UIView {
 	}
 	
 	
-	
+	//todo move this outside the view
 	private void QuartersAuthorizationSuccess() {
 
 		Debug.Log("QuartersAuthorizationSuccess");
@@ -65,11 +72,8 @@ public class AuthorizeView : UIView {
 					Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
 					
 						ModalView.instance.HideActivity();
-					
-						QuartersSession session = new QuartersSession();
-						if (!session.IsGuestSession) {
-							segueToMainMenu.Perform();
-						}
+
+						segueToMainMenu.Perform();
 
 					}, delegate(string getBalanceError) {
 					

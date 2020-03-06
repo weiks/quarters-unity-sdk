@@ -5,9 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/QuartersSDK/Example/Example.unity
-    guid: 77430569beab24c8790d7d06fed899c8
   - enabled: 1
     path: Assets/QuartersSDK/Modules/UI/Scenes/UIModule.unity
     guid: 34a9f22d6652d4b6395a8d35cffd908b

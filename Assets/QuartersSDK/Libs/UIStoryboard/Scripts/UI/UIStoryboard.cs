@@ -25,7 +25,7 @@ namespace QuartersSDK.UI {
 
 
 
-		void Start() {
+		public void Start() {
 			//initial view presentation and hiding other view
 			foreach (UIView view in Views) {
 				view.ViewWillDissappear();

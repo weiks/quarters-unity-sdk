@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-using QuartersSDK.Currency;
+// using QuartersSDK.Currency;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -22,17 +22,12 @@ namespace QuartersSDK {
 
         private CurrencyConfig currencyConfig;
         public CurrencyConfig CurrencyConfig {
-            get { return currencyConfig; }
-            set {
-                currencyConfig = value;
-                OnCurrencyConfigLoaded?.Invoke(currencyConfig);
+            get {
+                return QuartersInit.Instance.CurrencyConfig;
             }
         }
 
-        public delegate void OnCurrencyConfigLoadedDelegate (CurrencyConfig config);
-        public static OnCurrencyConfigLoadedDelegate OnCurrencyConfigLoaded; 
-
-		public delegate void OnAuthorizationStartDelegate();
+        public delegate void OnAuthorizationStartDelegate();
 		public static event OnAuthorizationStartDelegate OnAuthorizationStart;
 
 		public delegate void OnAuthorizationSuccessDelegate();
