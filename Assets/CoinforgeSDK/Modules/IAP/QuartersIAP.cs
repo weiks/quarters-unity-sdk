@@ -200,16 +200,18 @@ namespace QuartersSDK {
 
 
 
-        public IEnumerator VerifyPurchase(PurchaseEventArgs e = null) {
+        public IEnumerator VerifyPurchase(PurchaseEventArgs e) {
 
-            Debug.Log("Verify purchase");
+            Debug.Log("Verify purchase: " + JsonConvert.SerializeObject(e));
 
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Content-Type", "application/json;charset=UTF-8");
             headers.Add("x-api-key", QuartersInit.Instance.SERVER_API_TOKEN);
 
+            Debug.Log("headers: " + JsonConvert.SerializeObject(headers));
 
             string url = Quarters.API_URL + "/apps/" + QuartersInit.Instance.APP_ID + "/verifyReceipt/unity";
+            Debug.Log("url " + url);
 
 
             Dictionary<string, string> receiptData = JsonConvert.DeserializeObject<Dictionary<string, string>>(e.purchasedProduct.receipt);
@@ -220,26 +222,12 @@ namespace QuartersSDK {
             receipt.Add("TransactionID", receiptData["TransactionID"]);
             receipt.Add("Payload", receiptData["Payload"]);
 
+            Debug.Log("CurrentUser: " + Quarters.Instance.CurrentUser);
 
   
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("receipt", receipt);
             data.Add("user", Quarters.Instance.CurrentUser.userId);
-
-
-
-            string fileName = Application.persistentDataPath + "/" + Random.Range(0, 100000).ToString() + ".json";
-            Debug.Log(fileName);
-
-            if (File.Exists(fileName)) {
-                Debug.Log(fileName + " already exists.");
-
-            }
-            var sr = File.CreateText(fileName);
-
-
-            sr.WriteLine (JsonConvert.SerializeObject(data));
-            sr.Close();
             
 
             string dataJson = JsonConvert.SerializeObject(data);

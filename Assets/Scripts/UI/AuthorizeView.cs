@@ -61,19 +61,21 @@ public class AuthorizeView : UIView {
 		Debug.Log("QuartersAuthorizationSuccess");
 		ModalView.instance.ShowActivity();
 		
-		QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
-			
-			//products loaded
-			Debug.Log("Quarters products loaded: " + products.Length);
 			
 			//pull user details
 			Quarters.Instance.GetUserDetails(delegate(User quartersUser) {
 				Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) {
 					Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
-					
-						ModalView.instance.HideActivity();
+						
+						QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
+						
+							ModalView.instance.HideActivity();
 
-						segueToMainMenu.Perform();
+							segueToMainMenu.Perform();
+								
+						}, delegate(InitializationFailureReason reason) {
+							ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[]{"Try again"}, null);
+						});
 
 					}, delegate(string getBalanceError) {
 					
@@ -91,10 +93,7 @@ public class AuthorizeView : UIView {
 			} );
 			
 			
-			
-		}, delegate(InitializationFailureReason reason) {
-			ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[]{"Try again"}, null);
-		});
+	
 		
 		
 		

@@ -20,7 +20,7 @@ MonoBehaviour:
   BackgroundsColor: {r: 0.16862746, g: 0.24705884, b: 0.5176471, a: 1}
   BrandColor: {r: 0.9607844, g: 0.8862746, b: 0.24313727, a: 1}
   IAPProductIds:
-  - com.quarters.example.100
-  - com.quarters.example.400
-  - com.quarters.example.1000
-  - com.quarters.example.4000
+  - com.quarters.example.Q.100
+  - com.quarters.example.Q.400
+  - com.quarters.example.Q.1000
+  - com.quarters.example.Q.4000
