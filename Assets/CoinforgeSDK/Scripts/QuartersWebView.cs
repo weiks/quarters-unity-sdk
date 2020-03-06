@@ -44,6 +44,7 @@ namespace QuartersSDK {
 #else
   
             UniWebView webView = webViewGO.AddComponent<UniWebView>();
+            webView.CleanCache();
             SetFrameSize(webView);
 
             

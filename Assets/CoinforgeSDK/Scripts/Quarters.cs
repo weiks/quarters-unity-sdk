@@ -106,8 +106,10 @@ namespace QuartersSDK {
 			}
 			set {
 				currentUser = value;
-                OnUserLoaded?.Invoke(currentUser);
-			}
+                if (value != null) {
+                    OnUserLoaded?.Invoke(currentUser);
+                }
+            }
 		}
 
 

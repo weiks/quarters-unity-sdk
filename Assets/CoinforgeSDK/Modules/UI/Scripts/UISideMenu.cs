@@ -6,11 +6,11 @@ using QuartersSDK.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Purchasing;
+using UnityEngine.SceneManagement;
 
 
 public class UISideMenu : MonoBehaviour {
-
-    public UIStoryboard Storyboard;
+    
     public RectTransform MenuRect;
     public Image Tint;
     private float tweenTime = 0.15f;
@@ -92,8 +92,8 @@ public class UISideMenu : MonoBehaviour {
 
     public void LogoutButtonTapped() {
         Quarters.Instance.Deauthorize();
-        
-        Storyboard.Start();
+
+        SceneManager.LoadScene(0);
     }
     
     
