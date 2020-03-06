@@ -3445,7 +3445,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 365219094}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999996
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3632,7 +3632,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3f4537c372949bb9ec860a66cbc9d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Name: 
+  ignoreTopMargin: 0
+  ignoreLeftMargin: 0
+  ignoreRightMargin: 0
+  ignoreBottomMargin: 0
+  ignoreOpositeNotchMargin: 0
+  leftMarginRectSize: 0
+  rightMarginRectSize: -0
+  topMarginRectSize: -0
+  bottomMarginRectSize: 0
 --- !u!1 &898080476
 GameObject:
   m_ObjectHideFlags: 0
@@ -4729,7 +4737,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3f4537c372949bb9ec860a66cbc9d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Name: 
+  ignoreTopMargin: 0
+  ignoreLeftMargin: 1
+  ignoreRightMargin: 1
+  ignoreBottomMargin: 1
+  ignoreOpositeNotchMargin: 0
+  leftMarginRectSize: 0
+  rightMarginRectSize: 0
+  topMarginRectSize: 0
+  bottomMarginRectSize: 0
 --- !u!1 &1158267235
 GameObject:
   m_ObjectHideFlags: 0
@@ -5655,7 +5671,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00007406947, y: 0.000015760143}
+  m_AnchoredPosition: {x: -0.00007406947, y: -0.000017184922}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1520488615
