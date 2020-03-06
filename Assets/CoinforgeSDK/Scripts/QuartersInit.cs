@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 // using QuartersSDK.Currency;
 
 namespace QuartersSDK {
@@ -20,6 +22,7 @@ namespace QuartersSDK {
         public bool useAutoapproval = false;
         
         public CurrencyConfig CurrencyConfig;
+        public string FirstScene;
         
 
 		private static Quarters instance;
@@ -65,6 +68,10 @@ namespace QuartersSDK {
 			Debug.Log("QuartersInit complete");
 			this.OnInitComplete?.Invoke();
 
+		}
+
+		public void LoadMainScene() {
+			SceneManager.LoadScene(FirstScene, LoadSceneMode.Single);
 		}
 
 

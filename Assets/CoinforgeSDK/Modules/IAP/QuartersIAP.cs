@@ -46,22 +46,46 @@ namespace QuartersSDK {
 
 
 
-        public bool IsQuartersProduct(Product product) {
-            return product.definition.id.Contains(Constants.QUARTERS_PRODUCT_KEY);
-        }
+        public bool IsCoinForgeProduct(Product product, CurrencyConfig config) {
 
+            string producId = product.definition.id;
 
+            string[] split = producId.Split('.');
 
-        public int ParseQuartersQuantity(Product product) {
-            if (!IsQuartersProduct(product)) {
-                Debug.LogError("Trying to parse non Quarters product quantity");
+            if (split[split.Length - 2] == config.Code) {
+
+                string quantityString = split[split.Length - 1];
+
+                int quantity = -1;
+                if (int.TryParse(quantityString, out quantity)) {
+
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
+            else {
+                return false;
+            }
+        }
+        
 
-            string producId = product.definition.id.Replace(Application.identifier + ".", "");
+        public int ParseQuartersQuantity(Product product, CurrencyConfig config) {
             
-            return int.Parse(producId.Replace(Constants.QUARTERS_PRODUCT_KEY, ""));
+            if (!IsCoinForgeProduct(product, config)) {
+                Debug.LogError("Trying to parse non Coinforge product quantity");
+            }
+            
+            string producId = product.definition.id;
+            string[] split = producId.Split('.');
+            string quantityString = split[split.Length - 1];
+
+            return int.Parse(quantityString);
         }
 
+        
+       
         
 
         public void Initialize(List<string> productIds, OnProductsLoadedDelegate onProductsLoaded, OnInitializeFailedDelegate onInitializeFailed) {
@@ -143,7 +167,7 @@ namespace QuartersSDK {
 
         public void BuyProduct(Product product, PurchaseSucessfull purchaseSucessfullDelegate, PurchaseFailed purchaseFailedDelegate ) {
             
-            if (!IsQuartersProduct(product)) {
+            if (!IsCoinForgeProduct(product, Quarters.Instance.CurrencyConfig)) {
                 purchaseFailedDelegate("Incorrect product id");
             }
             
@@ -210,7 +234,7 @@ namespace QuartersSDK {
 
             Debug.Log("headers: " + JsonConvert.SerializeObject(headers));
 
-            string url = Quarters.API_URL + "/apps/" + QuartersInit.Instance.APP_ID + "/verifyReceipt/unity";
+            string url = Quarters.Instance.API_URL + "/apps/" + QuartersInit.Instance.APP_ID + "/verifyReceipt/unity";
             Debug.Log("url " + url);
 
 

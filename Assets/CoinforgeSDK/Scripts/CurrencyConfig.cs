@@ -9,6 +9,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "DefaultCurrency", menuName = "Quarters/Currency", order = 1)]
 public class CurrencyConfig : ScriptableObject {
 
+    public string APIBaseUrl;
     public string Code;
     public string DisplayNameSingular;
     public string DisplayNamePlural;

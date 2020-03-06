@@ -8,9 +8,6 @@ using UnityEngine.Purchasing;
 
 public class AuthorizeView : UIView {
 
-	[SerializeField]
-	private UISegue segueToMainMenu;
-
 	
 	public override void ViewAppeared() {
 		base.ViewAppeared();
@@ -69,9 +66,7 @@ public class AuthorizeView : UIView {
 						
 						QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
 						
-							ModalView.instance.HideActivity();
-
-							segueToMainMenu.Perform();
+							QuartersInit.Instance.LoadMainScene();
 								
 						}, delegate(InitializationFailureReason reason) {
 							ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[]{"Try again"}, null);
@@ -107,7 +102,16 @@ public class AuthorizeView : UIView {
 	
 
 	public void ButtonSignUpTapped() {
-		ModalView.instance.ShowActivity();Quarters.Instance.SignUp(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+		
+		QuartersSession session = new QuartersSession();
+
+		ModalView.instance.ShowActivity();
+		
+		Quarters.Instance.AuthorizeGuest(delegate {
+			Quarters.Instance.SignUp(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+		}, QuartersAuthorizationFailed);
+		
+		
 	}
 
 	

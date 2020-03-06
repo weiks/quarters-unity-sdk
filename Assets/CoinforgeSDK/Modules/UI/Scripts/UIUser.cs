@@ -15,6 +15,10 @@ namespace QuartersSDK.UI {
 
         private void OnEnable() {
             Quarters.OnUserLoaded += RefreshUser;
+
+            if (Quarters.Instance.CurrentUser != null) {
+                RefreshUser(Quarters.Instance.CurrentUser);
+            }
         }
         
         private void OnDisable() {
@@ -35,6 +39,10 @@ namespace QuartersSDK.UI {
             }
 
             Quarters.Instance.CurrentUser.OnAccountsLoaded += AccountsLoaded;
+            if (user.accounts.Count > 0) {
+                AccountsLoaded();
+                RefreshCoins(Quarters.Instance.CurrentUser.MainAccount.AvailableCoins);
+            }
         }
 
         
