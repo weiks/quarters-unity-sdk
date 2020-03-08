@@ -29,7 +29,7 @@ namespace CoinforgeSDK.UI {
         
         private void RefreshUser(User user) {
             
-            CurrencyLogo.sprite = Coinforge.Instance.CurrencyConfig.CurrencyLogo;
+            CurrencyLogo.sprite = Coinforge.Instance.CurrencyConfig.CurrencyIcon;
             
             if (user.IsGuestUser) {
                 UsernameText.text = "Guest";

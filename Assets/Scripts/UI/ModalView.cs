@@ -170,7 +170,7 @@ public class ModalView : UIView {
 
 	public void ShowActivity() {
 
-		activityIcon.sprite = Coinforge.Instance.CurrencyConfig.CurrencyLogo;
+		activityIcon.sprite = Coinforge.Instance.CurrencyConfig.CurrencyIcon;
 
 		ViewWillAppear();
 		SetVisible(true);

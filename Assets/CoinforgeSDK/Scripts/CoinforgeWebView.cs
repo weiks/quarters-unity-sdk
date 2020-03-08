@@ -32,6 +32,7 @@ namespace CoinforgeSDK {
             
             Debug.Log("Web view open url: " + url);
             
+        
             
             GameObject webViewGO= new GameObject("CoinforgeWebView");
             CoinforgeWebView coinforgeWebView = webViewGO.AddComponent<CoinforgeWebView>();

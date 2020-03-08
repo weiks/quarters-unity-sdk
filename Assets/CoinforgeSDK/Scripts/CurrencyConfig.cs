@@ -14,6 +14,7 @@ public class CurrencyConfig : ScriptableObject {
     public string DisplayNameSingular;
     public string DisplayNamePlural;
 
+    public Sprite CurrencyIcon;
     public Sprite CurrencyLogo;
     public Sprite BrandLogo;
 

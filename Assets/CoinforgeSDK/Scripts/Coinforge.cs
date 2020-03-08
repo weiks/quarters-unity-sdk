@@ -162,15 +162,13 @@ namespace CoinforgeSDK {
 
 
         public void Authorize(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
-
-
-
+            
             session = new Session();
 
 			this.OnAuthorizationSuccess = OnSuccessDelegate;
 			this.OnAuthorizationFailed = OnFailedDelegate;
 
-            if (IsAuthorized) {
+            if (IsAuthorized && !session.IsGuestSession) {
                 this.OnAuthorizationSuccess();
                 return;
             }
@@ -179,9 +177,7 @@ namespace CoinforgeSDK {
 
 
             AuthorizeWithWebView();
-			
-
-		}
+        }
         
 
     

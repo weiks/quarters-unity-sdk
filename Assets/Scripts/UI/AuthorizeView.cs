@@ -5,41 +5,95 @@ using System.Collections.Generic;
 using CoinforgeSDK.UI;
 using CoinforgeSDK;
 using UnityEngine.Purchasing;
+using DG.Tweening;
+
 
 public class AuthorizeView : UIView {
 
+	public Image brandLogo;
+
+	public GameObject SignUpButton;
+	public GameObject LoginButton;
+	public GameObject PlayAsGuestButton;
+	
 	
 	public override void ViewAppeared() {
 		base.ViewAppeared();
 		
 		CoinforgeInit.Instance.Init(delegate {
-			
-			//show loading
-			ModalView.instance.ShowActivity();
-		
-		
-			Session session = new Session();
 
-			//quarters
-			if (!session.IsAuthorized) {
-				//first session
-				ModalView.instance.HideActivity();
-			}
-			else {
-				//not first session
-				if (session.IsGuestSession) {
-					//following session with guest mode display dialog
+			Present(delegate {
+
+				//show loading
+				ModalView.instance.ShowActivity();
+		
+		
+				Session session = new Session();
+
+				//quarters
+				if (!session.IsAuthorized) {
+					//first session
+					ShowButtons();
 					ModalView.instance.HideActivity();
 				}
 				else {
-					//email user
-					Coinforge.Instance.Authorize(QuartersAuthorizationSuccess, QuartersAuthorizationFailed);
+					//not first session
+					if (session.IsGuestSession) {
+						//following session with guest mode display dialog
+						ShowButtons();
+						ModalView.instance.HideActivity();
+					}
+					else {
+						//email user
+						Coinforge.Instance.Authorize(QuartersAuthorizationSuccess, delegate(string error) {
+							ShowButtons();
+							QuartersAuthorizationFailed(error);
+						});
+					}
 				}
-			}
+				
+			});
 		});
-
 	}
+
+
+
+	private void ResetView() {
+		brandLogo.color = new Color(1f, 1f, 1f, 0);
+		HideButtons();
+	}
+
+
+
+	private void Present(TweenCallback OnPresented) {
+
+		ResetView();
+		
+		//fade brand
+		Sequence sequence = DOTween.Sequence();
+		sequence.Append(brandLogo.DOFade(1f, 1f)).SetEase(Ease.Linear);
+		sequence.AppendCallback(OnPresented);
+	}
+
 	
+	private void ShowButtons() {
+		SignUpButton.SetActive(true);
+		LoginButton.SetActive(true);
+		PlayAsGuestButton.SetActive(true);
+	}
+
+
+	private void HideButtons() {
+		SignUpButton.SetActive(false);
+		LoginButton.SetActive(false);
+		PlayAsGuestButton.SetActive(false);
+	}
+
+
+
+	private void OnViewPresented() {
+		
+	}
 	
 	
 	
@@ -47,6 +101,7 @@ public class AuthorizeView : UIView {
 	//TODO add retrying coroutine to all error UX
 	private void QuartersAuthorizationFailed(string error) {
 
+		
 		Debug.LogError("QuartersAuthorizationFailed: " + error);
 		ModalView.instance.ShowAlert("Authorization failed", error, new string[]{"Try again"}, null);
 	}

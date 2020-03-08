@@ -609,7 +609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdea07385a1754cbcad2226e9c5f5c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiUser: {fileID: 764134991}
+  segueToShop: {fileID: 1062341135}
 --- !u!1 &154590966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,7 +1114,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1823228196}
+      - m_Target: {fileID: 147895615}
         m_MethodName: SignUpButtonTapped
         m_Mode: 1
         m_Arguments:
@@ -1569,8 +1569,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1062341135}
-        m_MethodName: Perform
+      - m_Target: {fileID: 147895615}
+        m_MethodName: ButtonShopTapped
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2883,7 +2883,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1823228196}
+      - m_Target: {fileID: 147895615}
         m_MethodName: LogoutButtonTapped
         m_Mode: 1
         m_Arguments:
@@ -5671,7 +5671,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00007406947, y: -0.000017184922}
+  m_AnchoredPosition: {x: -0.00007406947, y: -0.000008312537}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1520488615
