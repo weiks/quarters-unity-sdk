@@ -97,7 +97,6 @@ namespace CoinforgeSDK {
             this.OnProductsLoaded = onProductsLoaded;
             this.OnInitializeFailedEvent = onInitializeFailed;
 
-
             StandardPurchasingModule module = StandardPurchasingModule.Instance();
             ConfigurationBuilder builder = ConfigurationBuilder.Instance(module);
 
