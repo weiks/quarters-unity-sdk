@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-// using QuartersSDK.Currency;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +11,8 @@ namespace CoinforgeSDK.UI {
         public Image CurrencyLogo;
         public Text UsernameText;
         public Text CoinsCount;
+
+        private long currentCoins;
 
 
         private void OnEnable() {
@@ -47,13 +49,21 @@ namespace CoinforgeSDK.UI {
 
         
         private void AccountsLoaded() {
-           
             Coinforge.Instance.CurrentUser.MainAccount.OnAvailableCoinsUpdated += RefreshCoins;
         }
         
         
         private void RefreshCoins(long availableCoins) {
-            CoinsCount.text = availableCoins.ToString();
+            
+            if (currentCoins != availableCoins) {
+                //coins updated
+                CoinsCount.rectTransform.DOPunchScale(Vector3.one * 0.5f, 0.3f, 0, 0);
+            }
+            
+            
+            CoinsCount.text = String.Format("{0:n0}", availableCoins);;
+            currentCoins = availableCoins;
+
         }
     }
 

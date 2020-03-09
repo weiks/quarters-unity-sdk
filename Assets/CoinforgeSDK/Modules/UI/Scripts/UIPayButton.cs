@@ -42,12 +42,7 @@ namespace CoinforgeSDK.UI {
         private void OnTransferSuccessful(string transactionHash) {
             ModalView.instance.HideActivity();
             
-            //refresh
-            Coinforge.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
-                _buttonClickedEvent.Invoke();
-            }, delegate(string error) {
-                ModalView.instance.ShowAlert("Balance error", error, new string[]{"OK"}, null);
-            });
+            _buttonClickedEvent.Invoke();
         }
 
 

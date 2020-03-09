@@ -382,7 +382,14 @@ namespace CoinforgeSDK {
                 Hashtable ht = JsonConvert.DeserializeObject<Hashtable>(www.text);
 
                     if (ht.ContainsKey("txId")) {
-                        OnSucess((string)ht["txId"]);
+                        
+                        GetAccountBalance(delegate(User.Account.Balance balance) {
+                            
+                            OnSucess((string)ht["txId"]);
+                        }, delegate(string error) {
+                            OnFailed(error);
+                        });
+                        
                     }
                     else {
                         Debug.Log(JsonConvert.SerializeObject(www.text));
@@ -1040,9 +1047,14 @@ namespace CoinforgeSDK {
                 request.txId = responseData["txId"];
 
                 Debug.Log("Autoapproved request txId is: " + request.txId);
-
-                request.successDelegate(request.txId);
-
+                
+                GetAccountBalance(delegate(User.Account.Balance balance) {
+                            
+                    request.successDelegate(request.txId);
+                    
+                }, delegate(string error) {
+                    request.failedDelegate(error);
+                });
             }
         }
 
@@ -1126,10 +1138,16 @@ namespace CoinforgeSDK {
                 }
                 else {
 
-                    transferRequest.txId = urlParams["txId"];
-                    Debug.Log("tx id:" + transferRequest.txId);
+                    
+                    GetAccountBalance(delegate(User.Account.Balance balance) {
+                        transferRequest.txId = urlParams["txId"];
+                        Debug.Log("tx id:" + transferRequest.txId);
 
-                    transferRequest.successDelegate(transferRequest.txId);
+                        transferRequest.successDelegate(transferRequest.txId);
+                    
+                    }, delegate(string error) {
+                        transferRequest.failedDelegate(error);
+                    });
                 }
 
                 currentTransferAPIRequests.Remove(transferRequest);

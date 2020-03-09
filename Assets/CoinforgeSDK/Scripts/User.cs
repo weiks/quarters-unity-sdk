@@ -70,6 +70,10 @@ namespace CoinforgeSDK {
                 }
             }
 
+            public string AvailableCoinsString {
+                get { return String.Format("{0:n0}", AvailableCoins); }
+            }
+
 
             public class Balance {
                 public long quarters = 0;
