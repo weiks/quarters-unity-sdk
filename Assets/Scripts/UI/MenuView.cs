@@ -105,7 +105,12 @@ public class MenuView : UIView {
         Debug.LogError("QuartersAuthorizationFailed: " + error);
         ModalView.instance.ShowAlert("Authorization failed", error, new string[]{"Try again"}, null);
     }
-    
 
+
+
+
+    public void DebugProceedToGame() {
+	    ModalView.instance.ShowAlert("Transfer completed", "User has ben charged and its ready to play", new string[]{"OK"}, null);
+    }
 
 }

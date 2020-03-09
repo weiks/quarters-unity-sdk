@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using CoinforgeSDK;
 using CoinforgeSDK.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class ModalView : UIView {
  
@@ -90,11 +91,11 @@ public class ModalView : UIView {
 		alertViewCanvasGroup.alpha = 1f;
 		alertViewCanvasGroup.interactable = true;
 		alertViewCanvasGroup.blocksRaycasts = true;
-  //
-  //       alertRect.DOKill();
-		// alertRect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-		//
-		alertRect.transform.localScale = Vector3.one;
+  
+        alertRect.DOKill();
+		alertRect.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+		
+		// alertRect.transform.localScale = Vector3.one;
 			
 		ViewWillAppear();
 		SetVisible(true);

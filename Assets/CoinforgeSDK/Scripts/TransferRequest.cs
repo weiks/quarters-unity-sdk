@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using UnityEngine.Assertions;
 
 namespace CoinforgeSDK {
     public class TransferRequest {
@@ -51,12 +52,18 @@ namespace CoinforgeSDK {
         public Coinforge.OnTransferFailedDelegate failedDelegate;
 
         public TransferAPIRequest (int tokens, Coinforge.OnTransferSuccessDelegate successDelegate, Coinforge.OnTransferFailedDelegate failedDelegate) {
+            
+            Assert.IsTrue(tokens > 0, "Transfer tokens must be larger than zero");
+            
             this.tokens = tokens;
             this.successDelegate = successDelegate;
             this.failedDelegate = failedDelegate;
         }
 
         public TransferAPIRequest(int tokens, string description, Coinforge.OnTransferSuccessDelegate successDelegate, Coinforge.OnTransferFailedDelegate failedDelegate) {
+            
+            Assert.IsTrue(tokens > 0, "Transfer tokens must be larger than zero");
+            
             this.tokens = tokens;
             this.description = description;
             this.successDelegate = successDelegate;
