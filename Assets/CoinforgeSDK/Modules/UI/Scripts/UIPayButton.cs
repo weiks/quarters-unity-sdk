@@ -11,9 +11,7 @@ namespace CoinforgeSDK.UI {
         
         [SerializeField] private int Price = 10;
         [SerializeField] private Button.ButtonClickedEvent _buttonClickedEvent;
-        
 
-        
         private Button button {
             get { return this.GetComponent<Button>(); }
         }
@@ -43,16 +41,21 @@ namespace CoinforgeSDK.UI {
         
         private void OnTransferSuccessful(string transactionHash) {
             ModalView.instance.HideActivity();
-            _buttonClickedEvent.Invoke();
-        }
-
-
-        private void OnTransferFailed(string error) {
-            ModalView.instance.ShowAlert("Transaction error", error, new string[]{"OK"}, null);
+            
+            //refresh
+            Coinforge.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
+                _buttonClickedEvent.Invoke();
+            }, delegate(string error) {
+                ModalView.instance.ShowAlert("Balance error", error, new string[]{"OK"}, null);
+            });
         }
 
 
         
+        private void OnTransferFailed(string error) {
+            ModalView.instance.ShowAlert("Transaction error", error, new string[]{"OK"}, null);
+        }
+        
+        
     }
-
 }

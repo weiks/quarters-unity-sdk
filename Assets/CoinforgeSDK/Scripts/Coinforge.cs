@@ -928,8 +928,6 @@ namespace CoinforgeSDK {
                     //failed, fallback to normal request
                     StartCoroutine(CreateTransferRequestCall(request, true));
                 }
-                
-           
             }
             else {
                 Debug.Log(www.text);
