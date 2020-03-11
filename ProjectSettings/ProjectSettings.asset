@@ -682,6 +682,10 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Build: 1
+    Collab: 0
+    ErrorHub: 0
+    Hub: 0
     UNet: 1
   luminIcon:
     m_Name: 
@@ -704,7 +708,7 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   cloudProjectId: cec1bfc3-5d74-408b-8e5b-69798775931b
   framebufferDepthMemorylessMode: 0
-  projectName: Coinforge SDK
+  projectName: Coinforge-SDK
   organizationId: realtime-tech
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
