@@ -704,7 +704,7 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   cloudProjectId: cec1bfc3-5d74-408b-8e5b-69798775931b
   framebufferDepthMemorylessMode: 0
-  projectName: Quarters-Unity-SDK
+  projectName: Coinforge SDK
   organizationId: realtime-tech
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
