@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultCurrency
   m_EditorClassIdentifier: 
   APIBaseUrl: pocketfulofquarters.com
-  Code: Q
+  Code: q
   DisplayNameSingular: Quarter
   DisplayNamePlural: Quarters
   CurrencyIcon: {fileID: 21300000, guid: f4d536b885e854dfeb35608b1430e2ec, type: 3}
@@ -22,7 +22,7 @@ MonoBehaviour:
   BackgroundsColor: {r: 0.16862746, g: 0.24705884, b: 0.5176471, a: 1}
   BrandColor: {r: 0.9607844, g: 0.8862746, b: 0.24313727, a: 1}
   IAPProductIds:
-  - com.quarters.example.Q.100
-  - com.quarters.example.Q.400
-  - com.quarters.example.Q.1000
-  - com.quarters.example.Q.4000
+  - com.poq.coinforgesdk.q.100
+  - com.poq.coinforgesdk.q.300
+  - com.poq.coinforgesdk.q.1000
+  - com.poq.coinforgesdk.q.4000

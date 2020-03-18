@@ -11,7 +11,7 @@ PlayerSettings:
   defaultScreenOrientation: 4
   targetDevice: 2
   useOnDemandResources: 0
-  accelerometerFrequency: 60
+  accelerometerFrequency: 0
   companyName: Pocketful of Quarters Inc
   productName: Coinforge SDK
   defaultCursor: {fileID: 0}
@@ -156,8 +156,8 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.quarters.example
-    iOS: com.quarters.example
+    Android: com.poq.coinforgesdk
+    iOS: com.poq.coinforgesdk
   buildNumber: {}
   AndroidBundleVersionCode: 3
   AndroidMinSdkVersion: 21
@@ -233,7 +233,7 @@ PlayerSettings:
   metalEditorSupport: 0
   metalAPIValidation: 1
   iOSRenderExtraFrameOnPause: 0
-  appleDeveloperTeamID: NVB8AXMSP8
+  appleDeveloperTeamID: D72SHMJJYJ
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
   iOSManualSigningProvisioningProfileType: 0
@@ -249,7 +249,7 @@ PlayerSettings:
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: Keystore/keystore.keystore
-  AndroidKeyaliasName: 
+  AndroidKeyaliasName: keystore
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
