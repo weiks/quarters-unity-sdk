@@ -370,32 +370,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: CurrencyConfig
-      value: 
-      objectReference: {fileID: 11400000, guid: da0c245eae8e74604be832497fd0af99,
-        type: 2}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: APP_ID
-      value: 9oMlv2JURRTZnI9Wnq9C
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: APP_KEY
-      value: 6b2slrat52vba6sahvb2luku8vxlh5n
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: SERVER_API_TOKEN
-      value: cm8gk5tm1j4giprj3lscmcbus0busemnqwc3u5xw71yqn5bpkjh0s
-      objectReference: {fileID: 0}
-    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
-        type: 3}
-      propertyPath: FirstScene
-      value: MainScene
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fda49cb785be4592a669bda56f10447, type: 3}
 --- !u!1 &608849145
@@ -1546,7 +1520,7 @@ PrefabInstance:
     - target: {fileID: 5785252395037182505, guid: 384fca06186d449d79eff75b26c50b6b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000019973584
+      value: -0.000019836856
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 384fca06186d449d79eff75b26c50b6b, type: 3}

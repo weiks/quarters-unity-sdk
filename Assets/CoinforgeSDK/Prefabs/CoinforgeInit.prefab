@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4558843478924128}
   - component: {fileID: 114318907845399088}
   m_Layer: 0
-  m_Name: QuartersInit
+  m_Name: CoinforgeInit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,4 +49,6 @@ MonoBehaviour:
   ETHEREUM_ADDRESS: 0x979a67f51a20f43f6aef84a986ddfb59c69d007e
   environment: 2
   useAutoapproval: 1
-  CurrencyConfig: {fileID: 11400000, guid: 00660e5b63ccf49819edbae56355f384, type: 2}
+  CurrencyConfig: {fileID: 11400000, guid: da0c245eae8e74604be832497fd0af99, type: 2}
+  FirstScene: 
+  CustomShopUI: 0
