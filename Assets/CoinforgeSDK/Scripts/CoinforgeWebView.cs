@@ -70,9 +70,18 @@ namespace CoinforgeSDK {
             
             Debug.Log("OnUrlOpenWebView " + url + " is deep link: " + url.IsDeepLink());
             if (url.IsDeepLink()) {
-                //deep link opened
-                if (OnDeepLink != null) OnDeepLink(url, isExternalBrowser: false);
-                webView.Hide(false);
+                
+                //cancel case
+                if (url.Contains("cancel=true")) {
+                    //case where close button is tapped on Android should be treated as cancel not deep link
+                    ShouldClose(webView);
+                }
+                else {
+                
+                    //deep link opened
+                    if (OnDeepLink != null) OnDeepLink(url, isExternalBrowser: false);
+                    webView.Hide(false);
+                }
             }
             else {
                 if (url != url) {

@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-// using QuartersSDK.Currency;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,6 +14,7 @@ using UnityEditor;
 namespace CoinforgeSDK {
 	public partial class Coinforge : MonoBehaviour {
 
+        
         public static Action<User> OnUserLoaded;
 
 		public static Coinforge Instance;
@@ -139,8 +139,8 @@ namespace CoinforgeSDK {
             session = new Session();
 
             if (!string.IsNullOrEmpty(session.RefreshToken)) {
-                Debug.LogError("Authorization error. Registered user session exist. Use Authorize User call instead, or Deauthorize Coinforge user first");
-                return;
+                Deauthorize();
+                // Debug.LogError("Authorization error. Registered user session exist. Use Authorize User call instead, or Deauthorize Coinforge user first");
             }
 
             this.OnAuthorizationSuccess = OnSuccessDelegate;
@@ -1155,7 +1155,11 @@ namespace CoinforgeSDK {
             else if (urlParams.ContainsKey("cancel")) {
                 if (urlParams["cancel"] == "true") {
                     
-                    currentTransferAPIRequests[0].failedDelegate("User canceled");
+                    Debug.Log("User canceled deep link");
+                    Debug.Log($"currentTransferAPIRequests count {currentTransferAPIRequests.Count.ToString()}");
+                    if (currentTransferAPIRequests.Count > 0) {
+                        currentTransferAPIRequests[0].failedDelegate("User canceled");
+                    }
                 }
             }
 

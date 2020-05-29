@@ -12,6 +12,8 @@ public class CoinforgeInitEditor : UnityEditor.Editor {
         
         CoinforgeInit coinforgeInit = (CoinforgeInit)target;
 
+        EditorGUILayout.LabelField($"Coinforge Unity SDK - Version {CoinforgeInit.SDK_VERSION}");
+        EditorGUILayout.Space();
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Copy your App ID and App Key from your Coinforge dashboard:");
         EditorGUILayout.Space();

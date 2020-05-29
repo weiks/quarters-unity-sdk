@@ -7,6 +7,7 @@ using CoinforgeSDK.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
+namespace CoinforgeSDK {
 public class ModalView : UIView {
  
 	public static ModalView instance;
@@ -61,6 +62,9 @@ public class ModalView : UIView {
 
 
 	public void ShowAlert(string title, string message, string[] buttonNames, AlertButtonTappedDelegate alertButtonDelegate) {
+		
+		Debug.Log($"Show alert: {title}");
+		
 		this.alertButtonDelegate = alertButtonDelegate;
 
 		alertRect.localPosition = Vector3.zero;
@@ -188,4 +192,5 @@ public class ModalView : UIView {
 		ViewDisappeared();
 		
 	}
+}
 }

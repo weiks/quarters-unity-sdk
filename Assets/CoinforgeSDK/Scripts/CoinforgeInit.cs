@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// using QuartersSDK.Currency;
 
 namespace CoinforgeSDK {
 	public class CoinforgeInit : MonoBehaviour {
@@ -12,7 +11,7 @@ namespace CoinforgeSDK {
 		public Action OnInitComplete;
 
         public static CoinforgeInit Instance;
-        [Header("Your quarters app:")]
+        [Header("Your Coinforge app:")]
         public string APP_ID = "";
         public string APP_KEY = "";
         public string SERVER_API_TOKEN = "";
@@ -23,6 +22,11 @@ namespace CoinforgeSDK {
         
         public CurrencyConfig CurrencyConfig;
         public string FirstScene;
+        public bool CustomShopUI = false;
+
+        public static string SDK_VERSION {
+	        get { return "1.0.0"; }
+        }
         
 
 		private static Coinforge instance;
@@ -46,11 +50,11 @@ namespace CoinforgeSDK {
             if (string.IsNullOrEmpty(SERVER_API_TOKEN)) Debug.LogError("Coinforge Server Token key is empty");
 
 
-			GameObject quarters = new GameObject("Coinforge");
-			quarters.transform.SetParent(this.transform);
-			DontDestroyOnLoad(quarters.gameObject);
+			GameObject coinforge = new GameObject("Coinforge");
+			coinforge.transform.SetParent(this.transform);
+			DontDestroyOnLoad(coinforge.gameObject);
 
-			instance = quarters.AddComponent<Coinforge>();
+			instance = coinforge.AddComponent<Coinforge>();
 			instance.Init();
 
 			//init currency
