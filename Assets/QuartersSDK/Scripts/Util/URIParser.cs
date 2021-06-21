@@ -51,7 +51,7 @@ namespace QuartersSDK {
             
             
             #if UNITY_WEBGL
-	        string appId = QuartersInit.Instance.APP_ID;
+	        string appId = CoinforgeInit.Instance.APP_ID;
 	        
 	        if (url.Contains(appId.ToLower())) {
 		        result = url.StartsWith(appId.ToLower());
@@ -65,6 +65,8 @@ namespace QuartersSDK {
 
             return result;
         }
+        
+     
 	}
 }
 
