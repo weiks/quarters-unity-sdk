@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55314a5c2b3eb4a8f8b5d735437a8477, type: 3}
+  m_Name: QuartersCurrency
+  m_EditorClassIdentifier: 
+  APIBaseUrl: pocketfulofquarters.com
+  Code: q
+  DisplayNameSingular: Quarter
+  DisplayNamePlural: Quarters
+  CurrencyIcon: {fileID: 21300000, guid: f4d536b885e854dfeb35608b1430e2ec, type: 3}
+  CurrencyLogo: {fileID: 21300000, guid: c4ecfec0e2efe4288b3a2bb4778e5070, type: 3}
+  BackgroundsColor: {r: 0.16862746, g: 0.24705884, b: 0.5176471, a: 1}
+  BrandColor: {r: 0.9607844, g: 0.8862746, b: 0.24313727, a: 1}
+  IAPProductQuantities: 6400000090010000e8030000a00f0000
