@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 
 namespace QuartersSDK {
-    public class CoinforgeWebView : MonoBehaviour {
+    public class QuartersWebView : MonoBehaviour {
         
 #if UNITY_WEBGL
         [DllImport("__Internal")]
@@ -28,14 +28,14 @@ namespace QuartersSDK {
         private static string LastOpenedUrl = "";
 
 
-        public static CoinforgeWebView OpenURL(string url) {
+        public static QuartersWebView OpenURL(string url) {
             
             Debug.Log("Web view open url: " + url);
             
         
             
-            GameObject webViewGO= new GameObject("CoinforgeWebView");
-            CoinforgeWebView coinforgeWebView = webViewGO.AddComponent<CoinforgeWebView>();
+            GameObject webViewGO= new GameObject("QuartersWebView");
+            QuartersWebView quartersWebView = webViewGO.AddComponent<QuartersWebView>();
 
             
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -51,7 +51,7 @@ namespace QuartersSDK {
             
             webView.Load(url);
             webView.Show(false, UniWebViewTransitionEdge.Bottom);
-            webView.OnPageStarted += coinforgeWebView.OnUrlOpenWebView;
+            webView.OnPageStarted += quartersWebView.OnUrlOpenWebView;
 
             //handle autorotation
             webView.OnOrientationChanged += (view, orientation) => {
@@ -61,7 +61,7 @@ namespace QuartersSDK {
             webView.OnShouldClose += ShouldClose;
 #endif
 
-            return coinforgeWebView;
+            return quartersWebView;
         }
 
 

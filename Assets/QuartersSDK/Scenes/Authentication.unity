@@ -162,7 +162,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 523}
-  m_SizeDelta: {x: 512, y: 512}
+  m_SizeDelta: {x: 455.6443, y: 136.89761}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &309372585
 MonoBehaviour:
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8b92f6c9233d440819b0a3e992f2b988, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 99faa0c6eae5c4c9289fba15009c7099, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -340,7 +340,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1627675155207574, guid: 6fda49cb785be4592a669bda56f10447, type: 3}
       propertyPath: m_Name
-      value: CoinforgeInit
+      value: QuartersInitInit
       objectReference: {fileID: 0}
     - target: {fileID: 4558843478924128, guid: 6fda49cb785be4592a669bda56f10447, type: 3}
       propertyPath: m_RootOrder
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 608849148}
   - component: {fileID: 608849147}
   m_Layer: 0
-  m_Name: CoinForgeSplashStoryboard
+  m_Name: QuartersSplashStoryboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1559,7 +1559,7 @@ PrefabInstance:
     - target: {fileID: 5785252395037182505, guid: 384fca06186d449d79eff75b26c50b6b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00019587496
+      value: 0.000002509335
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 384fca06186d449d79eff75b26c50b6b, type: 3}

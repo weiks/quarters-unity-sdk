@@ -11,7 +11,7 @@ namespace QuartersSDK {
 		public Action OnInitComplete;
 
         public static QuartersInit Instance;
-        [Header("Your Coinforge app:")]
+        [Header("Your Quarters app:")]
         public string APP_ID = "";
         public string APP_KEY = "";
         public string SERVER_API_TOKEN = "";
@@ -43,14 +43,14 @@ namespace QuartersSDK {
 
 			this.OnInitComplete = OnInitComplete;
 			
-			Debug.Log("Coinforge Init:");
+			Debug.Log("Quarters Init:");
 
-			if (string.IsNullOrEmpty(APP_ID)) Debug.LogError("Coinforge App Id is empty");
-			if (string.IsNullOrEmpty(APP_KEY)) Debug.LogError("Coinforge App key is empty");
-            if (string.IsNullOrEmpty(SERVER_API_TOKEN)) Debug.LogError("Coinforge Server Token key is empty");
+			if (string.IsNullOrEmpty(APP_ID)) Debug.LogError("Quarters App Id is empty");
+			if (string.IsNullOrEmpty(APP_KEY)) Debug.LogError("Quarters App key is empty");
+            if (string.IsNullOrEmpty(SERVER_API_TOKEN)) Debug.LogError("Quarters Server Token key is empty");
 
 
-			GameObject coinforge = new GameObject("Coinforge");
+			GameObject coinforge = new GameObject("Quarters");
 			coinforge.transform.SetParent(this.transform);
 			DontDestroyOnLoad(coinforge.gameObject);
 
@@ -59,13 +59,13 @@ namespace QuartersSDK {
 
 			//init currency
 			
-            GameObject iap = new GameObject("CoinforgeIAP");
+            GameObject iap = new GameObject("QuartersIAP");
             iap.transform.SetParent(this.transform);
             DontDestroyOnLoad(iap.gameObject);
             iap.AddComponent<QuartersIAP>();
 
 			
-			Debug.Log("CoinforgeInit complete");
+			Debug.Log("QuartersInit complete");
 			this.OnInitComplete?.Invoke();
 
 		}

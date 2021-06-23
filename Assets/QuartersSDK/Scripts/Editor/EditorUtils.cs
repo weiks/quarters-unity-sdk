@@ -8,11 +8,11 @@ namespace QuartersSDK {
 
     public class EditorUtils {
         
-        [MenuItem("Coinforge/Deauthorize Coinforge User")]
+        [MenuItem("Quarters/Deauthorize Quarters User")]
         private static void Deauthorize() {
             
             Session.Invalidate();
-            Debug.Log("Coinforge user deauthorized");
+            Debug.Log("Quarters user deauthorized");
             
         }
     }

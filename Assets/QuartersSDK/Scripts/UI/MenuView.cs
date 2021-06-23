@@ -68,13 +68,19 @@ namespace QuartersSDK.UI {
 			QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
 
 				//products loaded
-				Debug.Log("Coinforge products loaded: " + products.Length);
+				Debug.Log("Quarters products loaded: " + products.Length);
 
 				//pull user details
 				Quarters.Instance.GetUserDetails(delegate(User user) {
-					Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) { Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) { ModalView.instance.HideActivity(); }, delegate(string getBalanceError) { ModalView.instance.ShowAlert("Coinforge get balance error", getBalanceError, new string[] {"Try again"}, null); }); }, delegate(string getAccountsError) { ModalView.instance.ShowAlert("Coinforge get user accounts error", getAccountsError, new string[] {"Try again"}, null); });
+					Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) { Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
+						ModalView.instance.HideActivity();
+					}, delegate(string getBalanceError) {
+						ModalView.instance.ShowAlert("Quarters get balance error", getBalanceError, new string[] {"Try again"}, null);
+					}); }, delegate(string getAccountsError) {
+						ModalView.instance.ShowAlert("Quarters get user accounts error", getAccountsError, new string[] {"Try again"}, null);
+					});
 				}, delegate(string getUserDetailsError) {
-					ModalView.instance.ShowAlert("Coinforge user details error", getUserDetailsError, new string[] {"Try again"}, null);
+					ModalView.instance.ShowAlert("Quarters user details error", getUserDetailsError, new string[] {"Try again"}, null);
 				});
 
 			}, delegate(InitializationFailureReason reason) { ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[] {"Try again"}, null); });

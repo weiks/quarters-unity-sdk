@@ -80,7 +80,7 @@ namespace QuartersSDK {
         public int ParseCoinsQuantity(Product product, CurrencyConfig config) {
             
             if (!IsCoinForgeProduct(product, config)) {
-                Debug.LogError("Trying to parse non Coinforge product quantity");
+                Debug.LogError("Trying to parse non Quarters product quantity");
             }
             
             string producId = product.definition.id;
@@ -183,11 +183,11 @@ namespace QuartersSDK {
 
 
             if (products.Count == 0) {
-                purchaseFailedDelegate("No products loaded. Call CoinforgeIAP.Initialize first!");
+                purchaseFailedDelegate("No products loaded. Call QuartersIAP.Initialize first!");
                 return;
             }
 
-            Debug.Log("Buying Coinforge: " + product.definition.storeSpecificId);
+            Debug.Log("Buying Quarters: " + product.definition.storeSpecificId);
 
             #if UNITY_IOS || UNITY_ANDROID
 

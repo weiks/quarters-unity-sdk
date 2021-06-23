@@ -193,13 +193,13 @@ namespace QuartersSDK {
 
 
             //web view authentication
-            CoinforgeWebView.OpenURL(url);
-            CoinforgeWebView.OnDeepLink = DeepLink;
-            CoinforgeWebView.OnDeepLinkWebGL = DeepLinkWebGL;
-            CoinforgeWebView.OnCancelled += delegate {
+            QuartersWebView.OpenURL(url);
+            QuartersWebView.OnDeepLink = DeepLink;
+            QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+            QuartersWebView.OnCancelled += delegate {
                 //webview was closed
                 OnFailedDelegate("User canceled");
-                CoinforgeWebView.OnCancelled = null;
+                QuartersWebView.OnCancelled = null;
             };
        
             
@@ -218,7 +218,7 @@ namespace QuartersSDK {
             OnAuthorizationFailed = null;
             currentTransferAPIRequests = new List<TransferAPIRequest>();
 
-            Debug.Log("Coinforge user deauthorized");
+            Debug.Log("Quarters user deauthorized");
         }
 
 
@@ -281,16 +281,16 @@ namespace QuartersSDK {
 			Debug.Log(url);
 
             //web view authentication
-            CoinforgeWebView.OpenURL(url);
-            CoinforgeWebView.OnDeepLink = DeepLink;
-            CoinforgeWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+            QuartersWebView.OpenURL(url);
+            QuartersWebView.OnDeepLink = DeepLink;
+            QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
        
 		}
 
 
 		public void AuthorizationCodeReceived(string code) {
 
-			Debug.Log("Coinforge: Authorization code: " + code);
+			Debug.Log("Quarters: Authorization code: " + code);
 
             if (session.IsGuestSession) {
                 //real user authorisation, conversion from guest to real user. Invalidate and destroy guest token
@@ -306,7 +306,7 @@ namespace QuartersSDK {
         //used only in Editor
         public void RefreshTokenReceived(string token) {
 
-            Debug.Log("Coinforge: Refresh token: " + token);
+            Debug.Log("Quarters: Refresh token: " + token);
             session.RefreshToken = token;
 
             StartCoroutine(GetAccessToken(delegate {
@@ -797,7 +797,7 @@ namespace QuartersSDK {
 
         private IEnumerator CreateTransferRequestCall(TransferAPIRequest request, bool isRetry = false, bool forceExternalBrowser = false) {
 
-            if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Coinforge: Transfers with external browser arent supported in Unity editor");
+            if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Quarters: Transfers with external browser arent supported in Unity editor");
 
             Debug.Log("CreateTransferRequestCall");
 
@@ -866,12 +866,12 @@ namespace QuartersSDK {
 
                 if (!forceExternalBrowser) {
                     //web view authentication
-                    CoinforgeWebView.OpenURL(url);
-                    CoinforgeWebView.OnDeepLink = DeepLink;
-                    CoinforgeWebView.OnDeepLinkWebGL = DeepLinkWebGL;
-                    CoinforgeWebView.OnCancelled += delegate {
+                    QuartersWebView.OpenURL(url);
+                    QuartersWebView.OnDeepLink = DeepLink;
+                    QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+                    QuartersWebView.OnCancelled += delegate {
                         request.failedDelegate("User canceled");
-                        CoinforgeWebView.OnCancelled = null;
+                        QuartersWebView.OnCancelled = null;
                     };
                 }
                 else {
