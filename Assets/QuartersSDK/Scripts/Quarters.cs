@@ -82,11 +82,8 @@ namespace QuartersSDK {
 
         public static string URL_SCHEME  {
             get {
-//                #if UNITY_WEBGL
-//                return CoinforgeInit.Instance.APP_ID + "://";
-//                #else
-                return "https://" + Application.identifier;
-//                #endif
+                return Application.identifier + "://";
+   
             }
         }
 
@@ -193,13 +190,13 @@ namespace QuartersSDK {
 
 
             //web view authentication
-            QuartersWebView.OpenURL(url);
-            QuartersWebView.OnDeepLink = DeepLink;
-            QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
-            QuartersWebView.OnCancelled += delegate {
+            QuartersDeepLink.OpenURL(url);
+            QuartersDeepLink.OnDeepLink = DeepLink;
+            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
+            QuartersDeepLink.OnCancelled += delegate {
                 //webview was closed
                 OnFailedDelegate("User canceled");
-                QuartersWebView.OnCancelled = null;
+                QuartersDeepLink.OnCancelled = null;
             };
        
             
@@ -281,9 +278,9 @@ namespace QuartersSDK {
 			Debug.Log(url);
 
             //web view authentication
-            QuartersWebView.OpenURL(url);
-            QuartersWebView.OnDeepLink = DeepLink;
-            QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
+            QuartersDeepLink.OpenURL(url);
+            QuartersDeepLink.OnDeepLink = DeepLink;
+            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
        
 		}
 
@@ -866,12 +863,12 @@ namespace QuartersSDK {
 
                 if (!forceExternalBrowser) {
                     //web view authentication
-                    QuartersWebView.OpenURL(url);
-                    QuartersWebView.OnDeepLink = DeepLink;
-                    QuartersWebView.OnDeepLinkWebGL = DeepLinkWebGL;
-                    QuartersWebView.OnCancelled += delegate {
+                    QuartersDeepLink.OpenURL(url);
+                    QuartersDeepLink.OnDeepLink = DeepLink;
+                    QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
+                    QuartersDeepLink.OnCancelled += delegate {
                         request.failedDelegate("User canceled");
-                        QuartersWebView.OnCancelled = null;
+                        QuartersDeepLink.OnCancelled = null;
                     };
                 }
                 else {

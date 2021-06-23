@@ -45,7 +45,7 @@ namespace QuartersSDK {
 	    }
 
 
-        public static bool IsDeepLink(this string url) {
+        public static bool IsValidDeepLink(this string url) {
 
             bool result = false;
             
