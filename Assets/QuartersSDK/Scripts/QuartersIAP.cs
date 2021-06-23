@@ -235,11 +235,11 @@ namespace QuartersSDK {
 
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Content-Type", "application/json;charset=UTF-8");
-            headers.Add("x-api-key", CoinforgeInit.Instance.SERVER_API_TOKEN);
+            headers.Add("x-api-key", QuartersInit.Instance.SERVER_API_TOKEN);
 
             Debug.Log("headers: " + JsonConvert.SerializeObject(headers));
 
-            string url = Quarters.Instance.API_URL + "/apps/" + CoinforgeInit.Instance.APP_ID + "/verifyReceipt/unity";
+            string url = Quarters.Instance.API_URL + "/apps/" + QuartersInit.Instance.APP_ID + "/verifyReceipt/unity";
             Debug.Log("url " + url);
 
 

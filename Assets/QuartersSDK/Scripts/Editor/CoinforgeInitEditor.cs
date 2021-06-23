@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEditor;
 using QuartersSDK;
 
-[CustomEditor(typeof(CoinforgeInit))]
+[CustomEditor(typeof(QuartersInit))]
 public class CoinforgeInitEditor : UnityEditor.Editor {
 
 
     public override void OnInspectorGUI() {
         
-        CoinforgeInit coinforgeInit = (CoinforgeInit)target;
+        QuartersInit quartersInit = (QuartersInit)target;
 
-        EditorGUILayout.LabelField($"Coinforge Unity SDK - Version {CoinforgeInit.SDK_VERSION}");
+        EditorGUILayout.LabelField($"Coinforge Unity SDK - Version {QuartersInit.SDK_VERSION}");
         EditorGUILayout.Space();
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Copy your App ID and App Key from your Coinforge dashboard:");

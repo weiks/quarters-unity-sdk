@@ -23,7 +23,7 @@ namespace QuartersSDK.UI {
 		public override void ViewAppeared() {
 			base.ViewAppeared();
 
-			CoinforgeInit.Instance.Init(delegate {
+			QuartersInit.Instance.Init(delegate {
 				Present(delegate {
 
 					//show loading
@@ -120,7 +120,7 @@ namespace QuartersSDK.UI {
 
 
 			//pull user details
-			Quarters.Instance.GetUserDetails(delegate(User user) { Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) { Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) { QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) { CoinforgeInit.Instance.LoadMainScene(); }, delegate(InitializationFailureReason reason) { ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[] {"Try again"}, null); }); }, delegate(string getBalanceError) { ModalView.instance.ShowAlert("Coinforge get balance error", getBalanceError, new string[] {"Try again"}, null); }); }, delegate(string getAccountsError) { ModalView.instance.ShowAlert("Coinforge get user accounts error", getAccountsError, new string[] {"Try again"}, null); }); }, delegate(string getUserDetailsError) { ModalView.instance.ShowAlert("Coinforge user details error", getUserDetailsError, new string[] {"Try again"}, null); });
+			Quarters.Instance.GetUserDetails(delegate(User user) { Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) { Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) { QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) { QuartersInit.Instance.LoadMainScene(); }, delegate(InitializationFailureReason reason) { ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[] {"Try again"}, null); }); }, delegate(string getBalanceError) { ModalView.instance.ShowAlert("Coinforge get balance error", getBalanceError, new string[] {"Try again"}, null); }); }, delegate(string getAccountsError) { ModalView.instance.ShowAlert("Coinforge get user accounts error", getAccountsError, new string[] {"Try again"}, null); }); }, delegate(string getUserDetailsError) { ModalView.instance.ShowAlert("Coinforge user details error", getUserDetailsError, new string[] {"Try again"}, null); });
 
 		}
 

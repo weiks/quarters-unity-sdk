@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 
 
 namespace QuartersSDK {
-	public class CoinforgeInit : MonoBehaviour {
+	public class QuartersInit : MonoBehaviour {
 
 		public Action OnInitComplete;
 
-        public static CoinforgeInit Instance;
+        public static QuartersInit Instance;
         [Header("Your Coinforge app:")]
         public string APP_ID = "";
         public string APP_KEY = "";

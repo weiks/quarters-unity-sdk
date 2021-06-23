@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55314a5c2b3eb4a8f8b5d735437a8477, type: 3}
   m_Name: QuartersCurrency
   m_EditorClassIdentifier: 
-  APIBaseUrl: pocketfulofquarters.com
+  APIBaseUrl: www.poq.gg/api
   Code: q
   DisplayNameSingular: Quarter
   DisplayNamePlural: Quarters

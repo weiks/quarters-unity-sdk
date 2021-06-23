@@ -23,7 +23,7 @@ namespace QuartersSDK {
         private CurrencyConfig currencyConfig;
         public CurrencyConfig CurrencyConfig {
             get {
-                return CoinforgeInit.Instance.CurrencyConfig;
+                return QuartersInit.Instance.CurrencyConfig;
             }
         }
 
@@ -61,7 +61,7 @@ namespace QuartersSDK {
 
 		public string BASE_URL {
 			get {
-                Environment environment = CoinforgeInit.Instance.environment;
+                Environment environment = QuartersInit.Instance.environment;
                 if (environment == Environment.production) return $"https://{CurrencyConfig.APIBaseUrl}";
                 else if (environment == Environment.development) return $"https://dev.{CurrencyConfig.APIBaseUrl}";
                 else if (environment == Environment.sandbox) return $"https://sandbox.{CurrencyConfig.APIBaseUrl}";
@@ -71,7 +71,7 @@ namespace QuartersSDK {
 
 		public string API_URL {
 			get {
-                Environment environment = CoinforgeInit.Instance.environment;
+                Environment environment = QuartersInit.Instance.environment;
                 if (environment == Environment.production) return $"https://api.{CurrencyConfig.APIBaseUrl}/v1";
                 else if (environment == Environment.development) return $"https://api.dev.{CurrencyConfig.APIBaseUrl}/v1";
                 else if (environment == Environment.sandbox) return $"https://api.sandbox.{CurrencyConfig.APIBaseUrl}/v1";
@@ -186,7 +186,7 @@ namespace QuartersSDK {
 
         public void SignUp(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
 
-            string url =  BASE_URL + "/guest?token=" + session.GuestToken + "&redirect_uri=" + URL_SCHEME + "&inline=trueresponse_type=code&client_id=" + CoinforgeInit.Instance.APP_ID;
+            string url =  BASE_URL + "/guest?token=" + session.GuestToken + "&redirect_uri=" + URL_SCHEME + "&inline=trueresponse_type=code&client_id=" + QuartersInit.Instance.APP_ID;
 
             this.OnAuthorizationSuccess = OnSuccessDelegate;
             this.OnAuthorizationFailed = OnFailedDelegate;
@@ -243,7 +243,7 @@ namespace QuartersSDK {
 
 
         public void CreateTransfer(TransferAPIRequest request) {
-            if (CoinforgeInit.Instance.useAutoapproval) {
+            if (QuartersInit.Instance.useAutoapproval) {
                 StartCoroutine(CreateAutoApprovedTransferCall(request));
             }
             else {
@@ -266,7 +266,7 @@ namespace QuartersSDK {
         //TODO change for new guest to signup/login flow
         private void AuthorizeEditor() {
           
-			string url =  BASE_URL + "/access-token?app_id=" + CoinforgeInit.Instance.APP_ID + "&app_key=" + CoinforgeInit.Instance.APP_KEY;
+			string url =  BASE_URL + "/access-token?app_id=" + QuartersInit.Instance.APP_ID + "&app_key=" + QuartersInit.Instance.APP_KEY;
             Application.OpenURL(url);
 
         }
@@ -277,7 +277,7 @@ namespace QuartersSDK {
 
             Debug.Log("OAuth authorization");
 
-			string url = BASE_URL + "/oauth/authorize?response_type=code&client_id=" + CoinforgeInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&inline=true";
+			string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&scope=email";
 			Debug.Log(url);
 
             //web view authentication
@@ -350,7 +350,7 @@ namespace QuartersSDK {
             }
 
 
-            string url = Quarters.Instance.API_URL + "/accounts/" + CoinforgeInit.Instance.ETHEREUM_ADDRESS + "/transfer";
+            string url = Quarters.Instance.API_URL + "/accounts/" + QuartersInit.Instance.ETHEREUM_ADDRESS + "/transfer";
             Debug.Log(url);
             
             Dictionary<string, object> data = new Dictionary<string, object>();
@@ -361,7 +361,7 @@ namespace QuartersSDK {
             byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
             
             Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add("Authorization", CoinforgeInit.Instance.SERVER_API_TOKEN);
+            header.Add("Authorization", QuartersInit.Instance.SERVER_API_TOKEN);
             header.Add("Content-Type", "application/json;charset=UTF-8");
             
             WWW www = new WWW(url, dataBytes, header);
@@ -410,7 +410,7 @@ namespace QuartersSDK {
             Debug.Log("Create new guest account");
 
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + CoinforgeInit.Instance.SERVER_API_TOKEN);
+            headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
 
             Dictionary<string, object> data = new Dictionary<string, object>();
             string dataJson = JsonConvert.SerializeObject(data);
@@ -451,15 +451,15 @@ namespace QuartersSDK {
 			Dictionary<string, string> data = new Dictionary<string, string>();
 			data.Add("grant_type", "authorization_code");
 			data.Add("code", code);
-            data.Add("client_id", CoinforgeInit.Instance.APP_ID);
-            data.Add("client_secret", CoinforgeInit.Instance.APP_KEY);
+            data.Add("client_id", QuartersInit.Instance.APP_ID);
+            data.Add("client_secret", QuartersInit.Instance.APP_KEY);
 
 			string dataJson = JsonConvert.SerializeObject(data);
 			Debug.Log(dataJson);
 			byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
-            WWW www = new WWW(API_URL + "/oauth/token", dataBytes, AuthorizationHeader);
+            WWW www = new WWW(API_URL + "/oauth2/token", dataBytes, AuthorizationHeader);
 			Debug.Log(www.url);
 
 			while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -501,15 +501,15 @@ namespace QuartersSDK {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add("grant_type", "refresh_token");
             data.Add("refresh_token", session.RefreshToken);
-            data.Add("client_id", CoinforgeInit.Instance.APP_ID);
-            data.Add("client_secret", CoinforgeInit.Instance.APP_KEY);
+            data.Add("client_id", QuartersInit.Instance.APP_ID);
+            data.Add("client_secret", QuartersInit.Instance.APP_KEY);
 
             string dataJson = JsonConvert.SerializeObject(data);
             Debug.Log(dataJson);
             byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
-            WWW www = new WWW(API_URL + "/oauth/token", dataBytes, AuthorizationHeader);
+            WWW www = new WWW(API_URL + "/oauth2/token", dataBytes, AuthorizationHeader);
             Debug.Log(www.url);
 
             while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -808,7 +808,7 @@ namespace QuartersSDK {
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("tokens", request.tokens);
             if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
-            data.Add("app_id", CoinforgeInit.Instance.APP_ID);
+            data.Add("app_id", QuartersInit.Instance.APP_ID);
 
 
 
@@ -902,7 +902,7 @@ namespace QuartersSDK {
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("tokens", request.tokens);
             if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
-            data.Add("app_id", CoinforgeInit.Instance.APP_ID);
+            data.Add("app_id", QuartersInit.Instance.APP_ID);
 
 
             string dataJson = JsonConvert.SerializeObject(data);
@@ -989,11 +989,11 @@ namespace QuartersSDK {
             Debug.Log("AutoApproveTransfer");
 
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + CoinforgeInit.Instance.SERVER_API_TOKEN);
+            headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
 
 
             Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("clientId", CoinforgeInit.Instance.APP_ID);
+            data.Add("clientId", QuartersInit.Instance.APP_ID);
             data.Add("userId", CurrentUser.userId);
             data.Add("address", CurrentUser.accounts[0].address);
 

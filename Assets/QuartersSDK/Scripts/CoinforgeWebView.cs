@@ -154,7 +154,10 @@ namespace QuartersSDK {
         private static void SetFrameSize(UniWebView webView) {
 
             if (Application.isEditor) {
-                webView.Frame = new Rect(0, 0, 500f, 500f);
+
+                float aspectRatio = (float) Screen.height / (float) Screen.width;
+                
+                webView.Frame = new Rect((float)Screen.width * 0.5f, 0, 500f, 500f * aspectRatio);
             }
             else {
                 webView.Frame = new Rect(0, 0, Screen.width, Screen.height);

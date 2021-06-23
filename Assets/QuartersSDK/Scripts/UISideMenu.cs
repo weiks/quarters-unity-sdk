@@ -48,13 +48,13 @@ public class UISideMenu : MonoBehaviour {
         SetMenuAppearance(true, true);
         
         Session session = new Session();
-        ShopButton.gameObject.SetActive(!CoinforgeInit.Instance.CustomShopUI);
+        ShopButton.gameObject.SetActive(!QuartersInit.Instance.CustomShopUI);
         SignUpButton.gameObject.SetActive(session.IsGuestSession);
         LogoutButton.interactable = !session.IsGuestSession;
 
         ShopButtonText.text = $"Buy " + Quarters.Instance.CurrencyConfig.DisplayNamePlural;
         
-        Sprite logoSprite = CoinforgeInit.Instance.CurrencyConfig.CurrencyLogo;
+        Sprite logoSprite = QuartersInit.Instance.CurrencyConfig.CurrencyLogo;
         float aspectRatio = (float) logoSprite.rect.width / (float) logoSprite.rect.height;
         logoAspectRatioFitter.aspectRatio = aspectRatio;
         logo.sprite = logoSprite;

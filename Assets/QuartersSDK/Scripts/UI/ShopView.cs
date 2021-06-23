@@ -19,7 +19,7 @@ namespace QuartersSDK.UI {
             ShopTitleText.text = $"Buy " + Quarters.Instance.CurrencyConfig.DisplayNamePlural;
             productsList.Populate(new ArrayList(QuartersIAP.Instance.products));
 
-            Sprite logoSprite = CoinforgeInit.Instance.CurrencyConfig.CurrencyLogo;
+            Sprite logoSprite = QuartersInit.Instance.CurrencyConfig.CurrencyLogo;
             float aspectRatio = (float) logoSprite.rect.width / (float) logoSprite.rect.height;
             logoAspectRatioFitter.aspectRatio = aspectRatio;
             logo.sprite = logoSprite;
@@ -45,7 +45,7 @@ namespace QuartersSDK.UI {
             Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance newBalance) {
                 ModalView.instance.HideActivity();
 
-                int quantity = QuartersIAP.Instance.ParseCoinsQuantity(product, CoinforgeInit.Instance.CurrencyConfig);
+                int quantity = QuartersIAP.Instance.ParseCoinsQuantity(product, QuartersInit.Instance.CurrencyConfig);
                 
                 SpendRewardView.Instance.Present(quantity);
                 
