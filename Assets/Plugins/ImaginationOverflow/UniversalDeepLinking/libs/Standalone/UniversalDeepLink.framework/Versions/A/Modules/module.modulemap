@@ -1,0 +1,6 @@
+framework module UniversalDeepLink {
+  umbrella header "UniversalDeepLink.h"
+
+  export *
+  module * { export * }
+}

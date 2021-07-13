@@ -228,7 +228,7 @@ PlayerSettings:
   iOSLaunchScreenCustomStoryboardPath: 
   iOSDeviceRequirements: []
   iOSURLSchemes:
-  - com.quarters.example
+  - https://pocketfulofquarters.com/apps/sn72ojS0VtM4SDObZbAr
   iOSBackgroundModes: 0
   iOSMetalForceHardShadows: 0
   metalEditorSupport: 0

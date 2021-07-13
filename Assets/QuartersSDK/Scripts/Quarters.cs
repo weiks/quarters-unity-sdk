@@ -82,7 +82,7 @@ namespace QuartersSDK {
 
         public static string URL_SCHEME  {
             get {
-                return Application.identifier + "://";
+                return "https://pocketfulofquarters.com/apps/sn72ojS0VtM4SDObZbAr";
    
             }
         }
