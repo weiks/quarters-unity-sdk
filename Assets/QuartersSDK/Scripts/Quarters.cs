@@ -82,7 +82,7 @@ namespace QuartersSDK {
 
         public static string URL_SCHEME  {
             get {
-                return "https://pocketfulofquarters.com/apps/sn72ojS0VtM4SDObZbAr";
+                return "https://quarters-sandbox.s3.us-east-2.amazonaws.com/";
    
             }
         }
@@ -273,8 +273,10 @@ namespace QuartersSDK {
         private void AuthorizeWithWebView() {
 
             Debug.Log("OAuth authorization");
+            
+            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);;
 
-			string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + URL_SCHEME + "&scope=email";
+			string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + redirectSafeUrl + "&scope=email";
 			Debug.Log(url);
 
             //web view authentication

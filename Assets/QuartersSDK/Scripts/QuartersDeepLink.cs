@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using ImaginationOverflow.UniversalDeepLinking;
 using Newtonsoft.Json;
 
 namespace QuartersSDK {
@@ -30,27 +31,26 @@ namespace QuartersSDK {
 
 
         private void Awake() {
-            
-            Application.deepLinkActivated += ApplicationOnDeepLinkActivated;
-            if (!string.IsNullOrEmpty(Application.absoluteURL)) {
-                ApplicationOnDeepLinkActivated(Application.absoluteURL);
-            }
-            
+            DeepLinkManager.Instance.LinkActivated += OnLinkActivated;
+        }
+        
+        
+        private void OnDestroy() {
+            DeepLinkManager.Instance.LinkActivated -= OnLinkActivated;
         }
 
-        private void ApplicationOnDeepLinkActivated(string url) {
-            Debug.Log($"ApplicationOnDeepLinkActivated: {url} is valid deep link: {url.IsValidDeepLink()}");
+        private void OnLinkActivated(LinkActivation linkActivation) {
+            Debug.Log($"ApplicationOnDeepLinkActivated: {linkActivation.Uri} is valid deep link: {linkActivation.Uri.IsValidDeepLink()}");
             
-            if (url.IsValidDeepLink()) {
+            if (linkActivation.Uri.IsValidDeepLink()) {
                 
                 //deep link opened
-                if (OnDeepLink != null) OnDeepLink(url, isExternalBrowser: false);
+                if (OnDeepLink != null) OnDeepLink(linkActivation.Uri, isExternalBrowser: false);
                     
             }
-            
-            
         }
 
+    
 
         public static void OpenURL(string url) {
             
