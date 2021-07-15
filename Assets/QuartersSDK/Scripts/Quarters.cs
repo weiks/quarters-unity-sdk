@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using ImaginationOverflow.UniversalDeepLinking;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -173,7 +174,17 @@ namespace QuartersSDK {
 			if (OnAuthorizationStart != null) OnAuthorizationStart();
 
 
-            AuthorizeWithWebView();
+            Debug.Log("OAuth authorization");
+            
+            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);;
+
+            string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + redirectSafeUrl + "&scope=email";
+            Debug.Log(url);
+
+            //web view authentication
+            QuartersDeepLink.OpenURL(url);
+            QuartersDeepLink.OnDeepLink = DeepLink;
+            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
         }
         
 
@@ -258,33 +269,8 @@ namespace QuartersSDK {
         
         
         
+        
 
-
-        //TODO change for new guest to signup/login flow
-        private void AuthorizeEditor() {
-          
-			string url =  BASE_URL + "/access-token?app_id=" + QuartersInit.Instance.APP_ID + "&app_key=" + QuartersInit.Instance.APP_KEY;
-            Application.OpenURL(url);
-
-        }
-
-
-
-        private void AuthorizeWithWebView() {
-
-            Debug.Log("OAuth authorization");
-            
-            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);;
-
-			string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + redirectSafeUrl + "&scope=email";
-			Debug.Log(url);
-
-            //web view authentication
-            QuartersDeepLink.OpenURL(url);
-            QuartersDeepLink.OnDeepLink = DeepLink;
-            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
-       
-		}
 
 
 		public void AuthorizationCodeReceived(string code) {
@@ -452,13 +438,17 @@ namespace QuartersSDK {
 			data.Add("code", code);
             data.Add("client_id", QuartersInit.Instance.APP_ID);
             data.Add("client_secret", QuartersInit.Instance.APP_KEY);
+            
+            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);;
+            
+            data.Add("redirect_url", redirectSafeUrl);
 
 			string dataJson = JsonConvert.SerializeObject(data);
 			Debug.Log(dataJson);
 			byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
 
-            WWW www = new WWW(API_URL + "/oauth2/token", dataBytes, AuthorizationHeader);
+            WWW www = new WWW(BASE_URL + "/oauth2/token", dataBytes, AuthorizationHeader);
 			Debug.Log(www.url);
 
 			while (!www.isDone) yield return new WaitForEndOfFrame();
@@ -1079,32 +1069,25 @@ namespace QuartersSDK {
         
   
         
-		public void DeepLink (string url, bool isExternalBrowser) {
+		public void DeepLink (LinkActivation linkActivation) {
 
-			Debug.Log("Deep link url: " + url);
+			Debug.Log("Deep link url: " + linkActivation.Uri);
 
-            if (!string.IsNullOrEmpty(url)) {
-                
-#if UNITY_ANDROID
-                //overriden url if deep link comes from external browser, due to limitations of Android plugins implementation
-                if (isExternalBrowser) {
-                    url = CustomUrlSchemeAndroid.GetLaunchedUrl(true);
-                    CustomUrlSchemeAndroid.ClearSavedData();
-                }
-#endif
-  
-                Dictionary<string, string> urlParams = url.ParseURI();
-                ProcessDeepLink(isExternalBrowser, urlParams);
+            if (!string.IsNullOrEmpty(linkActivation.Uri)) {
+                ProcessDeepLink(linkActivation.QueryString);
             }
         }
 
+        
+        
+        
 
         public void DeepLinkWebGL(Dictionary<string, string> urlParams) {
-            ProcessDeepLink(false, urlParams);
+            ProcessDeepLink(urlParams);
         }
 
 
-        private void ProcessDeepLink(bool isExternalBrowser, Dictionary<string, string> urlParams) {
+        private void ProcessDeepLink(Dictionary<string, string> urlParams) {
 
             Debug.Log("ProcessDeepLink " + JsonConvert.SerializeObject(urlParams));
 

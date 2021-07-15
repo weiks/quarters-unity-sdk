@@ -49,20 +49,10 @@ namespace QuartersSDK {
 
             bool result = false;
             
-            
-            #if UNITY_WEBGL
-	        string appId = QuartersInit.Instance.APP_ID;
-	        
-	        if (url.Contains(appId.ToLower())) {
-		        result = url.StartsWith(appId.ToLower());
-	        }
-	        
-	        #else
             if (url.Contains(Quarters.URL_SCHEME)) {
                 result = url.StartsWith(Quarters.URL_SCHEME);
             }
-			#endif
-
+            
             return result;
         }
         
