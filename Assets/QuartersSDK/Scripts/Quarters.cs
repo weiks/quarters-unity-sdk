@@ -74,7 +74,7 @@ namespace QuartersSDK {
 		public string API_URL {
 			get {
                
-                return $"{BASE_URL}/api/v1";
+                return $"{BASE_URL}/v1";
 			}
 		}
 
@@ -515,6 +515,7 @@ namespace QuartersSDK {
                     Debug.Log("GetAccessToken result " + request.downloadHandler.text);
                     
                     Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
+                    session.RefreshToken = responseData["refresh_token"];
                     session.AccessToken = responseData["access_token"];
                     OnSuccess?.Invoke();
                 }
@@ -529,16 +530,22 @@ namespace QuartersSDK {
 
             Debug.Log("GetUserDetailsCall");
 
-            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + session.AccessToken);
+            if (!session.DoesHaveAccessToken) {
+                StartCoroutine(GetAccessToken(delegate {
+                    StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true));
+                }, delegate(string error) {
+                    OnFailed(error);
+                }));
+                yield break;
+            }
 
-            string url = API_URL + "/user/me";
+        
+            string url = API_URL + "/users/me";
             Debug.Log(url);
 
-
-
-
             using (UnityWebRequest request = UnityWebRequest.Get(url)) {
+                request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
                 // Request and wait for the desired page.
                 yield return request.SendWebRequest();
 
@@ -549,7 +556,9 @@ namespace QuartersSDK {
 
                     if (!isRetry) {
                         //refresh access code and retry this call in case access code expired
-                        StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); }, delegate(string error) { OnFailed(request.error); }));
+                        StartCoroutine(GetAccessToken(delegate {
+                            StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true));
+                        }, delegate(string error) { OnFailed(request.error); }));
                     }
                     else {
                         Debug.LogError(request.error);
