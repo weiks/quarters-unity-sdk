@@ -433,43 +433,39 @@ namespace QuartersSDK {
 
             Debug.Log("Get refresh token");
 
-			Dictionary<string, string> data = new Dictionary<string, string>();
-			data.Add("grant_type", "authorization_code");
-			data.Add("code", code);
-            data.Add("client_id", QuartersInit.Instance.APP_ID);
-            data.Add("client_secret", QuartersInit.Instance.APP_KEY);
+			WWWForm data = new WWWForm();
+			data.AddField("grant_type", "authorization_code");
+			data.AddField("code", code);
+            data.AddField("client_id", QuartersInit.Instance.APP_ID);
+            data.AddField("client_secret", QuartersInit.Instance.APP_KEY);
+            data.AddField("redirect_uri", URL_SCHEME);
             
-            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);;
-            
-            data.Add("redirect_url", redirectSafeUrl);
+            string url = BASE_URL + "/oauth2/token";
+            Debug.Log("GetRefreshToken url: " + url);
 
-			string dataJson = JsonConvert.SerializeObject(data);
-			Debug.Log(dataJson);
-			byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+            using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
+                yield return request.SendWebRequest();
 
 
-            WWW www = new WWW(BASE_URL + "/oauth2/token", dataBytes, AuthorizationHeader);
-			Debug.Log(www.url);
+                if (request.isNetworkError || request.isHttpError) {
+                    Debug.LogError(request.error);
+                    Debug.LogError(request.downloadHandler.text);
+                    
+                    OnAuthorizationFailed(request.error);
+                }
+                else {
+                    Debug.Log(request.downloadHandler.text);
+                    
+                    Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
+                    session.RefreshToken = responseData["refresh_token"];
+                    session.AccessToken = responseData["access_token"];
 
-			while (!www.isDone) yield return new WaitForEndOfFrame();
-
-			if (!string.IsNullOrEmpty(www.error)) {
-				Debug.LogError(www.error);
-
-				OnAuthorizationFailed(www.error);
-			}
-			else {
-				Debug.Log(www.text);
-
-				Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
-				session.RefreshToken = responseData["refresh_token"];
-                session.AccessToken = responseData["access_token"];
-
-				OnAuthorizationSuccess();
-			}
-		}
-
-
+                    OnAuthorizationSuccess();
+                }
+            }
+        }
+        
+        
 
 
         public IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
@@ -487,48 +483,43 @@ namespace QuartersSDK {
                 OnFailed("Missing refresh token");
                 yield break;
             }
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            data.Add("grant_type", "refresh_token");
-            data.Add("refresh_token", session.RefreshToken);
-            data.Add("client_id", QuartersInit.Instance.APP_ID);
-            data.Add("client_secret", QuartersInit.Instance.APP_KEY);
+            
+            
+            WWWForm data = new WWWForm();
+            data.AddField("grant_type", "refresh_token");
+            data.AddField("client_id", QuartersInit.Instance.APP_ID);
+            data.AddField("client_secret", QuartersInit.Instance.APP_KEY);
+            data.AddField("redirect_uri", URL_SCHEME);
+            
+            string url = BASE_URL + "/oauth2/token";
+            Debug.Log("GetAccessToken url: " + url);
+            
+            
+            using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
+                yield return request.SendWebRequest();
 
-            string dataJson = JsonConvert.SerializeObject(data);
-            Debug.Log(dataJson);
-            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
 
+                if (request.isNetworkError || request.isHttpError) {
+                    Debug.LogError(request.error);
+                    Debug.LogError(request.downloadHandler.text);
 
-            WWW www = new WWW(API_URL + "/oauth2/token", dataBytes, AuthorizationHeader);
-            Debug.Log(www.url);
-
-            while (!www.isDone) yield return new WaitForEndOfFrame();
-
-            if (!string.IsNullOrEmpty(www.error)) {
-               
-                string error = www.error;
-                Debug.LogError(error);
-
-                if (error == Error.UNAUTHORIZED_ERROR) {
-                    //dispose invalid refresh token
-                    session.RefreshToken = "";
+                    if (request.error == Error.UNAUTHORIZED_ERROR) {
+                        //dispose invalid refresh token
+                        session.RefreshToken = "";
+                    }
+                    
+                    OnFailed?.Invoke(request.error);
                 }
-
-                OnFailed(www.error);
-
-                
+                else {
+                    Debug.Log(request.downloadHandler.text);
+                    
+                    Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
+                    session.AccessToken = responseData["access_token"];
+                    OnSuccess?.Invoke();
+                }
             }
-            else {
-                Debug.Log(www.text);
-
-                Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
-                //RefreshToken = responseData["refresh_token"];
-                session.AccessToken = responseData["access_token"];
-
-//                session.AccessToken = "aa";
-
-                if (OnSuccess != null) OnSuccess();
-                
-            }
+            
+            
         }
 
 
