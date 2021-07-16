@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using ImaginationOverflow.UniversalDeepLinking;
+using QuartersSDK.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -72,11 +73,8 @@ namespace QuartersSDK {
 
 		public string API_URL {
 			get {
-                Environment environment = QuartersInit.Instance.environment;
-                if (environment == Environment.production) return $"https://api.{CurrencyConfig.APIBaseUrl}/v1";
-                else if (environment == Environment.development) return $"https://api.dev.{CurrencyConfig.APIBaseUrl}/v1";
-                else if (environment == Environment.sandbox) return $"https://api.sandbox.{CurrencyConfig.APIBaseUrl}/v1";
-                return null;
+               
+                return $"{BASE_URL}/api/v1";
 			}
 		}
 
@@ -138,7 +136,6 @@ namespace QuartersSDK {
 
             if (!string.IsNullOrEmpty(session.RefreshToken)) {
                 Deauthorize();
-                // Debug.LogError("Authorization error. Registered user session exist. Use Authorize User call instead, or Deauthorize Coinforge user first");
             }
 
             this.OnAuthorizationSuccess = OnSuccessDelegate;
@@ -185,6 +182,11 @@ namespace QuartersSDK {
             QuartersDeepLink.OpenURL(url);
             QuartersDeepLink.OnDeepLink = DeepLink;
             QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
+
+
+            if (Application.isEditor) {
+                AuthorizeEditorView.Instance.Show();
+            }
         }
         
 
@@ -489,12 +491,11 @@ namespace QuartersSDK {
             data.AddField("grant_type", "refresh_token");
             data.AddField("client_id", QuartersInit.Instance.APP_ID);
             data.AddField("client_secret", QuartersInit.Instance.APP_KEY);
-            data.AddField("redirect_uri", URL_SCHEME);
+            data.AddField("refresh_token", session.RefreshToken);
             
             string url = BASE_URL + "/oauth2/token";
             Debug.Log("GetAccessToken url: " + url);
-            
-            
+
             using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
                 yield return request.SendWebRequest();
 
@@ -511,7 +512,7 @@ namespace QuartersSDK {
                     OnFailed?.Invoke(request.error);
                 }
                 else {
-                    Debug.Log(request.downloadHandler.text);
+                    Debug.Log("GetAccessToken result " + request.downloadHandler.text);
                     
                     Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
                     session.AccessToken = responseData["access_token"];
@@ -524,41 +525,47 @@ namespace QuartersSDK {
 
 
 
-        private IEnumerator GetUserDetailsCall(OnUserDetailsSucessDelegate OnSucess, OnUserDetailsFailedDelegate OnFailed, bool isRetry = false) {
+        private IEnumerator GetUserDetailsCall(OnUserDetailsSucessDelegate OnSuccess, OnUserDetailsFailedDelegate OnFailed, bool isRetry = false) {
+
+            Debug.Log("GetUserDetailsCall");
 
             Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
             headers.Add("Authorization", "Bearer " + session.AccessToken);
 
-            WWW www = new WWW(API_URL + "/me", null, headers);
-			yield return www;
+            string url = API_URL + "/user/me";
+            Debug.Log(url);
 
-			while (!www.isDone) yield return new WaitForEndOfFrame();
 
-			if (!string.IsNullOrEmpty(www.error)) {
-				
-                if (!isRetry) {
-                    //refresh access code and retry this call in case access code expired
-                    StartCoroutine(GetAccessToken(delegate {
-                       
-                        StartCoroutine(GetUserDetailsCall(OnSucess, OnFailed, true));
 
-                    }, delegate (string error) {
-                        OnFailed(www.error);
-                    }));
-                } 
-                else {
-                    Debug.LogError(www.error);
-                    OnFailed(www.error);
+
+            using (UnityWebRequest request = UnityWebRequest.Get(url)) {
+                // Request and wait for the desired page.
+                yield return request.SendWebRequest();
+
+
+                if (request.isNetworkError || request.isHttpError) {
+                    Debug.LogError(request.error);
+                    Debug.LogError(request.downloadHandler.text);
+
+                    if (!isRetry) {
+                        //refresh access code and retry this call in case access code expired
+                        StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); }, delegate(string error) { OnFailed(request.error); }));
+                    }
+                    else {
+                        Debug.LogError(request.error);
+                        OnFailed(request.error);
+                    }
                 }
-			}
-			else {
+                else {
+                    Debug.Log("GetUserDetailsCall result " + request.downloadHandler.text);
 
-				Debug.Log(www.text);
-				CurrentUser = JsonConvert.DeserializeObject<User>(www.text);
-                OnSucess(CurrentUser);
-			
-			}
-		}
+                    Debug.Log(request.downloadHandler.text);
+                    CurrentUser = JsonConvert.DeserializeObject<User>(request.downloadHandler.text);
+                    OnSuccess(CurrentUser);
+
+                }
+            }
+        }
 
 
 
