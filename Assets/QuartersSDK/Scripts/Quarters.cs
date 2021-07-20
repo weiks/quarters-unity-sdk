@@ -21,7 +21,9 @@ namespace QuartersSDK {
 
 		public static Quarters Instance;
         public Session session;
-
+        public PCKE PCKE;
+        
+        
         private CurrencyConfig currencyConfig;
         public CurrencyConfig CurrencyConfig {
             get {
@@ -124,7 +126,12 @@ namespace QuartersSDK {
 
 		public void Init() {
 			Instance = this;
-		}
+            
+            PCKE = new PCKE();
+            Debug.Log(PCKE.CodeVerifier);
+            Debug.Log(PCKE.GenerateCodeChallenge());
+
+        }
 
 
 

@@ -40,7 +40,7 @@ namespace QuartersSDK {
                 PlayerPrefs.SetString(Constants.REFRESH_TOKEN_KEY, value);
             }
         }
-
+        
 
         private string accessToken = "";
         public string AccessToken {
