@@ -15,21 +15,20 @@ public class PCKE {
     }
     
     private string GenerateCodeVerifier() {
-        
-        // RNGCryptoServiceProvider
         string codeVerifier = RandomString(Random.Range(43, 129));
         return codeVerifier;
     }
 
     static readonly char[] padding = { '=' };
 
-    public string GenerateCodeChallenge() {
+    public string CodeChallenge() {
 
-        string hash = Sha256(GenerateCodeVerifier());
+        byte[] hash = Sha256(GenerateCodeVerifier());
+
+        string codeChallenge = Convert.ToBase64String(hash);
+        string result = codeChallenge.TrimEnd(padding).Replace('+', '-').Replace('/', '_');
         
-        string codeChallenge = Convert.ToBase64String(Encoding.ASCII.GetBytes(hash)).TrimEnd(padding).Replace('+', '-').Replace('/', '_');
-        
-        return codeChallenge;
+        return result;
     }
     
     
@@ -52,13 +51,9 @@ public class PCKE {
         return res.ToString();
     }
     
-    static string Sha256(string randomString) {
+    static byte[] Sha256(string randomString) {
         var crypt = new SHA256Managed();
-        string hash = String.Empty;
-        byte[] crypto = crypt.ComputeHash(Encoding.ASCII.GetBytes(randomString));
-        foreach (byte theByte in crypto) {
-            hash += theByte.ToString("x2");
-        }
-        return hash;
+        byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(randomString));
+        return crypto;
     }
 }

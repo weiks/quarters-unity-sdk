@@ -129,7 +129,7 @@ namespace QuartersSDK {
             
             PCKE = new PCKE();
             Debug.Log(PCKE.CodeVerifier);
-            Debug.Log(PCKE.GenerateCodeChallenge());
+            Debug.Log(PCKE.CodeChallenge());
 
         }
 
@@ -182,7 +182,13 @@ namespace QuartersSDK {
             
             string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);;
 
-            string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id=" + QuartersInit.Instance.APP_ID + "&redirect_uri=" + redirectSafeUrl + "&scope=email";
+            string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id="
+                                  + QuartersInit.Instance.APP_ID + "&redirect_uri="
+                                  + redirectSafeUrl
+                                  + "&scope=email"
+                                  + $"&code_challenge_method=S256"
+                                  + $"&code_challenge={PCKE.CodeChallenge()}";
+                                
             Debug.Log(url);
 
             //web view authentication
