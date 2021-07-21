@@ -446,14 +446,15 @@ namespace QuartersSDK {
 
 		public IEnumerator GetRefreshToken(string code) {
 
-            Debug.Log("Get refresh token");
+            Debug.Log($"Get refresh token with code: {code}");
 
 			WWWForm data = new WWWForm();
-			data.AddField("grant_type", "authorization_code");
-			data.AddField("code", code);
+            data.AddField("code_verifier", PCKE.CodeVerifier);
             data.AddField("client_id", QuartersInit.Instance.APP_ID);
-            data.AddField("client_secret", QuartersInit.Instance.APP_KEY);
+            data.AddField("grant_type", "authorization_code");
+			data.AddField("code", code);
             data.AddField("redirect_uri", URL_SCHEME);
+           
             
             string url = BASE_URL + "/oauth2/token";
             Debug.Log("GetRefreshToken url: " + url);
@@ -505,6 +506,7 @@ namespace QuartersSDK {
             data.AddField("client_id", QuartersInit.Instance.APP_ID);
             data.AddField("client_secret", QuartersInit.Instance.APP_KEY);
             data.AddField("refresh_token", session.RefreshToken);
+            data.AddField("code_verifier", PCKE.CodeVerifier);
             
             string url = BASE_URL + "/oauth2/token";
             Debug.Log("GetAccessToken url: " + url);

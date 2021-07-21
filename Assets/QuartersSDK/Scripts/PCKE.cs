@@ -16,6 +16,7 @@ public class PCKE {
     
     private string GenerateCodeVerifier() {
         string codeVerifier = RandomString(Random.Range(43, 129));
+        Debug.Log($"Code verifier: {codeVerifier}");
         return codeVerifier;
     }
 
@@ -23,7 +24,7 @@ public class PCKE {
 
     public string CodeChallenge() {
 
-        byte[] hash = Sha256(GenerateCodeVerifier());
+        byte[] hash = Sha256(CodeVerifier);
 
         string codeChallenge = Convert.ToBase64String(hash);
         string result = codeChallenge.TrimEnd(padding).Replace('+', '-').Replace('/', '_');
