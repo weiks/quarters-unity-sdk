@@ -45,12 +45,8 @@ namespace QuartersSDK.UI {
             
             CurrencyLogo.sprite = Quarters.Instance.CurrencyConfig.CurrencyIcon;
             
-            if (user.IsGuestUser) {
-                UsernameText.text = "Guest";
-            }
-            else {
-                UsernameText.text = user.displayName;
-            }
+            UsernameText.text = user.displayName;
+            
 
             Quarters.Instance.CurrentUser.OnAccountsLoaded += AccountsLoaded;
             if (user.accounts.Count > 0) {

@@ -14,10 +14,8 @@ namespace QuartersSDK.UI {
 	public class AuthorizeView : UIView {
 
 		public Image brandLogo;
-
-		public GameObject SignUpButton;
+		
 		public GameObject LoginButton;
-		public GameObject PlayAsGuestButton;
 
 
 		public override void ViewAppeared() {
@@ -38,21 +36,12 @@ namespace QuartersSDK.UI {
 						ModalView.instance.HideActivity();
 					}
 					else {
-						//not first session
-						if (session.IsGuestSession) {
-							//following session with guest mode display dialog
+						//email user
+						Quarters.Instance.Authorize(session.Scopes, AuthorizationSuccess, delegate(string error) {
 							ShowButtons();
-							ModalView.instance.HideActivity();
-						}
-						else {
-							//email user
-							Quarters.Instance.Authorize(AuthorizationSuccess, delegate(string error) {
-								ShowButtons();
-								AuthorizationFailed(error);
-							});
-						}
+							AuthorizationFailed(error);
+						});
 					}
-
 				});
 			});
 		}
@@ -78,16 +67,16 @@ namespace QuartersSDK.UI {
 
 
 		private void ShowButtons() {
-			SignUpButton.SetActive(true);
+
 			LoginButton.SetActive(true);
-			PlayAsGuestButton.SetActive(true);
+
 		}
 
 
 		private void HideButtons() {
-			SignUpButton.SetActive(false);
+
 			LoginButton.SetActive(false);
-			PlayAsGuestButton.SetActive(false);
+
 		}
 
 
@@ -139,30 +128,12 @@ namespace QuartersSDK.UI {
 			}, delegate(string getUserDetailsError) {
 				ModalView.instance.ShowAlert("Quarters user details error", getUserDetailsError, new string[] {"Try again"}, null);
 			});
-
 		}
-
-
-		public void ButtonPlayAsGuestTapped() {
-			ModalView.instance.ShowActivity();
-			Quarters.Instance.AuthorizeGuest(AuthorizationSuccess, AuthorizationFailed);
-		}
-
-
-		public void ButtonSignUpTapped() {
-
-			Session session = new Session();
-
-			ModalView.instance.ShowActivity();
-
-			Quarters.Instance.AuthorizeGuest(delegate { Quarters.Instance.SignUp(AuthorizationSuccess, AuthorizationFailed); }, AuthorizationFailed);
-
-
-		}
-
+		
+		
 
 		public void ButtonLoginTapped() {
-			Quarters.Instance.Authorize(AuthorizationSuccess, AuthorizationFailed);
+			Quarters.Instance.Authorize(QuartersInit.Instance.Scopes, AuthorizationSuccess, AuthorizationFailed);
 		}
 
 	}

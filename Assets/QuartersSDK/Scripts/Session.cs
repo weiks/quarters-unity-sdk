@@ -1,34 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace QuartersSDK {
     public class Session {
-
-        public bool IsGuestSession {
-            get {
-                return !string.IsNullOrEmpty(GuestToken);
-            }
-        }
-
-
-        public string GuestToken {
-            get {
-                return PlayerPrefs.GetString(Constants.GUEST_TOKEN_KEY, "");
-            }
-            set {
-                PlayerPrefs.SetString(Constants.GUEST_TOKEN_KEY, value);
-            }
-        }
-
-        public string GuestFirebaseToken {
-            get {
-                return PlayerPrefs.GetString(Constants.GUEST_FIREBASE_TOKEN, "");
-            }
-            set {
-                PlayerPrefs.SetString(Constants.GUEST_FIREBASE_TOKEN, value);
-            }
-        }
+        
 
 
         public string RefreshToken {
@@ -45,10 +23,7 @@ namespace QuartersSDK {
         private string accessToken = "";
         public string AccessToken {
             get {
-                if (IsGuestSession) return GuestToken;
-                else {
-                    return accessToken;
-                }
+                return accessToken;
             }
             set {
                 accessToken = value;
@@ -71,11 +46,25 @@ namespace QuartersSDK {
 
         public bool IsAuthorized {
             get {
-                if (IsGuestSession) return true;
-                else {
-                    return DoesHaveRefreshToken;
-                }
+                return DoesHaveRefreshToken;
             }
+        }
+
+        public List<Scope> Scopes = new List<Scope>();
+
+
+        public void SetScope(string scopesString) {
+
+            string scopes = UnityWebRequest.UnEscapeURL(scopesString);
+            
+            Scopes = new List<Scope>();
+
+            string[] split = scopes.Split(' ');
+
+            foreach (string scope in split) {
+                Scopes.Add((Scope)Enum.Parse(typeof(Scope), scope));
+            }
+
         }
 
 

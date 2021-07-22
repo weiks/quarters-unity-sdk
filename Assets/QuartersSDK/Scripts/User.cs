@@ -11,14 +11,7 @@ namespace QuartersSDK {
         public string userId = "";
 		public string displayName = "";
 		public string email = "";
-		public bool emailVerified = false;
-
-        public bool IsGuestUser {
-            get {
-                return email.Contains("@guest");
-            }
-        }
-
+        
         public List<Account> accounts = new List<Account>();
 
         public Account MainAccount {
@@ -35,10 +28,7 @@ namespace QuartersSDK {
             
             public Action<long> OnAvailableCoinsUpdated;
             
-            public string id = "";
             public string address = "";
-            public DateTime created = DateTime.MinValue;
-            public string userId = "";
 
             private Balance balance = null;
 

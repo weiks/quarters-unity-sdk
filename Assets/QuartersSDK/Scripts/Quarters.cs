@@ -136,41 +136,18 @@ namespace QuartersSDK {
 
 
         #region high level calls
-
-        public void AuthorizeGuest(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
-
-            session = new Session();
-
-            if (!string.IsNullOrEmpty(session.RefreshToken)) {
-                Deauthorize();
-            }
-
-            this.OnAuthorizationSuccess = OnSuccessDelegate;
-            this.OnAuthorizationFailed = OnFailedDelegate;
-
-            if (IsAuthorized) {
-                this.OnAuthorizationSuccess();
-                return;
-            }
-
-            if (OnAuthorizationStart != null) OnAuthorizationStart();
-
-            //create new guest account
-            StartCoroutine(CreateNewGuestUser());
-
-        }
+        
 
 
 
-
-        public void Authorize(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
+        public void Authorize(List<Scope> scopes, OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
             
             session = new Session();
 
 			this.OnAuthorizationSuccess = OnSuccessDelegate;
 			this.OnAuthorizationFailed = OnFailedDelegate;
 
-            if (IsAuthorized && !session.IsGuestSession) {
+            if (IsAuthorized) {
                 this.OnAuthorizationSuccess();
                 return;
             }
@@ -180,12 +157,20 @@ namespace QuartersSDK {
 
             Debug.Log("OAuth authorization");
             
-            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);;
+            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
+
+            string scopeString = "";
+            foreach (Scope scope in scopes) {
+                scopeString += scope.ToString();
+                if (scopes.IndexOf(scope) != scopes.Count - 1) {
+                    scopeString += " ";
+                }
+            }
 
             string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id="
                                   + QuartersInit.Instance.APP_ID + "&redirect_uri="
                                   + redirectSafeUrl
-                                  + "&scope=email"
+                                  + $"&scope={UnityWebRequest.EscapeURL(scopeString)}"
                                   + $"&code_challenge_method=S256"
                                   + $"&code_challenge={PCKE.CodeChallenge()}";
                                 
@@ -204,30 +189,6 @@ namespace QuartersSDK {
         
 
     
-
-
-
-        public void SignUp(OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
-
-            string url =  BASE_URL + "/guest?token=" + session.GuestToken + "&redirect_uri=" + URL_SCHEME + "&inline=trueresponse_type=code&client_id=" + QuartersInit.Instance.APP_ID;
-
-            this.OnAuthorizationSuccess = OnSuccessDelegate;
-            this.OnAuthorizationFailed = OnFailedDelegate;
-
-
-            //web view authentication
-            QuartersDeepLink.OpenURL(url);
-            QuartersDeepLink.OnDeepLink = DeepLink;
-            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
-            QuartersDeepLink.OnCancelled += delegate {
-                //webview was closed
-                OnFailedDelegate("User canceled");
-                QuartersDeepLink.OnCancelled = null;
-            };
-       
-            
-
-        }
         
 
         public void Deauthorize() {
@@ -291,16 +252,9 @@ namespace QuartersSDK {
 		public void AuthorizationCodeReceived(string code) {
 
 			Debug.Log("Quarters: Authorization code: " + code);
-
-            if (session.IsGuestSession) {
-                //real user authorisation, conversion from guest to real user. Invalidate and destroy guest token
-                session.InvalidateGuestSession();
-            }
-
-
+            
 			StartCoroutine(GetRefreshToken(code));
-		
-		}
+        }
 
 
         //used only in Editor
@@ -404,43 +358,7 @@ namespace QuartersSDK {
 
         #region api calls
 
-
-        public IEnumerator CreateNewGuestUser() {
-
-            Debug.Log("Create new guest account");
-
-            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
-
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            string dataJson = JsonConvert.SerializeObject(data);
-            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-
-
-            WWW www = new WWW(API_URL + "/new-guest", dataBytes, headers);
-            Debug.Log(www.url);
-
-            while (!www.isDone) yield return new WaitForEndOfFrame();
-
-            if (!string.IsNullOrEmpty(www.error)) {
-                Debug.LogError("Create new guest account failed: " + www.error);
-                OnAuthorizationFailed(www.error);
-
-            }
-            else {
-                Debug.Log(www.text);
-
-                //deserialize
-                Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
-                session.GuestToken = responseData["access_token"];
-                session.GuestFirebaseToken = responseData["firebase_token"];
-                OnAuthorizationSuccess();
-
-            }
-
-        }
-
-
+        
 
 
 
@@ -475,6 +393,7 @@ namespace QuartersSDK {
                     Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
                     session.RefreshToken = responseData["refresh_token"];
                     session.AccessToken = responseData["access_token"];
+                    session.SetScope(responseData["scope"]);
 
                     OnAuthorizationSuccess();
                 }
@@ -488,12 +407,6 @@ namespace QuartersSDK {
             
             Debug.Log("Get Access token");
             
-            //skip call for guest users
-            if (session.IsGuestSession) {
-                OnSuccess();
-                yield break;
-            }
-
             if (!session.DoesHaveRefreshToken) {
                 Debug.LogError("Missing refresh token");
                 OnFailed("Missing refresh token");
@@ -532,6 +445,7 @@ namespace QuartersSDK {
                     Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
                     session.RefreshToken = responseData["refresh_token"];
                     session.AccessToken = responseData["access_token"];
+                    session.SetScope(responseData["scope"]);
                     OnSuccess?.Invoke();
                 }
             }
@@ -869,9 +783,9 @@ namespace QuartersSDK {
                 //continue outh forward
                 string url = BASE_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
 
-                if (session.IsGuestSession) {
-                    url += "&firebase_token=" + session.GuestFirebaseToken;
-                }
+                // if (session.IsGuestSession) {
+                //     url += "&firebase_token=" + session.GuestFirebaseToken;
+                // }
 
                 Debug.Log("Transfer authorization url: " + url);
 

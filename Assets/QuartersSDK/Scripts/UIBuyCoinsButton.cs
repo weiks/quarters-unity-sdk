@@ -42,23 +42,9 @@ namespace QuartersSDK.UI {
             Session session = new Session();
 
             CurrencyConfig config = Quarters.Instance.CurrencyConfig;
-
-            if (session.IsGuestSession) {
-
-                string[] buttonNames = new string[] {"Cancel", "Sign up"};
-
-                ModalView.instance.ShowAlert($"Sign up to purchase {config.DisplayNamePlural}",
-                    $"You need to sign up or login to purchase {config.DisplayNamePlural}",
-                    buttonNames, delegate(string buttonTapped) {
-
-                        if (buttonTapped == buttonNames[1]) {
-                            FindObjectOfType<MenuView>().SignUpButtonTapped();
-                        }
-                    });
-            }
-            else {
-                ProceedToPurchase();
-            }
+            
+            ProceedToPurchase();
+            
 
             
             
