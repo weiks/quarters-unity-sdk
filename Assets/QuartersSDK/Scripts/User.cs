@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json;
 
 namespace QuartersSDK {
+    [Serializable]
 	public class User {
 
         public Action OnAccountsLoaded;
 
-        public string userId = "";
-		public string displayName = "";
-		public string email = "";
+        [JsonProperty("id")] public string Id = "";
+        [JsonProperty("gamerTag")] public string GamerTag = "";
+        [JsonProperty("email")] public string Email = "";
+        [JsonProperty("avatar")] public string AvatarUrl = "";
         
         public List<Account> accounts = new List<Account>();
 

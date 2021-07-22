@@ -28,7 +28,7 @@ namespace QuartersSDK.UI {
         
         
         private void RefreshUser(User user) {
-            UsernameText.text = user.displayName;
+            UsernameText.text = user.GamerTag;
         }
         
     }

@@ -45,7 +45,7 @@ namespace QuartersSDK.UI {
             
             CurrencyLogo.sprite = Quarters.Instance.CurrencyConfig.CurrencyIcon;
             
-            UsernameText.text = user.displayName;
+            UsernameText.text = user.GamerTag;
             
 
             Quarters.Instance.CurrentUser.OnAccountsLoaded += AccountsLoaded;

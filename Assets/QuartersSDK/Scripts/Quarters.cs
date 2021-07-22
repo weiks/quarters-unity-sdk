@@ -309,7 +309,7 @@ namespace QuartersSDK {
             
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("amount", expectedAward);
-            data.Add("user", Quarters.Instance.CurrentUser.userId);
+            data.Add("user", Quarters.Instance.CurrentUser.Id);
 
             string dataJson = JsonConvert.SerializeObject(data);
             byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
@@ -919,7 +919,7 @@ namespace QuartersSDK {
 
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("clientId", QuartersInit.Instance.APP_ID);
-            data.Add("userId", CurrentUser.userId);
+            data.Add("userId", CurrentUser.Id);
             data.Add("address", CurrentUser.accounts[0].address);
 
 
