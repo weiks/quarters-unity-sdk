@@ -44,13 +44,8 @@ namespace QuartersSDK.UI {
             CurrencyConfig config = Quarters.Instance.CurrencyConfig;
             
             ProceedToPurchase();
-            
-
-            
-            
-            
-           
         }
+        
         
         private void ProceedToPurchase() {
             ModalView.instance.ShowActivity();
@@ -63,9 +58,10 @@ namespace QuartersSDK.UI {
             ModalView.instance.ShowAlert("Purchase Error", error, new string[] {"OK"}, null);
         }
 
+        
         private void PurchaseSucessfullDelegate(Product product, string txid) {
             //refresh balance
-            Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance newBalance) {
+            Quarters.Instance.GetAccountBalanceCall(delegate(long newBalance) {
                 ModalView.instance.HideActivity();
                 
                 SpendRewardView.Instance.Present(Quantity);

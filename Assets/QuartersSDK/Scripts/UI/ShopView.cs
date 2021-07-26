@@ -42,7 +42,7 @@ namespace QuartersSDK.UI {
         private void PurchaseSucessfullDelegate(Product product, string txid) {
 
             //refresh balance
-            Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance newBalance) {
+            Quarters.Instance.GetAccountBalanceCall(delegate(long newBalance) {
                 ModalView.instance.HideActivity();
 
                 int quantity = QuartersIAP.Instance.ParseCoinsQuantity(product, QuartersInit.Instance.CurrencyConfig);

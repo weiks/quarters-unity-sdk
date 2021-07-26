@@ -27,16 +27,12 @@ namespace QuartersSDK.UI {
             DeltaDiferenceText.text = "";
        
             Quarters.OnUserLoaded += RefreshUser;
-
-            if (Quarters.Instance != null) {
-                if (Quarters.Instance.CurrentUser != null) {
-                    RefreshUser(Quarters.Instance.CurrentUser);
-                }
-            }
+            Quarters.Instance.CurrentUser.OnBalanceUpdated += RefreshCoins;
         }
         
         private void OnDisable() {
             Quarters.OnUserLoaded -= RefreshUser;
+            Quarters.Instance.CurrentUser.OnBalanceUpdated -= RefreshCoins;
         }
 
 
@@ -44,12 +40,8 @@ namespace QuartersSDK.UI {
         private void RefreshUser(User user) {
 
             UsernameText.text = user.GamerTag;
-
-            Quarters.Instance.CurrentUser.OnAccountsLoaded += AccountsLoaded;
-            if (user.accounts.Count > 0) {
-                AccountsLoaded();
-                RefreshCoins(Quarters.Instance.CurrentUser.MainAccount.AvailableCoins);
-            }
+            
+            RefreshCoins(Quarters.Instance.CurrentUser.Balance);
             
             
             //refresh avatar
@@ -69,11 +61,7 @@ namespace QuartersSDK.UI {
         
         
         
-        
-        private void AccountsLoaded() {
-            Quarters.Instance.CurrentUser.MainAccount.OnAvailableCoinsUpdated += RefreshCoins;
-        }
-        
+
         
         private void RefreshCoins(long availableCoins) {
             

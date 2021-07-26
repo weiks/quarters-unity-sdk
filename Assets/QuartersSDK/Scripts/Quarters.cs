@@ -42,15 +42,7 @@ namespace QuartersSDK {
 
 		public delegate void OnUserDetailsSucessDelegate(User user);
 		public delegate void OnUserDetailsFailedDelegate(string error);
-
-        public delegate void OnAccountsSuccessDelegate(List<User.Account> accounts);
-        public delegate void OnAccountsFailedDelegate(string error);
-
-        public delegate void OnAccountBalanceSuccessDelegate(User.Account.Balance balance);
-        public delegate void OnAccountBalanceFailedDelegate(string error);
-
-        public delegate void OnAccounRewardSuccessDelegate(User.Account.Reward reward);
-        public delegate void OnAccountRewardFailedDelegate(string error);
+        
 
         //Transfer
         public delegate void OnTransferSuccessDelegate(string transactionHash);
@@ -218,28 +210,21 @@ namespace QuartersSDK {
             StartCoroutine(GetUserDetailsCall(OnSuccessDelegate, OnFailedDelegate));
 		}
 
-        public void GetAccounts(OnAccountsSuccessDelegate OnSuccessDelegate, OnAccountsFailedDelegate OnFailedDelegate) {
-            StartCoroutine(GetAccountsCall(OnSuccessDelegate, OnFailedDelegate));
+        public void GetAccountBalanceCall(Action<long> OnSuccess, Action<string> OnError) {
+            StartCoroutine(GetAccountBalance(OnSuccess, OnError));
         }
 
-        public void GetAccountBalance(OnAccountBalanceSuccessDelegate OnSuccessDelegate, OnAccountBalanceFailedDelegate OnFailedDelegate) {
-            StartCoroutine(GetAccountBalanceCall(OnSuccessDelegate, OnFailedDelegate));
-        }
-
-        public void GetAccountReward(OnAccounRewardSuccessDelegate OnSuccessDelegate, OnAccountRewardFailedDelegate OnFailedDelegate) {
-            StartCoroutine(GetAccountRewardCall(OnSuccessDelegate, OnFailedDelegate));
-        }
 
 
 
         public void CreateTransfer(TransferAPIRequest request) {
-            if (QuartersInit.Instance.useAutoapproval) {
-                StartCoroutine(CreateAutoApprovedTransferCall(request));
-            }
-            else {
-                //normal transfer
-                StartCoroutine(CreateTransferRequestCall(request));
-            }
+            // if (QuartersInit.Instance.useAutoapproval) {
+            //     StartCoroutine(CreateAutoApprovedTransferCall(request));
+            // }
+            // else {
+            //     //normal transfer
+            //     StartCoroutine(CreateTransferRequestCall(request));
+            // }
 
         }
 
@@ -281,84 +266,84 @@ namespace QuartersSDK {
 
         }
         
-         public void Award(int expectedAmount, OnAwardSuccessDelegate OnSuccessDelegate, OnAwardFailedDelegate OnFailedDelegate) {
-            StartCoroutine(AwardCall(expectedAmount, OnSuccessDelegate, OnFailedDelegate));
-        }
+        //  public void Award(int expectedAmount, OnAwardSuccessDelegate OnSuccessDelegate, OnAwardFailedDelegate OnFailedDelegate) {
+        //     StartCoroutine(AwardCall(expectedAmount, OnSuccessDelegate, OnFailedDelegate));
+        // }
 
         
-        private IEnumerator AwardCall(int expectedAward, OnAwardSuccessDelegate OnSucess, OnAwardFailedDelegate OnFailed) { 
-            
-            //pull user details if dont exist
-            if (CurrentUser == null) {
-                bool isUserDetailsDone = false;
-                string getUserDetailsError = "";
-
-                StartCoroutine(GetUserDetailsCall(delegate (User user) {
-                    //user details loaded
-                    isUserDetailsDone = true;
-
-                }, delegate (string userDetailsError) {
-                    OnFailed("Getting user details failed: " + userDetailsError);
-                    isUserDetailsDone = true;
-                    getUserDetailsError = userDetailsError;
-                }));
-
-                while (!isUserDetailsDone) yield return new WaitForEndOfFrame();
-
-                //error occured, break out of coroutine
-                if (!string.IsNullOrEmpty(getUserDetailsError)) yield break;
-            }
-
-
-            string url = Quarters.Instance.API_URL + "/accounts/" + QuartersInit.Instance.ETHEREUM_ADDRESS + "/transfer";
-            Debug.Log(url);
-            
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("amount", expectedAward);
-            data.Add("user", Quarters.Instance.CurrentUser.Id);
-
-            string dataJson = JsonConvert.SerializeObject(data);
-            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-            
-            Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add("Authorization", QuartersInit.Instance.SERVER_API_TOKEN);
-            header.Add("Content-Type", "application/json;charset=UTF-8");
-            
-            WWW www = new WWW(url, dataBytes, header);
-
-
-            while (!www.isDone) {
-                yield return new WaitForEndOfFrame();
-            }
-
-            Debug.Log(www.text);
-
-            if (!string.IsNullOrEmpty(www.error)) {
-                Debug.LogError(www.text);
-                OnFailed(www.error + " " + www.text);
-            }
-            else {
-                
-                Hashtable ht = JsonConvert.DeserializeObject<Hashtable>(www.text);
-
-                    if (ht.ContainsKey("txId")) {
-                        
-                        GetAccountBalance(delegate(User.Account.Balance balance) {
-                            
-                            OnSucess((string)ht["txId"]);
-                        }, delegate(string error) {
-                            OnFailed(error);
-                        });
-                        
-                    }
-                    else {
-                        Debug.Log(JsonConvert.SerializeObject(www.text));
-                        OnFailed("Unknown error");
-                    }
-            }
- 
-
-        }
+        // private IEnumerator AwardCall(int expectedAward, OnAwardSuccessDelegate OnSucess, OnAwardFailedDelegate OnFailed) { 
+        //     
+        //     //pull user details if dont exist
+        //     if (CurrentUser == null) {
+        //         bool isUserDetailsDone = false;
+        //         string getUserDetailsError = "";
+        //
+        //         StartCoroutine(GetUserDetailsCall(delegate (User user) {
+        //             //user details loaded
+        //             isUserDetailsDone = true;
+        //
+        //         }, delegate (string userDetailsError) {
+        //             OnFailed("Getting user details failed: " + userDetailsError);
+        //             isUserDetailsDone = true;
+        //             getUserDetailsError = userDetailsError;
+        //         }));
+        //
+        //         while (!isUserDetailsDone) yield return new WaitForEndOfFrame();
+        //
+        //         //error occured, break out of coroutine
+        //         if (!string.IsNullOrEmpty(getUserDetailsError)) yield break;
+        //     }
+        //
+        //
+        //     string url = Quarters.Instance.API_URL + "/accounts/" + QuartersInit.Instance.ETHEREUM_ADDRESS + "/transfer";
+        //     Debug.Log(url);
+        //     
+        //     Dictionary<string, object> data = new Dictionary<string, object>();
+        //     data.Add("amount", expectedAward);
+        //     data.Add("user", Quarters.Instance.CurrentUser.Id);
+        //
+        //     string dataJson = JsonConvert.SerializeObject(data);
+        //     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+        //     
+        //     Dictionary<string, string> header = new Dictionary<string, string>();
+        //     header.Add("Authorization", QuartersInit.Instance.SERVER_API_TOKEN);
+        //     header.Add("Content-Type", "application/json;charset=UTF-8");
+        //     
+        //     WWW www = new WWW(url, dataBytes, header);
+        //
+        //
+        //     while (!www.isDone) {
+        //         yield return new WaitForEndOfFrame();
+        //     }
+        //
+        //     Debug.Log(www.text);
+        //
+        //     if (!string.IsNullOrEmpty(www.error)) {
+        //         Debug.LogError(www.text);
+        //         OnFailed(www.error + " " + www.text);
+        //     }
+        //     else {
+        //         
+        //         Hashtable ht = JsonConvert.DeserializeObject<Hashtable>(www.text);
+        //
+        //             if (ht.ContainsKey("txId")) {
+        //                 
+        //                 GetAccountBalance(delegate(User.Account.Balance balance) {
+        //                     
+        //                     OnSucess((string)ht["txId"]);
+        //                 }, delegate(string error) {
+        //                     OnFailed(error);
+        //                 });
+        //                 
+        //             }
+        //             else {
+        //                 Debug.Log(JsonConvert.SerializeObject(www.text));
+        //                 OnFailed("Unknown error");
+        //             }
+        //     }
+        //
+        //
+        // }
 
 
 
@@ -538,97 +523,14 @@ namespace QuartersSDK {
 
 
 
-        private IEnumerator GetAccountsCall(OnAccountsSuccessDelegate OnSucess, OnAccountsFailedDelegate OnFailed, bool isRetry = false) {
-
-            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + session.AccessToken);
-
-            //pull user details if dont exist
-            if (CurrentUser == null) {
-                bool isUserDetailsDone = false;
-                string getUserDetailsError = "";
-
-                StartCoroutine(GetUserDetailsCall(delegate (User user) {
-                    //user details loaded
-                    isUserDetailsDone = true;
-
-                }, delegate (string userDetailsError) {
-                    OnFailed("Getting user details failed: " + userDetailsError);
-                    isUserDetailsDone = true;
-                    getUserDetailsError = userDetailsError;
-                }));
-
-                while (!isUserDetailsDone) yield return new WaitForEndOfFrame();
-
-                //error occured, break out of coroutine
-                if (!string.IsNullOrEmpty(getUserDetailsError)) yield break;
-            }
-
-            WWW www = new WWW(API_URL + "/accounts", null, headers);
-            yield return www;
-
-            while (!www.isDone) yield return new WaitForEndOfFrame();
-
-            if (!string.IsNullOrEmpty(www.error)) {
-
-                if (!isRetry) {
-                    //refresh access code and retry this call in case access code expired
-                    StartCoroutine(GetAccessToken(delegate {
-
-                        StartCoroutine(GetAccountsCall(OnSucess, OnFailed, true));
-
-                    }, delegate (string error) {
-                        OnFailed(www.error);
-                    }));
-                } 
-                else {
-                    Debug.LogError(www.error);
-                    OnFailed(www.error);
-                }
-            }
-            else {
-
-                Debug.Log(www.text);
-                CurrentUser.accounts = JsonConvert.DeserializeObject<List<User.Account>>(www.text);
-                CurrentUser.OnAccountsLoaded?.Invoke();
-                OnSucess(CurrentUser.accounts);
-
-            }
-        }
+   
 
 
 
 
-        private IEnumerator GetAccountBalanceCall(OnAccountBalanceSuccessDelegate OnSucess, OnAccountBalanceFailedDelegate OnFailed, bool isRetry = false) {
-
-            bool areAccountsDone = false;
-            string accountsLoadingError = "";
-
-            if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
-                Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
-                    //accounts loaded
-                    areAccountsDone = true;
-
-                }, delegate (string getAccountsError) {
-                    OnFailed("Getting user accounts failed: " + getAccountsError);
-                    areAccountsDone = true;
-                    accountsLoadingError = getAccountsError;
-                });
-
-                while (!areAccountsDone) yield return new WaitForEndOfFrame();
-
-                //error occured, break out of coroutine
-                if (!string.IsNullOrEmpty(accountsLoadingError)) yield break;
-            }
-
-            if (CurrentUser.accounts.Count < 1) {
-                OnFailed("User account not loaded");
-                yield break;
-            }
-
-            User.Account account = CurrentUser.accounts[0];
-
-            string url = API_URL + "/accounts/" + account.address + "/balance";
+        private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
+            
+            string url = API_URL + "wallets/@me";
 
             WWW www = new WWW(url, null, AuthorizationHeader);
             yield return www;
@@ -640,8 +542,7 @@ namespace QuartersSDK {
                 if (!isRetry) {
                     //refresh access code and retry this call in case access code expired
                     StartCoroutine(GetAccessToken(delegate {
-
-                        StartCoroutine(GetAccountBalanceCall(OnSucess, OnFailed, true));
+                        StartCoroutine(GetAccountBalance(OnSuccess, OnFailed, true));
 
                     }, delegate (string error) {
                         OnFailed(www.error);
@@ -655,8 +556,7 @@ namespace QuartersSDK {
             else {
 
                 Debug.Log(www.text);
-                account.CurrentBalance = JsonConvert.DeserializeObject<User.Account.Balance>(www.text);
-                OnSucess(account.CurrentBalance);
+           
 
             }
 
@@ -665,69 +565,7 @@ namespace QuartersSDK {
 
 
 
-        private IEnumerator GetAccountRewardCall(OnAccounRewardSuccessDelegate OnSucess, OnAccountRewardFailedDelegate OnFailed, bool isRetry = false) {
-
-            bool areAccountsDone = false;
-            string accountsLoadingError = "";
-
-            if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
-                Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
-                    //accounts loaded
-                    areAccountsDone = true;
-
-                }, delegate (string getAccountsError) {
-                    OnFailed("Getting user accounts failed: " + getAccountsError);
-                    areAccountsDone = true;
-                    accountsLoadingError = getAccountsError;
-                });
-
-                while (!areAccountsDone) yield return new WaitForEndOfFrame();
-
-                //error occured, break out of coroutine
-                if (!string.IsNullOrEmpty(accountsLoadingError)) yield break;
-            }
-
-            if (CurrentUser.accounts.Count < 1) {
-                OnFailed("User account not loaded");
-                yield break;
-            }
-
-            User.Account account = CurrentUser.accounts[0];
-
-            string url = API_URL + "/accounts/" + account.address + "/rewards";
-
-            WWW www = new WWW(url, null, AuthorizationHeader);
-            yield return www;
-
-            while (!www.isDone) yield return new WaitForEndOfFrame();
-
-            if (!string.IsNullOrEmpty(www.error)) {
-
-                if (!isRetry) {
-                    //refresh access code and retry this call in case access code expired
-                    StartCoroutine(GetAccessToken(delegate {
-
-                        StartCoroutine(GetAccountRewardCall(OnSucess, OnFailed, true));
-
-                    }, delegate (string error) {
-                        OnFailed(www.error);
-                    }));
-                }
-                else {
-                    Debug.LogError(www.error);
-                    OnFailed(www.error);
-                }
-            }
-            else {
-
-                Debug.Log(www.text);
-                account.CurrentReward = JsonConvert.DeserializeObject<User.Account.Reward>(www.text);
-                OnSucess(account.CurrentReward);
-
-            }
-
-        }
-
+      
 
 
         private void AddOrSwapAPITransferRequest(TransferAPIRequest request) {
@@ -838,179 +676,179 @@ namespace QuartersSDK {
 
 
 
-        private IEnumerator CreateAutoApprovedTransferCall(TransferAPIRequest request, bool isRetry = false) {
-        
-            Debug.Log("CreateAutoApprovedTransfer");
-            
-            if (string.IsNullOrEmpty(session.AccessToken)) {
-                yield return StartCoroutine(GetAccessToken(null, null));
-            }
-            
-
-            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + session.AccessToken);
-            
-            Debug.Log("Headers: " + JsonConvert.SerializeObject(headers));
-
-
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("tokens", request.tokens);
-            if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
-            data.Add("app_id", QuartersInit.Instance.APP_ID);
-
-
-            string dataJson = JsonConvert.SerializeObject(data);
-            Debug.Log(dataJson);
-            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-
-
-            WWW www = new WWW(API_URL + "/requests", dataBytes, headers);
-            Debug.Log(www.url);
-
-            while (!www.isDone) yield return new WaitForEndOfFrame();
-
-            
-            if (!string.IsNullOrEmpty(www.error)) {
-                Debug.Log(www.error);
-
-                if (www.error == Error.UNAUTHORIZED_ERROR && !isRetry) {
-                
-                    //token expired
-                    StartCoroutine(GetAccessToken(delegate {
-                        
-                        StartCoroutine(CreateAutoApprovedTransferCall(request, true));
-                        
-                    }, delegate(string error) {
-                        request.failedDelegate(error);
-                    }));
-                  
-                }
-                else {
-                    //failed, fallback to normal request
-                    StartCoroutine(CreateTransferRequestCall(request, true));
-                }
-            }
-            else {
-                Debug.Log(www.text);
-
-                string response = www.text;
-                Debug.Log("Response: " + response);
-
-                TransferRequest transferRequest = new TransferRequest(response);
-
-                request.requestId = transferRequest.id;
-                Debug.Log("request id is: " + transferRequest.id);
-                AddOrSwapAPITransferRequest(request);
-
-                StartCoroutine(AutoApproveTransfer(request));
-
-
-            }
-        }
-
-
+        // private IEnumerator CreateAutoApprovedTransferCall(TransferAPIRequest request, bool isRetry = false) {
+        //
+        //     Debug.Log("CreateAutoApprovedTransfer");
+        //     
+        //     if (string.IsNullOrEmpty(session.AccessToken)) {
+        //         yield return StartCoroutine(GetAccessToken(null, null));
+        //     }
+        //     
+        //
+        //     Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
+        //     headers.Add("Authorization", "Bearer " + session.AccessToken);
+        //     
+        //     Debug.Log("Headers: " + JsonConvert.SerializeObject(headers));
+        //
+        //
+        //     Dictionary<string, object> data = new Dictionary<string, object>();
+        //     data.Add("tokens", request.tokens);
+        //     if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
+        //     data.Add("app_id", QuartersInit.Instance.APP_ID);
+        //
+        //
+        //     string dataJson = JsonConvert.SerializeObject(data);
+        //     Debug.Log(dataJson);
+        //     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+        //
+        //
+        //     WWW www = new WWW(API_URL + "/requests", dataBytes, headers);
+        //     Debug.Log(www.url);
+        //
+        //     while (!www.isDone) yield return new WaitForEndOfFrame();
+        //
+        //     
+        //     if (!string.IsNullOrEmpty(www.error)) {
+        //         Debug.Log(www.error);
+        //
+        //         if (www.error == Error.UNAUTHORIZED_ERROR && !isRetry) {
+        //         
+        //             //token expired
+        //             StartCoroutine(GetAccessToken(delegate {
+        //                 
+        //                 StartCoroutine(CreateAutoApprovedTransferCall(request, true));
+        //                 
+        //             }, delegate(string error) {
+        //                 request.failedDelegate(error);
+        //             }));
+        //           
+        //         }
+        //         else {
+        //             //failed, fallback to normal request
+        //             StartCoroutine(CreateTransferRequestCall(request, true));
+        //         }
+        //     }
+        //     else {
+        //         Debug.Log(www.text);
+        //
+        //         string response = www.text;
+        //         Debug.Log("Response: " + response);
+        //
+        //         TransferRequest transferRequest = new TransferRequest(response);
+        //
+        //         request.requestId = transferRequest.id;
+        //         Debug.Log("request id is: " + transferRequest.id);
+        //         AddOrSwapAPITransferRequest(request);
+        //
+        //         StartCoroutine(AutoApproveTransfer(request));
+        //
+        //
+        //     }
+        // }
 
 
 
-        private IEnumerator AutoApproveTransfer(TransferAPIRequest request) {
-            
-            
-            bool areAccountsDone = false;
-            string accountsLoadingError = "";
-            
-            if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
-                Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
-                    //accounts loaded
-                    areAccountsDone = true;
-
-                }, delegate (string getAccountsError) {
-                    request.failedDelegate("Getting user accounts failed: " + getAccountsError);
-                    areAccountsDone = true;
-                    accountsLoadingError = getAccountsError;
-                });
-
-                while (!areAccountsDone) yield return new WaitForEndOfFrame();
-
-                //error occured, break out of coroutine
-                if (!string.IsNullOrEmpty(accountsLoadingError)) yield break;
-            }
-
-            if (CurrentUser.accounts.Count < 1) {
-                request.failedDelegate("User account not loaded");
-                yield break;
-            }
-
-            Debug.Log("AutoApproveTransfer");
-
-            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
 
 
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("clientId", QuartersInit.Instance.APP_ID);
-            data.Add("userId", CurrentUser.Id);
-            data.Add("address", CurrentUser.accounts[0].address);
-
-
-            string dataJson = JsonConvert.SerializeObject(data);
-
-            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-
-
-            WWW www = new WWW(API_URL + "/requests/" + request.requestId + "/autoApprove", dataBytes, headers);
-            Debug.Log(JsonConvert.SerializeObject(headers));
-            Debug.Log(www.url);
-            Debug.Log(dataJson);
-
-            while (!www.isDone) yield return new WaitForEndOfFrame();
-
-            if (!string.IsNullOrEmpty(www.error)) {
-                Debug.Log(www.text);
-                if (www.error.StartsWith("40")) {
-
-                    //bad request check for reason
-                    if (www.error.StartsWith("400") && !string.IsNullOrEmpty(www.text)) {
-                        //bad request, possibly out of coins
-                        Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
-                        if (responseData.ContainsKey("message")) {
-                            request.failedDelegate(responseData["message"]);
-                        }
-                        else {
-                            StartCoroutine(CreateTransferRequestCall(request));
-                        }
-                    }
-                    else {
-                        //fallback to normal transfer automatically
-                        StartCoroutine(CreateTransferRequestCall(request));
-                    }
-                }
-                else {
-                    Debug.LogError(www.error);
-                    request.failedDelegate(www.error);
-                }
-
-            }
-            else {
-                Debug.Log(www.text);
-
-                string response = www.text;
-                Debug.Log("Autoapprove response: " + response);
-
-                Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string,string>>(response);
-
-                request.txId = responseData["txId"];
-
-                Debug.Log("Autoapproved request txId is: " + request.txId);
-                
-                GetAccountBalance(delegate(User.Account.Balance balance) {
-                            
-                    request.successDelegate(request.txId);
-                    
-                }, delegate(string error) {
-                    request.failedDelegate(error);
-                });
-            }
-        }
+        // private IEnumerator AutoApproveTransfer(TransferAPIRequest request) {
+        //     
+        //     
+        //     bool areAccountsDone = false;
+        //     string accountsLoadingError = "";
+        //     
+        //     if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
+        //         Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
+        //             //accounts loaded
+        //             areAccountsDone = true;
+        //
+        //         }, delegate (string getAccountsError) {
+        //             request.failedDelegate("Getting user accounts failed: " + getAccountsError);
+        //             areAccountsDone = true;
+        //             accountsLoadingError = getAccountsError;
+        //         });
+        //
+        //         while (!areAccountsDone) yield return new WaitForEndOfFrame();
+        //
+        //         //error occured, break out of coroutine
+        //         if (!string.IsNullOrEmpty(accountsLoadingError)) yield break;
+        //     }
+        //
+        //     if (CurrentUser.accounts.Count < 1) {
+        //         request.failedDelegate("User account not loaded");
+        //         yield break;
+        //     }
+        //
+        //     Debug.Log("AutoApproveTransfer");
+        //
+        //     Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
+        //     headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
+        //
+        //
+        //     Dictionary<string, object> data = new Dictionary<string, object>();
+        //     data.Add("clientId", QuartersInit.Instance.APP_ID);
+        //     data.Add("userId", CurrentUser.Id);
+        //     data.Add("address", CurrentUser.accounts[0].address);
+        //
+        //
+        //     string dataJson = JsonConvert.SerializeObject(data);
+        //
+        //     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
+        //
+        //
+        //     WWW www = new WWW(API_URL + "/requests/" + request.requestId + "/autoApprove", dataBytes, headers);
+        //     Debug.Log(JsonConvert.SerializeObject(headers));
+        //     Debug.Log(www.url);
+        //     Debug.Log(dataJson);
+        //
+        //     while (!www.isDone) yield return new WaitForEndOfFrame();
+        //
+        //     if (!string.IsNullOrEmpty(www.error)) {
+        //         Debug.Log(www.text);
+        //         if (www.error.StartsWith("40")) {
+        //
+        //             //bad request check for reason
+        //             if (www.error.StartsWith("400") && !string.IsNullOrEmpty(www.text)) {
+        //                 //bad request, possibly out of coins
+        //                 Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
+        //                 if (responseData.ContainsKey("message")) {
+        //                     request.failedDelegate(responseData["message"]);
+        //                 }
+        //                 else {
+        //                     StartCoroutine(CreateTransferRequestCall(request));
+        //                 }
+        //             }
+        //             else {
+        //                 //fallback to normal transfer automatically
+        //                 StartCoroutine(CreateTransferRequestCall(request));
+        //             }
+        //         }
+        //         else {
+        //             Debug.LogError(www.error);
+        //             request.failedDelegate(www.error);
+        //         }
+        //
+        //     }
+        //     else {
+        //         Debug.Log(www.text);
+        //
+        //         string response = www.text;
+        //         Debug.Log("Autoapprove response: " + response);
+        //
+        //         Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string,string>>(response);
+        //
+        //         request.txId = responseData["txId"];
+        //
+        //         Debug.Log("Autoapproved request txId is: " + request.txId);
+        //         
+        //         GetAccountBalance(delegate(User.Account.Balance balance) {
+        //                     
+        //             request.successDelegate(request.txId);
+        //             
+        //         }, delegate(string error) {
+        //             request.failedDelegate(error);
+        //         });
+        //     }
+        // }
 
 
 
@@ -1086,7 +924,7 @@ namespace QuartersSDK {
                 else {
 
                     
-                    GetAccountBalance(delegate(User.Account.Balance balance) {
+                    GetAccountBalance(delegate(long balance) {
                         transferRequest.txId = urlParams["txId"];
                         Debug.Log("tx id:" + transferRequest.txId);
 
