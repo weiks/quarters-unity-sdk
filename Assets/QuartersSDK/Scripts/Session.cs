@@ -64,7 +64,10 @@ namespace QuartersSDK {
             foreach (string scope in split) {
                 Scopes.Add((Scope)Enum.Parse(typeof(Scope), scope));
             }
+        }
 
+        public bool HasScopeFor(string scope) {
+            return Scopes.Contains((Scope)Enum.Parse(typeof(Scope), scope));
         }
 
 

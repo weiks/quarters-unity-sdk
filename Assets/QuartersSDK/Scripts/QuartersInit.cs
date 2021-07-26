@@ -19,10 +19,12 @@ namespace QuartersSDK {
 		public Environment environment = Environment.production;
         [Header("Configuration:")]
         public bool useAutoapproval = false;
-        public List<Scope> Scopes = new List<Scope>() {
+        public List<Scope> DefaultScope = new List<Scope>() {
+	        Scope.identity,
 	        Scope.email,
 	        Scope.transactions,
-	        Scope.events
+	        Scope.events,
+	        Scope.wallet
         };
         
         public CurrencyConfig CurrencyConfig;

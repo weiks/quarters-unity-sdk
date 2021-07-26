@@ -28,6 +28,8 @@ namespace QuartersSDK.UI {
        
             Quarters.OnUserLoaded += RefreshUser;
             Quarters.Instance.CurrentUser.OnBalanceUpdated += RefreshCoins;
+
+            RefreshUser(Quarters.Instance.CurrentUser);
         }
         
         private void OnDisable() {
@@ -55,6 +57,10 @@ namespace QuartersSDK.UI {
 
             }, null));
 
+            
+            Quarters.Instance.GetAccountBalanceCall(RefreshCoins, delegate(string error) {
+                Debug.LogError(error);
+            });
 
         }
 

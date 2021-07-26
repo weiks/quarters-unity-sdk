@@ -139,7 +139,7 @@ namespace QuartersSDK.UI {
 		
 
 		public void ButtonLoginTapped() {
-			Quarters.Instance.Authorize(QuartersInit.Instance.Scopes, AuthorizationSuccess, AuthorizationFailed);
+			Quarters.Instance.Authorize(QuartersInit.Instance.DefaultScope, AuthorizationSuccess, AuthorizationFailed);
 		}
 
 	}

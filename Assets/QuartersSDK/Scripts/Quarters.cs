@@ -530,34 +530,39 @@ namespace QuartersSDK {
 
         private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
             
-            string url = API_URL + "wallets/@me";
+            string url = API_URL + "wallets/me";
+            
+            using (UnityWebRequest request = UnityWebRequest.Get(url)) {
+                request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
+                // Request and wait for the desired page.
+                yield return request.SendWebRequest();
 
-            WWW www = new WWW(url, null, AuthorizationHeader);
-            yield return www;
 
-            while (!www.isDone) yield return new WaitForEndOfFrame();
+                if (request.isNetworkError || request.isHttpError) {
+                    Debug.LogError(request.error);
+                    Debug.LogError(request.downloadHandler.text);
 
-            if (!string.IsNullOrEmpty(www.error)) {
-                
-                if (!isRetry) {
-                    //refresh access code and retry this call in case access code expired
-                    StartCoroutine(GetAccessToken(delegate {
-                        StartCoroutine(GetAccountBalance(OnSuccess, OnFailed, true));
+                    if (!isRetry) {
+                        //refresh access code and retry this call in case access code expired
+                        StartCoroutine(GetAccessToken(delegate {
+                            StartCoroutine(GetAccountBalance(OnSuccess, OnFailed, true));
 
-                    }, delegate (string error) {
-                        OnFailed(www.error);
-                    }));
-                } 
-                else {
-                    Debug.LogError(www.error);
-                    OnFailed(www.error);
+                        }, delegate (string error) {
+                            OnFailed(request.error);
+                        }));
+                    }
+                    else {
+                        Debug.LogError(request.error);
+                        OnFailed(request.error);
+                    }
                 }
-            }
-            else {
+                else {
 
-                Debug.Log(www.text);
-           
+                    Debug.Log(request.downloadHandler.text);
+        
 
+                }
             }
 
         }

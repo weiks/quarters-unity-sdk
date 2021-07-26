@@ -41,7 +41,8 @@ namespace QuartersSDK {
         identity,
         email,
         transactions,
-        events
+        events,
+        wallet
     }
     
 }
