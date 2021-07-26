@@ -148,7 +148,13 @@ namespace QuartersSDK {
 			this.OnAuthorizationFailed = OnFailedDelegate;
 
             if (IsAuthorized) {
-                this.OnAuthorizationSuccess();
+
+                StartCoroutine(GetAccessToken(delegate {
+                    OnSuccessDelegate?.Invoke();
+                }, delegate(string error) {
+                    OnFailedDelegate?.Invoke(error);
+                }));
+                
                 return;
             }
 
@@ -431,13 +437,15 @@ namespace QuartersSDK {
                 if (request.isNetworkError || request.isHttpError) {
                     Debug.LogError(request.error);
                     Debug.LogError(request.downloadHandler.text);
+                    
+                    Error error = new Error(request.downloadHandler.text);
 
-                    if (request.error == Error.UNAUTHORIZED_ERROR) {
+                    if (error.ErrorDescription == Error.INVALID_TOKEN) {
                         //dispose invalid refresh token
                         session.RefreshToken = "";
                     }
                     
-                    OnFailed?.Invoke(request.error);
+                    OnFailed?.Invoke(error.ErrorDescription);
                 }
                 else {
                     Debug.Log("GetAccessToken result " + request.downloadHandler.text);

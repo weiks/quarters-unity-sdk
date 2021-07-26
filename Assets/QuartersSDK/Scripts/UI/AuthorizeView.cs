@@ -97,7 +97,13 @@ namespace QuartersSDK.UI {
 			}
 
 			Debug.LogError("AuthorizationFailed: " + error);
-			ModalView.instance.ShowAlert("Authorization failed", error, new string[] {"Try again"}, null);
+
+			if (error == Error.INVALID_TOKEN) {
+				ModalView.instance.ShowAlert("Authorization failed", "Invalid session, please log in again", new string[] {"OK"}, null);
+			}
+			else {
+				ModalView.instance.ShowAlert("Authorization failed", error, new string[] {"Try again"}, null);
+			}
 		}
 
 

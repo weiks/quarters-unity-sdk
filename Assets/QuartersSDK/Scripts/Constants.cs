@@ -1,12 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace QuartersSDK {
-    public static class Error {
+    public class Error {
 
         public static string UNAUTHORIZED_ERROR = "401 Unauthorized";
+        public static string INVALID_TOKEN = "Invalid `refresh_token`";
 
+
+        [JsonProperty("error")] public string ErrorMessage;
+        [JsonProperty("error_description")] public string ErrorDescription;
+        
+        public Error() {}
+
+        public Error(string json) {
+            Error error = JsonConvert.DeserializeObject<Error>(json);
+            this.ErrorMessage = error.ErrorMessage;
+            this.ErrorDescription = error.ErrorDescription;
+        }
+        
     }
 
     public enum Environment {
