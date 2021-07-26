@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 namespace QuartersSDK.UI {
     public class UIUser : MonoBehaviour {
-
-        public Image CurrencyLogo;
+        
+        public Image Avatar;
         public Text UsernameText;
         public Text CoinsCount;
         public Text DeltaDiferenceText;
@@ -42,19 +42,33 @@ namespace QuartersSDK.UI {
 
         
         private void RefreshUser(User user) {
-            
-            CurrencyLogo.sprite = Quarters.Instance.CurrencyConfig.CurrencyIcon;
-            
+
             UsernameText.text = user.GamerTag;
-            
 
             Quarters.Instance.CurrentUser.OnAccountsLoaded += AccountsLoaded;
             if (user.accounts.Count > 0) {
                 AccountsLoaded();
                 RefreshCoins(Quarters.Instance.CurrentUser.MainAccount.AvailableCoins);
             }
+            
+            
+            //refresh avatar
+            StartCoroutine(Quarters.Instance.GetAvatar(delegate(Texture avatar) {
+
+                Rect rect = new Rect(0.0f, 0.0f, avatar.width, avatar.height);
+                
+                Sprite avatarSprite = Sprite.Create((Texture2D)avatar, rect, new Vector2(0.5f, 0.5f));
+
+                Avatar.sprite = avatarSprite;
+
+            }, null));
+
+
         }
 
+        
+        
+        
         
         private void AccountsLoaded() {
             Quarters.Instance.CurrentUser.MainAccount.OnAvailableCoinsUpdated += RefreshCoins;

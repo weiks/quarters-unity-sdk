@@ -14,6 +14,8 @@ namespace QuartersSDK {
         [JsonProperty("gamerTag")] public string GamerTag = "";
         [JsonProperty("email")] public string Email = "";
         [JsonProperty("avatar")] public string AvatarUrl = "";
+
+        public Texture AvatarTexture;
         
         public List<Account> accounts = new List<Account>();
 
