@@ -16,10 +16,7 @@ namespace QuartersSDK.UI {
             get { return this.GetComponent<Button>(); }
         }
 
-
-        private void Awake() {
-            Assert.IsTrue(Price > 0, $"Incorrect Price: {Price} UIPayButton Price must be larger than zero");
-        }
+        
 
 
         void Start() {
@@ -34,8 +31,10 @@ namespace QuartersSDK.UI {
             
             ModalView.instance.ShowActivity();
             
-            TransferAPIRequest transferRequest = new TransferAPIRequest(Price, OnTransferSuccessful, OnTransferFailed);
-            Quarters.Instance.CreateTransfer(transferRequest);
+            Quarters.Instance.MakeTransactionCall((long)Price, "Example transaction", null, delegate(string error) {
+                ModalView.instance.HideActivity();
+            });
+
         }
         
         

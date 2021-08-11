@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Text;
 using ImaginationOverflow.UniversalDeepLinking;
 using Newtonsoft.Json.Linq;
 using QuartersSDK.UI;
@@ -215,6 +216,10 @@ namespace QuartersSDK {
             StartCoroutine(GetAccountBalance(OnSuccess, OnError));
         }
 
+        
+        public void MakeTransactionCall(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError) {
+            StartCoroutine(MakeTransaction(coinsQuantity, description, OnSuccess, OnError));
+        }
 
 
 
@@ -568,6 +573,56 @@ namespace QuartersSDK {
         }
 
 
+        
+        public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) {
+            
+            Debug.Log("MakeTransaction");
+            
+            if (!session.DoesHaveRefreshToken) {
+                Debug.LogError("Missing refresh token");
+                OnFailed("Missing refresh token");
+                yield break;
+            }
+
+            string url = API_URL + "/transactions";
+            Debug.Log("Transaction url: " + url);
+            
+            Dictionary<string, object> postData = new Dictionary<string, object>();
+            postData.Add("creditUser", coinsQuantity.ToString());
+            postData.Add("description", description);
+
+            string json = JsonConvert.SerializeObject(postData);
+
+
+            using (UnityWebRequest request = UnityWebRequest.Post(url, json)) {
+                request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
+                request.SetRequestHeader("Content-Type", "application/json");
+                
+                // byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+                // request.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
+                
+                yield return request.SendWebRequest();
+
+                if (request.isNetworkError || request.isHttpError) {
+                    Debug.LogError(request.error);
+                    Debug.LogError(request.downloadHandler.text);
+                    
+                    Error error = new Error(request.downloadHandler.text);
+
+                    if (error.ErrorDescription == Error.INVALID_TOKEN) {
+                        //dispose invalid refresh token
+                        session.RefreshToken = "";
+                    }
+                    
+                    OnFailed?.Invoke(error.ErrorDescription);
+                }
+                else {
+                    Debug.Log(request.downloadHandler.text);
+                    
+                    OnSuccess?.Invoke();
+                }
+            }
+        }
 
 
       

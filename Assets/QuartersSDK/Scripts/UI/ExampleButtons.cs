@@ -8,8 +8,7 @@ namespace QuartersSDK.UI {
 
         public void PayQuarters(int price) {
             
-            // Quarters.Instance.CreateTransfer();
-            
+           
             
         }
         
