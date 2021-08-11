@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using ImaginationOverflow.UniversalDeepLinking;
+using Newtonsoft.Json.Linq;
 using QuartersSDK.UI;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -530,10 +531,10 @@ namespace QuartersSDK {
 
         private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
             
-            string url = API_URL + "wallets/me";
+            string url = API_URL + "/wallets/@me";
             
             using (UnityWebRequest request = UnityWebRequest.Get(url)) {
-                request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                // request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
                 // Request and wait for the desired page.
                 yield return request.SendWebRequest();
@@ -558,10 +559,9 @@ namespace QuartersSDK {
                     }
                 }
                 else {
-
                     Debug.Log(request.downloadHandler.text);
-        
-
+                    JObject responseData = JsonConvert.DeserializeObject<JObject>(request.downloadHandler.text);
+                    CurrentUser.Balance = responseData["balance"].ToObject<long>();
                 }
             }
 
