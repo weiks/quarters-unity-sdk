@@ -70,13 +70,8 @@ namespace QuartersSDK.UI {
 
         
         private void RefreshCoins(long availableCoins) {
-            
-            if (currentCoins != availableCoins) {
-                //coins updated
-                CoinsCount.rectTransform.DOPunchScale(Vector3.one * 0.5f, 0.3f, 0, 0);
-            }
 
-            CoinsCount.text = String.Format("{0:n0}", availableCoins);;
+            CoinsCount.text = String.Format("{0:n0}", availableCoins);
             currentCoins = availableCoins;
         }
 
@@ -109,9 +104,17 @@ namespace QuartersSDK.UI {
             Vector2 hiddenPosition = new Vector2(rectTransform.anchoredPosition.x, rectTransform.rect.height - topMargin);
             rectTransform.anchoredPosition = hiddenPosition;
 
+            CoinsCount.text = String.Format("{0:n0}", currentCoins - delta);
+            
+            
             Sequence sequence = DOTween.Sequence();
             sequence.Append(rectTransform.DOAnchorPosY(0, 0.33f));
-            sequence.AppendInterval(2f);
+            sequence.AppendInterval(0.5f);
+            sequence.AppendCallback(delegate {
+                CoinsCount.text = String.Format("{0:n0}", currentCoins);
+            });
+            sequence.Append(CoinsCount.rectTransform.DOPunchScale(Vector3.one * 0.5f, 0.3f, 0, 0));
+            sequence.AppendInterval(1f);
             sequence.Append(rectTransform.DOAnchorPosY(hiddenPosition.y, 0.33f));
 
         }

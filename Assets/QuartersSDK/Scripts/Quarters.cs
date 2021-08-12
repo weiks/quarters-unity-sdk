@@ -49,11 +49,8 @@ namespace QuartersSDK {
         //Transfer
         public delegate void OnTransferSuccessDelegate(string transactionHash);
         public delegate void OnTransferFailedDelegate(string error);
-        
-        public delegate void OnAwardSuccessDelegate(string transactionHash);
-        public delegate void OnAwardFailedDelegate(string error);
-        
-        
+
+
 
         public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
 
@@ -222,30 +219,11 @@ namespace QuartersSDK {
         }
 
 
-
-        public void CreateTransfer(TransferAPIRequest request) {
-            // if (QuartersInit.Instance.useAutoapproval) {
-            //     StartCoroutine(CreateAutoApprovedTransferCall(request));
-            // }
-            // else {
-            //     //normal transfer
-            //     StartCoroutine(CreateTransferRequestCall(request));
-            // }
-
-        }
-
+        
 
         #endregion
 
-        
-        
-        
-        
-        
-        
-
-
-
+    
 		public void AuthorizationCodeReceived(string code) {
 
 			Debug.Log("Quarters: Authorization code: " + code);
@@ -271,86 +249,7 @@ namespace QuartersSDK {
             }));
 
         }
-        
-        //  public void Award(int expectedAmount, OnAwardSuccessDelegate OnSuccessDelegate, OnAwardFailedDelegate OnFailedDelegate) {
-        //     StartCoroutine(AwardCall(expectedAmount, OnSuccessDelegate, OnFailedDelegate));
-        // }
-
-        
-        // private IEnumerator AwardCall(int expectedAward, OnAwardSuccessDelegate OnSucess, OnAwardFailedDelegate OnFailed) { 
-        //     
-        //     //pull user details if dont exist
-        //     if (CurrentUser == null) {
-        //         bool isUserDetailsDone = false;
-        //         string getUserDetailsError = "";
-        //
-        //         StartCoroutine(GetUserDetailsCall(delegate (User user) {
-        //             //user details loaded
-        //             isUserDetailsDone = true;
-        //
-        //         }, delegate (string userDetailsError) {
-        //             OnFailed("Getting user details failed: " + userDetailsError);
-        //             isUserDetailsDone = true;
-        //             getUserDetailsError = userDetailsError;
-        //         }));
-        //
-        //         while (!isUserDetailsDone) yield return new WaitForEndOfFrame();
-        //
-        //         //error occured, break out of coroutine
-        //         if (!string.IsNullOrEmpty(getUserDetailsError)) yield break;
-        //     }
-        //
-        //
-        //     string url = Quarters.Instance.API_URL + "/accounts/" + QuartersInit.Instance.ETHEREUM_ADDRESS + "/transfer";
-        //     Debug.Log(url);
-        //     
-        //     Dictionary<string, object> data = new Dictionary<string, object>();
-        //     data.Add("amount", expectedAward);
-        //     data.Add("user", Quarters.Instance.CurrentUser.Id);
-        //
-        //     string dataJson = JsonConvert.SerializeObject(data);
-        //     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-        //     
-        //     Dictionary<string, string> header = new Dictionary<string, string>();
-        //     header.Add("Authorization", QuartersInit.Instance.SERVER_API_TOKEN);
-        //     header.Add("Content-Type", "application/json;charset=UTF-8");
-        //     
-        //     WWW www = new WWW(url, dataBytes, header);
-        //
-        //
-        //     while (!www.isDone) {
-        //         yield return new WaitForEndOfFrame();
-        //     }
-        //
-        //     Debug.Log(www.text);
-        //
-        //     if (!string.IsNullOrEmpty(www.error)) {
-        //         Debug.LogError(www.text);
-        //         OnFailed(www.error + " " + www.text);
-        //     }
-        //     else {
-        //         
-        //         Hashtable ht = JsonConvert.DeserializeObject<Hashtable>(www.text);
-        //
-        //             if (ht.ContainsKey("txId")) {
-        //                 
-        //                 GetAccountBalance(delegate(User.Account.Balance balance) {
-        //                     
-        //                     OnSucess((string)ht["txId"]);
-        //                 }, delegate(string error) {
-        //                     OnFailed(error);
-        //                 });
-        //                 
-        //             }
-        //             else {
-        //                 Debug.Log(JsonConvert.SerializeObject(www.text));
-        //                 OnFailed("Unknown error");
-        //             }
-        //     }
-        //
-        //
-        // }
-
+   
 
 
         #region api calls
@@ -567,6 +466,7 @@ namespace QuartersSDK {
                     Debug.Log(request.downloadHandler.text);
                     JObject responseData = JsonConvert.DeserializeObject<JObject>(request.downloadHandler.text);
                     CurrentUser.Balance = responseData["balance"].ToObject<long>();
+                    OnSuccess(CurrentUser.Balance);
                 }
             }
 
@@ -588,40 +488,43 @@ namespace QuartersSDK {
             Debug.Log("Transaction url: " + url);
             
             Dictionary<string, object> postData = new Dictionary<string, object>();
-            postData.Add("creditUser", coinsQuantity.ToString());
+            postData.Add("creditUser", coinsQuantity);
             postData.Add("description", description);
 
             string json = JsonConvert.SerializeObject(postData);
 
 
-            using (UnityWebRequest request = UnityWebRequest.Post(url, json)) {
-                request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
-                request.SetRequestHeader("Content-Type", "application/json");
-                
-                // byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
-                // request.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
-                
-                yield return request.SendWebRequest();
+            UnityWebRequest request = new UnityWebRequest(url, "POST");
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
+            request.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+            request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
+            request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            
+            yield return request.SendWebRequest();
 
-                if (request.isNetworkError || request.isHttpError) {
-                    Debug.LogError(request.error);
-                    Debug.LogError(request.downloadHandler.text);
+            if (request.isNetworkError || request.isHttpError) {
+                Debug.LogError(request.error);
+                Debug.LogError(request.downloadHandler.text);
                     
-                    Error error = new Error(request.downloadHandler.text);
-
-                    if (error.ErrorDescription == Error.INVALID_TOKEN) {
-                        //dispose invalid refresh token
-                        session.RefreshToken = "";
-                    }
-                    
-                    OnFailed?.Invoke(error.ErrorDescription);
+                Error error = new Error(request.downloadHandler.text);
+            
+                if (error.ErrorDescription == Error.INVALID_TOKEN) {
+                    //dispose invalid refresh token
+                    session.RefreshToken = "";
                 }
-                else {
-                    Debug.Log(request.downloadHandler.text);
                     
-                    OnSuccess?.Invoke();
-                }
+                OnFailed?.Invoke(error.ErrorDescription);
             }
+            else {
+                Debug.Log(request.downloadHandler.text);
+
+                GetAccountBalanceCall(delegate(long balance) {
+                    OnSuccess?.Invoke();
+                }, OnFailed);
+
+            }
+            
         }
 
 
@@ -732,183 +635,6 @@ namespace QuartersSDK {
                 }
             }
         }
-
-
-
-
-        // private IEnumerator CreateAutoApprovedTransferCall(TransferAPIRequest request, bool isRetry = false) {
-        //
-        //     Debug.Log("CreateAutoApprovedTransfer");
-        //     
-        //     if (string.IsNullOrEmpty(session.AccessToken)) {
-        //         yield return StartCoroutine(GetAccessToken(null, null));
-        //     }
-        //     
-        //
-        //     Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-        //     headers.Add("Authorization", "Bearer " + session.AccessToken);
-        //     
-        //     Debug.Log("Headers: " + JsonConvert.SerializeObject(headers));
-        //
-        //
-        //     Dictionary<string, object> data = new Dictionary<string, object>();
-        //     data.Add("tokens", request.tokens);
-        //     if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
-        //     data.Add("app_id", QuartersInit.Instance.APP_ID);
-        //
-        //
-        //     string dataJson = JsonConvert.SerializeObject(data);
-        //     Debug.Log(dataJson);
-        //     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-        //
-        //
-        //     WWW www = new WWW(API_URL + "/requests", dataBytes, headers);
-        //     Debug.Log(www.url);
-        //
-        //     while (!www.isDone) yield return new WaitForEndOfFrame();
-        //
-        //     
-        //     if (!string.IsNullOrEmpty(www.error)) {
-        //         Debug.Log(www.error);
-        //
-        //         if (www.error == Error.UNAUTHORIZED_ERROR && !isRetry) {
-        //         
-        //             //token expired
-        //             StartCoroutine(GetAccessToken(delegate {
-        //                 
-        //                 StartCoroutine(CreateAutoApprovedTransferCall(request, true));
-        //                 
-        //             }, delegate(string error) {
-        //                 request.failedDelegate(error);
-        //             }));
-        //           
-        //         }
-        //         else {
-        //             //failed, fallback to normal request
-        //             StartCoroutine(CreateTransferRequestCall(request, true));
-        //         }
-        //     }
-        //     else {
-        //         Debug.Log(www.text);
-        //
-        //         string response = www.text;
-        //         Debug.Log("Response: " + response);
-        //
-        //         TransferRequest transferRequest = new TransferRequest(response);
-        //
-        //         request.requestId = transferRequest.id;
-        //         Debug.Log("request id is: " + transferRequest.id);
-        //         AddOrSwapAPITransferRequest(request);
-        //
-        //         StartCoroutine(AutoApproveTransfer(request));
-        //
-        //
-        //     }
-        // }
-
-
-
-
-
-        // private IEnumerator AutoApproveTransfer(TransferAPIRequest request) {
-        //     
-        //     
-        //     bool areAccountsDone = false;
-        //     string accountsLoadingError = "";
-        //     
-        //     if (CurrentUser == null || CurrentUser.accounts.Count == 0) {
-        //         Quarters.Instance.GetAccounts(delegate (List<User.Account> accounts) {
-        //             //accounts loaded
-        //             areAccountsDone = true;
-        //
-        //         }, delegate (string getAccountsError) {
-        //             request.failedDelegate("Getting user accounts failed: " + getAccountsError);
-        //             areAccountsDone = true;
-        //             accountsLoadingError = getAccountsError;
-        //         });
-        //
-        //         while (!areAccountsDone) yield return new WaitForEndOfFrame();
-        //
-        //         //error occured, break out of coroutine
-        //         if (!string.IsNullOrEmpty(accountsLoadingError)) yield break;
-        //     }
-        //
-        //     if (CurrentUser.accounts.Count < 1) {
-        //         request.failedDelegate("User account not loaded");
-        //         yield break;
-        //     }
-        //
-        //     Debug.Log("AutoApproveTransfer");
-        //
-        //     Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-        //     headers.Add("Authorization", "Bearer " + QuartersInit.Instance.SERVER_API_TOKEN);
-        //
-        //
-        //     Dictionary<string, object> data = new Dictionary<string, object>();
-        //     data.Add("clientId", QuartersInit.Instance.APP_ID);
-        //     data.Add("userId", CurrentUser.Id);
-        //     data.Add("address", CurrentUser.accounts[0].address);
-        //
-        //
-        //     string dataJson = JsonConvert.SerializeObject(data);
-        //
-        //     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-        //
-        //
-        //     WWW www = new WWW(API_URL + "/requests/" + request.requestId + "/autoApprove", dataBytes, headers);
-        //     Debug.Log(JsonConvert.SerializeObject(headers));
-        //     Debug.Log(www.url);
-        //     Debug.Log(dataJson);
-        //
-        //     while (!www.isDone) yield return new WaitForEndOfFrame();
-        //
-        //     if (!string.IsNullOrEmpty(www.error)) {
-        //         Debug.Log(www.text);
-        //         if (www.error.StartsWith("40")) {
-        //
-        //             //bad request check for reason
-        //             if (www.error.StartsWith("400") && !string.IsNullOrEmpty(www.text)) {
-        //                 //bad request, possibly out of coins
-        //                 Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(www.text);
-        //                 if (responseData.ContainsKey("message")) {
-        //                     request.failedDelegate(responseData["message"]);
-        //                 }
-        //                 else {
-        //                     StartCoroutine(CreateTransferRequestCall(request));
-        //                 }
-        //             }
-        //             else {
-        //                 //fallback to normal transfer automatically
-        //                 StartCoroutine(CreateTransferRequestCall(request));
-        //             }
-        //         }
-        //         else {
-        //             Debug.LogError(www.error);
-        //             request.failedDelegate(www.error);
-        //         }
-        //
-        //     }
-        //     else {
-        //         Debug.Log(www.text);
-        //
-        //         string response = www.text;
-        //         Debug.Log("Autoapprove response: " + response);
-        //
-        //         Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string,string>>(response);
-        //
-        //         request.txId = responseData["txId"];
-        //
-        //         Debug.Log("Autoapproved request txId is: " + request.txId);
-        //         
-        //         GetAccountBalance(delegate(User.Account.Balance balance) {
-        //                     
-        //             request.successDelegate(request.txId);
-        //             
-        //         }, delegate(string error) {
-        //             request.failedDelegate(error);
-        //         });
-        //     }
-        // }
 
 
 

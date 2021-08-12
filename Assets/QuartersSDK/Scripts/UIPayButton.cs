@@ -31,14 +31,15 @@ namespace QuartersSDK.UI {
             
             ModalView.instance.ShowActivity();
             
-            Quarters.Instance.MakeTransactionCall((long)Price, "Example transaction", null, delegate(string error) {
+            Quarters.Instance.MakeTransactionCall((long)Price, "Example transaction", delegate {
                 ModalView.instance.HideActivity();
-            });
+                OnTransferSuccessful();
+            }, delegate(string error) { OnTransferFailed(error); });
 
         }
         
         
-        private void OnTransferSuccessful(string transactionHash) {
+        private void OnTransferSuccessful() {
             ModalView.instance.HideActivity();
             
             SpendRewardView.Instance.Present(-Price);
