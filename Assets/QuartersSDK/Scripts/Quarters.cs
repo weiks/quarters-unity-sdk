@@ -4,12 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
-using System;
-using System.Linq;
-using System.Text;
-using ImaginationOverflow.UniversalDeepLinking;
 using Newtonsoft.Json.Linq;
-using QuartersSDK.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -17,13 +12,14 @@ using UnityEditor;
 
 namespace QuartersSDK {
 	public partial class Quarters : MonoBehaviour {
-
         
         public static Action<User> OnUserLoaded;
 
 		public static Quarters Instance;
-        public Session session;
-        public PCKE PCKE;
+        private Session session;
+        private PCKE PCKE;
+
+        [HideInInspector] public UniWebView WebView;
         
         
         private CurrencyConfig currencyConfig;
@@ -50,6 +46,12 @@ namespace QuartersSDK {
         public delegate void OnTransferSuccessDelegate(string transactionHash);
         public delegate void OnTransferFailedDelegate(string error);
 
+        private Rect WebViewFrame {
+            get {
+                float factor = Application.isEditor ? 0.3f : 1f;
+                return new Rect(0, 0, (float) Screen.width * factor, (float) Screen.height * factor);
+            }
+        }
 
 
         public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
@@ -80,14 +82,6 @@ namespace QuartersSDK {
         }
 
 
-        private Dictionary<string, string> AuthorizationHeader {
-            get { 
-                Dictionary<string, string> result = new Dictionary<string, string>();
-                result.Add("Content-Type", "application/json;charset=UTF-8");
-                return result;
-            }
-        }
-
 		private User currentUser = null;
 		public User CurrentUser {
 			get {
@@ -117,18 +111,12 @@ namespace QuartersSDK {
 
 		public void Init() {
 			Instance = this;
-            
             PCKE = new PCKE();
-            Debug.Log(PCKE.CodeVerifier);
-            Debug.Log(PCKE.CodeChallenge());
-
         }
 
 
 
         #region high level calls
-        
-
 
 
         public void Authorize(List<Scope> scopes, OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
@@ -154,7 +142,7 @@ namespace QuartersSDK {
 
             Debug.Log("OAuth authorization");
             
-            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
+            // string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
 
             string scopeString = "";
             foreach (Scope scope in scopes) {
@@ -166,22 +154,37 @@ namespace QuartersSDK {
 
             string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id="
                                   + QuartersInit.Instance.APP_ID + "&redirect_uri="
-                                  + redirectSafeUrl
                                   + $"&scope={UnityWebRequest.EscapeURL(scopeString)}"
                                   + $"&code_challenge_method=S256"
                                   + $"&code_challenge={PCKE.CodeChallenge()}";
                                 
             Debug.Log(url);
+            
 
-            //web view authentication
-            QuartersDeepLink.OpenURL(url);
-            QuartersDeepLink.OnDeepLink = DeepLink;
-            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
+            //webview authentication
+            WebView = this.gameObject.AddComponent<UniWebView>();
+      
+            WebView.Frame = WebViewFrame;
+            WebView.Load(url);
+            WebView.Show(false, UniWebViewTransitionEdge.Bottom, 0.33f);
+            
+            WebView.OnPageStarted += delegate(UniWebView view, string pageUrl) {
+                
+                Debug.Log(pageUrl);
+                
+                UniWebViewMessage message = new UniWebViewMessage(pageUrl);
 
-
-            if (Application.isEditor) {
-                AuthorizeEditorView.Instance.Show();
-            }
+                if (message.Args.ContainsKey("code")) {
+                    AuthorizationCodeReceived(message.Args["code"]);
+                    WebView.Hide();
+                }
+                else if (message.Args.ContainsKey("error")) {
+                    ModalView.instance.ShowAlert("Authorisation error", message.Args["error_description"], new []{"OK"}, null);
+                    WebView.Hide();
+                }
+            }; 
+            
+   
         }
         
 
@@ -198,8 +201,7 @@ namespace QuartersSDK {
             OnAuthorizationSuccess = null;
             OnAuthorizationFailed = null;
             currentTransferAPIRequests = new List<TransferAPIRequest>();
-
-            Debug.Log("Quarters user deauthorized");
+            
         }
 
 
@@ -230,33 +232,13 @@ namespace QuartersSDK {
             
 			StartCoroutine(GetRefreshToken(code));
         }
-
-
-        //used only in Editor
-        public void RefreshTokenReceived(string token) {
-
-            Debug.Log("Quarters: Refresh token: " + token);
-            session.RefreshToken = token;
-
-            StartCoroutine(GetAccessToken(delegate {
-                
-                OnAuthorizationSuccess();
-
-            }, delegate (string error) {
-                
-                OnAuthorizationFailed(error);
-
-            }));
-
-        }
+        
    
 
 
         #region api calls
 
         
-
-
 
 		public IEnumerator GetRefreshToken(string code) {
 
@@ -267,7 +249,7 @@ namespace QuartersSDK {
             data.AddField("client_id", QuartersInit.Instance.APP_ID);
             data.AddField("grant_type", "authorization_code");
 			data.AddField("code", code);
-            data.AddField("redirect_uri", URL_SCHEME);
+            // data.AddField("redirect_uri", URL_SCHEME);
            
             
             string url = BASE_URL + "/oauth2/token";
@@ -425,13 +407,7 @@ namespace QuartersSDK {
         }
 
 
-
-
-
-   
-
-
-
+        
 
         private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
             
@@ -528,115 +504,13 @@ namespace QuartersSDK {
         }
 
 
-      
 
 
-        private void AddOrSwapAPITransferRequest(TransferAPIRequest request) {
+        public void BuyQuarters() {
 
-            for (int i = 0; i < currentTransferAPIRequests.Count; i++) {
-
-                if (currentTransferAPIRequests[i].requestId == request.requestId) {
-                    currentTransferAPIRequests[i] = request;
-                    return;
-                }
-                
-            }
-            
-            currentTransferAPIRequests.Add(request);
-            
+            string url = "https://www.poq.gg/buy";
+            Application.OpenURL(url);
         }
-
-
-
-
-
-        private IEnumerator CreateTransferRequestCall(TransferAPIRequest request, bool isRetry = false, bool forceExternalBrowser = false) {
-
-            if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Quarters: Transfers with external browser arent supported in Unity editor");
-
-            Debug.Log("CreateTransferRequestCall");
-
-            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + session.AccessToken);
-
-
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("tokens", request.tokens);
-            if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
-            data.Add("app_id", QuartersInit.Instance.APP_ID);
-
-
-
-
-            string dataJson = JsonConvert.SerializeObject(data);
-            Debug.Log(dataJson);
-            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-
-
-            WWW www = new WWW(API_URL + "/requests", dataBytes, headers);
-            Debug.Log(www.url);
-
-            while (!www.isDone) yield return new WaitForEndOfFrame();
-
-            if (!string.IsNullOrEmpty(www.error)) {
-                Debug.Log(www.error);
-
-                if (www.error == Error.UNAUTHORIZED_ERROR && !isRetry) {
-                    //token expired
-                    StartCoroutine(GetAccessToken(delegate {
-                        
-                        StartCoroutine(CreateTransferRequestCall(request, true, forceExternalBrowser));
-                        
-                    }, delegate(string error) {
-                        request.failedDelegate(error);
-                    }));
-                }
-                else {
-                    request.failedDelegate("Creating transfer failed: " + www.error);
-                }
-          
-                
-               
-            }
-            else {
-                Debug.Log(www.text);
-
-                string response = www.text;
-                Debug.Log("Response: " + response);
-
-                TransferRequest transferRequest = new TransferRequest(response);
-
-                request.requestId = transferRequest.id;
-                Debug.Log("request id is: " + transferRequest.id);
-                AddOrSwapAPITransferRequest(request);
-
-                //continue outh forward
-                string url = BASE_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
-
-                // if (session.IsGuestSession) {
-                //     url += "&firebase_token=" + session.GuestFirebaseToken;
-                // }
-
-                Debug.Log("Transfer authorization url: " + url);
-
-                if (!forceExternalBrowser) {
-                    //web view authentication
-                    QuartersDeepLink.OpenURL(url);
-                    QuartersDeepLink.OnDeepLink = DeepLink;
-                    QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
-                    QuartersDeepLink.OnCancelled += delegate {
-                        request.failedDelegate("User canceled");
-                        QuartersDeepLink.OnCancelled = null;
-                    };
-                }
-                else {
-                    //external authentication
-                    Application.OpenURL(url);
-                }
-            }
-        }
-
-
 
 
 
@@ -644,101 +518,8 @@ namespace QuartersSDK {
         #endregion
 
 
-        #region Deep linking
 
 
-        void OnApplicationFocus( bool focusStatus ){
-            if (focusStatus) {
-                #if UNITY_ANDROID
-//                ProcessDeepLink(true);
-                #endif
-            }
-        }
-
-        
-  
-        
-		public void DeepLink (LinkActivation linkActivation) {
-
-			Debug.Log("Deep link url: " + linkActivation.Uri);
-
-            if (!string.IsNullOrEmpty(linkActivation.Uri)) {
-                ProcessDeepLink(linkActivation.QueryString);
-            }
-        }
-
-        
-        
-        
-
-        public void DeepLinkWebGL(Dictionary<string, string> urlParams) {
-            ProcessDeepLink(urlParams);
-        }
-
-
-        private void ProcessDeepLink(Dictionary<string, string> urlParams) {
-
-            Debug.Log("ProcessDeepLink " + JsonConvert.SerializeObject(urlParams));
-
-            foreach (KeyValuePair<string,string> urlParam in urlParams) {
-                Debug.Log(urlParam.Key + " : " + urlParam.Value);
-            }
-
-            if (urlParams.ContainsKey("code")) {
-                //string code = split[1];
-                AuthorizationCodeReceived(urlParams["code"]);
-            }
-            else if (urlParams.ContainsKey("requestId")) {
-
-                string transferId = urlParams["requestId"];
-
-                foreach (TransferAPIRequest r in currentTransferAPIRequests) {
-                    Debug.Log("Current requests id: " + r.requestId);
-                }
-
-                //get request from ongoing
-                TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
-                if (transferRequest == null) {
-                    Debug.LogError("Transfer id is invalid: " + transferId);
-                    transferRequest.failedDelegate("Invalid transfer id: " + transferId);
-                }
-
-                if (urlParams.ContainsKey("error")) {
-                    //all requests are validated positivelly currently
-                    transferRequest.failedDelegate(urlParams["error"]);
-                }
-                else {
-
-                    
-                    GetAccountBalance(delegate(long balance) {
-                        transferRequest.txId = urlParams["txId"];
-                        Debug.Log("tx id:" + transferRequest.txId);
-
-                        transferRequest.successDelegate(transferRequest.txId);
-                    
-                    }, delegate(string error) {
-                        transferRequest.failedDelegate(error);
-                    });
-                }
-
-                currentTransferAPIRequests.Remove(transferRequest);
-            }
-            else if (urlParams.ContainsKey("cancel")) {
-                if (urlParams["cancel"] == "true") {
-                    
-                    Debug.Log("User canceled deep link");
-                    Debug.Log($"currentTransferAPIRequests count {currentTransferAPIRequests.Count.ToString()}");
-                    if (currentTransferAPIRequests.Count > 0) {
-                        currentTransferAPIRequests[0].failedDelegate("User canceled");
-                    }
-                }
-            }
-
-
-
-        }
-
-        #endregion
 
 	}
 

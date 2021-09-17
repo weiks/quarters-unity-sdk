@@ -45,16 +45,7 @@ namespace QuartersSDK {
 	    }
 
 
-        public static bool IsValidDeepLink(this string url) {
-
-            bool result = false;
-            
-            if (url.Contains(Quarters.URL_SCHEME)) {
-                result = url.StartsWith(Quarters.URL_SCHEME);
-            }
-            
-            return result;
-        }
+ 
         
      
 	}

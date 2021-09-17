@@ -6,8 +6,7 @@ using UnityEngine.UI;
 namespace QuartersSDK.UI {
     [RequireComponent(typeof(Button))]
     public class UIShowShopButton : MonoBehaviour {
-
-        [SerializeField] private Button.ButtonClickedEvent _buttonClickedEvent;
+        
         
         private Button button {
             get { return this.GetComponent<Button>(); }
@@ -21,8 +20,8 @@ namespace QuartersSDK.UI {
         
         
         public void ButtonTapped() {
-            
-            FindObjectOfType<MenuView>().ButtonShopTapped();
+
+            Quarters.Instance.BuyQuarters();
         }
 
     }

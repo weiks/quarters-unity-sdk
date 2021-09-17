@@ -57,11 +57,11 @@ namespace QuartersSDK {
             if (string.IsNullOrEmpty(SERVER_API_TOKEN)) Debug.LogError("Quarters Server Token key is empty");
 
 
-			GameObject coinforge = new GameObject("Quarters");
-			coinforge.transform.SetParent(this.transform);
-			DontDestroyOnLoad(coinforge.gameObject);
+			GameObject quarters = new GameObject("Quarters");
+			quarters.transform.SetParent(this.transform);
+			DontDestroyOnLoad(quarters.gameObject);
 
-			instance = coinforge.AddComponent<Quarters>();
+			instance = quarters.AddComponent<Quarters>();
 			instance.Init();
 
 			//init currency
