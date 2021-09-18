@@ -153,7 +153,7 @@ namespace QuartersSDK {
             }
 
             string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id="
-                                  + QuartersInit.Instance.APP_ID + "&redirect_uri="
+                                  + QuartersInit.Instance.APP_ID
                                   + $"&scope={UnityWebRequest.EscapeURL(scopeString)}"
                                   + $"&code_challenge_method=S256"
                                   + $"&code_challenge={PCKE.CodeChallenge()}";
