@@ -42,29 +42,10 @@ namespace QuartersSDK.UI {
             Session session = new Session();
 
             CurrencyConfig config = Quarters.Instance.CurrencyConfig;
-
-            if (session.IsGuestSession) {
-
-                string[] buttonNames = new string[] {"Cancel", "Sign up"};
-
-                ModalView.instance.ShowAlert($"Sign up to purchase {config.DisplayNamePlural}",
-                    $"You need to sign up or login to purchase {config.DisplayNamePlural}",
-                    buttonNames, delegate(string buttonTapped) {
-
-                        if (buttonTapped == buttonNames[1]) {
-                            FindObjectOfType<MenuView>().SignUpButtonTapped();
-                        }
-                    });
-            }
-            else {
-                ProceedToPurchase();
-            }
-
             
-            
-            
-           
+            ProceedToPurchase();
         }
+        
         
         private void ProceedToPurchase() {
             ModalView.instance.ShowActivity();
@@ -77,9 +58,10 @@ namespace QuartersSDK.UI {
             ModalView.instance.ShowAlert("Purchase Error", error, new string[] {"OK"}, null);
         }
 
+        
         private void PurchaseSucessfullDelegate(Product product, string txid) {
             //refresh balance
-            Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance newBalance) {
+            Quarters.Instance.GetAccountBalanceCall(delegate(long newBalance) {
                 ModalView.instance.HideActivity();
                 
                 SpendRewardView.Instance.Present(Quantity);

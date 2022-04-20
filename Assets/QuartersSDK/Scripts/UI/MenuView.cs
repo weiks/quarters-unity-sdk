@@ -22,33 +22,9 @@ namespace QuartersSDK.UI {
 
 			CurrencyConfig config = Quarters.Instance.CurrencyConfig;
 
-			if (session.IsGuestSession) {
-
-				string[] buttonNames = new string[] {"Cancel", "Sign up"};
-
-				ModalView.instance.ShowAlert($"Sign up to purchase {config.DisplayNamePlural}",
-					$"You need to sign up or login to purchase {config.DisplayNamePlural}",
-					buttonNames, delegate(string buttonTapped) {
-
-						if (buttonTapped == buttonNames[1]) {
-							SignUpButtonTapped();
-						}
-					});
-			}
-			else {
-				segueToShop.Perform();
-			}
-
-
-
-
-		}
-
-
-
-		public void SignUpButtonTapped() {
-			ModalView.instance.ShowActivity();
-			Quarters.Instance.SignUp(AuthorizationSuccess, AuthorizationFailed);
+	
+			segueToShop.Perform();
+			
 		}
 
 		public void LogoutButtonTapped() {
@@ -59,40 +35,40 @@ namespace QuartersSDK.UI {
 
 
 
-
-		private void AuthorizationSuccess() {
-
-			Debug.Log("AuthorizationSuccess");
-			ModalView.instance.ShowActivity();
-
-			QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
-
-				//products loaded
-				Debug.Log("Quarters products loaded: " + products.Length);
-
-				//pull user details
-				Quarters.Instance.GetUserDetails(delegate(User user) {
-					Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) { Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
-						ModalView.instance.HideActivity();
-					}, delegate(string getBalanceError) {
-						ModalView.instance.ShowAlert("Quarters get balance error", getBalanceError, new string[] {"Try again"}, null);
-					}); }, delegate(string getAccountsError) {
-						ModalView.instance.ShowAlert("Quarters get user accounts error", getAccountsError, new string[] {"Try again"}, null);
-					});
-				}, delegate(string getUserDetailsError) {
-					ModalView.instance.ShowAlert("Quarters user details error", getUserDetailsError, new string[] {"Try again"}, null);
-				});
-
-			}, delegate(InitializationFailureReason reason) { ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[] {"Try again"}, null); });
-
-		}
-
-
-		private void AuthorizationFailed(string error) {
-
-			Debug.LogError("AuthorizationFailed: " + error);
-			ModalView.instance.ShowAlert("Authorization failed", error, new string[] {"Try again"}, null);
-		}
+		//
+		// private void AuthorizationSuccess() {
+		//
+		// 	Debug.Log("AuthorizationSuccess");
+		// 	ModalView.instance.ShowActivity();
+		//
+		// 	QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
+		//
+		// 		//products loaded
+		// 		Debug.Log("Quarters products loaded: " + products.Length);
+		//
+		// 		//pull user details
+		// 		Quarters.Instance.GetUserDetails(delegate(User user) {
+		// 			Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) { Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
+		// 				ModalView.instance.HideActivity();
+		// 			}, delegate(string getBalanceError) {
+		// 				ModalView.instance.ShowAlert("Quarters get balance error", getBalanceError, new string[] {"Try again"}, null);
+		// 			}); }, delegate(string getAccountsError) {
+		// 				ModalView.instance.ShowAlert("Quarters get user accounts error", getAccountsError, new string[] {"Try again"}, null);
+		// 			});
+		// 		}, delegate(string getUserDetailsError) {
+		// 			ModalView.instance.ShowAlert("Quarters user details error", getUserDetailsError, new string[] {"Try again"}, null);
+		// 		});
+		//
+		// 	}, delegate(InitializationFailureReason reason) { ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[] {"Try again"}, null); });
+		//
+		// }
+		//
+		//
+		// private void AuthorizationFailed(string error) {
+		//
+		// 	Debug.LogError("AuthorizationFailed: " + error);
+		// 	ModalView.instance.ShowAlert("Authorization failed", error, new string[] {"Try again"}, null);
+		// }
 
 
 		public void DebugProceedToGame() {
@@ -101,21 +77,21 @@ namespace QuartersSDK.UI {
 
 
 
-		public void AwardCoinsExample(int coinsAmount) {
-
-			Quarters.Instance.Award(coinsAmount, delegate(string transactionHash) {
-				
-				//player successfully received the coins
-				Debug.Log("Coins awarded: " + transactionHash);
-
-			}, delegate(string error) {
-				
-				//error occurred
-				ModalView.instance.ShowAlert("Award error", error, new string[] {"OK"}, null);
-				
-			});
-
-		}
+		// public void AwardCoinsExample(int coinsAmount) {
+		//
+		// 	Quarters.Instance.Award(coinsAmount, delegate(string transactionHash) {
+		// 		
+		// 		//player successfully received the coins
+		// 		Debug.Log("Coins awarded: " + transactionHash);
+		//
+		// 	}, delegate(string error) {
+		// 		
+		// 		//error occurred
+		// 		ModalView.instance.ShowAlert("Award error", error, new string[] {"OK"}, null);
+		// 		
+		// 	});
+		//
+		// }
 
 
 

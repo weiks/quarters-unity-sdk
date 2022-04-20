@@ -14,10 +14,8 @@ namespace QuartersSDK.UI {
 	public class AuthorizeView : UIView {
 
 		public Image brandLogo;
-
-		public GameObject SignUpButton;
+		
 		public GameObject LoginButton;
-		public GameObject PlayAsGuestButton;
 
 
 		public override void ViewAppeared() {
@@ -38,21 +36,12 @@ namespace QuartersSDK.UI {
 						ModalView.instance.HideActivity();
 					}
 					else {
-						//not first session
-						if (session.IsGuestSession) {
-							//following session with guest mode display dialog
+						//email user
+						Quarters.Instance.Authorize(session.Scopes, AuthorizationSuccess, delegate(string error) {
 							ShowButtons();
-							ModalView.instance.HideActivity();
-						}
-						else {
-							//email user
-							Quarters.Instance.Authorize(AuthorizationSuccess, delegate(string error) {
-								ShowButtons();
-								AuthorizationFailed(error);
-							});
-						}
+							AuthorizationFailed(error);
+						});
 					}
-
 				});
 			});
 		}
@@ -78,16 +67,16 @@ namespace QuartersSDK.UI {
 
 
 		private void ShowButtons() {
-			SignUpButton.SetActive(true);
+
 			LoginButton.SetActive(true);
-			PlayAsGuestButton.SetActive(true);
+
 		}
 
 
 		private void HideButtons() {
-			SignUpButton.SetActive(false);
+
 			LoginButton.SetActive(false);
-			PlayAsGuestButton.SetActive(false);
+
 		}
 
 
@@ -108,7 +97,13 @@ namespace QuartersSDK.UI {
 			}
 
 			Debug.LogError("AuthorizationFailed: " + error);
-			ModalView.instance.ShowAlert("Authorization failed", error, new string[] {"Try again"}, null);
+
+			if (error == Error.INVALID_TOKEN) {
+				ModalView.instance.ShowAlert("Authorization failed", "Invalid session, please log in again", new string[] {"OK"}, null);
+			}
+			else {
+				ModalView.instance.ShowAlert("Authorization failed", error, new string[] {"Try again"}, null);
+			}
 		}
 
 
@@ -120,31 +115,31 @@ namespace QuartersSDK.UI {
 
 
 			//pull user details
-			Quarters.Instance.GetUserDetails(delegate(User user) { Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) { Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) { QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) { QuartersInit.Instance.LoadMainScene(); }, delegate(InitializationFailureReason reason) { ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[] {"Try again"}, null); }); }, delegate(string getBalanceError) { ModalView.instance.ShowAlert("Coinforge get balance error", getBalanceError, new string[] {"Try again"}, null); }); }, delegate(string getAccountsError) { ModalView.instance.ShowAlert("Coinforge get user accounts error", getAccountsError, new string[] {"Try again"}, null); }); }, delegate(string getUserDetailsError) { ModalView.instance.ShowAlert("Coinforge user details error", getUserDetailsError, new string[] {"Try again"}, null); });
-
+			Quarters.Instance.GetUserDetails(delegate(User user) {
+				QuartersInit.Instance.LoadMainScene();
+				
+				// Quarters.Instance.GetAccounts(delegate(List<User.Account> accounts) {
+				// 	Quarters.Instance.GetAccountBalance(delegate(User.Account.Balance balance) {
+				// 		QuartersIAP.Instance.Initialize(Quarters.Instance.CurrencyConfig.IAPProductIds, delegate(Product[] products) {
+				// 			QuartersInit.Instance.LoadMainScene();
+				// 		}, delegate(InitializationFailureReason reason) {
+				// 			ModalView.instance.ShowAlert("Unable to load products", reason.ToString(), new string[] {"Try again"}, null);
+				// 		});
+				// 	}, delegate(string getBalanceError) {
+				// 		ModalView.instance.ShowAlert("Quarters get balance error", getBalanceError, new string[] {"Try again"}, null);
+				// 	});
+				// }, delegate(string getAccountsError) {
+				// 	ModalView.instance.ShowAlert("Quarters get user accounts error", getAccountsError, new string[] {"Try again"}, null);
+				// });
+			}, delegate(string getUserDetailsError) {
+				ModalView.instance.ShowAlert("Quarters user details error", getUserDetailsError, new string[] {"Try again"}, null);
+			});
 		}
-
-
-		public void ButtonPlayAsGuestTapped() {
-			ModalView.instance.ShowActivity();
-			Quarters.Instance.AuthorizeGuest(AuthorizationSuccess, AuthorizationFailed);
-		}
-
-
-		public void ButtonSignUpTapped() {
-
-			Session session = new Session();
-
-			ModalView.instance.ShowActivity();
-
-			Quarters.Instance.AuthorizeGuest(delegate { Quarters.Instance.SignUp(AuthorizationSuccess, AuthorizationFailed); }, AuthorizationFailed);
-
-
-		}
-
+		
+		
 
 		public void ButtonLoginTapped() {
-			Quarters.Instance.Authorize(AuthorizationSuccess, AuthorizationFailed);
+			Quarters.Instance.Authorize(QuartersInit.Instance.DefaultScope, AuthorizationSuccess, AuthorizationFailed);
 		}
 
 	}

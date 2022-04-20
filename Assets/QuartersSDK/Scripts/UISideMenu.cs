@@ -49,8 +49,8 @@ public class UISideMenu : MonoBehaviour {
         
         Session session = new Session();
         ShopButton.gameObject.SetActive(!QuartersInit.Instance.CustomShopUI);
-        SignUpButton.gameObject.SetActive(session.IsGuestSession);
-        LogoutButton.interactable = !session.IsGuestSession;
+
+        LogoutButton.interactable = true;
 
         ShopButtonText.text = $"Buy " + Quarters.Instance.CurrencyConfig.DisplayNamePlural;
         

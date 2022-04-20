@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using ImaginationOverflow.UniversalDeepLinking;
 using Newtonsoft.Json;
 
 namespace QuartersSDK {
@@ -17,7 +18,7 @@ namespace QuartersSDK {
         private static extern void CloseWebView();
 #endif
 
-        public delegate void OnDeepLinkDelegate(string url, bool isExternalBrowser);
+        public delegate void OnDeepLinkDelegate(LinkActivation linkActivation);
         public static OnDeepLinkDelegate OnDeepLink;
         
         public delegate void OnDeepLinkWebGLDelegate(Dictionary<string, string> webViewData);
@@ -26,67 +27,35 @@ namespace QuartersSDK {
         public delegate void OnCancelledDelegate();
         public static OnCancelledDelegate OnCancelled;
 
-        private static string LastOpenedUrl = "";
+
 
 
         private void Awake() {
-            
-            Application.deepLinkActivated += ApplicationOnDeepLinkActivated;
-            if (!string.IsNullOrEmpty(Application.absoluteURL)) {
-                ApplicationOnDeepLinkActivated(Application.absoluteURL);
-            }
-            
+            DeepLinkManager.Instance.LinkActivated += OnLinkActivated;
+        }
+        
+        
+        private void OnDestroy() {
+            DeepLinkManager.Instance.LinkActivated -= OnLinkActivated;
         }
 
-        private void ApplicationOnDeepLinkActivated(string url) {
-            Debug.Log($"ApplicationOnDeepLinkActivated: {url} is valid deep link: {url.IsValidDeepLink()}");
+        private void OnLinkActivated(LinkActivation linkActivation) {
+            Debug.Log($"ApplicationOnDeepLinkActivated: {linkActivation.Uri} is valid deep link: {linkActivation.Uri.IsValidDeepLink()}");
             
-            if (url.IsValidDeepLink()) {
+            if (linkActivation.Uri.IsValidDeepLink()) {
                 
                 //deep link opened
-                if (OnDeepLink != null) OnDeepLink(url, isExternalBrowser: false);
+                if (OnDeepLink != null) OnDeepLink(linkActivation);
                     
             }
-            
-            
         }
 
+    
 
         public static void OpenURL(string url) {
             
             Debug.Log("Web view open url: " + url);
-            
             Application.OpenURL(url);
-        
-            
-//             GameObject webViewGO = new GameObject("QuartersWebView");
-//             QuartersDeepLink quartersDeepLink = webViewGO.AddComponent<QuartersDeepLink>();
-//
-//             
-// #if UNITY_WEBGL && !UNITY_EDITOR
-//             //webGL plugin show webview
-//             LastOpenedUrl = url;
-//             OpenWebView(url);
-// #else
-//   
-//             UniWebView webView = webViewGO.AddComponent<UniWebView>();
-//             webView.CleanCache();
-//             SetFrameSize(webView);
-//
-//             
-//             webView.Load(url);
-//             webView.Show(false, UniWebViewTransitionEdge.Bottom);
-//             webView.OnPageStarted += quartersDeepLink.OnUrlOpenWebView;
-//
-//             //handle autorotation
-//             webView.OnOrientationChanged += (view, orientation) => {
-//                 SetFrameSize(webView);
-//             };
-//
-//             webView.OnShouldClose += ShouldClose;
-// #endif
-//
-//             return quartersDeepLink;
         }
 
 

@@ -1,0 +1,52 @@
+{
+    "_steamId": "",
+    "_displayName": "Quarters SDK",
+    "_globalConfiguration": {
+        "_domainProtocols": [
+            {
+                "_scheme": "https",
+                "_host": "quarters-sandbox.s3.us-east-2.amazonaws.com/",
+                "_path": ""
+            }
+        ],
+        "_deepLinkingProtocols": [],
+        "_initialized": false
+    },
+    "_customDeepLinkingProtocols": [
+        {
+            "_domainProtocols": [],
+            "_deepLinkingProtocols": [],
+            "_initialized": false
+        },
+        {
+            "_domainProtocols": [],
+            "_deepLinkingProtocols": [],
+            "_initialized": false
+        },
+        {
+            "_domainProtocols": [],
+            "_deepLinkingProtocols": [],
+            "_initialized": false
+        },
+        {
+            "_domainProtocols": [],
+            "_deepLinkingProtocols": [],
+            "_initialized": false
+        },
+        {
+            "_domainProtocols": [],
+            "_deepLinkingProtocols": [],
+            "_initialized": false
+        },
+        {
+            "_domainProtocols": [],
+            "_deepLinkingProtocols": [],
+            "_initialized": false
+        },
+        {
+            "_domainProtocols": [],
+            "_deepLinkingProtocols": [],
+            "_initialized": false
+        }
+    ]
+}

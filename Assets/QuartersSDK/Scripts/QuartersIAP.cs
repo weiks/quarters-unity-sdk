@@ -256,7 +256,7 @@ namespace QuartersSDK {
   
             Dictionary<string, object> data = new Dictionary<string, object>();
             data.Add("receipt", receipt);
-            data.Add("user", Quarters.Instance.CurrentUser.userId);
+            data.Add("user", Quarters.Instance.CurrentUser.Id);
             
 
             string dataJson = JsonConvert.SerializeObject(data);

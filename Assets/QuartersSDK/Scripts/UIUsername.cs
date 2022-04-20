@@ -28,13 +28,7 @@ namespace QuartersSDK.UI {
         
         
         private void RefreshUser(User user) {
-            if (user.IsGuestUser) {
-                UsernameText.text = "Guest";
-            }
-            else {
-                UsernameText.text = user.displayName;
-            }
-
+            UsernameText.text = user.GamerTag;
         }
         
     }
