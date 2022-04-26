@@ -275,7 +275,7 @@ namespace QuartersSDK {
             data.AddField("redirect_uri", URL_SCHEME);
            
             
-            string url = BASE_URL + "/oauth2/token";
+            string url = BASE_URL + "/api/oauth2/token";
             Debug.Log("GetRefreshToken url: " + url);
 
             using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
@@ -322,7 +322,7 @@ namespace QuartersSDK {
             data.AddField("refresh_token", session.RefreshToken);
             data.AddField("code_verifier", PCKE.CodeVerifier);
             
-            string url = BASE_URL + "/oauth2/token";
+            string url = BASE_URL + "/api/oauth2/token";
             Debug.Log("GetAccessToken url: " + url);
 
             using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
