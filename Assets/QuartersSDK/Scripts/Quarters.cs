@@ -57,9 +57,8 @@ namespace QuartersSDK {
 		public string BASE_URL {
 			get {
                 Environment environment = QuartersInit.Instance.environment;
-                if (environment == Environment.production) return $"https://{CurrencyConfig.APIBaseUrl}";
-                else if (environment == Environment.development) return $"https://dev.{CurrencyConfig.APIBaseUrl}";
-                else if (environment == Environment.sandbox) return $"https://sandbox.{CurrencyConfig.APIBaseUrl}";
+                if (environment == Environment.production) return $"www.poq.gg";
+                else if (environment == Environment.sandbox) return $"https://s2w-dev-firebase.herokuapp.com";
                 return null;
             }
 		}
@@ -67,10 +66,16 @@ namespace QuartersSDK {
 		public string API_URL {
 			get {
                
-                return $"{BASE_URL}/v1";
+                return $"{BASE_URL}/api/v1";
 			}
 		}
 
+        public string BUY_URL {
+            get {
+               
+                return $"{BASE_URL}/buy";
+            }
+        }
 
         public static string URL_SCHEME  {
             get {
@@ -476,7 +481,7 @@ namespace QuartersSDK {
         
         public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) {
             
-            Debug.Log("MakeTransaction");
+            Debug.Log($"MakeTransaction with quantity: {coinsQuantity}");
             
             if (!session.DoesHaveRefreshToken) {
                 Debug.LogError("Missing refresh token");
@@ -638,6 +643,19 @@ namespace QuartersSDK {
 
 
 
+        public void BuyQuarters() {
+            
+            Debug.Log("Buy Quarters");
+            
+        
+            string url = BUY_URL;
+            Debug.Log(url);
+
+            QuartersDeepLink.OpenURL(url);
+            QuartersDeepLink.OnDeepLink = DeepLink;
+            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
+            
+        }
 
 
 
