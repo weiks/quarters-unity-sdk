@@ -15,7 +15,6 @@ namespace QuartersSDK {
         public string APP_ID = "";
         public string APP_KEY = "";
         public string SERVER_API_TOKEN = "";
-        public string ETHEREUM_ADDRESS = "";
 		public Environment environment = Environment.production;
         [Header("Configuration:")]
         public bool useAutoapproval = false;

@@ -647,8 +647,9 @@ namespace QuartersSDK {
             
             Debug.Log("Buy Quarters");
             
+            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
         
-            string url = BUY_URL;
+            string url = $"{BUY_URL}?redirect?{redirectSafeUrl}";
             Debug.Log(url);
 
             QuartersDeepLink.OpenURL(url);
