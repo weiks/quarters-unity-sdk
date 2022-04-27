@@ -16,16 +16,14 @@ using UnityEditor;
 
 
 namespace QuartersSDK {
-	public partial class Quarters : MonoBehaviour {
-
+	public class Quarters : MonoBehaviour {
         
         public static Action<User> OnUserLoaded;
 
 		public static Quarters Instance;
         public Session session;
         public PCKE PCKE;
-        
-        
+
         private CurrencyConfig currencyConfig;
         public CurrencyConfig CurrencyConfig {
             get {
@@ -45,14 +43,6 @@ namespace QuartersSDK {
 		public delegate void OnUserDetailsSucessDelegate(User user);
 		public delegate void OnUserDetailsFailedDelegate(string error);
         
-
-        // //Transfer
-        // public delegate void OnTransferSuccessDelegate(string transactionHash);
-        // public delegate void OnTransferFailedDelegate(string error);
-        //
-        //
-        //
-        // public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
 
 		public string BASE_URL {
 			get {
@@ -77,21 +67,8 @@ namespace QuartersSDK {
             }
         }
 
-        public static string URL_SCHEME  {
-            get {
-                return "https://quarters-sandbox.s3.us-east-2.amazonaws.com/";
-   
-            }
-        }
-
-
-        private Dictionary<string, string> AuthorizationHeader {
-            get { 
-                Dictionary<string, string> result = new Dictionary<string, string>();
-                result.Add("Content-Type", "application/json;charset=UTF-8");
-                return result;
-            }
-        }
+        public static string URL_SCHEME = String.Empty;
+        
 
 		private User currentUser = null;
 		public User CurrentUser {
@@ -124,9 +101,7 @@ namespace QuartersSDK {
 			Instance = this;
             
             PCKE = new PCKE();
-            Debug.Log(PCKE.CodeVerifier);
-            Debug.Log(PCKE.CodeChallenge());
-
+            URL_SCHEME = QuartersInit.Instance.REDIRECT_URL;
         }
 
 
@@ -236,24 +211,24 @@ namespace QuartersSDK {
         }
 
 
-        //used only in Editor
-        public void RefreshTokenReceived(string token) {
-
-            Debug.Log("Quarters: Refresh token: " + token);
-            session.RefreshToken = token;
-
-            StartCoroutine(GetAccessToken(delegate {
-                
-                OnAuthorizationSuccess();
-
-            }, delegate (string error) {
-                
-                OnAuthorizationFailed(error);
-
-            }));
-
-        }
-   
+        // //used only in Editor
+        // public void RefreshTokenReceived(string token) {
+        //
+        //     Debug.Log("Quarters: Refresh token: " + token);
+        //     session.RefreshToken = token;
+        //
+        //     StartCoroutine(GetAccessToken(delegate {
+        //         
+        //         OnAuthorizationSuccess();
+        //
+        //     }, delegate (string error) {
+        //         
+        //         OnAuthorizationFailed(error);
+        //
+        //     }));
+        //
+        // }
+        //
 
 
         #region api calls
@@ -584,7 +559,6 @@ namespace QuartersSDK {
                 ProcessDeepLink(linkActivation.QueryString);
             }
         }
-
         
         
         
@@ -606,54 +580,7 @@ namespace QuartersSDK {
                 //string code = split[1];
                 AuthorizationCodeReceived(urlParams["code"]);
             }
-            // else if (urlParams.ContainsKey("requestId")) {
-            //
-            //     string transferId = urlParams["requestId"];
-            //
-            //     foreach (TransferAPIRequest r in currentTransferAPIRequests) {
-            //         Debug.Log("Current requests id: " + r.requestId);
-            //     }
-            //
-            //     //get request from ongoing
-            //     TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
-            //     if (transferRequest == null) {
-            //         Debug.LogError("Transfer id is invalid: " + transferId);
-            //         transferRequest.failedDelegate("Invalid transfer id: " + transferId);
-            //     }
-            //
-            //     if (urlParams.ContainsKey("error")) {
-            //         //all requests are validated positivelly currently
-            //         transferRequest.failedDelegate(urlParams["error"]);
-            //     }
-            //     else {
-            //
-            //         
-            //         GetAccountBalance(delegate(long balance) {
-            //             transferRequest.txId = urlParams["txId"];
-            //             Debug.Log("tx id:" + transferRequest.txId);
-            //
-            //             transferRequest.successDelegate(transferRequest.txId);
-            //         
-            //         }, delegate(string error) {
-            //             transferRequest.failedDelegate(error);
-            //         });
-            //     }
-            //
-            //     currentTransferAPIRequests.Remove(transferRequest);
-            // }
-            // else if (urlParams.ContainsKey("cancel")) {
-            //     if (urlParams["cancel"] == "true") {
-            //         
-            //         Debug.Log("User canceled deep link");
-            //         Debug.Log($"currentTransferAPIRequests count {currentTransferAPIRequests.Count.ToString()}");
-            //         if (currentTransferAPIRequests.Count > 0) {
-            //             currentTransferAPIRequests[0].failedDelegate("User canceled");
-            //         }
-            //     }
-            // }
-
-
-
+            
         }
 
         #endregion

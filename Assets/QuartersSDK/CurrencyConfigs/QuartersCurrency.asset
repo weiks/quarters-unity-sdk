@@ -13,11 +13,8 @@ MonoBehaviour:
   m_Name: QuartersCurrency
   m_EditorClassIdentifier: 
   APIBaseUrl: www.poq.gg/api
+  RedirectUrl: https://quarters-sandbox.s3.us-east-2.amazonaws.com/
   Code: q
   DisplayNameSingular: Quarter
   DisplayNamePlural: Quarters
   CurrencyIcon: {fileID: 21300000, guid: f4d536b885e854dfeb35608b1430e2ec, type: 3}
-  CurrencyLogo: {fileID: 21300000, guid: c4ecfec0e2efe4288b3a2bb4778e5070, type: 3}
-  BackgroundsColor: {r: 0.16862746, g: 0.24705884, b: 0.5176471, a: 1}
-  BrandColor: {r: 0.9607844, g: 0.8862746, b: 0.24313727, a: 1}
-  IAPProductQuantities: 6400000090010000e8030000a00f0000

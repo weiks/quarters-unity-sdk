@@ -733,6 +733,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
         type: 3}
+      propertyPath: REDIRECT_URL
+      value: https://quarters-sandbox.s3.us-east-2.amazonaws.com/
+      objectReference: {fileID: 0}
+    - target: {fileID: 114318907845399088, guid: 6fda49cb785be4592a669bda56f10447,
+        type: 3}
       propertyPath: SERVER_API_TOKEN
       value: g3hvn72mlzvr2bxhx6absqieyylhhh1ca4wz0l0gcr6eclcgby98w4
       objectReference: {fileID: 0}
@@ -1998,7 +2003,7 @@ PrefabInstance:
     - target: {fileID: 5785252395037182505, guid: 384fca06186d449d79eff75b26c50b6b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00036536276
+      value: 0.000061235856
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 384fca06186d449d79eff75b26c50b6b, type: 3}

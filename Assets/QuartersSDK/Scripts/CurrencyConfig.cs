@@ -9,8 +9,7 @@ using UnityEngine.UI;
 
 namespace QuartersSDK {
     public class CurrencyConfig : ScriptableObject {
-
-        public string APIBaseUrl;
+        
         public string Code;
         public string DisplayNameSingular;
         public string DisplayNamePlural;

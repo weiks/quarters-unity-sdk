@@ -11,10 +11,13 @@ namespace QuartersSDK {
 		public Action OnInitComplete;
 
         public static QuartersInit Instance;
+        
+        //TODO move those to dedicated class
         [Header("Your Quarters app:")]
         public string APP_ID = "";
         public string APP_KEY = "";
         public string SERVER_API_TOKEN = "";
+        public string REDIRECT_URL = "";
 		public Environment environment = Environment.production;
 
         public List<Scope> DefaultScope = new List<Scope>() {
@@ -27,10 +30,9 @@ namespace QuartersSDK {
         
         public CurrencyConfig CurrencyConfig;
         public string FirstScene;
-        public bool CustomShopUI = false;
 
         public static string SDK_VERSION {
-	        get { return "1.0.0"; }
+	        get { return "2.0.0"; }
         }
         
 
