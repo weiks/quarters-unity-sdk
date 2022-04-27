@@ -46,13 +46,13 @@ namespace QuartersSDK {
 		public delegate void OnUserDetailsFailedDelegate(string error);
         
 
-        //Transfer
-        public delegate void OnTransferSuccessDelegate(string transactionHash);
-        public delegate void OnTransferFailedDelegate(string error);
-
-
-
-        public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
+        // //Transfer
+        // public delegate void OnTransferSuccessDelegate(string transactionHash);
+        // public delegate void OnTransferFailedDelegate(string error);
+        //
+        //
+        //
+        // public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
 
 		public string BASE_URL {
 			get {
@@ -202,7 +202,6 @@ namespace QuartersSDK {
             OnAuthorizationStart = null;
             OnAuthorizationSuccess = null;
             OnAuthorizationFailed = null;
-            currentTransferAPIRequests = new List<TransferAPIRequest>();
 
             Debug.Log("Quarters user deauthorized");
         }
@@ -536,111 +535,11 @@ namespace QuartersSDK {
       
 
 
-        private void AddOrSwapAPITransferRequest(TransferAPIRequest request) {
-
-            for (int i = 0; i < currentTransferAPIRequests.Count; i++) {
-
-                if (currentTransferAPIRequests[i].requestId == request.requestId) {
-                    currentTransferAPIRequests[i] = request;
-                    return;
-                }
-                
-            }
-            
-            currentTransferAPIRequests.Add(request);
-            
-        }
 
 
 
 
-
-        private IEnumerator CreateTransferRequestCall(TransferAPIRequest request, bool isRetry = false, bool forceExternalBrowser = false) {
-
-            if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Quarters: Transfers with external browser arent supported in Unity editor");
-
-            Debug.Log("CreateTransferRequestCall");
-
-            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + session.AccessToken);
-
-
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("tokens", request.tokens);
-            if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
-            data.Add("app_id", QuartersInit.Instance.APP_ID);
-
-
-
-
-            string dataJson = JsonConvert.SerializeObject(data);
-            Debug.Log(dataJson);
-            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-
-
-            WWW www = new WWW(API_URL + "/requests", dataBytes, headers);
-            Debug.Log(www.url);
-
-            while (!www.isDone) yield return new WaitForEndOfFrame();
-
-            if (!string.IsNullOrEmpty(www.error)) {
-                Debug.Log(www.error);
-
-                if (www.error == Error.UNAUTHORIZED_ERROR && !isRetry) {
-                    //token expired
-                    StartCoroutine(GetAccessToken(delegate {
-                        
-                        StartCoroutine(CreateTransferRequestCall(request, true, forceExternalBrowser));
-                        
-                    }, delegate(string error) {
-                        request.failedDelegate(error);
-                    }));
-                }
-                else {
-                    request.failedDelegate("Creating transfer failed: " + www.error);
-                }
-          
-                
-               
-            }
-            else {
-                Debug.Log(www.text);
-
-                string response = www.text;
-                Debug.Log("Response: " + response);
-
-                TransferRequest transferRequest = new TransferRequest(response);
-
-                request.requestId = transferRequest.id;
-                Debug.Log("request id is: " + transferRequest.id);
-                AddOrSwapAPITransferRequest(request);
-
-                //continue outh forward
-                string url = BASE_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
-
-                // if (session.IsGuestSession) {
-                //     url += "&firebase_token=" + session.GuestFirebaseToken;
-                // }
-
-                Debug.Log("Transfer authorization url: " + url);
-
-                if (!forceExternalBrowser) {
-                    //web view authentication
-                    QuartersDeepLink.OpenURL(url);
-                    QuartersDeepLink.OnDeepLink = DeepLink;
-                    QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
-                    QuartersDeepLink.OnCancelled += delegate {
-                        request.failedDelegate("User canceled");
-                        QuartersDeepLink.OnCancelled = null;
-                    };
-                }
-                else {
-                    //external authentication
-                    Application.OpenURL(url);
-                }
-            }
-        }
-
+       
 
 
         public void BuyQuarters() {
@@ -707,51 +606,51 @@ namespace QuartersSDK {
                 //string code = split[1];
                 AuthorizationCodeReceived(urlParams["code"]);
             }
-            else if (urlParams.ContainsKey("requestId")) {
-
-                string transferId = urlParams["requestId"];
-
-                foreach (TransferAPIRequest r in currentTransferAPIRequests) {
-                    Debug.Log("Current requests id: " + r.requestId);
-                }
-
-                //get request from ongoing
-                TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
-                if (transferRequest == null) {
-                    Debug.LogError("Transfer id is invalid: " + transferId);
-                    transferRequest.failedDelegate("Invalid transfer id: " + transferId);
-                }
-
-                if (urlParams.ContainsKey("error")) {
-                    //all requests are validated positivelly currently
-                    transferRequest.failedDelegate(urlParams["error"]);
-                }
-                else {
-
-                    
-                    GetAccountBalance(delegate(long balance) {
-                        transferRequest.txId = urlParams["txId"];
-                        Debug.Log("tx id:" + transferRequest.txId);
-
-                        transferRequest.successDelegate(transferRequest.txId);
-                    
-                    }, delegate(string error) {
-                        transferRequest.failedDelegate(error);
-                    });
-                }
-
-                currentTransferAPIRequests.Remove(transferRequest);
-            }
-            else if (urlParams.ContainsKey("cancel")) {
-                if (urlParams["cancel"] == "true") {
-                    
-                    Debug.Log("User canceled deep link");
-                    Debug.Log($"currentTransferAPIRequests count {currentTransferAPIRequests.Count.ToString()}");
-                    if (currentTransferAPIRequests.Count > 0) {
-                        currentTransferAPIRequests[0].failedDelegate("User canceled");
-                    }
-                }
-            }
+            // else if (urlParams.ContainsKey("requestId")) {
+            //
+            //     string transferId = urlParams["requestId"];
+            //
+            //     foreach (TransferAPIRequest r in currentTransferAPIRequests) {
+            //         Debug.Log("Current requests id: " + r.requestId);
+            //     }
+            //
+            //     //get request from ongoing
+            //     TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
+            //     if (transferRequest == null) {
+            //         Debug.LogError("Transfer id is invalid: " + transferId);
+            //         transferRequest.failedDelegate("Invalid transfer id: " + transferId);
+            //     }
+            //
+            //     if (urlParams.ContainsKey("error")) {
+            //         //all requests are validated positivelly currently
+            //         transferRequest.failedDelegate(urlParams["error"]);
+            //     }
+            //     else {
+            //
+            //         
+            //         GetAccountBalance(delegate(long balance) {
+            //             transferRequest.txId = urlParams["txId"];
+            //             Debug.Log("tx id:" + transferRequest.txId);
+            //
+            //             transferRequest.successDelegate(transferRequest.txId);
+            //         
+            //         }, delegate(string error) {
+            //             transferRequest.failedDelegate(error);
+            //         });
+            //     }
+            //
+            //     currentTransferAPIRequests.Remove(transferRequest);
+            // }
+            // else if (urlParams.ContainsKey("cancel")) {
+            //     if (urlParams["cancel"] == "true") {
+            //         
+            //         Debug.Log("User canceled deep link");
+            //         Debug.Log($"currentTransferAPIRequests count {currentTransferAPIRequests.Count.ToString()}");
+            //         if (currentTransferAPIRequests.Count > 0) {
+            //             currentTransferAPIRequests[0].failedDelegate("User canceled");
+            //         }
+            //     }
+            // }
 
 
 
