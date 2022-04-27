@@ -154,7 +154,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1041594829}
-  - {fileID: 1062341134}
   m_Father: {fileID: 608849150}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -210,10 +209,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 147895612}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdea07385a1754cbcad2226e9c5f5c1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 7aace9e94e7b54105824429ab6019860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  segueToShop: {fileID: 1062341135}
 --- !u!1 &429914231
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,54 +514,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &1062341133
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1062341134}
-  - component: {fileID: 1062341135}
-  m_Layer: 0
-  m_Name: segueToShopView
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1062341134
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1062341133}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 147895613}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1062341135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1062341133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bc054a384a424fe6950583606de58b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animatedTransition: 1
-  animatedTransitionType: 0
-  transitionType: 1
-  overrideSourceView: {fileID: 0}
-  targetView: {fileID: 0}
 --- !u!1 &1154278897
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,7 +718,7 @@ PrefabInstance:
     - target: {fileID: 5785252395037182505, guid: 384fca06186d449d79eff75b26c50b6b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000118561375
+      value: 0.00040832724
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 384fca06186d449d79eff75b26c50b6b, type: 3}

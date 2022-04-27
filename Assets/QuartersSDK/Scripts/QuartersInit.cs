@@ -16,8 +16,7 @@ namespace QuartersSDK {
         public string APP_KEY = "";
         public string SERVER_API_TOKEN = "";
 		public Environment environment = Environment.production;
-        [Header("Configuration:")]
-        public bool useAutoapproval = false;
+
         public List<Scope> DefaultScope = new List<Scope>() {
 	        Scope.identity,
 	        Scope.email,

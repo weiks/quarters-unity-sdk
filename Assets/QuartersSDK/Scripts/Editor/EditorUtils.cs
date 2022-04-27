@@ -9,7 +9,7 @@ namespace QuartersSDK {
     public class EditorUtils {
         
         [MenuItem("Quarters/Deauthorize Quarters User")]
-        private static void Deauthorize() {
+        private static void DeAuthorize() {
             
             Session.Invalidate();
             Debug.Log("Quarters user deauthorized");
