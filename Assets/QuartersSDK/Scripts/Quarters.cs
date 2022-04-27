@@ -16,16 +16,14 @@ using UnityEditor;
 
 
 namespace QuartersSDK {
-	public partial class Quarters : MonoBehaviour {
-
+	public class Quarters : MonoBehaviour {
         
         public static Action<User> OnUserLoaded;
 
 		public static Quarters Instance;
         public Session session;
         public PCKE PCKE;
-        
-        
+
         private CurrencyConfig currencyConfig;
         public CurrencyConfig CurrencyConfig {
             get {
@@ -46,20 +44,11 @@ namespace QuartersSDK {
 		public delegate void OnUserDetailsFailedDelegate(string error);
         
 
-        //Transfer
-        public delegate void OnTransferSuccessDelegate(string transactionHash);
-        public delegate void OnTransferFailedDelegate(string error);
-
-
-
-        public List<TransferAPIRequest> currentTransferAPIRequests = new List<TransferAPIRequest>();
-
 		public string BASE_URL {
 			get {
                 Environment environment = QuartersInit.Instance.environment;
-                if (environment == Environment.production) return $"https://{CurrencyConfig.APIBaseUrl}";
-                else if (environment == Environment.development) return $"https://dev.{CurrencyConfig.APIBaseUrl}";
-                else if (environment == Environment.sandbox) return $"https://sandbox.{CurrencyConfig.APIBaseUrl}";
+                if (environment == Environment.production) return $"https://www.poq.gg";
+                else if (environment == Environment.sandbox) return $"https://s2w-dev-firebase.herokuapp.com";
                 return null;
             }
 		}
@@ -67,26 +56,19 @@ namespace QuartersSDK {
 		public string API_URL {
 			get {
                
-                return $"{BASE_URL}/v1";
+                return $"{BASE_URL}/api/v1";
 			}
 		}
 
-
-        public static string URL_SCHEME  {
+        public string BUY_URL {
             get {
-                return "https://quarters-sandbox.s3.us-east-2.amazonaws.com/";
-   
+               
+                return $"{BASE_URL}/buy";
             }
         }
 
-
-        private Dictionary<string, string> AuthorizationHeader {
-            get { 
-                Dictionary<string, string> result = new Dictionary<string, string>();
-                result.Add("Content-Type", "application/json;charset=UTF-8");
-                return result;
-            }
-        }
+        public static string URL_SCHEME = String.Empty;
+        
 
 		private User currentUser = null;
 		public User CurrentUser {
@@ -119,9 +101,7 @@ namespace QuartersSDK {
 			Instance = this;
             
             PCKE = new PCKE();
-            Debug.Log(PCKE.CodeVerifier);
-            Debug.Log(PCKE.CodeChallenge());
-
+            URL_SCHEME = QuartersInit.Instance.REDIRECT_URL;
         }
 
 
@@ -197,7 +177,6 @@ namespace QuartersSDK {
             OnAuthorizationStart = null;
             OnAuthorizationSuccess = null;
             OnAuthorizationFailed = null;
-            currentTransferAPIRequests = new List<TransferAPIRequest>();
 
             Debug.Log("Quarters user deauthorized");
         }
@@ -232,24 +211,24 @@ namespace QuartersSDK {
         }
 
 
-        //used only in Editor
-        public void RefreshTokenReceived(string token) {
-
-            Debug.Log("Quarters: Refresh token: " + token);
-            session.RefreshToken = token;
-
-            StartCoroutine(GetAccessToken(delegate {
-                
-                OnAuthorizationSuccess();
-
-            }, delegate (string error) {
-                
-                OnAuthorizationFailed(error);
-
-            }));
-
-        }
-   
+        // //used only in Editor
+        // public void RefreshTokenReceived(string token) {
+        //
+        //     Debug.Log("Quarters: Refresh token: " + token);
+        //     session.RefreshToken = token;
+        //
+        //     StartCoroutine(GetAccessToken(delegate {
+        //         
+        //         OnAuthorizationSuccess();
+        //
+        //     }, delegate (string error) {
+        //         
+        //         OnAuthorizationFailed(error);
+        //
+        //     }));
+        //
+        // }
+        //
 
 
         #region api calls
@@ -270,7 +249,7 @@ namespace QuartersSDK {
             data.AddField("redirect_uri", URL_SCHEME);
            
             
-            string url = BASE_URL + "/oauth2/token";
+            string url = BASE_URL + "/api/oauth2/token";
             Debug.Log("GetRefreshToken url: " + url);
 
             using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
@@ -317,7 +296,7 @@ namespace QuartersSDK {
             data.AddField("refresh_token", session.RefreshToken);
             data.AddField("code_verifier", PCKE.CodeVerifier);
             
-            string url = BASE_URL + "/oauth2/token";
+            string url = BASE_URL + "/api/oauth2/token";
             Debug.Log("GetAccessToken url: " + url);
 
             using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
@@ -476,7 +455,7 @@ namespace QuartersSDK {
         
         public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) {
             
-            Debug.Log("MakeTransaction");
+            Debug.Log($"MakeTransaction with quantity: {coinsQuantity}");
             
             if (!session.DoesHaveRefreshToken) {
                 Debug.LogError("Missing refresh token");
@@ -531,113 +510,27 @@ namespace QuartersSDK {
       
 
 
-        private void AddOrSwapAPITransferRequest(TransferAPIRequest request) {
 
-            for (int i = 0; i < currentTransferAPIRequests.Count; i++) {
 
-                if (currentTransferAPIRequests[i].requestId == request.requestId) {
-                    currentTransferAPIRequests[i] = request;
-                    return;
-                }
-                
-            }
+
+
+       
+
+
+        public void BuyQuarters() {
             
-            currentTransferAPIRequests.Add(request);
+            Debug.Log("Buy Quarters");
+            
+            string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
+        
+            string url = $"{BUY_URL}?redirect?{redirectSafeUrl}";
+            Debug.Log(url);
+
+            QuartersDeepLink.OpenURL(url);
+            QuartersDeepLink.OnDeepLink = DeepLink;
+            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
             
         }
-
-
-
-
-
-        private IEnumerator CreateTransferRequestCall(TransferAPIRequest request, bool isRetry = false, bool forceExternalBrowser = false) {
-
-            if (Application.isEditor && forceExternalBrowser) Debug.LogWarning("Quarters: Transfers with external browser arent supported in Unity editor");
-
-            Debug.Log("CreateTransferRequestCall");
-
-            Dictionary<string, string> headers = new Dictionary<string, string>(AuthorizationHeader);
-            headers.Add("Authorization", "Bearer " + session.AccessToken);
-
-
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("tokens", request.tokens);
-            if (!string.IsNullOrEmpty(request.description)) data.Add("description", request.description);
-            data.Add("app_id", QuartersInit.Instance.APP_ID);
-
-
-
-
-            string dataJson = JsonConvert.SerializeObject(data);
-            Debug.Log(dataJson);
-            byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(dataJson);
-
-
-            WWW www = new WWW(API_URL + "/requests", dataBytes, headers);
-            Debug.Log(www.url);
-
-            while (!www.isDone) yield return new WaitForEndOfFrame();
-
-            if (!string.IsNullOrEmpty(www.error)) {
-                Debug.Log(www.error);
-
-                if (www.error == Error.UNAUTHORIZED_ERROR && !isRetry) {
-                    //token expired
-                    StartCoroutine(GetAccessToken(delegate {
-                        
-                        StartCoroutine(CreateTransferRequestCall(request, true, forceExternalBrowser));
-                        
-                    }, delegate(string error) {
-                        request.failedDelegate(error);
-                    }));
-                }
-                else {
-                    request.failedDelegate("Creating transfer failed: " + www.error);
-                }
-          
-                
-               
-            }
-            else {
-                Debug.Log(www.text);
-
-                string response = www.text;
-                Debug.Log("Response: " + response);
-
-                TransferRequest transferRequest = new TransferRequest(response);
-
-                request.requestId = transferRequest.id;
-                Debug.Log("request id is: " + transferRequest.id);
-                AddOrSwapAPITransferRequest(request);
-
-                //continue outh forward
-                string url = BASE_URL + "/requests/" + transferRequest.id + "?inline=true" + "&redirect_uri=" + URL_SCHEME;
-
-                // if (session.IsGuestSession) {
-                //     url += "&firebase_token=" + session.GuestFirebaseToken;
-                // }
-
-                Debug.Log("Transfer authorization url: " + url);
-
-                if (!forceExternalBrowser) {
-                    //web view authentication
-                    QuartersDeepLink.OpenURL(url);
-                    QuartersDeepLink.OnDeepLink = DeepLink;
-                    QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
-                    QuartersDeepLink.OnCancelled += delegate {
-                        request.failedDelegate("User canceled");
-                        QuartersDeepLink.OnCancelled = null;
-                    };
-                }
-                else {
-                    //external authentication
-                    Application.OpenURL(url);
-                }
-            }
-        }
-
-
-
 
 
 
@@ -666,7 +559,6 @@ namespace QuartersSDK {
                 ProcessDeepLink(linkActivation.QueryString);
             }
         }
-
         
         
         
@@ -688,54 +580,7 @@ namespace QuartersSDK {
                 //string code = split[1];
                 AuthorizationCodeReceived(urlParams["code"]);
             }
-            else if (urlParams.ContainsKey("requestId")) {
-
-                string transferId = urlParams["requestId"];
-
-                foreach (TransferAPIRequest r in currentTransferAPIRequests) {
-                    Debug.Log("Current requests id: " + r.requestId);
-                }
-
-                //get request from ongoing
-                TransferAPIRequest transferRequest = currentTransferAPIRequests.Find(t => t.requestId == transferId);
-                if (transferRequest == null) {
-                    Debug.LogError("Transfer id is invalid: " + transferId);
-                    transferRequest.failedDelegate("Invalid transfer id: " + transferId);
-                }
-
-                if (urlParams.ContainsKey("error")) {
-                    //all requests are validated positivelly currently
-                    transferRequest.failedDelegate(urlParams["error"]);
-                }
-                else {
-
-                    
-                    GetAccountBalance(delegate(long balance) {
-                        transferRequest.txId = urlParams["txId"];
-                        Debug.Log("tx id:" + transferRequest.txId);
-
-                        transferRequest.successDelegate(transferRequest.txId);
-                    
-                    }, delegate(string error) {
-                        transferRequest.failedDelegate(error);
-                    });
-                }
-
-                currentTransferAPIRequests.Remove(transferRequest);
-            }
-            else if (urlParams.ContainsKey("cancel")) {
-                if (urlParams["cancel"] == "true") {
-                    
-                    Debug.Log("User canceled deep link");
-                    Debug.Log($"currentTransferAPIRequests count {currentTransferAPIRequests.Count.ToString()}");
-                    if (currentTransferAPIRequests.Count > 0) {
-                        currentTransferAPIRequests[0].failedDelegate("User canceled");
-                    }
-                }
-            }
-
-
-
+            
         }
 
         #endregion

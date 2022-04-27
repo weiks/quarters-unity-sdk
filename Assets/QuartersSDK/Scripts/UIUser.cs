@@ -73,12 +73,16 @@ namespace QuartersSDK.UI {
 
             CoinsCount.text = String.Format("{0:n0}", availableCoins);
             currentCoins = availableCoins;
+            Debug.Log($"Current coins: {currentCoins}");
         }
 
 
    
 
         public void ToastPresent(int delta, Action OnAnimationComplete) {
+            
+
+            Debug.Log($"Delta: {delta}");
             
             if (toastSequence != null) toastSequence.Kill();
 
@@ -108,10 +112,11 @@ namespace QuartersSDK.UI {
             
             
             Sequence sequence = DOTween.Sequence();
-            sequence.Append(rectTransform.DOAnchorPosY(0, 0.33f));
+            sequence.Append(rectTransform.DOAnchorPosY(0, 0.6f));
             sequence.AppendInterval(0.5f);
             sequence.AppendCallback(delegate {
                 CoinsCount.text = String.Format("{0:n0}", currentCoins);
+                DeltaDiferenceText.text = string.Empty;
             });
             sequence.Append(CoinsCount.rectTransform.DOPunchScale(Vector3.one * 0.5f, 0.3f, 0, 0));
             sequence.AppendInterval(1f);

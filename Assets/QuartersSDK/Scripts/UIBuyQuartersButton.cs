@@ -7,9 +7,8 @@ using UnityEngine.UI;
 
 namespace QuartersSDK.UI {
     [RequireComponent(typeof(Button))]
-    public class UIPayButton : MonoBehaviour {
+    public class UIBuyQuartersButton : MonoBehaviour {
         
-        [SerializeField] private int Price = 10;
         private Button.ButtonClickedEvent _buttonClickedEvent;
 
         private Button button {
@@ -31,19 +30,14 @@ namespace QuartersSDK.UI {
             
             ModalView.instance.ShowActivity();
             
-            Quarters.Instance.MakeTransactionCall((long)Price, "Example transaction", delegate {
-                ModalView.instance.HideActivity();
-                OnTransferSuccessful();
-            }, delegate(string error) { OnTransferFailed(error); });
-
+            Quarters.Instance.BuyQuarters();
+            
+            
         }
         
         
         private void OnTransferSuccessful() {
-            ModalView.instance.HideActivity();
-            
-            SpendRewardView.Instance.Present(Price);
-            
+
             _buttonClickedEvent.Invoke();
         }
 

@@ -48,8 +48,9 @@ MonoBehaviour:
   APP_KEY: vx30bwmncmx4vl8heferjeqon6xzjch
   SERVER_API_TOKEN: 6dz934boysy6mhgjjudvjlh83kide32jodfds6kbo9utuj020ztanb
   ETHEREUM_ADDRESS: 0x979a67f51a20f43f6aef84a986ddfb59c69d007e
-  environment: 2
+  environment: 1
   useAutoapproval: 1
+  DefaultScope: 0000000001000000020000000300000004000000
   CurrencyConfig: {fileID: 11400000, guid: da0c245eae8e74604be832497fd0af99, type: 2}
   FirstScene: 
   CustomShopUI: 0
