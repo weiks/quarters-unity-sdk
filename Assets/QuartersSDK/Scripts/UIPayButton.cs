@@ -42,7 +42,7 @@ namespace QuartersSDK.UI {
         private void OnTransferSuccessful() {
             ModalView.instance.HideActivity();
             
-            SpendRewardView.Instance.Present(-Price);
+            SpendRewardView.Instance.Present(Price);
             
             _buttonClickedEvent.Invoke();
         }
