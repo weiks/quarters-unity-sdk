@@ -1,7 +1,5 @@
 fileFormatVersion: 2
-guid: e899307a734ec4f41b03d36d63254f69
-timeCreated: 1524482094
-licenseType: Pro
+guid: 6522c3271bb5d4f9c8027535f1d59412
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -10,15 +8,17 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Apple SD Gothic Neo
   fontNames:
-  - Apple SD Gothic Neo
+  - Lato
   fallbackFontReferences:
-  - {fileID: 12800000, guid: 2d4eeaf57dd984af6a97089c44b56def, type: 3}
+  - {fileID: 12800000, guid: 54103d47425f9458d95a143d035c3849, type: 3}
+  - {fileID: 12800000, guid: 52c3290f65fc64f56887d818b086df8a, type: 3}
+  - {fileID: 12800000, guid: 0535f640572034933b9e5d3ff09813e7, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 
