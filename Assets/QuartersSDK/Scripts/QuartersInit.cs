@@ -63,14 +63,7 @@ namespace QuartersSDK {
 			instance = coinforge.AddComponent<Quarters>();
 			instance.Init();
 
-			//init currency
-			
-            GameObject iap = new GameObject("QuartersIAP");
-            iap.transform.SetParent(this.transform);
-            DontDestroyOnLoad(iap.gameObject);
-            iap.AddComponent<QuartersIAP>();
 
-			
 			Debug.Log("QuartersInit complete");
 			this.OnInitComplete?.Invoke();
 

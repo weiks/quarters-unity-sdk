@@ -4,13 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using QuartersSDK.UI;
 using QuartersSDK;
-using UnityEngine.Purchasing;
 using DG.Tweening;
 
 
 namespace QuartersSDK.UI {
-
-
+	
 	public class AuthorizeView : UIView {
 
 		public Image brandLogo;

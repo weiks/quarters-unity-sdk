@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using QuartersSDK;
 using QuartersSDK.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Purchasing;
 
 
 namespace QuartersSDK.UI {
