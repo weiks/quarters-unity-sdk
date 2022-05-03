@@ -532,23 +532,22 @@ namespace QuartersSDK {
         #region Deep linking
 
 
-        void OnApplicationFocus( bool focusStatus ){
-            if (focusStatus) {
-                #if UNITY_ANDROID
-//                ProcessDeepLink(true);
-                #endif
-            }
-        }
+//         void OnApplicationFocus( bool focusStatus ){
+//             if (focusStatus) {
+//                 #if UNITY_ANDROID
+// //                ProcessDeepLink(true);
+//                 #endif
+//             }
+//         }
 
         
   
-        //TODO add unified uri parsing
-		public void DeepLink (LinkActivation linkActivation) {
+		public void DeepLink (QuartersLink link) {
 
-			Debug.Log("Deep link url: " + linkActivation.Uri);
+			Debug.Log("Deep link url: " + link.Uri);
 
-            if (!string.IsNullOrEmpty(linkActivation.Uri)) {
-                ProcessDeepLink(linkActivation.QueryString);
+            if (!string.IsNullOrEmpty(link.Uri)) {
+                ProcessDeepLink(link.QueryString);
             }
         }
         

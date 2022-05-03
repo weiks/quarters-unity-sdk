@@ -6,33 +6,36 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 using ImaginationOverflow.UniversalDeepLinking;
 using Newtonsoft.Json;
+using UnityEditor;
 
 namespace QuartersSDK {
     public class QuartersWebView : MonoBehaviour {
-        
-#if UNITY_WEBGL
-        [DllImport("__Internal")]
-        private static extern void OpenWebView(string url);
 
-        [DllImport("__Internal")]
-        private static extern void CloseWebView();
-#endif
-
-        public delegate void OnDeepLinkDelegate(LinkActivation linkActivation);
+        public delegate void OnDeepLinkDelegate(QuartersLink link);
         public static OnDeepLinkDelegate OnDeepLink;
-        
-        public delegate void OnDeepLinkWebGLDelegate(Dictionary<string, string> webViewData);
-        public static OnDeepLinkWebGLDelegate OnDeepLinkWebGL;
 
         public delegate void OnCancelledDelegate();
         public static OnCancelledDelegate OnCancelled;
-
-
+        
         private UniWebView WebView;
 
         public void Init() {
             DeepLinkManager.Instance.LinkActivated += OnLinkActivated;
+            
+            
             WebView = this.gameObject.AddComponent<UniWebView>();
+            WebView.SetShowToolbar(false);
+
+            
+            if (Application.isEditor) {
+                float editorScaleFactor = 0.5f;
+                WebView.Frame = new Rect(0, 0, Screen.width * editorScaleFactor, Screen.height * editorScaleFactor);
+            }
+            else {
+                //full screen
+                WebView.Frame = new Rect(0, 0, Screen.width, Screen.height);
+            }
+
             WebView.OnPageStarted += WebViewOnOnPageStarted;
         }
 
@@ -48,18 +51,27 @@ namespace QuartersSDK {
         //webview
         private void WebViewOnOnPageStarted(UniWebView webview, string url) {
             Debug.Log($"WebViewOnOnPageStarted: {url}");
-            
+            QuartersLink link = QuartersLink.Create(url);
+
+            if (link.Uri.IsValidDeepLink()) {
+                //deep link opened
+                WebView.Hide();
+                if (OnDeepLink != null) OnDeepLink(link);
+            }
         }
+
+        
 
         
         
         //external universal link
         private void OnLinkActivated(LinkActivation linkActivation) {
             Debug.Log($"ApplicationOnDeepLinkActivated: {linkActivation.Uri} is valid deep link: {linkActivation.Uri.IsValidDeepLink()}");
+            QuartersLink link = QuartersLink.Create(linkActivation.Uri);
             
-            if (linkActivation.Uri.IsValidDeepLink()) {
+            if (link.Uri.IsValidDeepLink()) {
                 //deep link opened
-                if (OnDeepLink != null) OnDeepLink(linkActivation);
+                if (OnDeepLink != null) OnDeepLink(link);
                     
             }
         }

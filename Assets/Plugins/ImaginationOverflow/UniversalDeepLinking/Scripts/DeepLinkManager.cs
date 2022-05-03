@@ -263,7 +263,7 @@ namespace ImaginationOverflow.UniversalDeepLinking
                 _currProvider.PollInfoAfterPause();
         }
 
-        private class UrlEncodingParser : Dictionary<string, string>
+        public class UrlEncodingParser : Dictionary<string, string>
         {
 
             /// <summary>
