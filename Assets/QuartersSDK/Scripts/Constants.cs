@@ -43,5 +43,10 @@ namespace QuartersSDK {
         events,
         wallet
     }
+
+    public enum LinkType {
+        WebView,
+        External
+    }
     
 }

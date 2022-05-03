@@ -23,6 +23,7 @@ namespace QuartersSDK {
 		public static Quarters Instance;
         public Session session;
         public PCKE PCKE;
+        [HideInInspector] public QuartersWebView QuartersWebView;
 
         private CurrencyConfig currencyConfig;
         public CurrencyConfig CurrencyConfig {
@@ -154,9 +155,8 @@ namespace QuartersSDK {
             Debug.Log(url);
 
             //web view authentication
-            QuartersDeepLink.OpenURL(url);
-            QuartersDeepLink.OnDeepLink = DeepLink;
-            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
+            QuartersWebView.OpenURL(url, LinkType.WebView);
+            QuartersWebView.OnDeepLink = DeepLink;
 
 
             if (Application.isEditor) {
@@ -510,13 +510,6 @@ namespace QuartersSDK {
       
 
 
-
-
-
-
-       
-
-
         public void BuyQuarters() {
             
             Debug.Log("Buy Quarters");
@@ -526,9 +519,8 @@ namespace QuartersSDK {
             string url = $"{BUY_URL}?redirect?{redirectSafeUrl}";
             Debug.Log(url);
 
-            QuartersDeepLink.OpenURL(url);
-            QuartersDeepLink.OnDeepLink = DeepLink;
-            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
+            QuartersWebView.OpenURL(url, LinkType.External);
+            QuartersWebView.OnDeepLink = DeepLink;
             
         }
 
@@ -550,7 +542,7 @@ namespace QuartersSDK {
 
         
   
-        
+        //TODO add unified uri parsing
 		public void DeepLink (LinkActivation linkActivation) {
 
 			Debug.Log("Deep link url: " + linkActivation.Uri);
@@ -562,11 +554,6 @@ namespace QuartersSDK {
         
         
         
-
-        public void DeepLinkWebGL(Dictionary<string, string> urlParams) {
-            ProcessDeepLink(urlParams);
-        }
-
 
         private void ProcessDeepLink(Dictionary<string, string> urlParams) {
 
