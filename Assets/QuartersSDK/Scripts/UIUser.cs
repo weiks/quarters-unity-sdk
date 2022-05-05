@@ -8,6 +8,7 @@ using UnityEngine.UI;
 namespace QuartersSDK.UI {
     public class UIUser : MonoBehaviour {
         
+        
         public Image Avatar;
         public Text UsernameText;
         public Text CoinsCount;
@@ -23,20 +24,28 @@ namespace QuartersSDK.UI {
         }
 
         private void OnEnable() {
+            QuartersInit.OnInitComplete += Init;
+        }
         
+        private void OnDestroy() {
+            Quarters.OnUserLoaded -= RefreshUser;
+            Quarters.Instance.CurrentUser.OnBalanceUpdated -= RefreshCoins;
+        }
+
+
+
+        private void Init() {
+               
             DeltaDiferenceText.text = "";
        
             Quarters.OnUserLoaded += RefreshUser;
             Quarters.Instance.CurrentUser.OnBalanceUpdated += RefreshCoins;
 
             RefreshUser(Quarters.Instance.CurrentUser);
-        }
         
-        private void OnDisable() {
-            Quarters.OnUserLoaded -= RefreshUser;
-            Quarters.Instance.CurrentUser.OnBalanceUpdated -= RefreshCoins;
         }
 
+    
 
         
         private void RefreshUser(User user) {
