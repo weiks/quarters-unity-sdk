@@ -23,6 +23,7 @@ namespace QuartersSDK {
 		public static Quarters Instance;
         public Session session;
         public PCKE PCKE;
+        [HideInInspector] public QuartersWebView QuartersWebView;
 
         private CurrencyConfig currencyConfig;
         public CurrencyConfig CurrencyConfig {
@@ -154,14 +155,10 @@ namespace QuartersSDK {
             Debug.Log(url);
 
             //web view authentication
-            QuartersDeepLink.OpenURL(url);
-            QuartersDeepLink.OnDeepLink = DeepLink;
-            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
+            QuartersWebView.OpenURL(url, LinkType.WebView);
+            QuartersWebView.OnDeepLink = DeepLink;
 
-
-            if (Application.isEditor) {
-                AuthorizeEditorView.Instance.Show();
-            }
+            
         }
         
 
@@ -510,13 +507,6 @@ namespace QuartersSDK {
       
 
 
-
-
-
-
-       
-
-
         public void BuyQuarters() {
             
             Debug.Log("Buy Quarters");
@@ -526,9 +516,8 @@ namespace QuartersSDK {
             string url = $"{BUY_URL}?redirect?{redirectSafeUrl}";
             Debug.Log(url);
 
-            QuartersDeepLink.OpenURL(url);
-            QuartersDeepLink.OnDeepLink = DeepLink;
-            QuartersDeepLink.OnDeepLinkWebGL = DeepLinkWebGL;
+            QuartersWebView.OpenURL(url, LinkType.External);
+            QuartersWebView.OnDeepLink = DeepLink;
             
         }
 
@@ -540,33 +529,27 @@ namespace QuartersSDK {
         #region Deep linking
 
 
-        void OnApplicationFocus( bool focusStatus ){
-            if (focusStatus) {
-                #if UNITY_ANDROID
-//                ProcessDeepLink(true);
-                #endif
-            }
-        }
+//         void OnApplicationFocus( bool focusStatus ){
+//             if (focusStatus) {
+//                 #if UNITY_ANDROID
+// //                ProcessDeepLink(true);
+//                 #endif
+//             }
+//         }
 
         
   
-        
-		public void DeepLink (LinkActivation linkActivation) {
+		public void DeepLink (QuartersLink link) {
 
-			Debug.Log("Deep link url: " + linkActivation.Uri);
+			Debug.Log("Deep link url: " + link.Uri);
 
-            if (!string.IsNullOrEmpty(linkActivation.Uri)) {
-                ProcessDeepLink(linkActivation.QueryString);
+            if (!string.IsNullOrEmpty(link.Uri)) {
+                ProcessDeepLink(link.QueryString);
             }
         }
         
         
         
-
-        public void DeepLinkWebGL(Dictionary<string, string> urlParams) {
-            ProcessDeepLink(urlParams);
-        }
-
 
         private void ProcessDeepLink(Dictionary<string, string> urlParams) {
 

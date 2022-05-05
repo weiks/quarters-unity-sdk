@@ -36,8 +36,7 @@ namespace QuartersSDK {
         }
         
 
-		private static Quarters instance;
-
+	
 
 		void Awake() {
 			DontDestroyOnLoad(this.gameObject);
@@ -57,13 +56,20 @@ namespace QuartersSDK {
             if (string.IsNullOrEmpty(SERVER_API_TOKEN)) Debug.LogError("Quarters Server Token key is empty");
 
 
-			GameObject coinforge = new GameObject("Quarters");
-			coinforge.transform.SetParent(this.transform);
-			DontDestroyOnLoad(coinforge.gameObject);
+			GameObject quarters = new GameObject("Quarters");
+			quarters.transform.SetParent(this.transform);
+			DontDestroyOnLoad(quarters.gameObject);
 
-			instance = coinforge.AddComponent<Quarters>();
-			instance.Init();
-
+			Quarters quartersComponent = quarters.AddComponent<Quarters>();
+			quartersComponent.Init();
+			
+			GameObject quartersWebView = new GameObject("QuartersWebView");
+			quarters.transform.SetParent(this.transform);
+			QuartersWebView webViewComponent = quarters.AddComponent<QuartersWebView>();
+			quartersComponent.QuartersWebView = webViewComponent;
+			webViewComponent.Init();
+			DontDestroyOnLoad(quartersWebView.gameObject);
+			
 
 			Debug.Log("QuartersInit complete");
 			this.OnInitComplete?.Invoke();
