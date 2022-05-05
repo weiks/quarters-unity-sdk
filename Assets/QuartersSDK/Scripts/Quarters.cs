@@ -158,10 +158,7 @@ namespace QuartersSDK {
             QuartersWebView.OpenURL(url, LinkType.WebView);
             QuartersWebView.OnDeepLink = DeepLink;
 
-
-            if (Application.isEditor) {
-                AuthorizeEditorView.Instance.Show();
-            }
+            
         }
         
 
