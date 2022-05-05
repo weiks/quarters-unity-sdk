@@ -7,10 +7,9 @@ using UnityEngine.SceneManagement;
 
 namespace QuartersSDK {
 	public class QuartersInit : MonoBehaviour {
-
-		public Action OnInitComplete;
-
+		
         public static QuartersInit Instance;
+        public static Action OnInitComplete;
         
         //TODO move those to dedicated class
         [Header("Your Quarters app:")]
@@ -45,12 +44,12 @@ namespace QuartersSDK {
 
 
 
-		public void Init(Action OnInitComplete) {
-
-			this.OnInitComplete = OnInitComplete;
+		public void Init(Action OnInitComplete, Action<string> OnInitError) {
 			
 			Debug.Log("Quarters Init:");
 
+			string error = "";
+			
 			if (string.IsNullOrEmpty(APP_ID)) Debug.LogError("Quarters App Id is empty");
 			if (string.IsNullOrEmpty(APP_KEY)) Debug.LogError("Quarters App key is empty");
             if (string.IsNullOrEmpty(SERVER_API_TOKEN)) Debug.LogError("Quarters Server Token key is empty");
@@ -72,14 +71,12 @@ namespace QuartersSDK {
 			
 
 			Debug.Log("QuartersInit complete");
-			this.OnInitComplete?.Invoke();
+			Session session = new Session();
+			session.Scopes = DefaultScope;
+			Quarters.Instance.Authorize(session.Scopes, OnInitComplete, OnInitError);
 
 		}
-
-		public void LoadMainScene() {
-			SceneManager.LoadScene(FirstScene, LoadSceneMode.Single);
-		}
-
+		
 
 	}
 }

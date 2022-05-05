@@ -20,7 +20,8 @@ namespace QuartersSDK {
         
         public static Action<User> OnUserLoaded;
 
-		public static Quarters Instance;
+        public static Quarters Instance;
+        
         public Session session;
         public PCKE PCKE;
         [HideInInspector] public QuartersWebView QuartersWebView;
@@ -34,12 +35,9 @@ namespace QuartersSDK {
 
         public delegate void OnAuthorizationStartDelegate();
 		public static event OnAuthorizationStartDelegate OnAuthorizationStart;
-
-		public delegate void OnAuthorizationSuccessDelegate();
-		public OnAuthorizationSuccessDelegate OnAuthorizationSuccess;
-
-		public delegate void OnAuthorizationFailedDelegate(string error);
-		public OnAuthorizationFailedDelegate OnAuthorizationFailed;
+        
+		public Action OnAuthorizationSuccess;
+        public Action<string> OnAuthorizationFailed;
 
 		public delegate void OnUserDetailsSucessDelegate(User user);
 		public delegate void OnUserDetailsFailedDelegate(string error);
@@ -112,7 +110,7 @@ namespace QuartersSDK {
 
 
 
-        public void Authorize(List<Scope> scopes, OnAuthorizationSuccessDelegate OnSuccessDelegate, OnAuthorizationFailedDelegate OnFailedDelegate) {
+        public void Authorize(List<Scope> scopes, Action OnSuccessDelegate, Action<string> OnFailedDelegate) {
             
             session = new Session();
 
