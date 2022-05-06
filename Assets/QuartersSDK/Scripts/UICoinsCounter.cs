@@ -22,7 +22,7 @@ namespace QuartersSDK.UI {
         private void OnEnable() {
             
             Quarters.OnUserLoaded += RefreshUser;
-            Quarters.Instance.CurrentUser.OnBalanceUpdated += RefreshCoins;
+            Quarters.OnBalanceUpdated += RefreshCoins;
 
             if (Quarters.Instance.CurrentUser != null) {
                 RefreshUser(Quarters.Instance.CurrentUser);

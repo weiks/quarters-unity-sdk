@@ -8,7 +8,7 @@ namespace QuartersSDK {
     [Serializable]
 	public class User {
         
-        public Action<long> OnBalanceUpdated;
+   
 
         [JsonProperty("id")] public string Id = "";
         [JsonProperty("gamerTag")] public string GamerTag = "";
@@ -21,7 +21,6 @@ namespace QuartersSDK {
 
             set {
                 balance = value;
-                OnBalanceUpdated?.Invoke(balance);
             }
             
             get {

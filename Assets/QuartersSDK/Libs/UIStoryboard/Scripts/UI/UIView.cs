@@ -107,21 +107,11 @@ namespace QuartersSDK.UI {
 
 		#if UNITY_EDITOR
 		void OnDrawGizmos() {
-			DrawOutline(Color.yellow);
 			Handles.Label(camera.ViewportToWorldPoint(Vector3.zero), gameObject.name.Replace("View", ""));
 		}
 
-		void OnDrawGizmosSelected () {
-			DrawOutline(Color.green);
-		}
+	
 
-		void DrawOutline(Color color) {
-			//draw view outline
-			DrawLine(Vector2.zero, new Vector2(0, 1f), color);
-			DrawLine(new Vector2(0, 1f), new Vector2(1f, 1f), color);
-			DrawLine(new Vector2(1f, 1f), new Vector2(1f, 0), color);
-			DrawLine(new Vector2(1f, 0), new Vector2(0, 0), color);
-		}
 		
 		void DrawLine(Vector2 screenPosFrom, Vector2 screenPosTo, Color color) {
 

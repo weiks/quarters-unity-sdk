@@ -13,6 +13,7 @@ namespace QuartersSDK.UI {
         public Text UsernameText;
         public Text CoinsCount;
         public Text DeltaDiferenceText;
+        public Sprite emptyAvatar;
 
         private long currentCoins;
         private Sequence toastSequence = null;
@@ -29,7 +30,7 @@ namespace QuartersSDK.UI {
         
         private void OnDestroy() {
             Quarters.OnUserLoaded -= RefreshUser;
-            Quarters.Instance.CurrentUser.OnBalanceUpdated -= RefreshCoins;
+            Quarters.OnBalanceUpdated -= RefreshCoins;
         }
 
 
@@ -39,9 +40,9 @@ namespace QuartersSDK.UI {
             DeltaDiferenceText.text = "";
        
             Quarters.OnUserLoaded += RefreshUser;
-            Quarters.Instance.CurrentUser.OnBalanceUpdated += RefreshCoins;
+            Quarters.OnBalanceUpdated += RefreshCoins;
 
-            RefreshUser(Quarters.Instance.CurrentUser);
+            // RefreshUser(Quarters.Instance.CurrentUser);
         
         }
 

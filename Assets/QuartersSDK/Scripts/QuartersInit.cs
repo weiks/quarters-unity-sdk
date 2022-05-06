@@ -73,7 +73,11 @@ namespace QuartersSDK {
 			Debug.Log("QuartersInit complete");
 			Session session = new Session();
 			session.Scopes = DefaultScope;
-			Quarters.Instance.Authorize(session.Scopes, OnInitComplete, OnInitError);
+			Quarters.Instance.Authorize(session.Scopes, delegate {
+				QuartersInit.OnInitComplete?.Invoke();
+				OnInitComplete?.Invoke();
+
+			}, OnInitError);
 
 		}
 		

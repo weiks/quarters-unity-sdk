@@ -19,6 +19,7 @@ namespace QuartersSDK {
 	public class Quarters : MonoBehaviour {
         
         public static Action<User> OnUserLoaded;
+        public static Action<long> OnBalanceUpdated;
 
         public static Quarters Instance;
         
@@ -440,6 +441,7 @@ namespace QuartersSDK {
                     Debug.Log(request.downloadHandler.text);
                     JObject responseData = JsonConvert.DeserializeObject<JObject>(request.downloadHandler.text);
                     CurrentUser.Balance = responseData["balance"].ToObject<long>();
+                    OnBalanceUpdated?.Invoke(CurrentUser.Balance);
                     OnSuccess(CurrentUser.Balance);
                 }
             }
