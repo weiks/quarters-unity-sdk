@@ -40,8 +40,8 @@ namespace QuartersSDK {
 		public Action OnAuthorizationSuccess;
         public Action<string> OnAuthorizationFailed;
 
-		public delegate void OnUserDetailsSucessDelegate(User user);
-		public delegate void OnUserDetailsFailedDelegate(string error);
+        public Action OnUserDetailsSucessDelegate;
+        public Action<string> OnUserDetailsFailedDelegate;
         
 
 		public string BASE_URL {
@@ -180,7 +180,7 @@ namespace QuartersSDK {
 
 
 
-		public void GetUserDetails(OnUserDetailsSucessDelegate OnSuccessDelegate, OnUserDetailsFailedDelegate OnFailedDelegate) {
+		public void GetUserDetails(Action<User> OnSuccessDelegate, Action<string> OnFailedDelegate) {
             StartCoroutine(GetUserDetailsCall(OnSuccessDelegate, OnFailedDelegate));
 		}
 
@@ -349,7 +349,7 @@ namespace QuartersSDK {
         }
 
 
-        private IEnumerator GetUserDetailsCall(OnUserDetailsSucessDelegate OnSuccess, OnUserDetailsFailedDelegate OnFailed, bool isRetry = false) {
+        private IEnumerator GetUserDetailsCall(Action<User> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
 
             Debug.Log("GetUserDetailsCall");
 
@@ -409,6 +409,11 @@ namespace QuartersSDK {
 
 
         private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
+
+            if (CurrentUser == null) {
+                yield return GetUserDetailsCall(delegate(User user) { }, OnFailed);
+            }
+            
             
             string url = API_URL + "/wallets/@me";
             

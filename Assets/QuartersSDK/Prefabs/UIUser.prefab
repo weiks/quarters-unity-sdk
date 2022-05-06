@@ -474,3 +474,4 @@ MonoBehaviour:
   UsernameText: {fileID: 7371387509779560231}
   CoinsCount: {fileID: 7371387510974960348}
   DeltaDiferenceText: {fileID: 1754090755813400460}
+  emptyAvatar: {fileID: 21300000, guid: f4d536b885e854dfeb35608b1430e2ec, type: 3}

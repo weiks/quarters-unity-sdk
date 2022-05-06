@@ -54,23 +54,26 @@ namespace QuartersSDK.UI {
             UsernameText.text = user.GamerTag;
             
             RefreshCoins(Quarters.Instance.CurrentUser.Balance);
+
+
+            if (!string.IsNullOrEmpty(Quarters.Instance.CurrentUser.AvatarUrl)) {
+                //refresh avatar
+                StartCoroutine(Quarters.Instance.GetAvatar(delegate(Texture avatar) {
+
+                    Rect rect = new Rect(0.0f, 0.0f, avatar.width, avatar.height);
+
+                    Sprite avatarSprite = Sprite.Create((Texture2D) avatar, rect, new Vector2(0.5f, 0.5f));
+
+                    Avatar.sprite = avatarSprite;
+
+                }, null));
+            }
+            else {
+                Avatar.sprite = emptyAvatar;
+            }
             
             
-            //refresh avatar
-            StartCoroutine(Quarters.Instance.GetAvatar(delegate(Texture avatar) {
-
-                Rect rect = new Rect(0.0f, 0.0f, avatar.width, avatar.height);
-                
-                Sprite avatarSprite = Sprite.Create((Texture2D)avatar, rect, new Vector2(0.5f, 0.5f));
-
-                Avatar.sprite = avatarSprite;
-
-            }, null));
-
-            
-            Quarters.Instance.GetAccountBalanceCall(RefreshCoins, delegate(string error) {
-                Debug.LogError(error);
-            });
+            Quarters.Instance.GetAccountBalanceCall(RefreshCoins, delegate(string error) { Debug.LogError(error); });
 
         }
 
