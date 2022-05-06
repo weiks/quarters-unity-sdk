@@ -27,12 +27,7 @@ namespace QuartersSDK.UI {
 
 
         public void ButtonTapped() {
-            
-            ModalView.instance.ShowActivity();
-            
             Quarters.Instance.BuyQuarters();
-            
-            
         }
         
         

@@ -42,7 +42,6 @@ namespace QuartersSDK.UI {
             Quarters.OnUserLoaded += RefreshUser;
             Quarters.OnBalanceUpdated += RefreshCoins;
 
-            // RefreshUser(Quarters.Instance.CurrentUser);
         
         }
 
@@ -94,7 +93,6 @@ namespace QuartersSDK.UI {
 
         public void ToastPresent(int delta, Action OnAnimationComplete) {
             
-
             Debug.Log($"Delta: {delta}");
             
             if (toastSequence != null) toastSequence.Kill();

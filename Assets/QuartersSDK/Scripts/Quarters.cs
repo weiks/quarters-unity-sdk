@@ -26,25 +26,15 @@ namespace QuartersSDK {
         public Session session;
         public PCKE PCKE;
         [HideInInspector] public QuartersWebView QuartersWebView;
-
-        private CurrencyConfig currencyConfig;
+        
         public CurrencyConfig CurrencyConfig {
             get {
                 return QuartersInit.Instance.CurrencyConfig;
             }
         }
 
-        public delegate void OnAuthorizationStartDelegate();
-		public static event OnAuthorizationStartDelegate OnAuthorizationStart;
-        
-		public Action OnAuthorizationSuccess;
-        public Action<string> OnAuthorizationFailed;
 
-        public Action OnUserDetailsSucessDelegate;
-        public Action<string> OnUserDetailsFailedDelegate;
-        
-
-		public string BASE_URL {
+        public string BASE_URL {
 			get {
                 Environment environment = QuartersInit.Instance.environment;
                 if (environment == Environment.production) return $"https://www.poq.gg";
@@ -111,28 +101,22 @@ namespace QuartersSDK {
 
 
 
-        public void Authorize(List<Scope> scopes, Action OnSuccessDelegate, Action<string> OnFailedDelegate) {
+        public void Authorize(List<Scope> scopes, Action OnSuccess, Action<string> OnError) {
             
             session = new Session();
-
-			this.OnAuthorizationSuccess = OnSuccessDelegate;
-			this.OnAuthorizationFailed = OnFailedDelegate;
+            
 
             if (IsAuthorized) {
 
                 StartCoroutine(GetAccessToken(delegate {
-                    OnSuccessDelegate?.Invoke();
+                    OnSuccess?.Invoke();
                 }, delegate(string error) {
-                    OnFailedDelegate?.Invoke(error);
+                    OnError?.Invoke(error);
                 }));
                 
                 return;
             }
 
-			if (OnAuthorizationStart != null) OnAuthorizationStart();
-
-
-            Debug.Log("OAuth authorization");
             
             string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
 
@@ -155,7 +139,18 @@ namespace QuartersSDK {
 
             //web view authentication
             QuartersWebView.OpenURL(url, LinkType.WebView);
-            QuartersWebView.OnDeepLink = DeepLink;
+            QuartersWebView.OnDeepLink = delegate(QuartersLink link) {
+
+                if (link.QueryString.ContainsKey("code")) {
+                    string code = link.QueryString["code"];
+                    StartCoroutine(GetRefreshToken(code, OnSuccess, OnError));
+                    QuartersWebView.OnDeepLink = null;
+                }
+                else if (link.QueryString.ContainsKey("error")) {
+                    OnError?.Invoke(link.QueryString["error"]);
+                    QuartersWebView.OnDeepLink = null;
+                }
+            };
 
             
         }
@@ -168,11 +163,7 @@ namespace QuartersSDK {
             Session.Invalidate();
             this.session = null;
             CurrentUser = null;
-
-            //clean up delegates
-            OnAuthorizationStart = null;
-            OnAuthorizationSuccess = null;
-            OnAuthorizationFailed = null;
+            
 
             Debug.Log("Quarters user deauthorized");
         }
@@ -199,41 +190,14 @@ namespace QuartersSDK {
         #endregion
 
     
-		public void AuthorizationCodeReceived(string code) {
-
-			Debug.Log("Quarters: Authorization code: " + code);
-            
-			StartCoroutine(GetRefreshToken(code));
-        }
-
-
-        // //used only in Editor
-        // public void RefreshTokenReceived(string token) {
-        //
-        //     Debug.Log("Quarters: Refresh token: " + token);
-        //     session.RefreshToken = token;
-        //
-        //     StartCoroutine(GetAccessToken(delegate {
-        //         
-        //         OnAuthorizationSuccess();
-        //
-        //     }, delegate (string error) {
-        //         
-        //         OnAuthorizationFailed(error);
-        //
-        //     }));
-        //
-        // }
-        //
-
+		// public void AuthorizationCodeReceived(string code) {
+  //           
+  //       }
+        
 
         #region api calls
 
-        
-
-
-
-		public IEnumerator GetRefreshToken(string code) {
+        private IEnumerator GetRefreshToken(string code, Action OnComplete, Action<string> OnError) {
 
             Debug.Log($"Get refresh token with code: {code}");
 
@@ -256,7 +220,7 @@ namespace QuartersSDK {
                     Debug.LogError(request.error);
                     Debug.LogError(request.downloadHandler.text);
                     
-                    OnAuthorizationFailed(request.error);
+                    OnError(request.error);
                 }
                 else {
                     Debug.Log(request.downloadHandler.text);
@@ -266,7 +230,7 @@ namespace QuartersSDK {
                     session.AccessToken = responseData["access_token"];
                     session.SetScope(responseData["scope"]);
 
-                    OnAuthorizationSuccess();
+                    OnComplete();
                 }
             }
         }
@@ -522,7 +486,8 @@ namespace QuartersSDK {
             Debug.Log(url);
 
             QuartersWebView.OpenURL(url, LinkType.External);
-            QuartersWebView.OnDeepLink = DeepLink;
+            Debug.LogError("Add deep link implementation");
+            // QuartersWebView.OnDeepLink = DeepLink;
             
         }
 
@@ -544,32 +509,35 @@ namespace QuartersSDK {
 
         
   
-		public void DeepLink (QuartersLink link) {
-
-			Debug.Log("Deep link url: " + link.Uri);
-
-            if (!string.IsNullOrEmpty(link.Uri)) {
-                ProcessDeepLink(link.QueryString);
-            }
-        }
+		// public void DeepLink (QuartersLink link) {
+  //
+		// 	Debug.Log("Deep link url: " + link.Uri);
+  //
+  //           if (!string.IsNullOrEmpty(link.Uri)) {
+  //               
+  //               
+  //               
+  //               ProcessDeepLink(link.QueryString);
+  //           }
+  //       }
+  //       
         
         
-        
 
-        private void ProcessDeepLink(Dictionary<string, string> urlParams) {
-
-            Debug.Log("ProcessDeepLink " + JsonConvert.SerializeObject(urlParams));
-
-            foreach (KeyValuePair<string,string> urlParam in urlParams) {
-                Debug.Log(urlParam.Key + " : " + urlParam.Value);
-            }
-
-            if (urlParams.ContainsKey("code")) {
-                //string code = split[1];
-                AuthorizationCodeReceived(urlParams["code"]);
-            }
-            
-        }
+        // private void ProcessDeepLink(Dictionary<string, string> urlParams) {
+        //
+        //     Debug.Log("ProcessDeepLink " + JsonConvert.SerializeObject(urlParams));
+        //
+        //     foreach (KeyValuePair<string,string> urlParam in urlParams) {
+        //         Debug.Log(urlParam.Key + " : " + urlParam.Value);
+        //     }
+        //
+        //     if (urlParams.ContainsKey("code")) {
+        //         //string code = split[1];
+        //         AuthorizationCodeReceived(urlParams["code"]);
+        //     }
+        //     
+        // }
 
         #endregion
 

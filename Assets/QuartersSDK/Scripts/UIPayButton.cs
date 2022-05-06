@@ -31,10 +31,7 @@ namespace QuartersSDK.UI {
             
             ModalView.instance.ShowActivity();
             
-            Quarters.Instance.MakeTransactionCall((long)Price, "Example transaction", delegate {
-                ModalView.instance.HideActivity();
-                OnTransferSuccessful();
-            }, delegate(string error) { OnTransferFailed(error); });
+            Quarters.Instance.MakeTransactionCall((long)Price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
 
         }
         
@@ -43,7 +40,6 @@ namespace QuartersSDK.UI {
             ModalView.instance.HideActivity();
             
             SpendRewardView.Instance.Present(Price);
-            
             _buttonClickedEvent.Invoke();
         }
 

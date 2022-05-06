@@ -37,6 +37,7 @@ namespace QuartersSDK.UI {
 		
 		private void OnInitError(string error) {
 			LoginButton.interactable = true;
+			Debug.LogError(error);
 		}
 		
 

@@ -44,7 +44,9 @@ namespace QuartersSDK {
         
         private void OnDestroy() {
             DeepLinkManager.Instance.LinkActivated -= OnLinkActivated;
-            WebView.OnPageStarted -= WebViewOnOnPageStarted;
+            if (WebView != null) {
+                WebView.OnPageStarted -= WebViewOnOnPageStarted;
+            }
         }
         
 
