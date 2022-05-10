@@ -18,27 +18,43 @@ namespace QuartersSDK.UI {
 
 		public bool AutomaticSignIn = false;
 
+		
+
 
 		private void Start() {
-			if (AutomaticSignIn) {
-				ButtonSignInClicked();
-			}
+			QuartersInit.Instance.Init(OnInitComplete, OnInitError);
 		}
 
+
 		public void ButtonSignInClicked() {
-			LoginButton.interactable = false;
-			QuartersInit.Instance.Init(OnInitComplete, OnInitError);
+			Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
 		}
 		
 
 		private void OnInitComplete() {
-			SegueToMainMenu.Perform();
+
+			if (AutomaticSignIn || Quarters.Instance.IsAuthorized) {
+				Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
+			}
+
 		}
 		
+		private void OnSignInComplete() {
+			SegueToMainMenu.Perform();
+		}
+
+		
+		
+		
 		private void OnInitError(string error) {
-			LoginButton.interactable = true;
 			Debug.LogError(error);
 		}
+		
+		
+		private void OnSignInError(string signInError) {
+			Debug.Log(signInError);
+		}
+
 		
 
 		

@@ -20,6 +20,7 @@ namespace QuartersSDK {
         
         public static Action<User> OnUserLoaded;
         public static Action<long> OnBalanceUpdated;
+        public static Action OnSignOut;
 
         public static Quarters Instance;
         
@@ -32,6 +33,15 @@ namespace QuartersSDK {
                 return QuartersInit.Instance.CurrencyConfig;
             }
         }
+        
+        public List<Scope> DefaultScope = new List<Scope>() {
+            Scope.identity,
+            Scope.email,
+            Scope.transactions,
+            Scope.events,
+            Scope.wallet
+        };
+
 
 
         public string BASE_URL {
@@ -89,6 +99,7 @@ namespace QuartersSDK {
 
 		public void Init() {
 			Instance = this;
+            session = new Session();
             
             PCKE = new PCKE();
             URL_SCHEME = QuartersInit.Instance.REDIRECT_URL;
@@ -99,9 +110,17 @@ namespace QuartersSDK {
         #region high level calls
         
 
+        public void SignInWithQuarters(Action OnComplete, Action<string> OnError) {
+            Session session = new Session();
+            session.Scopes = DefaultScope;
+            Quarters.Instance.Authorize(session.Scopes, delegate {
+                OnComplete?.Invoke();
+            }, OnError);
+
+        }
 
 
-        public void Authorize(List<Scope> scopes, Action OnSuccess, Action<string> OnError) {
+        private void Authorize(List<Scope> scopes, Action OnSuccess, Action<string> OnError) {
             
             session = new Session();
             
@@ -163,14 +182,13 @@ namespace QuartersSDK {
             Session.Invalidate();
             this.session = null;
             CurrentUser = null;
-            
 
-            Debug.Log("Quarters user deauthorized");
+            Debug.Log("Quarters user signed out");
+            OnSignOut?.Invoke();
         }
 
 
-
-
+        
 		public void GetUserDetails(Action<User> OnSuccessDelegate, Action<string> OnFailedDelegate) {
             StartCoroutine(GetUserDetailsCall(OnSuccessDelegate, OnFailedDelegate));
 		}
@@ -482,7 +500,7 @@ namespace QuartersSDK {
             
             string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
         
-            string url = $"{BUY_URL}?redirect?{redirectSafeUrl}";
+            string url = $"{BUY_URL}?redirect={redirectSafeUrl}";
             Debug.Log(url);
 
             QuartersWebView.OpenURL(url, LinkType.External);

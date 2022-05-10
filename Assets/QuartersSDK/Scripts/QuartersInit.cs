@@ -19,6 +19,13 @@ namespace QuartersSDK {
         public string REDIRECT_URL = "";
 		public Environment environment = Environment.production;
 
+     
+        public CurrencyConfig CurrencyConfig;
+
+        public static string SDK_VERSION {
+	        get { return "2.0.0"; }
+        }
+        
         public List<Scope> DefaultScope = new List<Scope>() {
 	        Scope.identity,
 	        Scope.email,
@@ -26,14 +33,7 @@ namespace QuartersSDK {
 	        Scope.events,
 	        Scope.wallet
         };
-        
-        public CurrencyConfig CurrencyConfig;
-        public string FirstScene;
 
-        public static string SDK_VERSION {
-	        get { return "2.0.0"; }
-        }
-        
 
 	
 
@@ -71,15 +71,12 @@ namespace QuartersSDK {
 			
 
 			Debug.Log("QuartersInit complete");
-			Session session = new Session();
-			session.Scopes = DefaultScope;
-			Quarters.Instance.Authorize(session.Scopes, delegate {
-				QuartersInit.OnInitComplete?.Invoke();
-				OnInitComplete?.Invoke();
-
-			}, OnInitError);
+			QuartersInit.OnInitComplete?.Invoke();
+			OnInitComplete?.Invoke();
 
 		}
+
+	
 		
 
 	}
