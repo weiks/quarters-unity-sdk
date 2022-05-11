@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using QuartersSDK.UI;
 using QuartersSDK;
-using DG.Tweening;
 
 
 namespace QuartersSDK.UI {

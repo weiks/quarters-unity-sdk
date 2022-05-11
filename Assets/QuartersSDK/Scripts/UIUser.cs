@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +13,10 @@ namespace QuartersSDK.UI {
         public Text CoinsCount;
         public Text DeltaDiferenceText;
         public Sprite emptyAvatar;
-
+        public Animation Animation;
+        
         private long currentCoins;
-        private Sequence toastSequence = null;
+        
         
         private RectTransform rectTransform {
             get {
@@ -94,8 +94,6 @@ namespace QuartersSDK.UI {
         public void ToastPresent(int delta, Action OnAnimationComplete) {
             
             Debug.Log($"Delta: {delta}");
-            
-            if (toastSequence != null) toastSequence.Kill();
 
             string deltaText = "";
             
@@ -120,21 +118,16 @@ namespace QuartersSDK.UI {
             rectTransform.anchoredPosition = hiddenPosition;
 
             CoinsCount.text = String.Format("{0:n0}", currentCoins - delta);
-            
-            
-            Sequence sequence = DOTween.Sequence();
-            sequence.Append(rectTransform.DOAnchorPosY(0, 0.6f));
-            sequence.AppendInterval(0.5f);
-            sequence.AppendCallback(delegate {
-                CoinsCount.text = String.Format("{0:n0}", currentCoins);
-                DeltaDiferenceText.text = string.Empty;
-            });
-            sequence.Append(CoinsCount.rectTransform.DOPunchScale(Vector3.one * 0.5f, 0.3f, 0, 0));
-            sequence.AppendInterval(1f);
-            sequence.Append(rectTransform.DOAnchorPosY(hiddenPosition.y, 0.33f));
-
+            Animation.Play("ToastMessage");
         }
-        
+
+
+
+        //animation event
+        public void UpdateBalance() {
+            CoinsCount.text = String.Format("{0:n0}", currentCoins);
+            DeltaDiferenceText.text = string.Empty;
+        }
         
         
        
