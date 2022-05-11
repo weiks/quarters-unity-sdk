@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: affbc34804eab0d449d35f401ad3f40b
-timeCreated: 1530807883
+guid: 3733732f53ff5497fb5deb29e5fa218a
+timeCreated: 1524849270
 licenseType: Store
 PluginImporter:
   serializedVersion: 2
@@ -23,11 +23,12 @@ PluginImporter:
           Exclude OSXIntel: 1
           Exclude OSXIntel64: 1
           Exclude OSXUniversal: 1
-          Exclude Tizen: 1
+          Exclude Tizen: 0
           Exclude Win: 1
           Exclude Win64: 1
           Exclude WindowsStoreApps: 1
           Exclude iOS: 0
+          Exclude tvOS: 1
     data:
       first:
         '': Editor
@@ -128,6 +129,12 @@ PluginImporter:
           CPU: AnyCPU
     data:
       first:
+        Tizen: Tizen
+      second:
+        enabled: 1
+        settings: {}
+    data:
+      first:
         Windows Store Apps: WindowsStoreApps
       second:
         enabled: 0
@@ -142,6 +149,14 @@ PluginImporter:
         iPhone: iOS
       second:
         enabled: 1
+        settings:
+          CompileFlags: 
+          FrameworkDependencies: 
+    data:
+      first:
+        tvOS: tvOS
+      second:
+        enabled: 0
         settings:
           CompileFlags: 
           FrameworkDependencies: 

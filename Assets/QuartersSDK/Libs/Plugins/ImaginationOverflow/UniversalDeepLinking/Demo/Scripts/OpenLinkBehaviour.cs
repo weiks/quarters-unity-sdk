@@ -9,7 +9,7 @@ public class OpenLinkBehaviour : MonoBehaviour
     {
         GetComponent<Button>().onClick.AddListener(Open);
     }
-	
+
     public void Open()
     {
         Application.OpenURL(Url);

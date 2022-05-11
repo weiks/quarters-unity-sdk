@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using ImaginationOverflow.UniversalDeepLinking;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,22 +14,21 @@ public class DeeplinkingExample : MonoBehaviour
     void Start()
     {
         SetupUi();
-        //
-        //  When the game is activated via deeplink or web link call the Instance_LinkActivated method
-        //
         DeepLinkManager.Instance.LinkActivated += Instance_LinkActivated;
     }
+
+  
 
     private void SetupUi()
     {
         Reference.SetActive(false);
+        
     }
 
 
     private void Instance_LinkActivated(LinkActivation s)
     {
         var go = Instantiate(Reference, Panel.transform);
-
         go.transform.GetChild(0).GetComponent<Text>().text = DateTime.Now.ToString("t");
         go.transform.GetChild(1).GetComponent<Text>().text = s.Uri;
         go.SetActive(true);
@@ -43,6 +43,5 @@ public class DeeplinkingExample : MonoBehaviour
         trans.sizeDelta = new Vector2(trans.sizeDelta.x, trans.sizeDelta.y + 112);
     }
 
-
-   
+    
 }

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: d0a629f01937043159e469a936b24fa6,
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 3ff10f00ee6944df8b27a47fbd9482d6,
     type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -351,7 +351,7 @@ Canvas:
   m_GameObject: {fileID: 178852067}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 1900725530}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
