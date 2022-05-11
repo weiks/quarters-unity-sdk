@@ -46,7 +46,7 @@ namespace QuartersSDK {
 
         public string BASE_URL {
 			get {
-                Environment environment = QuartersInit.Instance.environment;
+                Environment environment = QuartersInit.Instance.Environment;
                 if (environment == Environment.production) return $"https://www.poq.gg";
                 else if (environment == Environment.sandbox) return $"https://s2w-dev-firebase.herokuapp.com";
                 return null;
