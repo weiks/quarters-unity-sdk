@@ -6,9 +6,7 @@ using UnityEngine;
 namespace QuartersSDK {
     public class Error {
 
-        public static string UNAUTHORIZED_ERROR = "401 Unauthorized";
         public static string INVALID_TOKEN = "Invalid `refresh_token`";
-
 
         [JsonProperty("error")] public string ErrorMessage;
         [JsonProperty("error_description")] public string ErrorDescription;
@@ -20,14 +18,12 @@ namespace QuartersSDK {
             this.ErrorMessage = error.ErrorMessage;
             this.ErrorDescription = error.ErrorDescription;
         }
-        
     }
 
     public enum Environment {
         sandbox,
 		production
 	}
-
 
     public static partial class Constants {
         public const string REFRESH_TOKEN_KEY = "QuartersRefreshToken";

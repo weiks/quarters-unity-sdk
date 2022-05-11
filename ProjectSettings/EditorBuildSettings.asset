@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/QuartersSDK/Sample/Scenes/ExampleScene.unity
+    path: Assets/QuartersSDK/Sample/Scenes/SampleScene.unity
     guid: 46f84b90dbbaf4f8e98eb36606772a03
   m_configObjects: {}
