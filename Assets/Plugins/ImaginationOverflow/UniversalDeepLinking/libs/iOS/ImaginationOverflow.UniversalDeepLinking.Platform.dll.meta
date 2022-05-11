@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 060e1768692e941c2aa0f7c9f9f10e32
+guid: c38ee28a50e054c4cb7a69ff7939b100
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -12,7 +12,7 @@ PluginImporter:
   validateReferences: 1
   platformData:
   - first:
-      : Any
+      '': Any
     second:
       enabled: 0
       settings:
@@ -24,21 +24,19 @@ PluginImporter:
         Exclude OSXIntel: 1
         Exclude OSXIntel64: 1
         Exclude OSXUniversal: 1
+        Exclude Tizen: 1
         Exclude Win: 1
         Exclude Win64: 1
+        Exclude WindowsStoreApps: 1
         Exclude iOS: 0
+        Exclude tvOS: 0
   - first:
-      : Editor
+      '': Editor
     second:
       enabled: 0
       settings:
         CPU: AnyCPU
         OS: AnyOS
-  - first:
-      : data
-    second:
-      enabled: 0
-      settings: {}
   - first:
       Android: Android
     second:
@@ -46,11 +44,18 @@ PluginImporter:
       settings:
         CPU: ARMv7
   - first:
+      Any: 
+    second:
+      enabled: 0
+      settings: {}
+  - first:
       Editor: Editor
     second:
       enabled: 0
       settings:
+        CPU: AnyCPU
         DefaultValueInitialized: true
+        OS: AnyOS
   - first:
       Facebook: Win
     second:
@@ -74,7 +79,13 @@ PluginImporter:
     second:
       enabled: 0
       settings:
-        CPU: AnyCPU
+        CPU: x86_64
+  - first:
+      Standalone: LinuxUniversal
+    second:
+      enabled: 0
+      settings:
+        CPU: None
   - first:
       Standalone: OSXIntel
     second:
@@ -88,6 +99,12 @@ PluginImporter:
       settings:
         CPU: AnyCPU
   - first:
+      Standalone: OSXUniversal
+    second:
+      enabled: 0
+      settings:
+        CPU: None
+  - first:
       Standalone: Win
     second:
       enabled: 0
@@ -100,12 +117,30 @@ PluginImporter:
       settings:
         CPU: AnyCPU
   - first:
+      Windows Store Apps: WindowsStoreApps
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+        DontProcess: false
+        PlaceholderPath: 
+        SDK: AnySDK
+        ScriptingBackend: AnyScriptingBackend
+  - first:
       iPhone: iOS
     second:
       enabled: 1
       settings:
+        AddToEmbeddedBinaries: false
         CompileFlags: 
-        FrameworkDependencies: WebKit;
+        FrameworkDependencies: 
+  - first:
+      tvOS: tvOS
+    second:
+      enabled: 1
+      settings:
+        CompileFlags: 
+        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 
