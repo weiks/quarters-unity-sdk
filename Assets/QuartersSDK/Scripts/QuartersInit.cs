@@ -12,6 +12,7 @@ namespace QuartersSDK {
         public static Action OnInitComplete;
         
         [Header("Your Quarters app:")]
+        [Header("Copy your App ID and App Key from your Quarters dashboard")]
         public string APP_ID = "";
         public string APP_KEY = "";
         public string REDIRECT_URL = "";
@@ -26,10 +27,21 @@ namespace QuartersSDK {
         public List<Scope> DefaultScope = new List<Scope>() {
 	        Scope.identity,
 	        Scope.email,
-	        Scope.transactions,
+	        Scope.transactions, 
 	        Scope.events,
 	        Scope.wallet
         };
+        
+        public string DASHBOARD_URL {
+	        get {
+		        string suffix = string.IsNullOrEmpty(APP_ID) ? "new" : APP_ID;
+		        
+		        if (Environment == Environment.production) return $"https://apps.pocketfulofquarters.com/apps/{suffix}";
+		        else if (Environment == Environment.sandbox) return $"https://sandbox.pocketfulofquarters.com/apps/{suffix}";
+		        return null;
+	        }
+        }
+
 
 
 	

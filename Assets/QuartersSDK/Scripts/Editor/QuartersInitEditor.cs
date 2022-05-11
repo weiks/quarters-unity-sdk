@@ -13,11 +13,10 @@ public class QuartersInitEditor : UnityEditor.Editor {
         QuartersInit quartersInit = (QuartersInit)target;
 
         EditorGUILayout.LabelField($"Quarters Unity SDK - Version {QuartersInit.SDK_VERSION}");
+        if (GUILayout.Button("Open Dashboard")) {
+            Application.OpenURL(quartersInit.DASHBOARD_URL);
+        }
         EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Copy your App ID and App Key from your Quarters dashboard:");
-        EditorGUILayout.Space();
-
         base.DrawDefaultInspector();
 
 
