@@ -158,7 +158,7 @@ namespace QuartersSDK {
             Debug.Log(url);
 
             //web view authentication
-            QuartersWebView.OpenURL(url, LinkType.WebView);
+            QuartersWebView.OpenURL(url, LinkType.External);
             QuartersWebView.OnDeepLink = delegate(QuartersLink link) {
 
                 if (link.QueryString.ContainsKey("code")) {
