@@ -8,7 +8,7 @@
     [
         {
             "displayName": "Sample",
-            "description": "Basic sample containing QUraters user authentication. Pay and Reward functionality as well as Buying Quarters",
+            "description": "Basic sample containing Quarters user authentication. Pay and Reward functionality as well as Buying Quarters",
             "path": "Samples/Sample"
         }
     ]
