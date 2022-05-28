@@ -1,0 +1,22 @@
+{
+    "name": "gg.poq.unity.sdk.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7b873947d041844408b5c3739ad2d376",
+        "GUID:4ca033ee547ec451c8a2d3c33d7620ad",
+        "GUID:b6d0e5b49a073436cbcd56804553ee20"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "iOS"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

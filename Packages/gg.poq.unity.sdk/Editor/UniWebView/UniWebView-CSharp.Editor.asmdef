@@ -1,6 +1,9 @@
 {
     "name": "UniWebView-CSharp.Editor",
-    "references": [],
+    "rootNamespace": "",
+    "references": [
+        "GUID:4ca033ee547ec451c8a2d3c33d7620ad"
+    ],
     "includePlatforms": [
         "Editor"
     ],

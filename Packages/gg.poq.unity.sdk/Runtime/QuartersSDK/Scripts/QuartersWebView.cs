@@ -17,6 +17,7 @@ namespace QuartersSDK {
         public delegate void OnCancelledDelegate();
         public static OnCancelledDelegate OnCancelled;
         
+        
         private UniWebView WebView;
 
         public void Init() {
