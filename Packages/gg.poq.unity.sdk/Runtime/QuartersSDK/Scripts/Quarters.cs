@@ -103,7 +103,7 @@ namespace QuartersSDK {
             session = new Session();
             
             PCKE = new PCKE();
-            URL_SCHEME = QuartersInit.Instance.REDIRECT_URL;
+            URL_SCHEME = $"https://{QuartersInit.Instance.APP_UNIQUE_IDENTIFIER}.games.poq.gg"; ;
         }
 
 

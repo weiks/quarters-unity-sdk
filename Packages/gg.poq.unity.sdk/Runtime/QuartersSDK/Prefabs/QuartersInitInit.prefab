@@ -44,14 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9509de02ddf495b920686930ec4278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  APP_ID: sn72ojS0VtM4SDObZbAr
-  APP_KEY: vx30bwmncmx4vl8heferjeqon6xzjch
-  SERVER_API_TOKEN: 6dz934boysy6mhgjjudvjlh83kide32jodfds6kbo9utuj020ztanb
-  REDIRECT_URL: 
-  environment: 1
-  DefaultScope: 0000000001000000020000000300000004000000
+  APP_ID: 3yh0HFnykT9cL1iwDHhA
+  APP_KEY: 81fp2j3qru26kshhumftfj7z0iknweffu
+  APP_UNIQUE_IDENTIFIER: exampleapp
+  Environment: 1
   CurrencyConfig: {fileID: 11400000, guid: da0c245eae8e74604be832497fd0af99, type: 2}
-  FirstScene: 
+  DefaultScope: 0000000001000000020000000300000004000000
 --- !u!114 &6742697960832874904
 MonoBehaviour:
   m_ObjectHideFlags: 0
