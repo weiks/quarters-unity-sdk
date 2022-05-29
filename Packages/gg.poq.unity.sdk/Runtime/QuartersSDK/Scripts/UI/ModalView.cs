@@ -43,7 +43,6 @@ public class ModalView : UIView {
 		alertViewCanvasGroup.alpha = 0;
 		alertViewCanvasGroup.interactable = false;
 		alertViewCanvasGroup.blocksRaycasts = false;
-		alertRect.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 		ViewWillDissappear();
 		SetVisible(false);
 		ViewDisappeared();
@@ -66,7 +65,6 @@ public class ModalView : UIView {
 		
 		this.alertButtonDelegate = alertButtonDelegate;
 
-		alertRect.localPosition = Vector3.zero;
 
 		activityView.SetActive(false);
 		Debug.Log("Show alert: " + title);
@@ -95,8 +93,6 @@ public class ModalView : UIView {
 		alertViewCanvasGroup.interactable = true;
 		alertViewCanvasGroup.blocksRaycasts = true;
 
-		// alertRect.transform.localScale = Vector3.one;
-			
 		ViewWillAppear();
 		SetVisible(true);
 		ViewAppeared();
@@ -124,7 +120,6 @@ public class ModalView : UIView {
 
 	public void Hide(System.Action OnAnimationFinished = null) {
 		
-		alertRect.transform.localScale = Vector3.zero;
 		
 		alertViewCanvasGroup.alpha = 0;
 		alertViewCanvasGroup.interactable = false;
