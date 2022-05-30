@@ -5,7 +5,7 @@
         "_domainProtocols": [
             {
                 "_scheme": "https",
-                "_host": "quarters-sandbox.s3.us-east-2.amazonaws.com",
+                "_host": "exampleapp.games.poq.gg",
                 "_path": ""
             }
         ],
