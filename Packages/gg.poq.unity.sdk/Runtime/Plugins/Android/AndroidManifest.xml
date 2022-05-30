@@ -12,7 +12,7 @@
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="https" android:host="quarters-sandbox.s3.us-east-2.amazonaws.com" android:pathPattern=".*" />
+        <data android:scheme="https" android:host="exampleapp.games.poq.gg" android:pathPattern=".*" />
       </intent-filter>
     </activity>
   </application>
