@@ -24,7 +24,7 @@ namespace ImaginationOverflow.UniversalDeepLinking.Editor.Ui
         private readonly Dictionary<SupportedPlatforms, bool> _platformsWithCustomData = new Dictionary<SupportedPlatforms, bool>();
 
 
-        [MenuItem("Window/ImaginationOverflow/Universal DeepLinking/Configuration", priority = 0)]
+        // [MenuItem("Window/ImaginationOverflow/Universal DeepLinking/Configuration", priority = 0)]
 
         public static void ShowWindow()
         {

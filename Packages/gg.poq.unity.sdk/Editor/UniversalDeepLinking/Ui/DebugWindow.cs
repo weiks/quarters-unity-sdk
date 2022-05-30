@@ -15,7 +15,7 @@ namespace ImaginationOverflow.UniversalDeepLinking.Editor.Ui
     {
         private string _link;
 
-        [MenuItem("Window/ImaginationOverflow/Universal DeepLinking/Debug", priority = 2)]
+        // [MenuItem("Window/ImaginationOverflow/Universal DeepLinking/Debug", priority = 2)]
 
         public static void ShowWindow()
         {
