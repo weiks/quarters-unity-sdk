@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9509de02ddf495b920686930ec4278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  APP_ID: 3yh0HFnykT9cL1iwDHhA
-  APP_KEY: 81fp2j3qru26kshhumftfj7z0iknweffu
-  APP_UNIQUE_IDENTIFIER: exampleapp
+  APP_ID: 
+  APP_KEY: 
+  APP_UNIQUE_IDENTIFIER: 
   Environment: 1
   CurrencyConfig: {fileID: 11400000, guid: da0c245eae8e74604be832497fd0af99, type: 2}
   DefaultScope: 0000000001000000020000000300000004000000
