@@ -5,3 +5,9 @@ License Type: "Limited Redistribution License"
 
 Component Name: Universal Deep Linking
 License Type: "BSD"
+
+Component Name: UIStoryboard - Realtime Tech Ltd
+License Type: "BSD"
+
+Component Name: UISafeArea - Realtime Tech Ltd
+License Type: "BSD"
