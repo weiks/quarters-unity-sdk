@@ -38,9 +38,10 @@ namespace ImaginationOverflow.UniversalDeepLinking.Editor
             foreach (var guid in assetsWithPluginName)
             {
                 var asset = AssetDatabase.GUIDToAssetPath(guid);
-                if (AssetDatabase.IsValidFolder(asset))
+                if (AssetDatabase.IsValidFolder(asset) && asset.Contains("Runtime"))
                 {
-                    _pluginPath = asset.Replace("Assets/", "");
+                    string path = asset.Replace("Assets/", "");
+                    _pluginPath = path;
                     Debug.Log($"Plugin path: {_pluginPath}");
                     break;
                 }
