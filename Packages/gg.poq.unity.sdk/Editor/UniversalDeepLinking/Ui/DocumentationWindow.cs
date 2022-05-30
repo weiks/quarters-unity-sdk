@@ -9,7 +9,7 @@ namespace Assets.Plugins.ImaginationOverflow.UniversalDeepLinking.Editor.Ui
 {
     public class DocumentationWindow
     {
-        [MenuItem("Window/ImaginationOverflow/Universal DeepLinking/Documentation", priority = 1)]
+        // [MenuItem("Window/ImaginationOverflow/Universal DeepLinking/Documentation", priority = 1)]
 
         public static void Show()
         {
@@ -19,7 +19,7 @@ namespace Assets.Plugins.ImaginationOverflow.UniversalDeepLinking.Editor.Ui
 
     public class ReviewWindow
     {
-        [MenuItem("Window/ImaginationOverflow/Universal DeepLinking/Review", priority = 9)]
+        // [MenuItem("Window/ImaginationOverflow/Universal DeepLinking/Review", priority = 9)]
 
         public static void Show()
         {

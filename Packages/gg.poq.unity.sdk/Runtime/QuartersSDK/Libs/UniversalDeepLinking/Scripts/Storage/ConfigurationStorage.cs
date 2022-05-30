@@ -9,8 +9,8 @@ namespace ImaginationOverflow.UniversalDeepLinking.Storage
 {
     public class ConfigurationStorage
     {
-        private static string[] SaveFolders = { "Resources", "ImaginationOverflow" };
-        private static string SaveFile = "UniversalDeepLink.bytes";
+        private static string[] SaveFolders = { "Resources", "QuartersSDK" };
+        private static string SaveFile = "QuartersDeepLink.bytes";
         private static string _fileLocation;
 
         public static void Save(AppLinkingConfiguration config)
@@ -44,7 +44,7 @@ namespace ImaginationOverflow.UniversalDeepLinking.Storage
             }
             else
             {
-                var ta = UnityEngine.Resources.Load<TextAsset>("ImaginationOverflow/UniversalDeepLink");
+                var ta = UnityEngine.Resources.Load<TextAsset>("QuartersSDK/QuartersDeepLink");
                 config = JsonUtility.FromJson<AppLinkingConfiguration>(ta.text);
             }
             config.EnsureAllPlats();

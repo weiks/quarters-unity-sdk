@@ -27,6 +27,8 @@ namespace ImaginationOverflow.UniversalDeepLinking.Editor.PreBuild
 
             string androidPluginsPath = Path.Combine(Application.dataPath, "Plugins/Android");
             string adjustManifestPath = Path.Combine(Application.dataPath, EditorHelpers.PluginPath + "/libs/Android/UniversalDeepLinkManifest.xml");
+            adjustManifestPath = adjustManifestPath.Replace("Assets/", "");
+            
             string appManifestPath = Path.Combine(Application.dataPath, "Plugins/Android/AndroidManifest.xml");
 
             if (!File.Exists(appManifestPath))

@@ -42,6 +42,14 @@ namespace QuartersSDK {
 	        }
         }
 
+        public string POQ_APPS_URL {
+	        get {
+		 
+		        if (Environment == Environment.production) return $"https://www.poq.gg/apps";
+		        else if (Environment == Environment.sandbox) return $"https://s2w-dev-firebase.herokuapp.com/apps";
+		        return null;
+	        }
+        }
 
 
 	
