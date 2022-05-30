@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEditor;
+using UnityEngine;
 
 namespace ImaginationOverflow.UniversalDeepLinking.Editor
 {
@@ -40,6 +41,7 @@ namespace ImaginationOverflow.UniversalDeepLinking.Editor
                 if (AssetDatabase.IsValidFolder(asset))
                 {
                     _pluginPath = asset.Replace("Assets/", "");
+                    Debug.Log($"Plugin path: {_pluginPath}");
                     break;
                 }
             }
