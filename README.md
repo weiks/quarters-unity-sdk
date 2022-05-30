@@ -16,13 +16,13 @@ The SDK can be consume using:
 
 ### Unity Editor 
 Once you load the project to test the SDK: 
-- Go inside `Assest/Samples/Quarters SDK/2.0.0/Sample/Scene` in Unity Project view. There you will find an scene file called `SampleScene` (.unity extension).
+- Inside `Assets/Samples/Quarters SDK/2.0.0/Sample/Scene` in Unity Project view; you will find an scene file called `SampleScene` (.unity extension).
 
 ![image](https://user-images.githubusercontent.com/3865131/171059181-69a3eb84-12a6-44f0-9377-17315f52740a.png)
 - Load the scene (clicking on it) and select the `QuartersInitInit` component in `Hierarchy` view
 
 ![image](https://user-images.githubusercontent.com/3865131/171059753-49600e84-0a1d-4ec5-bcf4-ef353951d35a.png)
-- Open Unity inspector view and fill the APP_ID (equivalent to `client_id``) , APP_KEY (equivalent to `client_secret`), APP_UNIQUE_IDENTIFIER (equivalent to `Server API token`) with the correct values from your APP (the one rigistered in https://sandbox.pocketfulofquarters.com/apps).
+- Open Unity inspector view and fill the APP_ID (equivalent to `client_id`) , APP_KEY (equivalent to `client_secret`), APP_UNIQUE_IDENTIFIER (equivalent to `Server API token`) with the correct values from your APP (the one rigistered in https://sandbox.pocketfulofquarters.com/apps).
 
 - Press play and you will be able to use the SDK
 ![image](https://user-images.githubusercontent.com/3865131/171061038-bb0a3d74-1b8e-49a9-a0eb-9d2638d55eb2.png)
