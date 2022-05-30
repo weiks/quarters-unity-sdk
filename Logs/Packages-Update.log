@@ -41,3 +41,67 @@ The following packages were added:
   com.unity.modules.vr@1.0.0
   com.unity.modules.wind@1.0.0
   com.unity.modules.xr@1.0.0
+
+=== Sat Sep 14 06:28:28 2019
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.textmeshpro from version 1.3.0 to 1.4.1
+
+=== Thu Jan 30 14:34:19 2020
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.package-manager-ui from version 2.0.7 to 2.0.8
+
+=== Mon Jun 21 12:17:51 2021
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were added:
+  com.unity.2d.sprite@1.0.0
+  com.unity.2d.tilemap@1.0.0
+  com.unity.ide.rider@1.2.1
+  com.unity.ide.vscode@1.2.3
+  com.unity.modules.androidjni@1.0.0
+  com.unity.multiplayer-hlapi@1.0.8
+  com.unity.test-framework@1.1.24
+  com.unity.timeline@1.2.18
+  com.unity.ugui@1.0.0
+  com.unity.xr.legacyinputhelpers@2.1.7
+The following packages were updated:
+  com.unity.purchasing from version 2.0.6 to 3.0.2
+The following packages were removed:
+  com.unity.package-manager-ui@2.0.8
+
+=== Thu Jul 15 13:26:43 2021
+
+Packages were changed.
+Update Mode: mergeDefaultDependencies
+
+The following packages were added:
+  com.unity.collab-proxy@1.2.16
+  com.unity.textmeshpro@2.1.4
+  com.unity.timeline@1.2.18
+
+=== Wed Apr 20 15:26:37 2022
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were added:
+  com.unity.ide.visualstudio@2.0.14
+The following packages were updated:
+  com.unity.collab-proxy from version 1.2.16 to 1.15.15
+  com.unity.ide.rider from version 1.2.1 to 2.0.7
+  com.unity.ide.vscode from version 1.2.3 to 1.2.5
+  com.unity.purchasing from version 3.0.2 to 4.1.3
+  com.unity.test-framework from version 1.1.24 to 1.1.31
+  com.unity.textmeshpro from version 2.1.4 to 3.0.6
+  com.unity.timeline from version 1.2.18 to 1.4.8
+  com.unity.xr.legacyinputhelpers from version 2.1.7 to 2.1.9

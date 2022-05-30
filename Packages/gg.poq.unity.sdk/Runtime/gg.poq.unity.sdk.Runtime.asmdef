@@ -1,0 +1,21 @@
+{
+    "name": "gg.poq.unity.sdk.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4ca033ee547ec451c8a2d3c33d7620ad"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "iOS",
+        "macOSStandalone"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
