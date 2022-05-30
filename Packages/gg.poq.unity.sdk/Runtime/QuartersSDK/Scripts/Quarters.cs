@@ -505,7 +505,6 @@ namespace QuartersSDK {
             Debug.Log(url);
 
             QuartersWebView.OpenURL(url, LinkType.External);
-            Debug.LogError("Add deep link implementation");
             // QuartersWebView.OnDeepLink = DeepLink;
             
         }
