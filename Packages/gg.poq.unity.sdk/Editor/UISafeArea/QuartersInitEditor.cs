@@ -15,9 +15,14 @@ public class QuartersInitEditor : UnityEditor.Editor {
         QuartersInit quartersInit = (QuartersInit)target;
 
         EditorGUILayout.LabelField($"Quarters Unity SDK - Version {QuartersInit.SDK_VERSION}");
-        if (GUILayout.Button("Open Dashboard")) {
+        if (GUILayout.Button("Open App Dashboard")) {
             Application.OpenURL(quartersInit.DASHBOARD_URL);
         }
+        if (GUILayout.Button("My Apps")) {
+            Application.OpenURL(quartersInit.POQ_APPS_URL);
+        }
+        
+        
         EditorGUILayout.Space();
         base.DrawDefaultInspector();
         
