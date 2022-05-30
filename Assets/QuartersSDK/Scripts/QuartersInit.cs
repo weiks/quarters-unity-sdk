@@ -15,7 +15,7 @@ namespace QuartersSDK {
         [Header("Copy your App ID and App Key from your Quarters dashboard")]
         public string APP_ID = "";
         public string APP_KEY = "";
-        public string REDIRECT_URL = "";
+        public string APP_UNIQUE_IDENTIFIER = "";
 		public Environment Environment = Environment.production;
 
 		public CurrencyConfig CurrencyConfig;
