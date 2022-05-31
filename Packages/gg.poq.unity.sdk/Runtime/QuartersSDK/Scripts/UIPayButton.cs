@@ -28,10 +28,11 @@ namespace QuartersSDK.UI {
 
 
         public void ButtonTapped() {
-            
+
+            long price = -10;
             ModalView.instance.ShowActivity();
             
-            Quarters.Instance.MakeTransactionCall((long)Price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
+            Quarters.Instance.Transaction((long)Price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
 
         }
         

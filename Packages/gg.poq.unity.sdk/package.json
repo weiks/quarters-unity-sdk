@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "displayName": "Quarters Unity SDK",
   "unity": "2019.4",
-  "description": "Quarters Unity SDK description PLACEHOLDER",
+  "description": "Quarters Unity SDK is a set of development tools with easily accessible API calls allowing developers to connect their games to Quarters ecosystem",
   "samples": [
     {
       "displayName": "Sample",

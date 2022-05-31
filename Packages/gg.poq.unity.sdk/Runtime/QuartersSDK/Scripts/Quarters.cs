@@ -199,7 +199,7 @@ namespace QuartersSDK {
         }
 
         
-        public void MakeTransactionCall(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError) {
+        public void Transaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError) {
             StartCoroutine(MakeTransaction(coinsQuantity, description, OnSuccess, OnError));
         }
 
