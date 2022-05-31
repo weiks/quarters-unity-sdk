@@ -64,6 +64,12 @@ Quarters Unity SDK contains a basic sample app presenting major SDK functionalit
 
 To import the sample scene select Sample Import from Unity Package Manager
 
+
+https://user-images.githubusercontent.com/41578378/171196202-3669bee8-29bb-4047-a914-326e6ec9d5dd.mov
+
+
+
+
 ## Unity supported versions
 Unity 2019.4+
 
