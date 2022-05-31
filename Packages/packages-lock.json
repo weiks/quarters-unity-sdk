@@ -40,7 +40,7 @@
     },
     "com.unity.nuget.newtonsoft-json": {
       "version": "3.0.2",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -69,7 +69,9 @@
       "version": "file:gg.poq.unity.sdk",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
+      }
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

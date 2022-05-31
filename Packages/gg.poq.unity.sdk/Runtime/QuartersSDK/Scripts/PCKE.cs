@@ -16,7 +16,6 @@ public class PCKE {
     
     private string GenerateCodeVerifier() {
         string codeVerifier = RandomString(Random.Range(43, 129));
-        Debug.Log($"Code verifier: {codeVerifier}");
         return codeVerifier;
     }
 

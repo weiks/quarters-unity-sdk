@@ -18,26 +18,35 @@ namespace QuartersSDK {
         public static OnCancelledDelegate OnCancelled;
         
         
-        private UniWebView WebView;
+        private UniWebView webView;
+        public UniWebView WebView {
+            get {
+                if (webView == null) {
+                    webView = this.gameObject.AddComponent<UniWebView>();
+                    webView.SetShowToolbar(false);
+
+            
+                    if (Application.isEditor) {
+                        float editorScaleFactor = 0.5f;
+                        webView.Frame = new Rect(0, 0, Screen.width * editorScaleFactor, Screen.height * editorScaleFactor);
+                    }
+                    else {
+                        //full screen
+                        webView.Frame = new Rect(0, 0, Screen.width, Screen.height);
+                    }
+
+                    webView.OnPageStarted += WebViewOnOnPageStarted;
+                }
+
+                return webView;
+            }
+            set {
+                webView = value;
+            }
+        }
 
         public void Init() {
             DeepLinkManager.Instance.LinkActivated += OnLinkActivated;
-            
-            
-            WebView = this.gameObject.AddComponent<UniWebView>();
-            WebView.SetShowToolbar(false);
-
-            
-            if (Application.isEditor) {
-                float editorScaleFactor = 0.5f;
-                WebView.Frame = new Rect(0, 0, Screen.width * editorScaleFactor, Screen.height * editorScaleFactor);
-            }
-            else {
-                //full screen
-                WebView.Frame = new Rect(0, 0, Screen.width, Screen.height);
-            }
-
-            WebView.OnPageStarted += WebViewOnOnPageStarted;
         }
 
 
@@ -88,6 +97,9 @@ namespace QuartersSDK {
             }
             
             if (linkType == LinkType.WebView) {
+                // if (this.gameObject.GetComponent<UniWebView>() == null) {
+                //     WebView = this.gameObject.AddComponent<UniWebView>();
+                // }
                 WebView.Load(url);
                 WebView.Show();
             }
