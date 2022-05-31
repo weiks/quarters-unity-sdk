@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4558843478924128}
   - component: {fileID: 114318907845399088}
-  - component: {fileID: 6742697960832874904}
   m_Layer: 0
   m_Name: QuartersInitInit
   m_TagString: Untagged
@@ -50,15 +49,3 @@ MonoBehaviour:
   Environment: 1
   CurrencyConfig: {fileID: 11400000, guid: da0c245eae8e74604be832497fd0af99, type: 2}
   DefaultScope: 0000000001000000020000000300000004000000
---- !u!114 &6742697960832874904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1627675155207574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 999c829569f274dae9d4249dfc8cf211, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
