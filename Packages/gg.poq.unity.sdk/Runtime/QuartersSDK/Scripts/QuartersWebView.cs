@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using ImaginationOverflow.UniversalDeepLinking;
 using Newtonsoft.Json;
 using UnityEditor;
+using UnityEngine.Serialization;
 
 namespace QuartersSDK {
     public class QuartersWebView : MonoBehaviour {
@@ -19,6 +20,7 @@ namespace QuartersSDK {
         
         
         private UniWebView webView;
+        private bool renderEditorAuthorizationWindow = false;
         public UniWebView WebView {
             get {
                 if (webView == null) {
@@ -92,76 +94,56 @@ namespace QuartersSDK {
 
         public void OpenURL(string url, LinkType linkType) {
 
-            if (Application.isEditor) {
+            if (Application.isEditor && Application.platform != RuntimePlatform.WindowsEditor) {
                 linkType = LinkType.WebView;
             }
             
             if (linkType == LinkType.WebView) {
-                // if (this.gameObject.GetComponent<UniWebView>() == null) {
-                //     WebView = this.gameObject.AddComponent<UniWebView>();
-                // }
                 WebView.Load(url);
                 WebView.Show();
             }
             else {
                 //external authorisation
                 Application.OpenURL(url);
+                if (Application.platform == RuntimePlatform.WindowsEditor) {
+                    renderEditorAuthorizationWindow = true;
+                }
             }
         }
 
 
-
-        
-        
-        
-        #region WebGL plugin events
-        
-#if UNITY_WEBGL
-        public void OnUrlOpen(string url) {
+        private string editorAuthCode = "Hello World";
+        private Color backgroundColor = new Color(255f / 19f, 255f / 34f, 255f / 43f);
+        public Rect windowRect = new Rect(0, 0, Screen.width, Screen.height);
+        private string editorAuthorizationUrl = string.Empty;
+        void OnGUI() {
+            if (!renderEditorAuthorizationWindow) return;
             
-//            if (LastOpenedUrl == url) return;
-//            
-//            Debug.Log("On Url Open Web GL is deep link: " + url.IsDeepLink() + " " + url);
-//            
-//            if (url.IsDeepLink()) {
-//                //deep link opened
-//                if (OnDeepLink != null) OnDeepLink(url, isExternalBrowser: false);
-//                CloseWebView();
-//            }
-//            else {
-//                if (url != url) {
-//                    //external link, open external browser instead and invalidate this webview
-//                    Application.OpenURL(url);
-//                }
-//            }
+            GUI.color = backgroundColor;
+            GUI.ModalWindow(0, windowRect, DrawEditorAuthWindow, "Quarters Authorization");
+        }
+        
+
+        void DrawEditorAuthWindow(int windowID) {
             
+            EditorGUILayout.BeginVertical();
+            GUI.color = Color.white;
+            editorAuthorizationUrl = GUILayout.TextField(editorAuthorizationUrl, "Authorization code", GUILayout.Height(200f));
+            
+            if (GUILayout.Button("OK"))
+            {
+                QuartersLink link = QuartersLink.Create(editorAuthorizationUrl);
+                if (OnDeepLink != null) OnDeepLink(link);
+
+                renderEditorAuthorizationWindow = false;
+            }
+            
+            EditorGUILayout.EndVertical();
+
+      
         }
-
-        
-        public void OnWebViewClosed() {
-            Debug.Log("OnWebViewClosed");
-            if (OnCancelled != null) OnCancelled();
-        }
-
-        public void OnWebViewReceivedData(string data) {
-            Debug.Log("OnWebViewReceivedData " + data);
-
-            Dictionary<string, string> webViewData = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
-            if (OnDeepLinkWebGL != null) OnDeepLinkWebGL(webViewData);
-        }
-
-#endif
-#endregion
-        
-        
-
-
 
 
 
     }
-
-
-
-
 }
