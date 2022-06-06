@@ -26,8 +26,7 @@ namespace QuartersSDK {
                 if (webView == null) {
                     webView = this.gameObject.AddComponent<UniWebView>();
                     webView.SetShowToolbar(false);
-
-            
+                    
                     if (Application.isEditor) {
                         float editorScaleFactor = 0.5f;
                         webView.Frame = new Rect(0, 0, Screen.width * editorScaleFactor, Screen.height * editorScaleFactor);
@@ -112,15 +111,14 @@ namespace QuartersSDK {
         }
 
 
-        private string editorAuthCode = "Hello World";
         private Color backgroundColor = new Color(255f / 19f, 255f / 34f, 255f / 43f);
-        public Rect windowRect = new Rect(0, 0, Screen.width, Screen.height);
+        public Rect windowRect = new Rect(0, Screen.height * 0.3f, Screen.width, Screen.height * 0.3f);
         private string editorAuthorizationUrl = string.Empty;
         void OnGUI() {
             if (!renderEditorAuthorizationWindow) return;
             
             GUI.color = backgroundColor;
-            GUI.ModalWindow(0, windowRect, DrawEditorAuthWindow, "Quarters Authorization");
+            GUI.ModalWindow(0, windowRect, DrawEditorAuthWindow, "Quarters Editor Authorization");
         }
         
 
@@ -128,19 +126,27 @@ namespace QuartersSDK {
             
             EditorGUILayout.BeginVertical();
             GUI.color = Color.white;
-            editorAuthorizationUrl = GUILayout.TextField(editorAuthorizationUrl, "Authorization code", GUILayout.Height(200f));
-            
-            if (GUILayout.Button("OK"))
-            {
+
+            GUILayout.Label("1. Authorize user in the external browser window\n" +
+                            "2. Then copy and paste browser url here\n" +
+                            "3. Press Authorize button");
+            editorAuthorizationUrl = GUILayout.TextArea(editorAuthorizationUrl, GUILayout.Height(100f));
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Paste and Authorize")) {
+                editorAuthorizationUrl = EditorGUIUtility.systemCopyBuffer;
                 QuartersLink link = QuartersLink.Create(editorAuthorizationUrl);
                 if (OnDeepLink != null) OnDeepLink(link);
-
                 renderEditorAuthorizationWindow = false;
             }
-            
-            EditorGUILayout.EndVertical();
 
-      
+            if (GUILayout.Button("Authorize")) {
+                QuartersLink link = QuartersLink.Create(editorAuthorizationUrl);
+                if (OnDeepLink != null) OnDeepLink(link);
+                renderEditorAuthorizationWindow = false;
+            }
+            GUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
         }
 
 
