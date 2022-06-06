@@ -64,6 +64,12 @@ Quarters Unity SDK contains a basic sample app presenting major SDK functionalit
 
 To import the sample scene select Sample Import from Unity Package Manager
 
+
+https://user-images.githubusercontent.com/41578378/171196202-3669bee8-29bb-4047-a914-326e6ec9d5dd.mov
+
+
+
+
 ## Unity supported versions
 Unity 2019.4+
 
@@ -107,6 +113,9 @@ private void OnSignInError(string signInError) {
     Debug.Log(signInError);
 }
 ```
+#### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. After successful authorisation please copy and paste the browser url to unity game view and press Authorize.
+![Capture](https://user-images.githubusercontent.com/41578378/172198600-980454b9-e260-4719-8ad8-621809a2ad14.PNG)
+
 
 ### Making Transactions
 You can charge user Quarters as well as reward your user with quarters using unified Transaction API call.
