@@ -413,10 +413,8 @@ namespace QuartersSDK {
             string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
 
             string url = $"{BUY_URL}?redirect={redirectSafeUrl}";
-            Debug.Log(url);
 
             QuartersWebView.OpenURL(url, LinkType.External);
-            // QuartersWebView.OnDeepLink = DeepLink;
         }
 
         #endregion
