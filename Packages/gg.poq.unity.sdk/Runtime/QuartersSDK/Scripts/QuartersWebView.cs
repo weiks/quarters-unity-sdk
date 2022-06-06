@@ -19,8 +19,10 @@ namespace QuartersSDK {
         public static OnCancelledDelegate OnCancelled;
         
         
-        private UniWebView webView;
+      
         private bool renderEditorAuthorizationWindow = false;
+        
+        private UniWebView webView;
         public UniWebView WebView {
             get {
                 if (webView == null) {
@@ -55,8 +57,8 @@ namespace QuartersSDK {
         
         private void OnDestroy() {
             DeepLinkManager.Instance.LinkActivated -= OnLinkActivated;
-            if (WebView != null) {
-                WebView.OnPageStarted -= WebViewOnOnPageStarted;
+            if (webView != null) {
+                webView.OnPageStarted -= WebViewOnOnPageStarted;
             }
         }
         
@@ -133,22 +135,27 @@ namespace QuartersSDK {
             editorAuthorizationUrl = GUILayout.TextArea(editorAuthorizationUrl, GUILayout.Height(100f));
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Paste and Authorize")) {
-                editorAuthorizationUrl = EditorGUIUtility.systemCopyBuffer;
-                QuartersLink link = QuartersLink.Create(editorAuthorizationUrl);
-                if (OnDeepLink != null) OnDeepLink(link);
+            if (GUILayout.Button("Cancel")) {
                 renderEditorAuthorizationWindow = false;
             }
-
+            if (GUILayout.Button("Paste and Authorize")) {
+                editorAuthorizationUrl = EditorGUIUtility.systemCopyBuffer;
+                AuthorizeEditor();
+                renderEditorAuthorizationWindow = false;
+            }
             if (GUILayout.Button("Authorize")) {
-                QuartersLink link = QuartersLink.Create(editorAuthorizationUrl);
-                if (OnDeepLink != null) OnDeepLink(link);
+                AuthorizeEditor();
                 renderEditorAuthorizationWindow = false;
             }
             GUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
         }
 
+        private void AuthorizeEditor() {
+            QuartersLink link = QuartersLink.Create(editorAuthorizationUrl);
+            if (OnDeepLink != null) OnDeepLink(link);
+        }
+        
 
 
     }
