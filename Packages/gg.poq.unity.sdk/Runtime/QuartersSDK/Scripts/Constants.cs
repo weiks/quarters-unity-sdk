@@ -42,7 +42,8 @@ namespace QuartersSDK {
 
     public enum LinkType {
         WebView,
-        External
+        External,
+        EditorExternal
     }
     
 }

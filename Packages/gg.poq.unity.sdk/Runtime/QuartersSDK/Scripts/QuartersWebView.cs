@@ -103,12 +103,13 @@ namespace QuartersSDK {
                 WebView.Load(url);
                 WebView.Show();
             }
+            else if (linkType == LinkType.EditorExternal) {
+                Application.OpenURL(url);
+                renderEditorAuthorizationWindow = true;
+            }
             else {
                 //external authorisation
                 Application.OpenURL(url);
-                if (Application.platform == RuntimePlatform.WindowsEditor) {
-                    renderEditorAuthorizationWindow = true;
-                }
             }
         }
 
