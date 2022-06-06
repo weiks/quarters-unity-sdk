@@ -1,26 +1,30 @@
 # Quarters Unity SDK
 
+## Before you start
+Please before the integration of your APP with **QuartersSDK** be sure to: 
+1. Register your APP following [the steps in poq-docs](https://github.com/weiks/poq-docs/blob/main/docs/unity-sdk-integeration.md).
+2. After you finished those steps please verify your app sending us a message to [💡┋api-and-integration](https://discord.com/channels/908772014859378708/910205059403509803).
+
 ## Getting Started
 ### Installation
 1. Open Unity package manager
-2. Select + button and Add the package from git URL
+2. Select **`"+"`** button and then **Add the package from git repository** (or if you have downloaded [QuartersSDK Unity project](https://github.com/weiks/quarters-unity-sdk) you can import it from there selecting `package.json` inside `quarters-unity-sdk-weiks\Packages\gg.poq.unity.sdk`)
 
 ![Screenshot 2022-05-31 at 9 07 02 am](https://user-images.githubusercontent.com/41578378/171151345-c5cc06a3-4b30-48aa-b2ea-ae2542c810fe.png)
 
-3. Enter https://github.com/weiks/poq-unity-package-manager.git and press Add. Unity Package Manager will pull Quarters Unity SDK and all of its dependencies to the project
-4. Add the following prefab to your first loaded scene Packages/Quarters Unity SDK/Runtime/QuartersSDK/Prefabs/QuartersInit
+1. Enter the URL from [poq-unity-package-manager](https://github.com/weiks/poq-unity-package-manager.git) project repository and press **Add** button. Unity Package Manager will pull Quarters Unity SDK and all of its dependencies to the project.
+2. Add the following prefab to your first loaded scene `Packages/Quarters Unity SDK/Runtime/QuartersSDK/Prefabs/QuartersInit`
 
 ![Screenshot 2022-05-31 at 9 39 47 am](https://user-images.githubusercontent.com/41578378/171151505-6682fe08-0d13-4feb-8428-3f8b6adbc7d8.png)
 
-5. Press Open App Dashboard. The web browser will open https://apps.pocketfulofquarters.com/apps/new to create new Quarters app. Press Save after populating the form.
+5. Press **Open App Dashboard** button. The web browser will open [URL to create new Quarters app](https://apps.pocketfulofquarters.com/apps/new). Press **Save** button after populating the form.
 
 ![Screenshot 2022-05-31 at 9 44 27 am](https://user-images.githubusercontent.com/41578378/171151698-45a22b3d-134f-4894-8859-c4e125e99392.png)
 
 6. Back in Unity Quarters Init component copy the following values from app dashboard to the Quarters Init Component.
-
-client_id -> APP_ID
-
-client_secret -> APP_KEY
+   - `client_id` -> `APP_ID`
+   - `client_secret` -> `APP_KEY`
+   - `App URL` sub-domain (ex. in this case exampleapp) -> `APP_UNIQUE_IDENTIFIER`
 
 ![Screenshot 2022-05-31 at 9 46 25 am](https://user-images.githubusercontent.com/41578378/171151877-db5b23f4-43ff-4b8f-acdb-4e381bdec7a6.png)
 
@@ -28,20 +32,20 @@ client_secret -> APP_KEY
 For the best user experience, Quarters Unity SDK utilises domain association to link users back to the app after purchasing and authorisation. Quarters SDK manages browser to app linking automatically. To set up linking please follow the steps for the chosen platform
 
 #### iOS
-1. Open https://www.poq.gg/apps
+1. Open [your PoQ APPS](https://www.poq.gg/apps)
 2. Find your app and select iOS under the Auto Manage option
 3. Enter any valid string as your PoQ app's unique identifier if empty
-4. Enter Apple Team ID. It can be pulled from https://developer.apple.com/account/#!/membership/
+4. Enter Apple Team ID. It can be pulled from [Apple developer account](https://developer.apple.com/account/#!/membership/)
 5. Enter your app bundle id. Example com.mycompany.mygame
 6. Press Submit
 7. Copy your PoQ app's unique identifier to the Quarters Init component APP_UNIQUE_IDENTIFIER field in Unity and press Save
 
 #### Android
-1. Open https://www.poq.gg/apps
+1. Open [your PoQ APPS](https://www.poq.gg/apps)
 2. Find your app and select iOS under the Auto Manage option
 3. Enter any valid string as your PoQ app's unique identifier if empty
 4. Enter your app package name. Example com.mycompany.mygame
-5. You need to get SHA-256 certificate fingerprint, to do that just run the following command on your terminal (note the keytool comes with the Java SDK)
+5. You need to get SHA-256 certificate fingerprint, to do that just run the following command on your terminal (note the keytool comes with the Java SDK or included with Unity Android OpenJDK ex. `C:\Program Files\Unity\Hub\Editor\2021.3.2f1\Editor\Data\PlaybackEngines\AndroidPlayer\OpenJDK\jre\bin` in case of Unity 2021.3.2f1 editor)
 
 ```
 keytool -list -v -keystore mystorekeystore.keystore
@@ -51,7 +55,7 @@ Running this command should yield something similar to the following image:
 ![3985997309-keystool](https://user-images.githubusercontent.com/41578378/171152564-6ac8e026-dd86-4c06-9c99-43ced71d7005.png)
 
 6. Press Submit
-7. If you haven't already copy your PoQ app's unique identifier to the Quarter's Init component APP_UNIQUE_IDENTIFIER field in Unity and press Save
+7. If you haven't already copy your PoQ app's unique identifier to the Quarter's Init component `APP_UNIQUE_IDENTIFIER` field in Unity and press Save
 
 ### That's it you are ready to use Quarters Unity SDK
 
@@ -59,8 +63,9 @@ Running this command should yield something similar to the following image:
 Quarters Unity SDK contains a basic sample app presenting major SDK functionality like
 - Sign In with Quarters
 - Sign Out
-- Spending and receiving Quarters
-- Buying Quarters through the website portal
+- Spend (*Pay Quarters* menu option): need to register your app manually contacting us on any channel as described in [Before Start section](#before-you-start) 
+- Receive (*Receive Quarters* menu option) Quarters
+- Buying (*Buy Quarters* menu option) Quarters through the website portal
 
 To import the sample scene select Sample Import from Unity Package Manager
 
@@ -75,8 +80,8 @@ Unity 2019.4+
 
 ## SDK supported platforms
 - iOS
-- Android
-- Unity Editor
+- Android: API 29 and above
+- Unity Editor: due to limitations of Unity Editor on Windows external browser is used to authorize user you can check [sign in doc](#please-note-that-due-to-limitations-of-unity-editor-on-windows-external-browser-is-used-to-authorize-user-after-successful-authorisation-please-copy-and-paste-the-browser-url-to-unity-game-view-and-press-authorize) for details. 
 
 ## API Reference
 ### Quarters Initialisation
@@ -153,3 +158,20 @@ To sign out current Quarters users call
 ```
 Quarters.Instance.Deauthorize();
 ```
+
+## Troubleshooting
+
+### Pay or receive Quarters throws *Transaction Error*
+When you try to Pay or receive Quarters you get *Transaction Error: Debit and Cretit address cannot be the same. You cannot test your app when you are logged into your developer account* to fix it:
+1. Sign Out.
+2. Sign In with a registered user that is has not developer rights. 
+
+### Pay or receive Quarters throws *Missing refresh token*
+When you try to Pay or receive Quarters you get *Missing refresh token* to fix it:
+1. Sign Out.
+2. Sign In again with the same account.
+
+### Pay throws *Your app must ve verified to transfer Quarters from users*
+When you try to Pay or receive Quarters you get *Your app must ve verified to transfer Quarters from users* to fix it:
+1. Verify your app [contacting us](#before-you-start).
+
