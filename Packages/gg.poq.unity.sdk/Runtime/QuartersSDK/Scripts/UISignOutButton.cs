@@ -8,7 +8,6 @@ using UnityEngine.UI;
 namespace QuartersSDK.UI {
     [RequireComponent(typeof(Button))]
     public class UISignOutButton : MonoBehaviour {
-        
         private Button.ButtonClickedEvent _buttonClickedEvent;
 
         private Button button {
@@ -24,11 +23,8 @@ namespace QuartersSDK.UI {
         }
 
 
-        
         public void ButtonTapped() {
             Quarters.Instance.Deauthorize();
         }
-
-
     }
 }

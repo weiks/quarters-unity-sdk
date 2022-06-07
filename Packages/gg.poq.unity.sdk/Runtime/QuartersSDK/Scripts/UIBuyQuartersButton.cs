@@ -8,14 +8,11 @@ using UnityEngine.UI;
 namespace QuartersSDK.UI {
     [RequireComponent(typeof(Button))]
     public class UIBuyQuartersButton : MonoBehaviour {
-        
         private Button.ButtonClickedEvent _buttonClickedEvent;
 
         private Button button {
             get { return this.GetComponent<Button>(); }
         }
-
-        
 
 
         void Start() {
@@ -29,19 +26,15 @@ namespace QuartersSDK.UI {
         public void ButtonTapped() {
             Quarters.Instance.BuyQuarters();
         }
-        
-        
-        private void OnTransferSuccessful() {
 
+
+        private void OnTransferSuccessful() {
             _buttonClickedEvent.Invoke();
         }
 
 
-        
         private void OnTransferFailed(string error) {
-            ModalView.instance.ShowAlert("Transaction error", error, new string[]{"OK"}, null);
+            ModalView.instance.ShowAlert("Transaction error", error, new string[] {"OK"}, null);
         }
-        
-        
     }
 }
