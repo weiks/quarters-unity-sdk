@@ -110,7 +110,7 @@ namespace QuartersSDK {
                                   + "&code_challenge_method=S256"
                                   + $"&code_challenge={pcke.CodeChallenge()}";
 
-            Debug.Log(url);
+            Log(url);
 
             //web view authentication
             LinkType linkType = Application.platform == RuntimePlatform.WindowsEditor
@@ -138,7 +138,7 @@ namespace QuartersSDK {
             session = null;
             CurrentUser = null;
 
-            Debug.Log("Quarters user signed out");
+            Log("Quarters user signed out");
             OnSignOut?.Invoke();
         }
 
@@ -160,7 +160,7 @@ namespace QuartersSDK {
         #region api calls
 
         private IEnumerator GetRefreshToken(string code, Action OnComplete, Action<string> OnError) {
-            Debug.Log($"Get refresh token with code: {code}");
+            Log($"Get refresh token with code: {code}");
 
             WWWForm data = new WWWForm();
             data.AddField("code_verifier", pcke.CodeVerifier);
@@ -171,20 +171,20 @@ namespace QuartersSDK {
 
 
             string url = BASE_URL + "/api/oauth2/token";
-            Debug.Log("GetRefreshToken url: " + url);
+            Log("GetRefreshToken url: " + url);
 
             using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
                 yield return request.SendWebRequest();
 
 
                 if (request.isNetworkError || request.isHttpError) {
-                    Debug.LogError(request.error);
-                    Debug.LogError(request.downloadHandler.text);
+                    LogError(request.error);
+                    LogError(request.downloadHandler.text);
 
                     OnError(request.error);
                 }
                 else {
-                    Debug.Log(request.downloadHandler.text);
+                    Log(request.downloadHandler.text);
 
                     Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
                     session.RefreshToken = responseData["refresh_token"];
@@ -198,10 +198,10 @@ namespace QuartersSDK {
 
 
         public IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
-            Debug.Log("Get Access token");
+            Log("Get Access token");
 
             if (!session.DoesHaveRefreshToken) {
-                Debug.LogError("Missing refresh token");
+                LogError("Missing refresh token");
                 OnFailed("Missing refresh token");
                 yield break;
             }
@@ -214,15 +214,15 @@ namespace QuartersSDK {
             data.AddField("code_verifier", pcke.CodeVerifier);
 
             string url = BASE_URL + "/api/oauth2/token";
-            Debug.Log("GetAccessToken url: " + url);
+            Log("GetAccessToken url: " + url);
 
             using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
                 yield return request.SendWebRequest();
 
 
                 if (request.isNetworkError || request.isHttpError) {
-                    Debug.LogError(request.error);
-                    Debug.LogError(request.downloadHandler.text);
+                    LogError(request.error);
+                    LogError(request.downloadHandler.text);
 
                     Error error = new Error(request.downloadHandler.text);
 
@@ -232,7 +232,7 @@ namespace QuartersSDK {
                     OnFailed?.Invoke(error.ErrorDescription);
                 }
                 else {
-                    Debug.Log("GetAccessToken result " + request.downloadHandler.text);
+                    Log("GetAccessToken result " + request.downloadHandler.text);
 
                     Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
                     session.RefreshToken = responseData["refresh_token"];
@@ -246,14 +246,14 @@ namespace QuartersSDK {
 
         public IEnumerator GetAvatar(Action<Texture> OnSuccess, Action<Error> OnError) {
             string url = $"https://www.poq.gg/images/{CurrentUser.Id}/{CurrentUser.AvatarUrl}";
-            Debug.Log($"Pull avatar: {url}");
+            Log($"Pull avatar: {url}");
 
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
             yield return www.SendWebRequest();
 
             if (www.isNetworkError || www.isHttpError) {
-                Debug.LogError(www.error);
-                Debug.LogError(www.downloadHandler.text);
+                LogError(www.error);
+                LogError(www.downloadHandler.text);
 
                 Error error = new Error(www.downloadHandler.text);
 
@@ -267,7 +267,7 @@ namespace QuartersSDK {
 
 
         private IEnumerator GetUserDetailsCall(Action<User> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
-            Debug.Log("GetUserDetailsCall");
+            Log("GetUserDetailsCall");
 
             if (!session.DoesHaveAccessToken) {
                 StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); }, delegate(string error) { OnFailed(error); }));
@@ -276,7 +276,7 @@ namespace QuartersSDK {
 
 
             string url = API_URL + "/users/me";
-            Debug.Log(url);
+            Log(url);
 
             using (UnityWebRequest request = UnityWebRequest.Get(url)) {
                 request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -286,22 +286,21 @@ namespace QuartersSDK {
 
 
                 if (request.isNetworkError || request.isHttpError) {
-                    Debug.LogError(request.error);
-                    Debug.LogError(request.downloadHandler.text);
+                    LogError(request.error);
+                    LogError(request.downloadHandler.text);
 
                     if (!isRetry) {
                         //refresh access code and retry this call in case access code expired
                         StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); }, delegate { OnFailed(request.error); }));
                     }
                     else {
-                        Debug.LogError(request.error);
+                        LogError(request.error);
                         OnFailed(request.error);
                     }
                 }
                 else {
-                    Debug.Log("GetUserDetailsCall result " + request.downloadHandler.text);
+                    Log("GetUserDetailsCall result " + request.downloadHandler.text);
 
-                    Debug.Log(request.downloadHandler.text);
                     CurrentUser = JsonConvert.DeserializeObject<User>(request.downloadHandler.text);
                     OnSuccess(CurrentUser);
                 }
@@ -315,27 +314,26 @@ namespace QuartersSDK {
             string url = API_URL + "/wallets/@me";
 
             using (UnityWebRequest request = UnityWebRequest.Get(url)) {
-                // request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
                 // Request and wait for the desired page.
                 yield return request.SendWebRequest();
 
 
                 if (request.isNetworkError || request.isHttpError) {
-                    Debug.LogError(request.error);
-                    Debug.LogError(request.downloadHandler.text);
+                    LogError(request.error);
+                    LogError(request.downloadHandler.text);
 
                     if (!isRetry) {
                         //refresh access code and retry this call in case access code expired
                         StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetAccountBalance(OnSuccess, OnFailed, true)); }, delegate { OnFailed(request.error); }));
                     }
                     else {
-                        Debug.LogError(request.error);
+                        LogError(request.error);
                         OnFailed(request.error);
                     }
                 }
                 else {
-                    Debug.Log(request.downloadHandler.text);
+                    Log(request.downloadHandler.text);
                     JObject responseData = JsonConvert.DeserializeObject<JObject>(request.downloadHandler.text);
                     CurrentUser.Balance = responseData["balance"].ToObject<long>();
                     OnBalanceUpdated?.Invoke(CurrentUser.Balance);
@@ -346,16 +344,16 @@ namespace QuartersSDK {
 
 
         public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) {
-            Debug.Log($"MakeTransaction with quantity: {coinsQuantity}");
+            Log($"MakeTransaction with quantity: {coinsQuantity}");
 
             if (!session.DoesHaveRefreshToken) {
-                Debug.LogError("Missing refresh token");
+                LogError("Missing refresh token");
                 OnFailed("Missing refresh token");
                 yield break;
             }
 
             string url = API_URL + "/transactions";
-            Debug.Log("Transaction url: " + url);
+            Log("Transaction url: " + url);
 
             Dictionary<string, object> postData = new Dictionary<string, object>();
             postData.Add("creditUser", coinsQuantity);
@@ -374,8 +372,8 @@ namespace QuartersSDK {
             yield return request.SendWebRequest();
 
             if (request.isNetworkError || request.isHttpError) {
-                Debug.LogError(request.error);
-                Debug.LogError(request.downloadHandler.text);
+                LogError(request.error);
+                LogError(request.downloadHandler.text);
 
                 Error error = new Error(request.downloadHandler.text);
 
@@ -385,7 +383,7 @@ namespace QuartersSDK {
                 OnFailed?.Invoke(error.ErrorDescription);
             }
             else {
-                Debug.Log(request.downloadHandler.text);
+                Log(request.downloadHandler.text);
 
                 GetAccountBalanceCall(delegate { OnSuccess?.Invoke(); }, OnFailed);
             }
@@ -393,7 +391,7 @@ namespace QuartersSDK {
 
 
         public void BuyQuarters() {
-            Debug.Log("Buy Quarters");
+            Log("Buy Quarters");
 
             string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
 
@@ -403,5 +401,17 @@ namespace QuartersSDK {
         }
 
         #endregion
+        
+        private void Log(string message) {
+            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
+                Debug.Log(message);
+            }
+        }
+        
+        private void LogError(string message) {
+            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
+                Debug.LogError(message);
+            }
+        }
     }
 }

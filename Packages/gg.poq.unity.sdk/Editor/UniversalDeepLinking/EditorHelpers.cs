@@ -42,7 +42,6 @@ namespace ImaginationOverflow.UniversalDeepLinking.Editor
                 {
                     string path = asset.Replace("Assets/", "");
                     _pluginPath = path;
-                    Debug.Log($"Plugin path: {_pluginPath}");
                     break;
                 }
             }

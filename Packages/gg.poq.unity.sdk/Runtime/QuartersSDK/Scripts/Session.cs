@@ -11,7 +11,6 @@
            public string RefreshToken {
                get => PlayerPrefs.GetString(Constants.REFRESH_TOKEN_KEY, "");
                set {
-                   Debug.Log("Storing refresh token: " + value);
                    PlayerPrefs.SetString(Constants.REFRESH_TOKEN_KEY, value);
                }
            }

@@ -24,6 +24,11 @@ namespace QuartersSDK {
         };
 
         public Environment Environment = Environment.production;
+        public LoggingType ConsoleLogging = LoggingType.None;
+        public enum LoggingType {
+            None,
+            Verbose
+        }
 
         public static string SDK_VERSION => "2.0.0";
 
@@ -53,12 +58,12 @@ namespace QuartersSDK {
 
 
         public void Init(Action OnInitComplete, Action<string> OnInitError) {
-            Debug.Log("Quarters Init:");
+            Log("Quarters Init:");
 
             string error = "";
 
-            if (string.IsNullOrEmpty(APP_ID)) Debug.LogError("Quarters App Id is empty");
-            if (string.IsNullOrEmpty(APP_KEY)) Debug.LogError("Quarters App key is empty");
+            if (string.IsNullOrEmpty(APP_ID)) LogError("Quarters App Id is empty");
+            if (string.IsNullOrEmpty(APP_KEY)) LogError("Quarters App key is empty");
 
 
             GameObject quarters = new GameObject("Quarters");
@@ -76,9 +81,21 @@ namespace QuartersSDK {
             DontDestroyOnLoad(quartersWebView.gameObject);
 
 
-            Debug.Log("QuartersInit complete");
+            Log("QuartersInit complete");
             QuartersInit.OnInitComplete?.Invoke();
             OnInitComplete?.Invoke();
+        }
+
+        private void Log(string message) {
+            if (ConsoleLogging == LoggingType.Verbose) {
+                Debug.Log(message);
+            }
+        }
+        
+        private void LogError(string message) {
+            if (ConsoleLogging == LoggingType.Verbose) {
+                Debug.LogError(message);
+            }
         }
     }
 }

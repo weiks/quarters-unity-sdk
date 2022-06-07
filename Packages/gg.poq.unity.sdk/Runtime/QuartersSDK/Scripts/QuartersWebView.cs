@@ -60,7 +60,7 @@ namespace QuartersSDK {
 
         //webview
         private void WebViewOnOnPageStarted(UniWebView webview, string url) {
-            Debug.Log($"WebViewOnOnPageStarted: {url}");
+            Log($"WebViewOnOnPageStarted: {url}");
             QuartersLink link = QuartersLink.Create(url);
 
             if (link.Uri.IsValidDeepLink()) {
@@ -73,7 +73,7 @@ namespace QuartersSDK {
 
         //external universal link
         private void OnLinkActivated(LinkActivation linkActivation) {
-            Debug.Log($"ApplicationOnDeepLinkActivated: {linkActivation.Uri} is valid deep link: {linkActivation.Uri.IsValidDeepLink()}");
+            Log($"ApplicationOnDeepLinkActivated: {linkActivation.Uri} is valid deep link: {linkActivation.Uri.IsValidDeepLink()}");
             QuartersLink link = QuartersLink.Create(linkActivation.Uri);
 
             if (link.Uri.IsValidDeepLink()) //deep link opened
@@ -140,5 +140,17 @@ namespace QuartersSDK {
             if (OnDeepLink != null) OnDeepLink(link);
         }
 #endif
+        
+        private void Log(string message) {
+            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
+                Debug.Log(message);
+            }
+        }
+        
+        private void LogError(string message) {
+            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
+                Debug.LogError(message);
+            }
+        }
     }
 }
