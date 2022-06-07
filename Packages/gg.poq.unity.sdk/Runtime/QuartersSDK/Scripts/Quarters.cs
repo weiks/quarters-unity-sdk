@@ -126,6 +126,7 @@ namespace QuartersSDK {
             LinkType linkType = Application.platform == RuntimePlatform.WindowsEditor
                 ? LinkType.EditorExternal
                 : LinkType.External;
+
             
             QuartersWebView.OpenURL(url, linkType);
             QuartersWebView.OnDeepLink = delegate(QuartersLink link) {

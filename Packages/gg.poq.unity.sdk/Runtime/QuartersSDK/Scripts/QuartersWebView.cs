@@ -115,13 +115,12 @@ namespace QuartersSDK {
 
 
         private Color backgroundColor = new Color(255f / 19f, 255f / 34f, 255f / 43f);
-        public Rect windowRect = new Rect(0, Screen.height * 0.3f, Screen.width, Screen.height * 0.3f);
         private string editorAuthorizationUrl = string.Empty;
         void OnGUI() {
             if (!renderEditorAuthorizationWindow) return;
             
             GUI.color = backgroundColor;
-            GUI.ModalWindow(0, windowRect, DrawEditorAuthWindow, "Quarters Editor Authorization");
+            GUI.ModalWindow(0,  new Rect(0, Screen.height * 0.3f, Screen.width, Screen.height * 0.5f), DrawEditorAuthWindow, "Quarters Editor Authorization");
         }
         
 
@@ -133,7 +132,7 @@ namespace QuartersSDK {
             GUILayout.Label("1. Authorize user in the external browser window\n" +
                             "2. Then copy and paste browser url here\n" +
                             "3. Press Authorize button");
-            editorAuthorizationUrl = GUILayout.TextArea(editorAuthorizationUrl, GUILayout.Height(100f));
+            editorAuthorizationUrl = GUILayout.TextArea(editorAuthorizationUrl, GUILayout.ExpandHeight(true));
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Cancel")) {
