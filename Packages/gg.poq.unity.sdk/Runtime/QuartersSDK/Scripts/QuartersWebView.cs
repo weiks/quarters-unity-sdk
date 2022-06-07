@@ -1,5 +1,8 @@
 ﻿using ImaginationOverflow.UniversalDeepLinking;
-using UnityEditor;
+#if UNITY_EDITOR
+    using UnityEditor; 
+#endif
+
 using UnityEngine;
 
 namespace QuartersSDK {
@@ -95,7 +98,8 @@ namespace QuartersSDK {
                 Application.OpenURL(url);
             }
         }
-
+        
+#if UNITY_EDITOR
         private void OnGUI() {
             if (!renderEditorAuthorizationWindow) return;
 
@@ -135,5 +139,6 @@ namespace QuartersSDK {
             QuartersLink link = QuartersLink.Create(editorAuthorizationUrl);
             if (OnDeepLink != null) OnDeepLink(link);
         }
+#endif
     }
 }
