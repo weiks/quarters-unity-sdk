@@ -1,7 +1,7 @@
 # Quarters Unity SDK
 
 ## Before you start
-In order to have a full integration with QuartersSDK you will need to follow this steps: 
+In order to have a full integration with QuartersSDK you must follow this steps: 
 - Register your APP following [the steps in poq-docs](https://github.com/weiks/poq-docs/blob/main/docs/unity-sdk-integeration.md).
 - It's mandatory to verify your app before your app can take Quarters from users. **Verify your app sending us a message to [💡┋api-and-integration](https://discord.com/channels/908772014859378708/910205059403509803) or if you are new on Discord please send us an invite [to request verification](https://discord.com/invite/poq)**.
 
