@@ -137,6 +137,9 @@ namespace QuartersSDK {
         public void ButtonTapped(Button button) {
             string buttonText = button.GetComponentInChildren<Text>().text;
 
+            if(buttonText.Equals(Constants.BUY_QUARTERS_BUTTON))
+                Quarters.Instance.BuyQuarters();
+
             Hide(delegate() {
                 if (alertButtonDelegate != null) alertButtonDelegate(buttonText);
             });
