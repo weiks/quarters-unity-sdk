@@ -70,17 +70,9 @@ namespace QuartersSDK {
             return Scopes.Contains((Scope)Enum.Parse(typeof(Scope), scope));
         }
 
-
-        public void InvalidateGuestSession() {
-            PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
-            PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
-        }
-
-
+        
         public static void Invalidate() {
             PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN_KEY);
-            PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
-            PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
         }
 
 
