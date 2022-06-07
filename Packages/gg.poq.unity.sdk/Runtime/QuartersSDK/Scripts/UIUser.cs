@@ -6,97 +6,75 @@ using UnityEngine.UI;
 
 namespace QuartersSDK.UI {
     public class UIUser : MonoBehaviour {
-        
-        
         public Image Avatar;
         public Text UsernameText;
         public Text CoinsCount;
         public Text DeltaDiferenceText;
         public Sprite emptyAvatar;
         public Animation Animation;
-        
+
         private long currentCoins;
-        
-        
+
+
         private RectTransform rectTransform {
-            get {
-                return (RectTransform)this.transform;
-            }
+            get { return (RectTransform) this.transform; }
         }
 
         private void OnEnable() {
             QuartersInit.OnInitComplete += Init;
         }
-        
+
         private void OnDestroy() {
             Quarters.OnUserLoaded -= RefreshUser;
             Quarters.OnBalanceUpdated -= RefreshCoins;
         }
 
 
-
         private void Init() {
-               
             DeltaDiferenceText.text = "";
-       
+
             Quarters.OnUserLoaded += RefreshUser;
             Quarters.OnBalanceUpdated += RefreshCoins;
-
-        
         }
 
-    
 
-        
         private void RefreshUser(User user) {
-
             UsernameText.text = user.GamerTag;
-            
+
             RefreshCoins(Quarters.Instance.CurrentUser.Balance);
 
 
             if (!string.IsNullOrEmpty(Quarters.Instance.CurrentUser.AvatarUrl)) {
                 //refresh avatar
                 StartCoroutine(Quarters.Instance.GetAvatar(delegate(Texture avatar) {
-
                     Rect rect = new Rect(0.0f, 0.0f, avatar.width, avatar.height);
 
                     Sprite avatarSprite = Sprite.Create((Texture2D) avatar, rect, new Vector2(0.5f, 0.5f));
 
                     Avatar.sprite = avatarSprite;
-
                 }, null));
             }
             else {
                 Avatar.sprite = emptyAvatar;
             }
-            
-            
-            Quarters.Instance.GetAccountBalanceCall(RefreshCoins, delegate(string error) { Debug.LogError(error); });
 
+
+            Quarters.Instance.GetAccountBalanceCall(RefreshCoins, delegate(string error) { Debug.LogError(error); });
         }
 
-        
-        
-        
 
-        
         private void RefreshCoins(long availableCoins) {
-
             CoinsCount.text = String.Format("{0:n0}", availableCoins);
             currentCoins = availableCoins;
             Debug.Log($"Current coins: {currentCoins}");
         }
 
 
-   
-
         public void ToastPresent(int delta, Action OnAnimationComplete) {
-            
             Debug.Log($"Delta: {delta}");
 
             string deltaText = "";
-            
+
             if (delta > 0) {
                 deltaText += "+" + delta;
             }
@@ -107,12 +85,12 @@ namespace QuartersSDK.UI {
             DeltaDiferenceText.text = deltaText;
 
             float topMargin = 0;
-            
+
             UISafeArea safeArea = this.transform.parent.GetComponent<UISafeArea>();
             if (safeArea != null) {
                 topMargin = safeArea.topMarginRectSize;
             }
-            
+
 
             Vector2 hiddenPosition = new Vector2(rectTransform.anchoredPosition.x, rectTransform.rect.height - topMargin);
             rectTransform.anchoredPosition = hiddenPosition;
@@ -122,15 +100,10 @@ namespace QuartersSDK.UI {
         }
 
 
-
         //animation event
         public void UpdateBalance() {
             CoinsCount.text = String.Format("{0:n0}", currentCoins);
             DeltaDiferenceText.text = string.Empty;
         }
-        
-        
-       
     }
-
 }

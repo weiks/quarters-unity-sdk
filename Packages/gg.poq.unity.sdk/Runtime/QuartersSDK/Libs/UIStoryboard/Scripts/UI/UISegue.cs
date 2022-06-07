@@ -62,8 +62,6 @@ namespace QuartersSDK.UI {
 
 		private void PerformFromMainThread() {
 
-            Debug.Log("UISegue: " + this.gameObject.name, this.gameObject);
-
 			//make sure new view is presented on top
 			if (transitionType == TransitionType.presentOnTop) {
 				targetView.camera.depth = sourceView.camera.depth + 1;

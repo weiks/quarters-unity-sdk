@@ -1,13 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using System;
-using UnityEngine.Networking;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace QuartersSDK {
     public class Quarters : MonoBehaviour {
@@ -17,15 +15,11 @@ namespace QuartersSDK {
 
         public static Quarters Instance;
 
-        public Session session;
-        public PCKE PCKE;
-        [HideInInspector] public QuartersWebView QuartersWebView;
+        public static string URL_SCHEME = string.Empty;
 
-        public CurrencyConfig CurrencyConfig {
-            get { return QuartersInit.Instance.CurrencyConfig; }
-        }
+        private User currentUser;
 
-        public List<Scope> DefaultScope = new List<Scope>() {
+        public List<Scope> DefaultScope = new List<Scope> {
             Scope.identity,
             Scope.email,
             Scope.transactions,
@@ -33,44 +27,42 @@ namespace QuartersSDK {
             Scope.wallet
         };
 
+        private PCKE pcke;
+        [HideInInspector] public QuartersWebView QuartersWebView;
+
+        public Session session;
+
+        public CurrencyConfig CurrencyConfig => QuartersInit.Instance.CurrencyConfig;
+        
+
 
         public string BASE_URL {
             get {
                 Environment environment = QuartersInit.Instance.Environment;
-                if (environment == Environment.production) return $"https://www.poq.gg";
-                else if (environment == Environment.sandbox) return $"https://s2w-dev-firebase.herokuapp.com";
+                if (environment == Environment.production) return "https://www.poq.gg";
+                if (environment == Environment.sandbox) return "https://s2w-dev-firebase.herokuapp.com";
                 return null;
             }
         }
 
 
-        public string API_URL {
-            get { return $"{BASE_URL}/api/v1"; }
-        }
+        public string API_URL => $"{BASE_URL}/api/v1";
 
-        public string BUY_URL {
-            get { return $"{BASE_URL}/buy"; }
-        }
+        public string BUY_URL => $"{BASE_URL}/buy";
 
-        public static string URL_SCHEME = String.Empty;
-
-        private User currentUser = null;
         public User CurrentUser {
-            get { return currentUser; }
+            get => currentUser;
             set {
                 currentUser = value;
-                if (value != null) {
-                    OnUserLoaded?.Invoke(currentUser);
-                }
+                if (value != null) OnUserLoaded?.Invoke(currentUser);
             }
         }
-        
+
         public bool IsAuthorized {
             get {
-                if (session != null) {
+                if (session != null)
                     return session.IsAuthorized;
-                }
-                else return false;
+                return false;
             }
         }
 
@@ -79,16 +71,16 @@ namespace QuartersSDK {
             Instance = this;
             session = new Session();
 
-            PCKE = new PCKE();
+            pcke = new PCKE();
             URL_SCHEME = $"https://{QuartersInit.Instance.APP_UNIQUE_IDENTIFIER}.games.poq.gg";
         }
-        
+
         #region high level calls
 
         public void SignInWithQuarters(Action OnComplete, Action<string> OnError) {
             Session session = new Session();
             session.Scopes = DefaultScope;
-            Quarters.Instance.Authorize(session.Scopes, delegate { OnComplete?.Invoke(); }, OnError);
+            Instance.Authorize(session.Scopes, delegate { OnComplete?.Invoke(); }, OnError);
         }
 
 
@@ -108,26 +100,24 @@ namespace QuartersSDK {
             string scopeString = "";
             foreach (Scope scope in scopes) {
                 scopeString += scope.ToString();
-                if (scopes.IndexOf(scope) != scopes.Count - 1) {
-                    scopeString += " ";
-                }
+                if (scopes.IndexOf(scope) != scopes.Count - 1) scopeString += " ";
             }
 
             string url = BASE_URL + "/oauth2/authorize?response_type=code&client_id="
                                   + QuartersInit.Instance.APP_ID + "&redirect_uri="
                                   + redirectSafeUrl
                                   + $"&scope={UnityWebRequest.EscapeURL(scopeString)}"
-                                  + $"&code_challenge_method=S256"
-                                  + $"&code_challenge={PCKE.CodeChallenge()}";
+                                  + "&code_challenge_method=S256"
+                                  + $"&code_challenge={pcke.CodeChallenge()}";
 
-            Debug.Log(url);
+            Log(url);
 
             //web view authentication
             LinkType linkType = Application.platform == RuntimePlatform.WindowsEditor
                 ? LinkType.EditorExternal
                 : LinkType.External;
 
-            
+
             QuartersWebView.OpenURL(url, linkType);
             QuartersWebView.OnDeepLink = delegate(QuartersLink link) {
                 if (link.QueryString.ContainsKey("code")) {
@@ -145,10 +135,10 @@ namespace QuartersSDK {
 
         public void Deauthorize() {
             Session.Invalidate();
-            this.session = null;
+            session = null;
             CurrentUser = null;
 
-            Debug.Log("Quarters user signed out");
+            Log("Quarters user signed out");
             OnSignOut?.Invoke();
         }
 
@@ -170,10 +160,10 @@ namespace QuartersSDK {
         #region api calls
 
         private IEnumerator GetRefreshToken(string code, Action OnComplete, Action<string> OnError) {
-            Debug.Log($"Get refresh token with code: {code}");
+            Log($"Get refresh token with code: {code}");
 
             WWWForm data = new WWWForm();
-            data.AddField("code_verifier", PCKE.CodeVerifier);
+            data.AddField("code_verifier", pcke.CodeVerifier);
             data.AddField("client_id", QuartersInit.Instance.APP_ID);
             data.AddField("grant_type", "authorization_code");
             data.AddField("code", code);
@@ -181,20 +171,20 @@ namespace QuartersSDK {
 
 
             string url = BASE_URL + "/api/oauth2/token";
-            Debug.Log("GetRefreshToken url: " + url);
+            Log("GetRefreshToken url: " + url);
 
             using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
                 yield return request.SendWebRequest();
 
 
                 if (request.isNetworkError || request.isHttpError) {
-                    Debug.LogError(request.error);
-                    Debug.LogError(request.downloadHandler.text);
+                    LogError(request.error);
+                    LogError(request.downloadHandler.text);
 
                     OnError(request.error);
                 }
                 else {
-                    Debug.Log(request.downloadHandler.text);
+                    Log(request.downloadHandler.text);
 
                     Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
                     session.RefreshToken = responseData["refresh_token"];
@@ -208,43 +198,41 @@ namespace QuartersSDK {
 
 
         public IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
-            Debug.Log("Get Access token");
+            Log("Get Access token");
 
             if (!session.DoesHaveRefreshToken) {
-                Debug.LogError("Missing refresh token");
+                LogError("Missing refresh token");
                 OnFailed("Missing refresh token");
                 yield break;
             }
-            
+
             WWWForm data = new WWWForm();
             data.AddField("grant_type", "refresh_token");
             data.AddField("client_id", QuartersInit.Instance.APP_ID);
             data.AddField("client_secret", QuartersInit.Instance.APP_KEY);
             data.AddField("refresh_token", session.RefreshToken);
-            data.AddField("code_verifier", PCKE.CodeVerifier);
+            data.AddField("code_verifier", pcke.CodeVerifier);
 
             string url = BASE_URL + "/api/oauth2/token";
-            Debug.Log("GetAccessToken url: " + url);
+            Log("GetAccessToken url: " + url);
 
             using (UnityWebRequest request = UnityWebRequest.Post(url, data)) {
                 yield return request.SendWebRequest();
 
 
                 if (request.isNetworkError || request.isHttpError) {
-                    Debug.LogError(request.error);
-                    Debug.LogError(request.downloadHandler.text);
+                    LogError(request.error);
+                    LogError(request.downloadHandler.text);
 
                     Error error = new Error(request.downloadHandler.text);
 
-                    if (error.ErrorDescription == Error.INVALID_TOKEN) {
-                        //dispose invalid refresh token
+                    if (error.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
                         session.RefreshToken = "";
-                    }
 
                     OnFailed?.Invoke(error.ErrorDescription);
                 }
                 else {
-                    Debug.Log("GetAccessToken result " + request.downloadHandler.text);
+                    Log("GetAccessToken result " + request.downloadHandler.text);
 
                     Dictionary<string, string> responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.downloadHandler.text);
                     session.RefreshToken = responseData["refresh_token"];
@@ -258,14 +246,14 @@ namespace QuartersSDK {
 
         public IEnumerator GetAvatar(Action<Texture> OnSuccess, Action<Error> OnError) {
             string url = $"https://www.poq.gg/images/{CurrentUser.Id}/{CurrentUser.AvatarUrl}";
-            Debug.Log($"Pull avatar: {url}");
+            Log($"Pull avatar: {url}");
 
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
             yield return www.SendWebRequest();
 
             if (www.isNetworkError || www.isHttpError) {
-                Debug.LogError(www.error);
-                Debug.LogError(www.downloadHandler.text);
+                LogError(www.error);
+                LogError(www.downloadHandler.text);
 
                 Error error = new Error(www.downloadHandler.text);
 
@@ -279,7 +267,7 @@ namespace QuartersSDK {
 
 
         private IEnumerator GetUserDetailsCall(Action<User> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
-            Debug.Log("GetUserDetailsCall");
+            Log("GetUserDetailsCall");
 
             if (!session.DoesHaveAccessToken) {
                 StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); }, delegate(string error) { OnFailed(error); }));
@@ -288,7 +276,7 @@ namespace QuartersSDK {
 
 
             string url = API_URL + "/users/me";
-            Debug.Log(url);
+            Log(url);
 
             using (UnityWebRequest request = UnityWebRequest.Get(url)) {
                 request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -298,22 +286,21 @@ namespace QuartersSDK {
 
 
                 if (request.isNetworkError || request.isHttpError) {
-                    Debug.LogError(request.error);
-                    Debug.LogError(request.downloadHandler.text);
+                    LogError(request.error);
+                    LogError(request.downloadHandler.text);
 
                     if (!isRetry) {
                         //refresh access code and retry this call in case access code expired
-                        StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); }, delegate(string error) { OnFailed(request.error); }));
+                        StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); }, delegate { OnFailed(request.error); }));
                     }
                     else {
-                        Debug.LogError(request.error);
+                        LogError(request.error);
                         OnFailed(request.error);
                     }
                 }
                 else {
-                    Debug.Log("GetUserDetailsCall result " + request.downloadHandler.text);
+                    Log("GetUserDetailsCall result " + request.downloadHandler.text);
 
-                    Debug.Log(request.downloadHandler.text);
                     CurrentUser = JsonConvert.DeserializeObject<User>(request.downloadHandler.text);
                     OnSuccess(CurrentUser);
                 }
@@ -322,34 +309,31 @@ namespace QuartersSDK {
 
 
         private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
-            if (CurrentUser == null) {
-                yield return GetUserDetailsCall(delegate(User user) { }, OnFailed);
-            }
+            if (CurrentUser == null) yield return GetUserDetailsCall(delegate { }, OnFailed);
 
             string url = API_URL + "/wallets/@me";
 
             using (UnityWebRequest request = UnityWebRequest.Get(url)) {
-                // request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
                 // Request and wait for the desired page.
                 yield return request.SendWebRequest();
 
 
                 if (request.isNetworkError || request.isHttpError) {
-                    Debug.LogError(request.error);
-                    Debug.LogError(request.downloadHandler.text);
+                    LogError(request.error);
+                    LogError(request.downloadHandler.text);
 
                     if (!isRetry) {
                         //refresh access code and retry this call in case access code expired
-                        StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetAccountBalance(OnSuccess, OnFailed, true)); }, delegate(string error) { OnFailed(request.error); }));
+                        StartCoroutine(GetAccessToken(delegate { StartCoroutine(GetAccountBalance(OnSuccess, OnFailed, true)); }, delegate { OnFailed(request.error); }));
                     }
                     else {
-                        Debug.LogError(request.error);
+                        LogError(request.error);
                         OnFailed(request.error);
                     }
                 }
                 else {
-                    Debug.Log(request.downloadHandler.text);
+                    Log(request.downloadHandler.text);
                     JObject responseData = JsonConvert.DeserializeObject<JObject>(request.downloadHandler.text);
                     CurrentUser.Balance = responseData["balance"].ToObject<long>();
                     OnBalanceUpdated?.Invoke(CurrentUser.Balance);
@@ -360,16 +344,16 @@ namespace QuartersSDK {
 
 
         public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) {
-            Debug.Log($"MakeTransaction with quantity: {coinsQuantity}");
+            Log($"MakeTransaction with quantity: {coinsQuantity}");
 
             if (!session.DoesHaveRefreshToken) {
-                Debug.LogError("Missing refresh token");
+                LogError("Missing refresh token");
                 OnFailed("Missing refresh token");
                 yield break;
             }
 
             string url = API_URL + "/transactions";
-            Debug.Log("Transaction url: " + url);
+            Log("Transaction url: " + url);
 
             Dictionary<string, object> postData = new Dictionary<string, object>();
             postData.Add("creditUser", coinsQuantity);
@@ -379,37 +363,35 @@ namespace QuartersSDK {
 
 
             UnityWebRequest request = new UnityWebRequest(url, "POST");
-            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
-            request.uploadHandler = (UploadHandler) new UploadHandlerRaw(jsonToSend);
-            request.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
+            byte[] jsonToSend = new UTF8Encoding().GetBytes(json);
+            request.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
             request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
             yield return request.SendWebRequest();
 
             if (request.isNetworkError || request.isHttpError) {
-                Debug.LogError(request.error);
-                Debug.LogError(request.downloadHandler.text);
+                LogError(request.error);
+                LogError(request.downloadHandler.text);
 
                 Error error = new Error(request.downloadHandler.text);
 
-                if (error.ErrorDescription == Error.INVALID_TOKEN) {
-                    //dispose invalid refresh token
+                if (error.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
                     session.RefreshToken = "";
-                }
 
                 OnFailed?.Invoke(error.ErrorDescription);
             }
             else {
-                Debug.Log(request.downloadHandler.text);
+                Log(request.downloadHandler.text);
 
-                GetAccountBalanceCall(delegate(long balance) { OnSuccess?.Invoke(); }, OnFailed);
+                GetAccountBalanceCall(delegate { OnSuccess?.Invoke(); }, OnFailed);
             }
         }
 
 
         public void BuyQuarters() {
-            Debug.Log("Buy Quarters");
+            Log("Buy Quarters");
 
             string redirectSafeUrl = UnityWebRequest.EscapeURL(URL_SCHEME);
 
@@ -420,5 +402,16 @@ namespace QuartersSDK {
 
         #endregion
         
+        private void Log(string message) {
+            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
+                Debug.Log(message);
+            }
+        }
+        
+        private void LogError(string message) {
+            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
+                Debug.LogError(message);
+            }
+        }
     }
 }
