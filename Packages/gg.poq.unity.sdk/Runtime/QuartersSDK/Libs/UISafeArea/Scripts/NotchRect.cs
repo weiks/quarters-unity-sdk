@@ -25,7 +25,7 @@ public class NotchRect : MonoBehaviour, ISafeAreaElement {
 			rectTransform.offsetMin = new Vector2(canvasRectTransform.rect.width + safeArea.rightMarginRectSize, 0);
 			rectTransform.offsetMax = Vector2.zero;
 		}
-		else if (Screen.orientation == ScreenOrientation.Landscape)
+		else if (Screen.orientation == ScreenOrientation.LandscapeLeft)
 		{
 			//notch on left
 			rectTransform.offsetMin = Vector2.zero;
