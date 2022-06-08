@@ -8,6 +8,7 @@ using UnityEngine.UI;
 namespace QuartersSDK.UI {
     [RequireComponent(typeof(Button))]
     public class UIPayButton : MonoBehaviour {
+        
         [SerializeField] private int Price = 10;
         private Button.ButtonClickedEvent _buttonClickedEvent;
 
@@ -39,9 +40,11 @@ namespace QuartersSDK.UI {
             _buttonClickedEvent.Invoke();
         }
 
-
         private void OnTransferFailed(string error) {
-            ModalView.instance.ShowAlert("Transaction error", error, new string[] {"OK"}, null);
+            if (error.Equals(Constants.QUARTERS_NOT_ENOUGH))
+                ModalView.instance.ShowAlert("Quarters balance too low", "Your wallet does not have enough Quarters to make this purchase.", new string[] { "OK", Constants.BUY_QUARTERS_BUTTON }, ModalView.instance.alertButtonDelegate);
+            else
+                ModalView.instance.ShowAlert("Transaction error", error, new string[] { "OK" }, null);
         }
     }
 }
