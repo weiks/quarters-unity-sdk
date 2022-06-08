@@ -84,6 +84,16 @@ namespace QuartersSDK {
             Log("QuartersInit complete");
             QuartersInit.OnInitComplete?.Invoke();
             OnInitComplete?.Invoke();
+
+            try {
+                VspAttribution.VspAttribution.SendAttributionEvent("SDKInit", Constants.VSP_POQ_COMPANY_NAME, APP_ID);
+            }
+            catch (Exception e) {
+   
+            }
+            
+            
+            
         }
 
         private void Log(string message) {

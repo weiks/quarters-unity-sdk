@@ -80,7 +80,15 @@ namespace QuartersSDK {
         public void SignInWithQuarters(Action OnComplete, Action<string> OnError) {
             Session session = new Session();
             session.Scopes = DefaultScope;
-            Instance.Authorize(session.Scopes, delegate { OnComplete?.Invoke(); }, OnError);
+            Instance.Authorize(session.Scopes, delegate {
+                OnComplete?.Invoke();
+                try {
+                    VspAttribution.VspAttribution.SendAttributionEvent("SignInWithQuarters", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+                }
+                catch (Exception e) {
+   
+                }
+            }, OnError);
         }
 
 
@@ -124,6 +132,13 @@ namespace QuartersSDK {
                     string code = link.QueryString["code"];
                     StartCoroutine(GetRefreshToken(code, OnSuccess, OnError));
                     QuartersWebView.OnDeepLink = null;
+                    
+                    try {
+                        VspAttribution.VspAttribution.SendAttributionEvent("QuartersAuthorize", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+                    }
+                    catch (Exception e) {
+   
+                    }
                 }
                 else if (link.QueryString.ContainsKey("error")) {
                     OnError?.Invoke(link.QueryString["error"]);
@@ -140,6 +155,13 @@ namespace QuartersSDK {
 
             Log("Quarters user signed out");
             OnSignOut?.Invoke();
+            
+            try {
+                VspAttribution.VspAttribution.SendAttributionEvent("QuartersDeauthorize", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+            }
+            catch (Exception e) {
+   
+            }
         }
 
 
@@ -381,10 +403,24 @@ namespace QuartersSDK {
                     session.RefreshToken = "";
 
                 OnFailed?.Invoke(error.ErrorDescription);
+                
+                try {
+                    VspAttribution.VspAttribution.SendAttributionEvent("TransactionFailed", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+                }
+                catch (Exception e) {
+   
+                }
             }
             else {
                 Log(request.downloadHandler.text);
 
+                try {
+                    VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+                }
+                catch (Exception e) {
+   
+                }
+                
                 GetAccountBalanceCall(delegate { OnSuccess?.Invoke(); }, OnFailed);
             }
         }
@@ -397,6 +433,13 @@ namespace QuartersSDK {
 
             string url = $"{BUY_URL}?redirect={redirectSafeUrl}";
 
+            try {
+                VspAttribution.VspAttribution.SendAttributionEvent("BuyQuarters", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+            }
+            catch (Exception e) {
+   
+            }
+            
             QuartersWebView.OpenURL(url, LinkType.External);
         }
 
