@@ -17,3 +17,7 @@
 
 - Code formatting fixes
 - Added Console logging level selection
+
+## 2.1.1 (2022-06-07)
+
+- Added VSP attribution
