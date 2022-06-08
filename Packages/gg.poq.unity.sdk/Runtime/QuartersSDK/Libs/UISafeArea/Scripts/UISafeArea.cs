@@ -254,7 +254,7 @@ public class UISafeArea : MonoBehaviour
 			{
 				leftMarginRectSize = 0;
 			}
-			else if (Screen.orientation == ScreenOrientation.Landscape)
+			else if (Screen.orientation == ScreenOrientation.LandscapeLeft)
 			{
 				rightMarginRectSize = 0;
 			}
