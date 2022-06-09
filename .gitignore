@@ -87,3 +87,10 @@ $RECYCLE.BIN/
 
 QuartersSDK/.vs/
 
+QuartersSDK/QuartersSDKTests/bin/
+
+QuartersSDK/QuartersSDK/bin/
+
+QuartersSDK/QuartersSDK/obj/
+
+QuartersSDK/QuartersSDKTests/obj/
