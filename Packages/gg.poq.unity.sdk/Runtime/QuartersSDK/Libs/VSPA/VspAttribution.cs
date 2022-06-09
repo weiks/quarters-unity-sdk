@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.Analytics;
 
 namespace QuartersSDK.VspAttribution
@@ -19,7 +20,7 @@ namespace QuartersSDK.VspAttribution
 			AnalyticsResult result = EditorAnalytics.RegisterEventWithLimit(k_EventName, k_MaxEventsPerHour,
 				k_MaxNumberOfElements, k_VendorKey, k_VersionId);
 #else // IF !UNITY_EDITOR
-			AnalyticsResult result = Analytics.Analytics.RegisterEvent(k_EventName, k_MaxEventsPerHour,
+			AnalyticsResult result = Analytics.RegisterEvent(k_EventName, k_MaxEventsPerHour,
 				k_MaxNumberOfElements, k_VendorKey, k_VersionId);
 #endif
 
@@ -55,7 +56,7 @@ namespace QuartersSDK.VspAttribution
 				if (!isEditorAnalyticsEnabled)
 					return AnalyticsResult.AnalyticsDisabled;
 #else // IF !UNITY_EDITOR
-				bool isRuntimeAnalyticsEnabled = Analytics.Analytics.enabled;
+				bool isRuntimeAnalyticsEnabled = Analytics.enabled;
 				
 				if (!isRuntimeAnalyticsEnabled)
 					return AnalyticsResult.AnalyticsDisabled;
@@ -83,7 +84,7 @@ namespace QuartersSDK.VspAttribution
 				// Send the Attribution Event
 				var eventResult = EditorAnalytics.SendEventWithLimit(k_EventName, eventData, k_VersionId);
 #else // IF !UNITY_EDITOR
-				var eventResult = Analytics.Analytics.SendEvent(k_EventName, eventData, k_VersionId);
+				var eventResult = Analytics.SendEvent(k_EventName, eventData, k_VersionId);
 #endif
 				return eventResult;
 			}
