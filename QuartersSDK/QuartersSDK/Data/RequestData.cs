@@ -17,9 +17,9 @@ namespace QuartersSDK.Data
 
         public RequestData(string clientId, string clientSecret , string grantType, string codeVerifier, string redirectUri = "", string code = "", string refreshToken = "")
         {
-            ClientId = clientId ?? throw new ArgumentNullException(nameof(clientId));
-            ClientSecret = clientSecret ?? throw new ArgumentNullException(nameof(clientSecret));
-            GrantType = grantType ?? throw new ArgumentNullException(nameof(grantType));
+            ClientId = !String.IsNullOrEmpty(clientId)? clientId : throw new ArgumentNullException(nameof(clientId));
+            ClientSecret = !String.IsNullOrEmpty(clientSecret)? clientSecret : throw new ArgumentNullException(nameof(clientSecret));
+            GrantType = !String.IsNullOrEmpty(grantType) ? grantType : throw new ArgumentNullException(nameof(grantType));
             CodeVerifier = codeVerifier ?? throw new ArgumentNullException(nameof(codeVerifier));
             RefreshToken = refreshToken ?? throw new ArgumentNullException(nameof(refreshToken));
             RedirectUri = redirectUri;

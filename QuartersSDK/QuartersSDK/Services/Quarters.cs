@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using QuartersSDK.Data;
+using QuartersSDK.Data.Enums;
 using QuartersSDK.Interfaces;
 using System;
 using System.Collections;
@@ -52,7 +53,7 @@ namespace QuartersSDK.Services
                     return new ResponseData(new Error("Missing token", "Missing refresh token on session"));
                 }
 
-                RequestData request = new RequestData(grantType: "refresh_token",
+                RequestData request = new RequestData(grantType: EnumUtils.ToEnumString(GrantType.REFRESH_TOKEN),
                                                        clientId: _app.APP_ID,
                                                        clientSecret: _app.APP_KEY,
                                                        refreshToken: _session.RefreshToken,
@@ -79,7 +80,7 @@ namespace QuartersSDK.Services
             {
                 _logger.LogInformation($"Get refresh token with code: {code}");
 
-                RequestData request = new RequestData(grantType: "authorization_code",
+                RequestData request = new RequestData(grantType: EnumUtils.ToEnumString(GrantType.AUTHORIZATION_CODE),
                                                        clientId: _app.APP_ID,
                                                        clientSecret: _app.APP_KEY,
                                                        redirectUri: _app.REDIRECT_URL,
