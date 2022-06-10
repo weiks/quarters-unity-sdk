@@ -184,3 +184,10 @@ When you try to Pay or receive Quarters you get *Missing refresh token* to fix i
 When you try to Pay or receive Quarters you get *Your app must ve verified to transfer Quarters from users* to fix it:
 1. Verify your app [contacting us](#before-you-start).
 
+### Pressing `Authorize` in Android mobile doesn't redirect to the app.
+When you `Sign In` with the sample app you are not redirected to the app after pressing `Authorize` button in your browser.
+Some mobile internet browsers (like Samsung default internet explorer) don't redirect to the app inmediatly. In case you want to be redirected inmediatly to the app change your default internet mobile browser:
+1. On your Android phone, tap `Settings`.
+2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) and finally `Default Apps`
+3. There on the option `Browser App` you will be able to change your default mobile browser
+![image](https://user-images.githubusercontent.com/3865131/173102296-e0a56135-b621-491f-9326-4aafdcbdd983.png)
