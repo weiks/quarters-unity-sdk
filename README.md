@@ -29,7 +29,7 @@ Currently you cannot make a transfer between your app and your developper accoun
 6. Back in Unity Quarters Init component copy the values from app dashboard to the inpector tab of Quarters Init Component:
    - `APP_ID` -> `client_id` 
    - `APP_KEY` -> `client_secret`
-   - `APP_UNIQUE_IDENTIFIER` -> It needs to be `App URL` sub-domain (ex. in this case exampleapp like in bellow picture)  
+   - `APP_UNIQUE_IDENTIFIER` -> It needs to be `App URL` sub-domain (ex. in this case exampleapp as in the image below)  
    Please check the addiotional values you can set in the Unity inspector tab:
    - `Environment` -> select `Production` if your app was registered in [production apps environment](https://apps.pocketfulofquarters.com/) otherwise select `Sandbox`. 
    - `Default scope` -> select the 5 scopes (`Identity`, `Email`, `Transactions`, `Events` and `Wallet`).
