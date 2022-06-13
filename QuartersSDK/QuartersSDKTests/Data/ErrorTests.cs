@@ -10,21 +10,24 @@ namespace QuartersSDK.Data.Tests
     public class ErrorTests
     {
         [Test()]
-        public void ErrorTest()
+        [Category("Creates missing token error")]
+        public void InstantiatesErrorTest()
         {
-            Assert.Fail();
+           Error err = new Error("Missing token", "Missing refresh token on session");
+
+            Assert.That(err.ErrorMessage.Equals("Missing token"));
+            Assert.That(err.ErrorDescription.Equals("Missing refresh token on session"));
         }
 
         [Test()]
-        public void ErrorTest1()
+        [Category("Creates error with JSON")]
+        public void InstantiatesWithJSONTest()
         {
-            Assert.Fail();
+            Error err = new Error("{error:'Test error', error_description:'test description error'}");
+
+            Assert.That(err.ErrorMessage.Equals("Test error"));
+            Assert.That(err.ErrorDescription.Equals("test description error"));
         }
 
-        [Test()]
-        public void ErrorTest2()
-        {
-            Assert.Fail();
-        }
     }
 }

@@ -31,7 +31,9 @@ namespace QuartersSDK.Data
         }
 
         public ResponseData() { } 
-        public ResponseData(Error err) { ErrorResponse = err; }
+        public ResponseData(Error err) {
+            SetError(err, HttpStatusCode.BadRequest);
+        }
         public ResponseData(string json, HttpStatusCode status) 
         {
             this.SetData(json, status);
@@ -39,19 +41,27 @@ namespace QuartersSDK.Data
 
         public void SetData(string json, HttpStatusCode status)
         {
-            var aux = JsonConvert.DeserializeObject<ResponseData>(json);
-            StatusCode = (int)status;
-            Balance = aux.Balance;
-            AccessToken = aux.AccessToken;
-            RefreshToken= aux.RefreshToken;
-            Scope = aux.Scope;
-            IsSuccesful = true;
+            try
+            {
+                var aux = JsonConvert.DeserializeObject<ResponseData>(json);
+                StatusCode = (int)status;
+                Balance = aux.Balance;
+                AccessToken = aux.AccessToken;
+                RefreshToken = aux.RefreshToken;
+                Scope = aux.Scope;
+                IsSuccesful = true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public void SetError(Error err, HttpStatusCode status)
         {
             StatusCode = (int)status;
             ErrorResponse = err;
+            IsSuccesful = false;
         }
 
     }

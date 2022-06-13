@@ -9,8 +9,5 @@ namespace QuartersSDK.Data.Enums
         JSON,
         [EnumMember(Value = "form-data")]
         FORM,
-        [EnumMember(Value = "form-data")]
-        WWW_FORM
-
     }
 }

@@ -19,9 +19,16 @@ namespace QuartersSDK.Data
 
             public Error(string json)
             {
-                var err = JsonConvert.DeserializeObject<Error>(json);
-                this.ErrorMessage = err.ErrorMessage;
-                this.ErrorDescription = err.ErrorDescription;
+                try
+                {
+                    var err = JsonConvert.DeserializeObject<Error>(json);
+                    this.ErrorMessage = err.ErrorMessage;
+                    this.ErrorDescription = err.ErrorDescription;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
 
             public Error(string message, string description)
