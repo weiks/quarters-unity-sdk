@@ -2,11 +2,12 @@
 using QuartersSDK.Data.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace QuartersSDK.Data
 {
-    public class Error : Serializable
+    public class Error : Exception
     {
             public static string INVALID_TOKEN = "Invalid `refresh_token`";
 

@@ -74,5 +74,25 @@ namespace QuartersSDK.Services
                 throw ex;
             }
         }
+
+        public HttpWebResponse RequestGet(string url, string requestToken)
+        {
+            try
+            {
+                var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+
+                httpRequest.Accept = "application/json";
+                httpRequest.Headers["Authorization"] = $"Bearer ${requestToken}";
+
+                var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+
+                return httpResponse;
+            }
+            catch (Exception ex)
+            {
+                Error error = new Error(ex.Message);
+                throw ex;
+            }
+        }
     }
 }

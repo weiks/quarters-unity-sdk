@@ -25,7 +25,7 @@ namespace QuartersSDK.Services
             {
                 yield return request.SendWebRequest();
 
-                if (request.isNetworkError || request.isHttpError)
+                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
                 {
                     Debug.LogError(request.error);
                     Debug.LogError(request.downloadHandler.text);
@@ -61,5 +61,9 @@ namespace QuartersSDK.Services
             return rdo;
         }
 
+        public HttpWebResponse RequestGet(string url, string request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

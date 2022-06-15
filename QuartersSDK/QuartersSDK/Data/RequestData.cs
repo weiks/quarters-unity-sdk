@@ -12,10 +12,11 @@ namespace QuartersSDK.Data
         public string GrantType { get; set; }
         public string CodeVerifier { get; set; }
         public string RefreshToken { get; set; }
+        public string AccessToken { get; set; }
         public string RedirectUri { get; set; } = String.Empty;
         public string Code { get; set; } = String.Empty;
 
-        public RequestData(string clientId, string clientSecret , string grantType, string codeVerifier, string redirectUri = "", string code = "", string refreshToken = "")
+        public RequestData(string clientId, string clientSecret , string grantType, string codeVerifier, string redirectUri = "", string code = "", string refreshToken = "", string accessToken = "")
         {
             ClientId = !String.IsNullOrEmpty(clientId)? clientId : throw new ArgumentNullException(nameof(clientId));
             ClientSecret = !String.IsNullOrEmpty(clientSecret)? clientSecret : throw new ArgumentNullException(nameof(clientSecret));
@@ -23,6 +24,7 @@ namespace QuartersSDK.Data
             CodeVerifier = codeVerifier ?? throw new ArgumentNullException(nameof(codeVerifier));
             RefreshToken = refreshToken ?? throw new ArgumentNullException(nameof(refreshToken));
             RedirectUri = redirectUri;
+            AccessToken = accessToken;
             Code = code;
         }
     }
