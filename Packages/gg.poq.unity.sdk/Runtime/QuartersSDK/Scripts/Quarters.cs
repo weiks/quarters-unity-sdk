@@ -219,7 +219,7 @@ namespace QuartersSDK {
         }
 
 
-        public IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
+        private IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
             Log("Get Access token");
 
             if (!session.DoesHaveRefreshToken) {
