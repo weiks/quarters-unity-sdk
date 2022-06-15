@@ -304,29 +304,6 @@ namespace QuartersSDK {
             }
         }
 
-
-        public IEnumerator GetAvatar(Action<Texture> OnSuccess, Action<Error> OnError) {
-            string url = $"https://www.poq.gg/images/{CurrentUser.Id}/{CurrentUser.AvatarUrl}";
-            Log($"Pull avatar: {url}");
-
-            UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
-            yield return www.SendWebRequest();
-
-            if (www.isNetworkError || www.isHttpError) {
-                LogError(www.error);
-                LogError(www.downloadHandler.text);
-
-                Error error = new Error(www.downloadHandler.text);
-
-                OnError?.Invoke(error);
-            }
-            else {
-                Texture avatarTexture = ((DownloadHandlerTexture) www.downloadHandler).texture;
-                OnSuccess?.Invoke(avatarTexture);
-            }
-        }
-
-
         private IEnumerator GetUserDetailsCall(Action<User> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
             Log("GetUserDetailsCall");
 
