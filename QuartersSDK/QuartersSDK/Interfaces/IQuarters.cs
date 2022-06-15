@@ -17,5 +17,7 @@ namespace QuartersSDK.Interfaces
 
         public void SignInWithQuarters(Action OnComplete, Action<string> OnError) { }
         public void MakeTransactionCall(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError) { }
+
+        public void BuyQuarters() { }
     }
 }

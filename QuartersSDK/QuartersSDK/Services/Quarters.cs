@@ -62,7 +62,7 @@ namespace QuartersSDK.Services
                                                        clientSecret: _app.APP_KEY,
                                                        refreshToken: _session.RefreshToken,
                                                        codeVerifier: _pcke.CodeVerifier);
-                var response = _apiClient.RequestPost(_api.ApiTokenURL, request);
+                ResponseData response = _apiClient.RequestPost(_api.ApiTokenURL, request);
 
                 if (!response.IsSuccesful)
                     return response;
@@ -112,7 +112,7 @@ namespace QuartersSDK.Services
         {
             _logger.LogInformation($"Pull avatar: {_api.AvatarURL(u)}");
 
-            UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+            UnityWebRequest request = UnityWebRequestTexture.GetTexture(_api.AvatarURL(u));
 
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             { 
@@ -160,86 +160,66 @@ namespace QuartersSDK.Services
         {
             _logger.LogInformation(_api.BalanceURL);
 
-            var response = _apiClient.RequestGet(_api.BalanceURL, _session.AccessToken);
-            var sr = new StreamReader(response.GetResponseStream());
-            var strResponse = sr.ReadToEnd();
-            if (!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
+            try
             {
-                _logger.LogError(strResponse);
-                _logger.LogError(response.StatusCode.ToString(), response.StatusDescription);
-                throw new Error(response.StatusCode.ToString(), response.StatusDescription);
-            }
+                var response = _apiClient.RequestGet(_api.BalanceURL, _session.AccessToken);
+                var sr = new StreamReader(response.GetResponseStream());
+                var strResponse = sr.ReadToEnd();
+                if (!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
+                {
+                    _logger.LogError(strResponse);
+                    _logger.LogError(response.StatusCode.ToString(), response.StatusDescription);
+                    throw new Error(response.StatusCode.ToString(), response.StatusDescription);
+                }
 
-            _logger.LogInformation(strResponse);
-            JObject responseData = JsonConvert.DeserializeObject<JObject>(strResponse);
-            return responseData["balance"].ToObject<long>();
+                _logger.LogInformation(strResponse);
+                JObject responseData = JsonConvert.DeserializeObject<JObject>(strResponse);
+                return responseData["balance"].ToObject<long>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new Error(ex.Message, ex.InnerException.ToString());
+            }
         }
 
-        public IEnumerator MakeTransaction(long coinsQuantity, string description)
+        public bool MakeTransaction(long coinsQuantity, string description)
         {
             _logger.LogInformation($"MakeTransaction with quantity: {coinsQuantity}");
 
-            if (!_session.DoesHaveRefreshToken)
-                _logger.LogError("Missing refresh token");
-
-            throw new NotImplementedException();
-
-            /*
-            string url = API_URL + "/transactions";
-            _logger.LogInformation("Transaction url: " + url);
-
-            Dictionary<string, object> postData = new Dictionary<string, object>();
-            postData.Add("creditUser", coinsQuantity);
-            postData.Add("description", description);
-            string json = JsonConvert.SerializeObject(postData);
-
-
-            UnityWebRequest request = new UnityWebRequest(url, "POST");
-            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
-            request.uploadHandler = new UploadHandlerRaw(jsonToSend);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Authorization", "Bearer " + _session.AccessToken);
-            request.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-            yield return request.SendWebRequest();
-
-            if (request.isNetworkError || request.isHttpError)
+            try
             {
-                LogError(request.error);
-                LogError(request.downloadHandler.text);
+                if (!_session.DoesHaveRefreshToken)
+                    _logger.LogError("Missing refresh token");
 
-                Error error = new Error(request.downloadHandler.text);
+                _logger.LogInformation("Transaction url: " + _api.TransactionsURL);
 
-                if (error.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
-                    session.RefreshToken = "";
-
-                OnFailed?.Invoke(error.ErrorDescription);
-
-                try
+                Dictionary<string, object> postData = new Dictionary<string, object>();
+                postData.Add("creditUser", coinsQuantity);
+                postData.Add("description", description);
+                var response = _apiClient.RequestPost(url: _api.TransactionsURL, token: _session.AccessToken, dic: postData);
+                if (!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
                 {
-                    VspAttribution.VspAttribution.SendAttributionEvent("TransactionFailed", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
-                }
-                catch (Exception e)
-                {
+                    _logger.LogError(response.ToJSONString());
+                    _logger.LogError($"Status: {response.StatusCode} |Response: {response.ToJSONString()}");
 
+                    Error error = new Error(response.ToJSONString());
+
+                    if (error.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
+                        _session.RefreshToken = "";
+                    return false;
+                    // VspAttribution.VspAttribution.SendAttributionEvent("TransactionFailed", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
                 }
+
+                _logger.LogInformation(response.ToJSONString());
+                //VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+                return true;
             }
-            else
+            catch (Exception ex)
             {
-                Log(request.downloadHandler.text);
-
-                try
-                {
-                    VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
-                }
-                catch (Exception e)
-                {
-
-                }
-
-                GetAccountBalanceCall(delegate { OnSuccess?.Invoke(); }, OnFailed);
+                _logger.LogError(ex.Message);
+                throw new Error(ex.Message, ex.InnerException.ToString());
             }
-            */
         }
         #endregion 
     }

@@ -65,5 +65,10 @@ namespace QuartersSDK.Services
         {
             throw new NotImplementedException();
         }
+
+        public ResponseData RequestPost(string url, string token, Dictionary<string, object> dic)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

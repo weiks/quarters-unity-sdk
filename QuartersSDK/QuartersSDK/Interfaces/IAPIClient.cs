@@ -15,6 +15,7 @@ namespace QuartersSDK.Interfaces
 
         public HttpWebResponse RequestGet(string url, string request);
 
-        public void BuyQuarters() { }
+        public ResponseData RequestPost(string url, string token, Dictionary<string, object> dic);
+
     }
 }

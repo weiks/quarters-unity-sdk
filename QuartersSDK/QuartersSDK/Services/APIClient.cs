@@ -4,24 +4,19 @@ using QuartersSDK.Data;
 using QuartersSDK.Data.Enums;
 using QuartersSDK.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using UnityEngine;
-using UnityEngine.Networking;
 
 namespace QuartersSDK.Services
 {
     public class APIClient : IAPIClient
     {
-        private ResponseData DoPost(HttpContent payload, string subPath)
+        private ResponseData DoPost(HttpContent payload, string subPath, string token)
         {
             var rdo = new ResponseData();
-
             try
             {
                 using (var httpClient = new HttpClient())
@@ -31,6 +26,8 @@ namespace QuartersSDK.Services
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(payload.Headers.ContentType.MediaType));
 
                     // make request
+                    if(!string.IsNullOrEmpty(token))
+                        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     var request = httpClient.PostAsync(subPath, payload);
                     request.Wait();
                     var response = request.Result.Content.ReadAsStringAsync();
@@ -46,8 +43,7 @@ namespace QuartersSDK.Services
             }
             catch (Exception ex)
             {
-                Error error = new Error(ex.Message, ex.InnerException.ToString());
-                throw ex;
+                throw new Error(ex.Message, ex.InnerException.ToString());
             }
             return rdo;
         }
@@ -66,12 +62,24 @@ namespace QuartersSDK.Services
                 if (!String.IsNullOrEmpty(request.Code))
                     data.Add(new StringContent(request.Code), "code");
 
-                return DoPost(data, url);
+                return DoPost(data, url, null);
             }
             catch (Exception ex)
             {
-                Error error = new Error(ex.Message);
-                throw ex;
+                throw new Error(ex.Message, ex.InnerException.ToString());
+            }
+        }
+
+        public ResponseData RequestPost(string url, string token, Dictionary<string,object> dic)
+        {
+            try
+            {
+                var data = new StringContent(dic.ToString(), Encoding.UTF8,"application/json");
+                return DoPost(data, url, token);
+            }
+            catch (Exception ex)
+            {
+                throw new Error(ex.Message, ex.InnerException.ToString());
             }
         }
 
@@ -90,8 +98,7 @@ namespace QuartersSDK.Services
             }
             catch (Exception ex)
             {
-                Error error = new Error(ex.Message);
-                throw ex;
+                throw new Error(ex.Message, ex.InnerException.ToString());
             }
         }
     }

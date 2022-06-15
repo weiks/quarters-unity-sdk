@@ -7,11 +7,10 @@ using System.Text;
 
 namespace QuartersSDK.Data
 {
-    public class ResponseData : Serializable
+    public class ResponseData : HttpWebResponse, ISerializable
     {
         private long _balance;
 
-        public int StatusCode;
         public bool IsSuccesful = false;
         public Error ErrorResponse;
 
@@ -44,11 +43,10 @@ namespace QuartersSDK.Data
             try
             {
                 var aux = JsonConvert.DeserializeObject<ResponseData>(json);
-                StatusCode = (int)status;
-                Balance = aux.Balance;
-                AccessToken = aux.AccessToken;
-                RefreshToken = aux.RefreshToken;
-                Scope = aux.Scope;
+                Balance = !string.IsNullOrEmpty(aux.Balance.ToString())? aux.Balance : (long)0;
+                AccessToken = aux.AccessToken ?? string.Empty;
+                RefreshToken = aux.RefreshToken ?? string.Empty;
+                Scope = aux.Scope ?? string.Empty;
                 IsSuccesful = true;
             }
             catch (Exception ex)
@@ -59,10 +57,13 @@ namespace QuartersSDK.Data
 
         public void SetError(Error err, HttpStatusCode status)
         {
-            StatusCode = (int)status;
             ErrorResponse = err;
             IsSuccesful = false;
         }
 
+        public string ToJSONString()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        }
     }
 }
