@@ -93,23 +93,8 @@ Unity 2019.4+
 - Unity Editor: due to limitations of Unity Editor on Windows external browser is used to authorize user you can check [sign in doc](#please-note-that-due-to-limitations-of-unity-editor-on-windows-external-browser-is-used-to-authorize-user-after-successful-authorisation-please-copy-and-paste-the-browser-url-to-unity-game-view-and-press-authorize) for details. 
 
 ## API Reference
-### Quarters Initialisation
-Before making any of the Quarters SDK calls you must call the following.
-
-```
-private void Start() {
-    QuartersInit.Instance.Init(OnInitComplete, OnInitError);
-}
-
-
-private void OnInitComplete() {
-
-}
-
-private void OnInitError(string error) {
-    Debug.LogError(error);
-}
-```
+<!-- TODO add reference to README-Api.md file -->
+[]()
 
 ### Sign in with Quarters
 Once Quarters Init is completed successfully you need to sign in your user
