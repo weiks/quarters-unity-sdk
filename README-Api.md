@@ -82,12 +82,30 @@ The player must click the **Authorize** button to allow Quarters transactions. A
 
 Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 
+#### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. Additional steps must be taken to authorize a player in the Unity Editor
+
+1. After clicking the **Authorize** button in the browser, the web browser will load a white page. 
+2. Have the player copy this new URL
+3. When the player returns from the web browser to the game, they will see this prompt in the Unity Editor:
+
+![Capture](https://user-images.githubusercontent.com/41578378/172198600-980454b9-e260-4719-8ad8-621809a2ad14.PNG)
+
+4. Have the player either click the **Paste and Authorize** button or have them paste the URL into the text box and have them click **Authorize**
+
+The game will then finish the sign in process.
+
+
 ### Making Transactions
-You can charge user Quarters as well as reward your user with quarters using unified Transaction API call.
+You can charge user Quarters as well as reward your user with quarters using unified Transaction API calling this method:
+``` 
+Quarters.Instance.Transaction(long price, string description, OnTransferSuccessful, OnTransferFailed );
+```
 **A negative price takes Quarters from the user's account. Positive price value reward user account with Quarters**
 
 | Parameter              | Required | Description                                                |
 | ---------------------- | -------- | ---------------------------------------------------------- |
+| `price`                | yes      |  ammount of the transaction                                |
+| `description`          | yes      |  brief description of the transaction reason               |
 | `OnTransferSuccessful` | yes      |  What happens when a transaction goes through successfully |
 |  `OnTransferFailed`    | yes      |  Checks to see if the transaction failed to go through     |
 
@@ -104,13 +122,12 @@ private void OnTransferFailed(string error) {
 ```
 
 ### Buying Quarters
-User can also purchase Quarters by using the credit card or other methods.
-
-**Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
+User can also purchase Quarters by using the credit card or other methods calling this API method:
 
 ```
 Quarters.Instance.BuyQuarters();
 ```
+**Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
 
 ### Sign Out
 To sign out current Quarters users call
