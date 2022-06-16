@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -66,7 +66,9 @@ namespace QuartersSDK {
             }
         }
 
-
+        /// <summary>
+        /// Initialization
+        /// </summary>
         public void Init() {
             Instance = this;
             session = new Session();
@@ -77,6 +79,11 @@ namespace QuartersSDK {
 
         #region high level calls
 
+        /// <summary>
+        /// Signing in 
+        /// </summary>
+        /// <param name="OnComplete">What happens when signing in is successful</param>
+        /// <param name="OnError">Checks to see if there was an error in signing in</param>
         public void SignInWithQuarters(Action OnComplete, Action<string> OnError) {
             Session session = new Session();
             session.Scopes = DefaultScope;
@@ -147,7 +154,9 @@ namespace QuartersSDK {
             };
         }
 
-
+        /// <summary>
+        /// Deauthorization and signing out
+        /// </summary>
         public void Deauthorize() {
             Session.Invalidate();
             session = null;
@@ -164,15 +173,31 @@ namespace QuartersSDK {
             }
         }
 
-
+        /// <summary>
+        /// Gets the user's account details
+        /// </summary>
+        /// <param name="OnSuccessDelegate">Operation was successful and details have been retreived</param>
+        /// <param name="OnFailedDelegate">Operation failed and details have not been retreived</param>
         public void GetUserDetails(Action<User> OnSuccessDelegate, Action<string> OnFailedDelegate) {
             StartCoroutine(GetUserDetailsCall(OnSuccessDelegate, OnFailedDelegate));
         }
 
+        /// <summary>
+        /// Gets the user's account balance (The amount of quarters they have)
+        /// </summary>
+        /// <param name="OnSuccess">Operation was successful and the account balance information has been retreived</param>
+        /// <param name="OnError">Operation failed and the account balance information has not been retreived</param>
         public void GetAccountBalanceCall(Action<long> OnSuccess, Action<string> OnError) {
             StartCoroutine(GetAccountBalance(OnSuccess, OnError));
         }
 
+        /// <summary>
+        /// Handles quarters transactions
+        /// </summary>
+        /// <param name="coinsQuantity">How many quarters are involved in the transaction</param>
+        /// <param name="description">Description of what the transaction is</param>
+        /// <param name="OnSuccess">The transaction was successful</param>
+        /// <param name="OnError">There was an error in the transaction</param>
         public void Transaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError) {
             StartCoroutine(MakeTransaction(coinsQuantity, description, OnSuccess, OnError));
         }
@@ -425,7 +450,9 @@ namespace QuartersSDK {
             }
         }
 
-
+        /// <summary>
+        /// When the buy quarters button is clicked, the user will be sent to a website where they can exchange money for quarters
+        /// </summary>
         public void BuyQuarters() {
             Log("Buy Quarters");
 
