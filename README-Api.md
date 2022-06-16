@@ -2,6 +2,11 @@
 ## Quarters Initialisation
 Before making any of the Quarters SDK calls you must call the following.
 
+| Parameter        | Required | Description                                                        |
+| -----------------| -------- | ----------------------------------------------------------------   |
+| `OnInitComplete` | yes      |  Runs this function if the Init function was successful            |
+| `OnInitError`    | yes      |  Runs this function if there was an error with the Init function   |
+
 ```
 private void Start() {
     // Runs the Init function of the Quarters class. Allows further Quarters functionality if completed
