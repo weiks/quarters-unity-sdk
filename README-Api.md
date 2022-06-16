@@ -45,7 +45,7 @@ After the player has signed into their Quarters account (if they have not alread
 
 The player must click the **Authorize** button to allow Quarters transactions. Any attempt to exchange Quarters, without being authorized first, will result in an error during the transaction process.
 
-TestAuth.png
+![AuthImage](https://github.com/BRoerish/TestRepo/blob/master/TestAuth.png)
 
 ## Player Information
 After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These scripts can be called after the player has signed into their Quarters account.
