@@ -1,5 +1,5 @@
 # API Documentation
-## Quarters Initialisation
+## Quarters Initialization
 Before making any of the Quarters SDK calls you must call the following.
 
 | Parameter        | Required | Description                                                        |
