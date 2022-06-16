@@ -72,6 +72,8 @@ Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These scripts can be called after the player has signed into their Quarters account.
 
 ### GetUserDetails
+Grabs the display name of the player, after they have signed in to their Quarters account.
+
 ```
 //function used as an example for grabbing user information.
 private void Example()
@@ -93,6 +95,7 @@ private void Example()
 ```
 
 ### GetAccountBalanceCall
+Grabs the Quarters balance of the player signed in.
 
 ```
 //function used as an example for grabbing user’s Quarters balance
