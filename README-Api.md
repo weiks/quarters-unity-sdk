@@ -82,18 +82,41 @@ The player must click the **Authorize** button to allow Quarters transactions. A
 
 Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 
-#### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. Additional steps must be taken to authorize a player in the Unity Editor
+### Making Transactions
+You can charge user Quarters as well as reward your user with quarters using unified Transaction API call.
+**A negative price takes Quarters from the user's account. Positive price value reward user account with Quarters**
 
-1. After clicking the **Authorize** button in the browser, the web browser will load a white page. 
-2. Have the player copy this new URL
-3. When the player returns from the web browser to the game, they will see this prompt in the Unity Editor:
+| Parameter              | Required | Description                                                |
+| ---------------------- | -------- | ---------------------------------------------------------- |
+| `OnTransferSuccessful` | yes      |  What happens when a transaction goes through successfully |
+|  `OnTransferFailed`    | yes      |  Checks to see if the transaction failed to go through     |
 
-![Capture](https://user-images.githubusercontent.com/41578378/172198600-980454b9-e260-4719-8ad8-621809a2ad14.PNG)
+```
+public void ButtonTapped() {
+   long price = -10;
+   Quarters.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
+}
+private void OnTransferSuccessful() {
+  
+}
+private void OnTransferFailed(string error) {
+}
+```
 
-4. Have the player either click the **Paste and Authorize** button or have them paste the URL into the text box and have them click **Authorize**
+### Buying Quarters
+User can also purchase Quarters by using the credit card or other methods.
 
-The game will then finish the sign in process.
+**Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
 
+```
+Quarters.Instance.BuyQuarters();
+```
+
+### Sign Out
+To sign out current Quarters users call
+```
+Quarters.Instance.Deauthorize();
+```
 ## Player Information
 After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These methods can be called after the player has signed into their Quarters account. 
 
