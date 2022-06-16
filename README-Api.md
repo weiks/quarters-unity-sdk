@@ -82,6 +82,17 @@ The player must click the **Authorize** button to allow Quarters transactions. A
 
 Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 
+#### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. Additional steps must be taken to authorize a player in the Unity Editor
+
+1. After clicking the **Authorize** button, the web browser will load a white page. 
+2. Have the player copy this new URL
+3. When the player returns from the web browser to the game, they will see this prompt in the Unity Editor:
+
+![Capture](https://user-images.githubusercontent.com/41578378/172198600-980454b9-e260-4719-8ad8-621809a2ad14.PNG)
+
+4. Have the player either click the **Paste and Authorize** button or have them paste the URL into the text box and have them click **Authorize**
+
+The game will then finish the authorization process.
 
 ## Player Information
 After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These methods can be called after the player has signed into their Quarters account. 
