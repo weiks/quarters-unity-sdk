@@ -92,7 +92,7 @@ Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 
 4. Have the player either click the **Paste and Authorize** button or have them paste the URL into the text box and have them click **Authorize**
 
-The game will then finish the authorization process.
+The game will then finish the sign in process.
 
 ## Player Information
 After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These methods can be called after the player has signed into their Quarters account. 
