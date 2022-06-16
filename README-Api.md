@@ -25,6 +25,13 @@ Once Quarters Init is completed successfully you need to sign in your user
 
 ```
 private void OnInitComplete() {
+        
+        /*Runs the SignInWithQuarters function of the Quarters class.
+    Loads the player's web browser. If they are not logged into their PoQ account, the user will be prompted to sign in.
+    Once the user is signed in, they will be redirected to the Authorization screen.
+	The player must authorize access to their PoQ wallet to allow Quarters transactions.
+    */
+
     Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
 }
 
