@@ -23,6 +23,11 @@ private void OnInitError(string error) {
 ## Sign in with Quarters
 Once Quarters Init is completed successfully you need to sign in your user
 
+| Parameter          | Required | Description                                                |
+| ------------------ | -------- | ---------------------------------------------------------- |
+| `OnSignInComplete` | yes      |  What happens when signing in is successful                |
+| `OnSignInError`    | yes      |  Checks to see if there was an error in signing in         |
+
 ```
 private void OnInitComplete() {
         
@@ -35,10 +40,12 @@ private void OnInitComplete() {
     Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
 }
 
+//Runs if the sign in function was successful. Players can make Quarters transactions at this point.
 private void OnSignInComplete() {
 
 }
 
+//Runs if there was an error during the Sign in process. Returns an error string
 private void OnSignInError(string signInError) {
     Debug.Log(signInError);
 }
