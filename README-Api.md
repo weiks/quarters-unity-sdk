@@ -58,10 +58,10 @@ private void Example()
 	//Calls the GetUserDetails function in the Quarters script
 	Quarters.Instance.GetUserDetails(delegate (User user)
         {
-	//Posts the user’s GamerTag in the console log. user.GamerTag can be referenced as a string
+	        //Posts the user’s GamerTag in the console log. user.GamerTag can be referenced as a string
             Debug.Log(user.GamerTag);
 
-//In case GetUserDetails runs into any errors, delegate can be used to to disclose what went wrong
+            //In case GetUserDetails runs into any errors, delegate can be used to to disclose what went wrong
         }, delegate (string error)
         {
             Debug.LogError(error);
