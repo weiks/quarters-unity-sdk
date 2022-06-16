@@ -48,6 +48,7 @@ The player must click the **Authorize** button to allow Quarters transactions. A
 
 
 ![AuthConsoleLog](https://github.com/BRoerish/TestRepo/blob/master/ConsoleLogEx.png)
+
 Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 
 
