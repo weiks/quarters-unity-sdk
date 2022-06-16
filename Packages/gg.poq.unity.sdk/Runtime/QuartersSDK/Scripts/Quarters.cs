@@ -219,7 +219,7 @@ namespace QuartersSDK {
         }
 
 
-        public IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
+        private IEnumerator GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
             Log("Get Access token");
 
             if (!session.DoesHaveRefreshToken) {
@@ -402,25 +402,13 @@ namespace QuartersSDK {
                 if (error.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
                     session.RefreshToken = "";
 
+                VspAttribution.VspAttribution.SendAttributionEvent("TransactionFailed", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
                 OnFailed?.Invoke(error.ErrorDescription);
-                
-                try {
-                    VspAttribution.VspAttribution.SendAttributionEvent("TransactionFailed", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
-                }
-                catch (Exception e) {
-   
-                }
             }
-            else {
+            else if (request.isDone)
+            {
                 Log(request.downloadHandler.text);
-
-                try {
-                    VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
-                }
-                catch (Exception e) {
-   
-                }
-                
+                VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
                 GetAccountBalanceCall(delegate { OnSuccess?.Invoke(); }, OnFailed);
             }
         }
