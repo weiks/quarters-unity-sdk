@@ -93,6 +93,7 @@ Unity 2019.4+
 - Unity Editor: due to limitations of Unity Editor on Windows external browser is used to authorize user you can check [sign in doc](#please-note-that-due-to-limitations-of-unity-editor-on-windows-external-browser-is-used-to-authorize-user-after-successful-authorisation-please-copy-and-paste-the-browser-url-to-unity-game-view-and-press-authorize) for details. 
 
 ## API Reference
+In order to make all the operations/transactions with Quarters you will be able to consume an API [using methods and examples in this README-Api](/README-Api.md) 
 <!-- TODO add reference to README-Api.md file -->
 []()
 

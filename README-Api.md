@@ -1,12 +1,17 @@
 # API Documentation
 ## Quarters Initialization
-Before making any of the Quarters SDK calls you must call the following.
+Before making any of the Quarters SDK calls you must call the following:
+ ```
+ QuartersInit.Instance.Init(OnInitComplete, OnInitError);
+ ```
 
+Where:
 | Parameter        | Required | Description                                                        |
 | -----------------| -------- | ----------------------------------------------------------------   |
 | `OnInitComplete` | yes      |  Runs this function if the Init function was successful            |
 | `OnInitError`    | yes      |  Runs this function if there was an error with the Init function   |
 
+For example:
 ```
 private void Start() {
     // Runs the Init function of the Quarters class. Allows further Quarters functionality if completed
@@ -26,13 +31,18 @@ private void OnInitError(string error) {
 ```
 
 ## Sign in with Quarters
-Once Quarters Init is completed successfully you need to sign in your user
+Once Quarters Init is completed successfully you need to sign in your user calling:
+```
+Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
+```
+Where:
 
 | Parameter          | Required | Description                                                |
 | ------------------ | -------- | ---------------------------------------------------------- |
 | `OnSignInComplete` | yes      |  What happens when signing in is successful                |
 | `OnSignInError`    | yes      |  Checks to see if there was an error in signing in         |
 
+Example:
 ```
 private void OnInitComplete() {
         
@@ -57,7 +67,7 @@ private void OnSignInError(string signInError) {
 ```
 
 ## Authorization Screen
-When the  SignInWithQuarters function is called, the player will be taken to the Quarters web page on their default browser. 
+When the  `SignInWithQuarters` function is called, the player will be taken to the Quarters web page on their default browser. 
  
 After the player has signed into their Quarters account (if they have not already done so) they will be prompted to allow the game access to the player’s PoQ account information. 
 
@@ -74,7 +84,7 @@ Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 
 
 ## Player Information
-After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These scripts can be called after the player has signed into their Quarters account.
+After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These methods can be called after the player has signed into their Quarters account. 
 
 ### GetUserDetails
 Grabs the display name of the player, after they have signed in to their Quarters account.
