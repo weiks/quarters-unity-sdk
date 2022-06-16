@@ -98,7 +98,7 @@ In order to make all the operations/transactions with Quarters you will be able 
 ### Sign in with Quarters
 Once Quarters Init is completed successfully you need to sign in your user
 
-In [API documentation you will find the method to call and an example](/README-Api.md/sign-in-with-quarters).
+In [API documentation you will find the method to call and an example](/README-Api.md#sign-in-with-quarters).
 #### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. After successful authorisation please copy and paste the browser url to unity game view and press Authorize.
 ![Capture](https://user-images.githubusercontent.com/41578378/172198600-980454b9-e260-4719-8ad8-621809a2ad14.PNG)
 
@@ -107,19 +107,19 @@ In [API documentation you will find the method to call and an example](/README-A
 You can charge user Quarters as well as reward your user with quarters using unified Transaction API call.
 **A negative price takes Quarters from the user's account. Positive price value reward user account with Quarters**
 
-Please go to the [API documentation](/README-Api.md/making-Transactions) for method description and a code example.
+Please go to the [API documentation](/README-Api.md#making-transactions) for method description and a code example.
 
 ### Buying Quarters
 User can also purchase Quarters by using the credit card or other methods.
 
 **Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
 
-Please go to the [API documentation](/README-Api.md/buying-quarters) for method description and a code example.
+Please go to the [API documentation](/README-Api.md#buying-quarters) for method description and a code example.
 
 ### Sign Out
 To sign out current Quarters users call
 
-Please go to the [API documentation](/README-Api.md/sign-out) for method description and a code example.
+Please go to the [API documentation](/README-Api.md#sign-out) for method description and a code example.
 
 ## Troubleshooting
 
