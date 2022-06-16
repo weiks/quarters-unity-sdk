@@ -45,6 +45,7 @@ After the player has signed into their Quarters account (if they have not alread
 ![AuthImage](https://github.com/BRoerish/TestRepo/blob/master/TestAuth.png)
 
 ⚠️ Important notes: ⚠️
+
 The player must click the **Authorize** button to allow Quarters transactions. Any attempt to exchange Quarters, without being authorized first, will result in an error during the transaction process.
 
 
