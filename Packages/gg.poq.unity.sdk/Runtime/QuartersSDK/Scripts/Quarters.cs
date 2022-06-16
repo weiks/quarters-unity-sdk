@@ -35,7 +35,9 @@ namespace QuartersSDK {
         public CurrencyConfig CurrencyConfig => QuartersInit.Instance.CurrencyConfig;
         
 
-
+        /// <summary>
+        /// Returns the URL of the environment we set
+        /// </summary>
         public string BASE_URL {
             get {
                 Environment environment = QuartersInit.Instance.Environment;
@@ -45,11 +47,19 @@ namespace QuartersSDK {
             }
         }
 
-
+        /// <summary>
+        /// Gets the base API endpoint
+        /// </summary>
         public string API_URL => $"{BASE_URL}/api/v1";
 
+        /// <summary>
+        /// Gets the buy endpoint
+        /// </summary>
         public string BUY_URL => $"{BASE_URL}/buy";
 
+        /// <summary>
+        /// Get or set the current user
+        /// </summary>
         public User CurrentUser {
             get => currentUser;
             set {
@@ -58,6 +68,9 @@ namespace QuartersSDK {
             }
         }
 
+        /// <summary>
+        /// Returns true in case the session is valid
+        /// </summary>
         public bool IsAuthorized {
             get {
                 if (session != null)
@@ -67,7 +80,7 @@ namespace QuartersSDK {
         }
 
         /// <summary>
-        /// Initialization
+        /// Initialization of Quarters user session and instance
         /// </summary>
         public void Init() {
             Instance = this;
@@ -80,7 +93,7 @@ namespace QuartersSDK {
         #region high level calls
 
         /// <summary>
-        /// Signing in 
+        /// This method authorizes the user and signing then 
         /// </summary>
         /// <param name="OnComplete">What happens when signing in is successful</param>
         /// <param name="OnError">Checks to see if there was an error in signing in</param>
@@ -192,7 +205,8 @@ namespace QuartersSDK {
         }
 
         /// <summary>
-        /// Handles quarters transactions
+        /// Handles quarters transactions. 
+        /// After calling this method the user will receive the amount of @coinsQuantity and the reason of transaction will be @description
         /// </summary>
         /// <param name="coinsQuantity">How many quarters are involved in the transaction</param>
         /// <param name="description">Description of what the transaction is</param>
@@ -390,6 +404,13 @@ namespace QuartersSDK {
         }
 
 
+        /// <summary>
+        /// After calling this method the user will receive the amount of @coinsQuantity and the reason of transaction will be @description
+        /// </summary>
+        /// <param name="coinsQuantity">How many quarters are involved in the transaction</param>
+        /// <param name="description">Description of what the transaction is</param>
+        /// <param name="OnSuccess">The transaction was successful</param>
+        /// <param name="OnError">There was an error in the transaction</param>
         public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) {
             Log($"MakeTransaction with quantity: {coinsQuantity}");
 
@@ -451,7 +472,7 @@ namespace QuartersSDK {
         }
 
         /// <summary>
-        /// When the buy quarters button is clicked, the user will be sent to a website where they can exchange money for quarters
+        /// When you call this method, the user will be sent to a website where they can exchange money for quarters
         /// </summary>
         public void BuyQuarters() {
             Log("Buy Quarters");
