@@ -79,6 +79,11 @@ After a player has authorized your game to have access to their account informat
 ### GetUserDetails
 Grabs the display name of the player, after they have signed in to their Quarters account.
 
+| Parameter        | Required | Description                                                        |
+| -----------------| -------- | ----------------------------------------------------------------   |
+| `user`           | yes      |  Collects the data from the user's account                         |
+| `user.GamerTag`  | no       |  A string that conatains the player's Quarters display name        |
+
 ```
 //function used as an example for grabbing user information.
 private void Example()
@@ -101,6 +106,11 @@ private void Example()
 
 ### GetAccountBalanceCall
 Grabs the Quarters balance of the player signed in.
+
+| Parameter        | Required | Description                                                        |
+| -----------------| -------- | ----------------------------------------------------------------   |
+| `OnSuccess`      | yes      |  Runs if the GetAccountBalanceCall function was successful         |
+| `balance`        | yes      |  The number of Quarters the player has in their account            |
 
 ```
 //function used as an example for grabbing user’s Quarters balance
