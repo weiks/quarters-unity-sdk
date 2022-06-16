@@ -84,7 +84,7 @@ Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 
 #### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. Additional steps must be taken to authorize a player in the Unity Editor
 
-1. After clicking the **Authorize** button, the web browser will load a white page. 
+1. After clicking the **Authorize** button in the browser, the web browser will load a white page. 
 2. Have the player copy this new URL
 3. When the player returns from the web browser to the game, they will see this prompt in the Unity Editor:
 
