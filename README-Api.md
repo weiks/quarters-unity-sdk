@@ -71,7 +71,7 @@ private void Example()
 
 ```
 
-###GetAccountBalanceCall
+### GetAccountBalanceCall
 
 ```
 //function used as an example for grabbing user’s Quarters balance
