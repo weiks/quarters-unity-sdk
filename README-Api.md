@@ -42,10 +42,14 @@ When the  SignInWithQuarters function is called, the player will be taken to the
  
 After the player has signed into their Quarters account (if they have not already done so) they will be prompted to allow the game access to the player’s PoQ account information. 
 
+![AuthImage](https://github.com/BRoerish/TestRepo/blob/master/TestAuth.png)
 
 The player must click the **Authorize** button to allow Quarters transactions. Any attempt to exchange Quarters, without being authorized first, will result in an error during the transaction process.
 
-![AuthImage](https://github.com/BRoerish/TestRepo/blob/master/TestAuth.png)
+
+![AuthConsoleLog](https://github.com/BRoerish/TestRepo/blob/master/ConsoleLogEx.png)
+Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
+
 
 ## Player Information
 After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These scripts can be called after the player has signed into their Quarters account.
