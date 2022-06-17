@@ -82,7 +82,46 @@ The player must click the **Authorize** button to allow Quarters transactions. A
 
 Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 
+
+### Making Transactions
+You can charge user Quarters as well as reward your user with quarters using unified Transaction API call.
+**A negative price takes Quarters from the user's account. Positive price value reward user account with Quarters**
+
+```
+public void ButtonTapped() {
+
+   long price = -10;
+
+   Quarters.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
+
+}
+
+private void OnTransferSuccessful() {
+  
+}
+
+private void OnTransferFailed(string error) {
+
+}
+```
+
+### Buying Quarters
+User can also purchase Quarters by using the credit card or other methods.
+
+**Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
+
+```
+Quarters.Instance.BuyQuarters();
+```
+
+### Sign Out
+To sign out current Quarters users call
+```
+Quarters.Instance.Deauthorize();
+```
+=======
 #### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. Additional steps must be taken to authorize a player in the Unity Editor
+
 
 1. After clicking the **Authorize** button in the browser, the web browser will load a white page. 
 2. Have the player copy this new URL
