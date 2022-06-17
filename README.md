@@ -5,11 +5,6 @@ In order to have a full integration with QuartersSDK you must follow this steps:
 - Register your APP following [the steps in poq-docs](https://github.com/weiks/poq-docs/blob/main/docs/unity-sdk-integeration.md).
 - It's mandatory to verify your app before your app can take Quarters from users. **Verify your app sending us a message to [💡┋api-and-integration](https://discord.com/channels/908772014859378708/910205059403509803) or if you are new on Discord please send us an invite [to request verification](https://discord.com/invite/poq)**.
 
-⚠️ Important notes: ⚠️
-
-Currently you cannot make a transfer between your app and your developer account. To test your app, you need to create a secondary test account on https://www.poq.gg/. For more information about transfers you can [check our API documentation](https://github.com/weiks/poq-docs/blob/main/docs/oauth-api.md#post-apiv1transactions).
-
-
 ## Getting Started
 ### Installation
 1. Open Unity package manager
@@ -170,6 +165,10 @@ Quarters.Instance.Deauthorize();
 ```
 
 ## Troubleshooting
+
+⚠️ Important notes: ⚠️
+
+Currently you cannot make a transfer between your app and your developer account. To test your app, you need to create a secondary test account on https://www.poq.gg/. For more information about transfers you can [check our API documentation](https://github.com/weiks/poq-docs/blob/main/docs/oauth-api.md#post-apiv1transactions).
 
 ### Pay or receive Quarters throws *Transaction Error*
 When you try to Pay or receive Quarters you get *Transaction Error: Debit and Cretit address cannot be the same. You cannot test your app when you are logged into your developer account* to fix it:
