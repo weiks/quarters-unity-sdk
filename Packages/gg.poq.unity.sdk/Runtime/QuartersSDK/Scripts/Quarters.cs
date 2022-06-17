@@ -312,7 +312,6 @@ namespace QuartersSDK {
                 yield break;
             }
 
-
             string url = API_URL + "/users/me";
             Log(url);
 
@@ -321,7 +320,6 @@ namespace QuartersSDK {
                 request.SetRequestHeader("Authorization", "Bearer " + session.AccessToken);
                 // Request and wait for the desired page.
                 yield return request.SendWebRequest();
-
 
                 if (request.isNetworkError || request.isHttpError) {
                     LogError(request.error);
