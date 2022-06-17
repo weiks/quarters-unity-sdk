@@ -7,7 +7,7 @@ In order to have a full integration with QuartersSDK you must follow this steps:
 
 ⚠️ Important notes: ⚠️
 
-Currently you cannot make a transfer between your app and your developper account. To test your app, you need to create a secondary test account on https://www.poq.gg/. For more information about transfers you can [check our API documentation](https://github.com/weiks/poq-docs/blob/main/docs/oauth-api.md#post-apiv1transactions).
+Currently you cannot make a transfer between your app and your developer account. To test your app, you need to create a secondary test account on https://www.poq.gg/. For more information about transfers you can [check our API documentation](https://github.com/weiks/poq-docs/blob/main/docs/oauth-api.md#post-apiv1transactions).
 
 
 ## Getting Started
@@ -44,7 +44,8 @@ For the best user experience, Quarters Unity SDK utilises domain association to 
 1. Open [your PoQ APPS](https://www.poq.gg/apps)
 2. Find your app and select iOS under the Auto Manage option
 3. Enter any valid string as your PoQ app's unique identifier if empty
-4. Enter Apple Team ID. It can be pulled from [Apple developer account](https://developer.apple.com/account/#!/membership/)
+4. Enter Apple Team ID. It can be pulled from [Apple 
+account](https://developer.apple.com/account/#!/membership/)
 5. Enter your app bundle id. Example com.mycompany.mygame
 6. Press Submit
 7. Copy your PoQ app's unique identifier to the Quarters Init component APP_UNIQUE_IDENTIFIER field in Unity and press Save
