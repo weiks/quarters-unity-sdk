@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -35,7 +35,9 @@ namespace QuartersSDK {
         public CurrencyConfig CurrencyConfig => QuartersInit.Instance.CurrencyConfig;
         
 
-
+        /// <summary>
+        /// Returns the URL of the environment we set
+        /// </summary>
         public string BASE_URL {
             get {
                 Environment environment = QuartersInit.Instance.Environment;
@@ -45,11 +47,19 @@ namespace QuartersSDK {
             }
         }
 
-
+        /// <summary>
+        /// Gets the base API endpoint
+        /// </summary>
         public string API_URL => $"{BASE_URL}/api/v1";
 
+        /// <summary>
+        /// Gets the buy endpoint
+        /// </summary>
         public string BUY_URL => $"{BASE_URL}/buy";
 
+        /// <summary>
+        /// Get or set the current user
+        /// </summary>
         public User CurrentUser {
             get => currentUser;
             set {
@@ -58,6 +68,9 @@ namespace QuartersSDK {
             }
         }
 
+        /// <summary>
+        /// Returns true in case the session is valid
+        /// </summary>
         public bool IsAuthorized {
             get {
                 if (session != null)
@@ -66,7 +79,9 @@ namespace QuartersSDK {
             }
         }
 
-
+        /// <summary>
+        /// Initialization of Quarters user session and instance
+        /// </summary>
         public void Init() {
             Instance = this;
             session = new Session();
@@ -77,6 +92,11 @@ namespace QuartersSDK {
 
         #region high level calls
 
+        /// <summary>
+        /// This method authorizes the user and signing then 
+        /// </summary>
+        /// <param name="OnComplete">What happens when signing in is successful</param>
+        /// <param name="OnError">Checks to see if there was an error in signing in</param>
         public void SignInWithQuarters(Action OnComplete, Action<string> OnError) {
             Session session = new Session();
             session.Scopes = DefaultScope;
@@ -147,7 +167,9 @@ namespace QuartersSDK {
             };
         }
 
-
+        /// <summary>
+        /// Deauthorization and signing out
+        /// </summary>
         public void Deauthorize() {
             Session.Invalidate();
             session = null;
@@ -164,15 +186,32 @@ namespace QuartersSDK {
             }
         }
 
-
+        /// <summary>
+        /// Gets the user's account details
+        /// </summary>
+        /// <param name="OnSuccessDelegate">Operation was successful and details have been retreived</param>
+        /// <param name="OnFailedDelegate">Operation failed and details have not been retreived</param>
         public void GetUserDetails(Action<User> OnSuccessDelegate, Action<string> OnFailedDelegate) {
             StartCoroutine(GetUserDetailsCall(OnSuccessDelegate, OnFailedDelegate));
         }
 
+        /// <summary>
+        /// Gets the user's account balance (The amount of quarters they have)
+        /// </summary>
+        /// <param name="OnSuccess">Operation was successful and the account balance information has been retreived</param>
+        /// <param name="OnError">Operation failed and the account balance information has not been retreived</param>
         public void GetAccountBalanceCall(Action<long> OnSuccess, Action<string> OnError) {
             StartCoroutine(GetAccountBalance(OnSuccess, OnError));
         }
 
+        /// <summary>
+        /// Handles quarters transactions. 
+        /// After calling this method the user will receive the amount of @coinsQuantity and the reason of transaction will be @description
+        /// </summary>
+        /// <param name="coinsQuantity">How many quarters are involved in the transaction</param>
+        /// <param name="description">Description of what the transaction is</param>
+        /// <param name="OnSuccess">The transaction was successful</param>
+        /// <param name="OnError">There was an error in the transaction</param>
         public void Transaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError) {
             StartCoroutine(MakeTransaction(coinsQuantity, description, OnSuccess, OnError));
         }
@@ -365,6 +404,13 @@ namespace QuartersSDK {
         }
 
 
+        /// <summary>
+        /// After calling this method the user will receive the amount of @coinsQuantity and the reason of transaction will be @description
+        /// </summary>
+        /// <param name="coinsQuantity">How many quarters are involved in the transaction</param>
+        /// <param name="description">Description of what the transaction is</param>
+        /// <param name="OnSuccess">The transaction was successful</param>
+        /// <param name="OnError">There was an error in the transaction</param>
         public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) {
             Log($"MakeTransaction with quantity: {coinsQuantity}");
 
@@ -425,7 +471,9 @@ namespace QuartersSDK {
             }
         }
 
-
+        /// <summary>
+        /// When you call this method, the user will be sent to a website where they can exchange money for quarters
+        /// </summary>
         public void BuyQuarters() {
             Log("Buy Quarters");
 
