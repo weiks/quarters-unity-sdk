@@ -86,5 +86,8 @@ $RECYCLE.BIN/
 .vsconfig
 
 QuartersSDK/.vs/
+<<<<<<< HEAD
 
 QuartersSDK/
+=======
+>>>>>>> remove-get-avatar
