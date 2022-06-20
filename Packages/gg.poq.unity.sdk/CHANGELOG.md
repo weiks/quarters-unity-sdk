@@ -21,3 +21,8 @@
 ## 2.1.1 (2022-06-07)
 
 - Added VSP attribution
+
+## 2.1.2 (2022-06-20)
+
+- iOS post build process fix to missing domain association config
+- Unity new Input system is now supported

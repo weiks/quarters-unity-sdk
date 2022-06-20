@@ -396,7 +396,7 @@ public class UniWebView: MonoBehaviour {
         // The gesture detection hangs out regularly. Wait for an improvement of Unity.
         // So we choose to use the old one whenever it is available.
         #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-        var backDetected = backButtonEnabled && UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame;
+        var backDetected = backButtonEnabled && Input.GetKeyUp(KeyCode.Escape);
         #else
         var backDetected = backButtonEnabled && Input.GetKeyUp(KeyCode.Escape);
         #endif
