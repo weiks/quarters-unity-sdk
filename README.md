@@ -5,11 +5,6 @@ In order to have a full integration with QuartersSDK you must follow this steps:
 - Register your APP following [the steps in poq-docs](https://github.com/weiks/poq-docs/blob/main/docs/unity-sdk-integeration.md).
 - It's mandatory to verify your app before your app can take Quarters from users. **Verify your app sending us a message to [💡┋api-and-integration](https://discord.com/channels/908772014859378708/910205059403509803) or if you are new on Discord please send us an invite [to request verification](https://discord.com/invite/poq)**.
 
-⚠️ Important notes: ⚠️
-
-Currently you cannot make a transfer between your app and your developper account. To test your app, you need to create a secondary test account on https://www.poq.gg/. For more information about transfers you can [check our API documentation](https://github.com/weiks/poq-docs/blob/main/docs/oauth-api.md#post-apiv1transactions).
-
-
 ## Getting Started
 ### Installation
 1. Open Unity package manager
@@ -44,7 +39,8 @@ For the best user experience, Quarters Unity SDK utilises domain association to 
 1. Open [your PoQ APPS](https://www.poq.gg/apps)
 2. Find your app and select iOS under the Auto Manage option
 3. Enter any valid string as your PoQ app's unique identifier if empty
-4. Enter Apple Team ID. It can be pulled from [Apple developer account](https://developer.apple.com/account/#!/membership/)
+4. Enter Apple Team ID. It can be pulled from [Apple 
+account](https://developer.apple.com/account/#!/membership/)
 5. Enter your app bundle id. Example com.mycompany.mygame
 6. Press Submit
 7. Copy your PoQ app's unique identifier to the Quarters Init component APP_UNIQUE_IDENTIFIER field in Unity and press Save
@@ -93,40 +89,12 @@ Unity 2019.4+
 - Unity Editor: due to limitations of Unity Editor on Windows external browser is used to authorize user you can check [sign in doc](#please-note-that-due-to-limitations-of-unity-editor-on-windows-external-browser-is-used-to-authorize-user-after-successful-authorisation-please-copy-and-paste-the-browser-url-to-unity-game-view-and-press-authorize) for details. 
 
 ## API Reference
-### Quarters Initialisation
-Before making any of the Quarters SDK calls you must call the following.
-
-```
-private void Start() {
-    QuartersInit.Instance.Init(OnInitComplete, OnInitError);
-}
-
-
-private void OnInitComplete() {
-
-}
-
-private void OnInitError(string error) {
-    Debug.LogError(error);
-}
-```
+In order to make all the operations/transactions with Quarters you will be able to consume an API that is [fully documented with methods and examples in this README-Api file](/README-Api.md). Here we will list a quick review of the API operations: 
 
 ### Sign in with Quarters
 Once Quarters Init is completed successfully you need to sign in your user
 
-```
-private void OnInitComplete() {
-    Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
-}
-
-private void OnSignInComplete() {
-
-}
-
-private void OnSignInError(string signInError) {
-    Debug.Log(signInError);
-}
-```
+In [API documentation you will find the method to call and an example](/README-Api.md#sign-in-with-quarters).
 #### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. After successful authorisation please copy and paste the browser url to unity game view and press Authorize.
 ![Capture](https://user-images.githubusercontent.com/41578378/172198600-980454b9-e260-4719-8ad8-621809a2ad14.PNG)
 
@@ -135,40 +103,25 @@ private void OnSignInError(string signInError) {
 You can charge user Quarters as well as reward your user with quarters using unified Transaction API call.
 **A negative price takes Quarters from the user's account. Positive price value reward user account with Quarters**
 
-```
-public void ButtonTapped() {
-
-   long price = -10;
-
-   Quarters.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
-
-}
-
-private void OnTransferSuccessful() {
-  
-}
-
-private void OnTransferFailed(string error) {
-
-}
-```
+Please go to the [API documentation](/README-Api.md#making-transactions) for method description and a code example.
 
 ### Buying Quarters
 User can also purchase Quarters by using the credit card or other methods.
 
 **Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
 
-```
-Quarters.Instance.BuyQuarters();
-```
+Please go to the [API documentation](/README-Api.md#buying-quarters) for method description and a code example.
 
 ### Sign Out
 To sign out current Quarters users call
-```
-Quarters.Instance.Deauthorize();
-```
+
+Please go to the [API documentation](/README-Api.md#sign-out) for method description and a code example.
 
 ## Troubleshooting
+
+⚠️ Important notes: ⚠️
+
+Currently you cannot make a transfer between your app and your developer account. To test your app, you need to create a secondary test account on https://www.poq.gg/. For more information about transfers you can [check our API documentation](https://github.com/weiks/poq-docs/blob/main/docs/oauth-api.md#post-apiv1transactions).
 
 ### Pay or receive Quarters throws *Transaction Error*
 When you try to Pay or receive Quarters you get *Transaction Error: Debit and Cretit address cannot be the same. You cannot test your app when you are logged into your developer account* to fix it:
