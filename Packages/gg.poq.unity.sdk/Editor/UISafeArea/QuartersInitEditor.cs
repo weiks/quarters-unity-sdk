@@ -38,8 +38,8 @@ public class QuartersInitEditor : UnityEditor.Editor {
             linkInformation.Host = $"{quartersInit.APP_UNIQUE_IDENTIFIER}.games.poq.gg";
             
             
-            config.DeepLinkingProtocols.Add(linkInformation);
-            
+            config.DomainProtocols.Add(linkInformation);
+
             ConfigurationStorage.Save(config);
             Debug.Log("Saved Quarters SDK Config");
             
