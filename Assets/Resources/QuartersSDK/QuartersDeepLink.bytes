@@ -2,14 +2,14 @@
     "_steamId": "",
     "_displayName": "Quarters SDK",
     "_globalConfiguration": {
-        "_domainProtocols": [],
-        "_deepLinkingProtocols": [
+        "_domainProtocols": [
             {
                 "_scheme": "https",
                 "_host": "exampleapp.games.poq.gg",
                 "_path": ""
             }
         ],
+        "_deepLinkingProtocols": [],
         "_initialized": false
     },
     "_customDeepLinkingProtocols": [
