@@ -25,6 +25,8 @@ namespace QuartersSDK.Data
             APP_ID = confSection.GetSection("APP_ID").Value;
             APP_KEY = confSection.GetSection("APP_KEY").Value;
             SDK_VERSION = confSection.GetSection("SDK_VERSION").Value;
+            REDIRECT_URL = confSection.GetSection("REDIRECT_URL").Value;
+            SDK_VERSION = confSection.GetSection("SDK_VERSION").Value;
 
             this.DefaultScope = new List<Scope>() {
                 Scope.identity,

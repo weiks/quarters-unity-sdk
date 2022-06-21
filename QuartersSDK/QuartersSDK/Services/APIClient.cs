@@ -14,6 +14,23 @@ namespace QuartersSDK.Services
 {
     public class APIClient : IAPIClient
     {
+        private static Dictionary<string, string> GetRequestContent(RequestData request)
+        {
+            var data = new Dictionary<string, string>();
+            data.Add("grant_type", request.GrantType);
+            data.Add("client_id", request.ClientId);
+            data.Add("redirect_uri", request.RedirectUri);
+
+            if (!String.IsNullOrEmpty(request.RefreshToken))
+                data.Add("refresh_token", request.RefreshToken);
+            if (!String.IsNullOrEmpty(request.CodeVerifier))
+                data.Add("code_verifier", request.CodeVerifier);
+            if (!String.IsNullOrEmpty(request.Code))
+                data.Add("code", request.Code);
+            else
+                data.Add("client_secret", request.ClientSecret);
+            return data;
+        }
         private ResponseData DoPost(HttpContent payload, string subPath, string token)
         {
             var rdo = new ResponseData();
@@ -47,21 +64,11 @@ namespace QuartersSDK.Services
             }
             return rdo;
         }
-
         public ResponseData RequestPost(string url, RequestData request)
         {
             try
             {
-                var data = new MultipartFormDataContent();
-                data.Add(new StringContent(request.GrantType), "grant_type");
-                data.Add(new StringContent(request.ClientId), "client_id");
-                data.Add(new StringContent(request.ClientSecret), "client_secret");
-                data.Add(new StringContent(request.RefreshToken), "refresh_token");
-                if (!String.IsNullOrEmpty(request.CodeVerifier))
-                    data.Add(new StringContent(request.CodeVerifier), "code_verifier");
-                if (!String.IsNullOrEmpty(request.Code))
-                    data.Add(new StringContent(request.Code), "code");
-
+                var data = new FormUrlEncodedContent(GetRequestContent(request));
                 return DoPost(data, url, null);
             }
             catch (Exception ex)
@@ -69,13 +76,33 @@ namespace QuartersSDK.Services
                 throw new Error(ex.Message, ex.InnerException.ToString());
             }
         }
-
         public ResponseData RequestPost(string url, string token, Dictionary<string,object> dic)
         {
             try
             {
                 var data = new StringContent(dic.ToString(), Encoding.UTF8,"application/json");
                 return DoPost(data, url, token);
+            }
+            catch (Exception ex)
+            {
+                throw new Error(ex.Message, ex.InnerException.ToString());
+            }
+        }
+        public ResponseData RequestPostMultipartForm(string url, RequestData request)
+        {
+            var rdo = new ResponseData();
+            try
+            {
+                Dictionary<string, string> data = GetRequestContent(request);
+                using (var httpClient = new HttpClient())
+                {
+                    var req = new HttpRequestMessage(HttpMethod.Post, url) { Content = new FormUrlEncodedContent(data) };
+                    var res = httpClient.SendAsync(req);
+                    res.Wait();
+                    var response = res.Result.Content.ReadAsStringAsync();
+                    rdo.SetData(response.Result, res.Result.StatusCode);
+                }
+                return rdo;
             }
             catch (Exception ex)
             {
@@ -90,7 +117,7 @@ namespace QuartersSDK.Services
                 var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 
                 httpRequest.Accept = "application/json";
-                httpRequest.Headers["Authorization"] = $"Bearer ${requestToken}";
+                httpRequest.Headers["Authorization"] = $"Bearer {requestToken}";
 
                 var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
 

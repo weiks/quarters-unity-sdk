@@ -2,11 +2,13 @@
 using QuartersSDK.Data.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
 
 namespace QuartersSDK.Data
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class ResponseData : HttpWebResponse, ISerializable
     {
         private long _balance;
@@ -63,7 +65,7 @@ namespace QuartersSDK.Data
 
         public string ToJSONString()
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

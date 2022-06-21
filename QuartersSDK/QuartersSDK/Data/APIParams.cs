@@ -19,10 +19,11 @@ namespace QuartersSDK.Data
 
         public string ApiURL { get { return $"{BASE_URL}{API_ENDPOINT}"; } }
         public string BuyURL { get { return $"{BASE_URL}{BUY_ENDPOINT}"; } }
-        public string UserDetailsURL { get { return $"{BASE_URL}{USER_DETAILS_ENDPOINT}"; } }
-        public string BalanceURL { get { return $"{BASE_URL}{USER_DETAILS_ENDPOINT}"; } }
-        public string TransactionsURL { get { return $"{BASE_URL}{TRANSACTIONS_ENDPOINT}"; } }
+        public string UserDetailsURL { get { return $"{ApiURL}{USER_DETAILS_ENDPOINT}"; } }
+        public string BalanceURL { get { return $"{ApiURL}{BALANCE_ENDPOINT}"; } }
+        public string TransactionsURL { get { return $"{ApiURL}{TRANSACTIONS_ENDPOINT}"; } }
         public string ApiTokenURL { get { return $"{BASE_URL}/api/oauth2/token"; } }
+        public string ApiAuthorizeURL { get { return $"{BASE_URL}/oauth2/authorize"; } }
 
 
         public string AvatarURL(User u){ 
@@ -32,9 +33,9 @@ namespace QuartersSDK.Data
         public APIParams(IConfigurationSection confSection)
         {
             APP_ID = confSection.GetSection("APP_ID").Value;
+            APP_KEY = confSection.GetSection("APP_KEY").Value;
             DASHBOARD_URL = confSection.GetSection("DASHBOARD_URL").Value;
             BASE_URL = confSection.GetSection("BASE_URL").Value;
-            APP_KEY = confSection.GetSection("APP_KEY").Value;
             URL_SCHEMA = confSection.GetSection("URL_SCHEMA").Value;
             API_ENDPOINT = confSection.GetSection("API_ENDPOINT").Value;
             BUY_ENDPOINT = confSection.GetSection("BUY_ENDPOINT").Value;

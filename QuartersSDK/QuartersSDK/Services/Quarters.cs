@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -25,16 +26,6 @@ namespace QuartersSDK.Services
         public ILogger<Quarters> _logger;
         private IConfiguration _configuration;
 
-        private void LoadConfiguration()
-        {
-            IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                       .AddJsonFile("appsettings.json");
-
-            _configuration = builder.Build();
-            _api = new APIParams(_configuration.GetSection("ApiParams"));
-            _app = new AppParams(_configuration.GetSection("AppParams"));
-        }
-
         public Quarters(IAPIClient apiClient, ILogger<Quarters> logger)
         {
             LoadConfiguration();
@@ -44,7 +35,55 @@ namespace QuartersSDK.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        //TODO Make a single method for GetAccessToken and GetRefreshToken
+        private void LoadConfiguration()
+        {
+            IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                       .AddJsonFile("appsettings.json");
+
+            _configuration = builder.Build();
+            _api = new APIParams(_configuration.GetSection("ApiParams"));
+            _app = new AppParams(_configuration.GetSection("AppParams"));
+        }
+        
+        private string GetStrResponse(string url, string token)
+        {
+            var response = _apiClient.RequestGet(url, token);
+            var sr = new StreamReader(response.GetResponseStream());
+            var strResponse = sr.ReadToEnd();
+            if (!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
+            {
+                _logger.LogError(strResponse);
+                _logger.LogError(response.StatusCode.ToString(), response.StatusDescription);
+                throw new Error(response.StatusCode.ToString(), response.StatusDescription);
+            }
+
+            _logger.LogInformation($"url: {url} | response: {strResponse}");
+            return strResponse;
+        }
+
+        private ResponseData RequestAuthorize(RequestData request)
+        {
+            var response = _apiClient.RequestPost(_api.ApiTokenURL, request);
+
+            if (!response.IsSuccesful)
+                return response;
+
+            _logger.LogInformation($"{_api.ApiTokenURL} result {response.ToJSONString()}");
+            _session.DoRefresh(response);
+            return response;
+        }
+
+        public string GetAuthorizeURL()
+        {
+            return $"{_api.ApiAuthorizeURL}?response_type=code&" +
+                $"client_id={_app.APP_ID}&" +
+                $"redirect_uri={_app.REDIRECT_URL}&" +
+                $"scope=identity+email+transactions+events+wallet&" +
+                $"code_challenge_method=S256&" +
+                $"code_challenge={_pcke.CodeChallenge()}";
+        }
+
+        #region UNITY Methods
         public ResponseData GetAccessToken()
         {
             try
@@ -62,14 +101,7 @@ namespace QuartersSDK.Services
                                                        clientSecret: _app.APP_KEY,
                                                        refreshToken: _session.RefreshToken,
                                                        codeVerifier: _pcke.CodeVerifier);
-                ResponseData response = _apiClient.RequestPost(_api.ApiTokenURL, request);
-
-                if (!response.IsSuccesful)
-                    return response;
-
-                _logger.LogInformation("GetAccessToken result " + response.ToJSONString());
-                _session.DoRefresh(response);
-                return response;
+                return RequestAuthorize(request);
             }
             catch (Exception ex)
             {
@@ -90,14 +122,7 @@ namespace QuartersSDK.Services
                                                        redirectUri: _app.REDIRECT_URL,
                                                        codeVerifier: _pcke.CodeVerifier,
                                                        code: code);
-                var response = _apiClient.RequestPost(_api.ApiTokenURL, request);
-
-                if (!response.IsSuccesful)
-                    return response;
-
-                _logger.LogInformation("GetRefreshToken result " + response.ToJSONString());
-                _session.DoRefresh(response);
-                return response;
+                return RequestAuthorize(request);
             }
             catch (Exception ex)
             {
@@ -106,47 +131,16 @@ namespace QuartersSDK.Services
             }
         }
 
-        #region TODO UNITY Methods
-
-        public Texture GetAvatar(User u)
-        {
-            _logger.LogInformation($"Pull avatar: {_api.AvatarURL(u)}");
-
-            UnityWebRequest request = UnityWebRequestTexture.GetTexture(_api.AvatarURL(u));
-
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            { 
-                _logger.LogError(request.error);
-                _logger.LogError(request.downloadHandler.text);
-
-                throw new Error(request.downloadHandler.text);
-            }
-
-            return ((DownloadHandlerTexture)request.downloadHandler).texture;
-        }
-
         public User GetUserDetailsCall()
         {
-            _logger.LogInformation("GetUserDetailsCall");
+            _logger.LogInformation($"GetUserDetailsCall - URL:{_api.UserDetailsURL}");
             try
             {
                 var responseAccessToken = new ResponseData();
                 if (!_session.DoesHaveAccessToken)
                     responseAccessToken = GetAccessToken();
 
-                _logger.LogInformation(_api.UserDetailsURL);
-
-                var response = _apiClient.RequestGet(_api.UserDetailsURL, _session.AccessToken);
-                var sr = new StreamReader(response.GetResponseStream());
-                var strResponse = sr.ReadToEnd();
-                if (!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
-                {
-                    _logger.LogError(strResponse);
-                    _logger.LogError(response.StatusCode.ToString(), response.StatusDescription);
-                    throw new Error(response.StatusCode.ToString(), response.StatusDescription);
-                }
-
-                _logger.LogInformation("GetUserDetailsCall result " + strResponse);
+                string strResponse = GetStrResponse(_api.UserDetailsURL, _session.AccessToken);
                 return JsonConvert.DeserializeObject<User>(strResponse);
             }
             catch (Exception ex)
@@ -158,21 +152,10 @@ namespace QuartersSDK.Services
 
         public long GetAccountBalanceCall()
         {
-            _logger.LogInformation(_api.BalanceURL);
-
+            _logger.LogInformation($"GetAccountBalanceCall - URL:{_api.BalanceURL}");
             try
             {
-                var response = _apiClient.RequestGet(_api.BalanceURL, _session.AccessToken);
-                var sr = new StreamReader(response.GetResponseStream());
-                var strResponse = sr.ReadToEnd();
-                if (!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
-                {
-                    _logger.LogError(strResponse);
-                    _logger.LogError(response.StatusCode.ToString(), response.StatusDescription);
-                    throw new Error(response.StatusCode.ToString(), response.StatusDescription);
-                }
-
-                _logger.LogInformation(strResponse);
+                string strResponse = GetStrResponse(_api.BalanceURL, _session.AccessToken);
                 JObject responseData = JsonConvert.DeserializeObject<JObject>(strResponse);
                 return responseData["balance"].ToObject<long>();
             }
@@ -220,6 +203,33 @@ namespace QuartersSDK.Services
                 _logger.LogError(ex.Message);
                 throw new Error(ex.Message, ex.InnerException.ToString());
             }
+        }
+        
+        public Texture GetAvatar(User u)
+        {
+            _logger.LogInformation($"Pull avatar: {_api.AvatarURL(u)}");
+
+            UnityWebRequest request = UnityWebRequestTexture.GetTexture(_api.AvatarURL(u));
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                _logger.LogError(request.error);
+                _logger.LogError(request.downloadHandler.text);
+
+                throw new Error(request.downloadHandler.text);
+            }
+
+            return ((DownloadHandlerTexture)request.downloadHandler).texture;
+        }
+
+        #endregion
+
+     
+
+        #region TODO UNITY Methods
+        public void BuyQuarters()
+        {
+
         }
         #endregion 
     }

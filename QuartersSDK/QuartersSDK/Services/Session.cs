@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using UnityEngine;
-using UnityEngine.Networking;
 using Newtonsoft.Json;
 
 namespace QuartersSDK.Services
@@ -13,20 +11,22 @@ namespace QuartersSDK.Services
     {
         public string AccessToken {get; set;}
         public List<Scope> Scopes = new List<Scope>();
+        public string RefreshToken { get; set; }
 
-        public string RefreshToken
-        {
-            get
-            {
-                // return PlayerPrefs.GetString(Constants.REFRESH_TOKEN_KEY, "");
-                return Constants.REFRESH_TOKEN_KEY;
-            }
-            set
-            {
-                Debug.Log("Storing refresh token: " + value);
-                PlayerPrefs.SetString(Constants.REFRESH_TOKEN_KEY, value);
-            }
-        }
+        //With Unity
+        //public string RefreshToken
+        //{
+        //    get
+        //    {
+        //        return PlayerPrefs.GetString(Constants.REFRESH_TOKEN_KEY, "");
+        //        return Constants.REFRESH_TOKEN_KEY;
+        //    }
+        //    set
+        //    {
+        //        Debug.Log("Storing refresh token: " + value);
+        //        PlayerPrefs.SetString(Constants.REFRESH_TOKEN_KEY, value);
+        //    }
+        //}
 
         public void DoRefresh(string response)
         {
@@ -66,8 +66,12 @@ namespace QuartersSDK.Services
 
         public void SetScope(string scopesString)
         {
-            string scopes = UnityWebRequest.UnEscapeURL(scopesString);
-            scopes.Split(' ').ToList().ForEach(x => Scopes.Add((Scope)Enum.Parse(typeof(Scope), x)));
+            //With Unity
+            //string scopes = UnityWebRequest.UnEscapeURL(scopesString);
+            //scopes.Split(' ').ToList().ForEach(x => Scopes.Add((Scope)Enum.Parse(typeof(Scope), x)));
+
+            ///Without
+            scopesString.Split(' ').ToList().ForEach(x => Scopes.Add((Scope)Enum.Parse(typeof(Scope), x)));
         }
 
         public bool HasScopeFor(string scope)
@@ -78,15 +82,15 @@ namespace QuartersSDK.Services
 
         public void InvalidateGuestSession()
         {
-            PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
-            PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
+            //PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
+            //PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
         }
 
         public void Invalidate()
         {
-            PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN_KEY);
-            PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
-            PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
+            //PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN_KEY);
+            //PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
+            //PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
         }
     }
 }
