@@ -12,8 +12,9 @@ namespace QuartersSDK.Data
         [Header("Copy your App ID and App Key from your Quarters dashboard")]
         public string APP_ID;
         public string APP_KEY { get; }
+        public string APP_NAME { get; }
         public string REDIRECT_URL { get; }
-
+        public string SCHEMA_URL { get; }
         public string SDK_VERSION { get; }
 
         public string Environment;
@@ -24,7 +25,9 @@ namespace QuartersSDK.Data
         {
             APP_ID = confSection.GetSection("APP_ID").Value;
             APP_KEY = confSection.GetSection("APP_KEY").Value;
+            APP_NAME = confSection.GetSection("APP_NAME").Value;
             SDK_VERSION = confSection.GetSection("SDK_VERSION").Value;
+            SCHEMA_URL = confSection.GetSection("SCHEMA_URL").Value.Replace("#REPLACE_WITH_APP_NAME", APP_NAME);
             REDIRECT_URL = confSection.GetSection("REDIRECT_URL").Value;
             SDK_VERSION = confSection.GetSection("SDK_VERSION").Value;
 

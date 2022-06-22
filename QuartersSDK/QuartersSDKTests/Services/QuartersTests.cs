@@ -60,7 +60,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger);
             string url = q.GetAuthorizeURL();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("bRT1ffhmFKsKonwkbmZn2YBKxv9RtY_h");
+            var res = q.GetRefreshToken("YGBAOtaN8Zw7tLotOAjf1oycVgLqNqcr");
 
             Assert.IsTrue(q._session.DoesHaveAccessToken);
             Assert.IsTrue(res.IsSuccesful);
@@ -181,6 +181,30 @@ namespace QuartersSDK.Services.Tests
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
             Assert.IsTrue(string.IsNullOrEmpty(idTransaction));
+        }
+
+        [Test()]
+        [Category("Get Buy Quarters URL")]
+        public void IsGetBuyQuartersUrlTest()
+        {
+            Quarters q = new Quarters(client, logger);
+            string buyUrl = q.GetBuyQuartersUrl();
+
+            Assert.IsFalse(string.IsNullOrEmpty(buyUrl));
+        }
+
+        [Test()]
+        [Category("Sign out and delete session")]
+        public void IsSignedOut()
+        {
+            Quarters q = new Quarters(client, logger);
+            string url = q.GetAuthorizeURL();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("6hJHrZxFkZIGtOnHiRhqYkVTzK8t-qbH");
+
+            q.SignOut();
+
+            Assert.IsTrue(q._session == null);
         }
     }
 }

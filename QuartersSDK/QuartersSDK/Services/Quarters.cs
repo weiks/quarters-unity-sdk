@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -204,7 +205,23 @@ namespace QuartersSDK.Services
                 throw new Error(ex.Message, ex.InnerException.ToString());
             }
         }
-        
+
+        public string GetBuyQuartersUrl()
+        {
+            _logger.LogInformation("Buy Quarters");
+
+            string redirectSafeUrl = HttpUtility.UrlEncode(_app.SCHEMA_URL);
+            return $"{_api.BuyURL}?redirect={redirectSafeUrl}";
+        }
+
+        public void SignOut()
+        {
+            _session.Invalidate();
+            _session = null;
+
+            _logger.LogInformation("Quarters user signed out");
+        }
+
         public Texture GetAvatar(User u)
         {
             _logger.LogInformation($"Pull avatar: {_api.AvatarURL(u)}");
@@ -224,13 +241,5 @@ namespace QuartersSDK.Services
 
         #endregion
 
-     
-
-        #region TODO UNITY Methods
-        public void BuyQuarters()
-        {
-
-        }
-        #endregion 
     }
 }
