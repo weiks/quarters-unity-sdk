@@ -23,8 +23,8 @@ namespace QuartersSDK.Data
                 try
                 {
                     var err = JsonConvert.DeserializeObject<Error>(json);
-                    this.ErrorMessage = err.ErrorMessage;
-                    this.ErrorDescription = err.ErrorDescription;
+                    this.ErrorMessage = err.ErrorMessage ?? json;
+                    this.ErrorDescription = err.ErrorDescription ?? String.Empty;
                 }
                 catch (Exception ex)
                 {

@@ -74,7 +74,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger);
             string url = q.GetAuthorizeURL();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            q.GetRefreshToken("oQiyx6y9tLPXu31tQRde8__aZzW_uBtJ");
+            q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
             
             var res = q.GetAccessToken();
 
@@ -131,10 +131,56 @@ namespace QuartersSDK.Services.Tests
         }
 
         [Test()]
-        public void MakeTransactionTest()
+        [Category("Success on receive quarters transaction (possitive ammount) request")]
+        public void IsReceiveTransactionTest()
         {
             Quarters q = new Quarters(client, logger);
-            Assert.Fail();
+            string url = q.GetAuthorizeURL();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("vt_bkocQupQD76pmGNcddvuq6xgQ3rpU");
+
+            var idTransaction = q.MakeTransaction(10,"SDK Test receive");
+
+            Assert.IsTrue(q._session.DoesHaveAccessToken);
+            Assert.IsTrue(res.IsSuccesful);
+            Assert.IsTrue(res.ErrorResponse == null);
+            
+            Assert.IsFalse(string.IsNullOrEmpty(idTransaction));
+        }
+
+        [Test()]
+        [Category("Success on send quarters transaction (negative ammount) request")]
+        public void IsSendTransactionTest()
+        {
+            Quarters q = new Quarters(client, logger);
+            string url = q.GetAuthorizeURL();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("WD1rxegR7Rot2AvJKFrYKAyrh_7vEpSY");
+
+            var idTransaction = q.MakeTransaction(-10, "SDK send receive");
+
+            Assert.IsTrue(q._session.DoesHaveAccessToken);
+            Assert.IsTrue(res.IsSuccesful);
+            Assert.IsTrue(res.ErrorResponse == null);
+
+            Assert.IsFalse(string.IsNullOrEmpty(idTransaction));
+        }
+
+        [Test()]
+        [Category("Success on send too much quarters transaction (negative ammount) request")]
+        public void IsSendTooMuchTransactionTest()
+        {
+            Quarters q = new Quarters(client, logger);
+            string url = q.GetAuthorizeURL();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("UAsWKwmhJtW5viQM9ClFJG4JYOcFZJQ4");
+
+            var idTransaction = q.MakeTransaction(-100000, "SDK Test send too much");
+
+            Assert.IsTrue(q._session.DoesHaveAccessToken);
+            Assert.IsTrue(res.IsSuccesful);
+            Assert.IsTrue(res.ErrorResponse == null);
+            Assert.IsTrue(string.IsNullOrEmpty(idTransaction));
         }
     }
 }

@@ -16,6 +16,9 @@ namespace QuartersSDK.Data
         public bool IsSuccesful = false;
         public Error ErrorResponse;
 
+        [JsonProperty("Id")]
+        public string IdTransaction;
+
         [JsonProperty("refresh_token")]
         public string RefreshToken;
 
@@ -49,6 +52,7 @@ namespace QuartersSDK.Data
                 AccessToken = aux.AccessToken ?? string.Empty;
                 RefreshToken = aux.RefreshToken ?? string.Empty;
                 Scope = aux.Scope ?? string.Empty;
+                IdTransaction = aux.IdTransaction;
                 IsSuccesful = true;
             }
             catch (Exception ex)

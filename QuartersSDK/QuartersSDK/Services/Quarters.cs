@@ -57,7 +57,7 @@ namespace QuartersSDK.Services
                 throw new Error(response.StatusCode.ToString(), response.StatusDescription);
             }
 
-            _logger.LogInformation($"url: {url} | response: {strResponse}");
+            _logger.LogInformation($"url: {url} | strResponse: {strResponse}");
             return strResponse;
         }
 
@@ -166,8 +166,9 @@ namespace QuartersSDK.Services
             }
         }
 
-        public bool MakeTransaction(long coinsQuantity, string description)
+        public string MakeTransaction(long coinsQuantity, string description)
         {
+            string rdo = string.Empty;
             _logger.LogInformation($"MakeTransaction with quantity: {coinsQuantity}");
 
             try
@@ -181,22 +182,21 @@ namespace QuartersSDK.Services
                 postData.Add("creditUser", coinsQuantity);
                 postData.Add("description", description);
                 var response = _apiClient.RequestPost(url: _api.TransactionsURL, token: _session.AccessToken, dic: postData);
-                if (!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
+                if (!response.IsSuccesful)
                 {
-                    _logger.LogError(response.ToJSONString());
-                    _logger.LogError($"Status: {response.StatusCode} |Response: {response.ToJSONString()}");
+                    _logger.LogError($"ErrorDescription: {response.ErrorResponse.ErrorDescription} |ErrorMessage: {response.ErrorResponse.ErrorMessage}");
 
                     Error error = new Error(response.ToJSONString());
 
                     if (error.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
                         _session.RefreshToken = "";
-                    return false;
+                    return rdo;
                     // VspAttribution.VspAttribution.SendAttributionEvent("TransactionFailed", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
                 }
 
                 _logger.LogInformation(response.ToJSONString());
                 //VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
-                return true;
+                return response.IdTransaction;
             }
             catch (Exception ex)
             {

@@ -80,7 +80,8 @@ namespace QuartersSDK.Services
         {
             try
             {
-                var data = new StringContent(dic.ToString(), Encoding.UTF8,"application/json");
+                var jsonString = JsonConvert.SerializeObject(dic);
+                var data = new StringContent(jsonString, Encoding.UTF8,"application/json");
                 return DoPost(data, url, token);
             }
             catch (Exception ex)
