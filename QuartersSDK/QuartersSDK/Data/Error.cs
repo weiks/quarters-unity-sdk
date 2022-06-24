@@ -3,6 +3,7 @@ using QuartersSDK.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 
 namespace QuartersSDK.Data
@@ -16,7 +17,10 @@ namespace QuartersSDK.Data
 
             [JsonProperty("error_description")] 
             public string ErrorDescription;
-            public Error() { }
+
+            [JsonProperty("status_code")]
+            public HttpStatusCode StatusCode;
+        public Error() { }
 
             public Error(string json)
             {
@@ -25,6 +29,7 @@ namespace QuartersSDK.Data
                     var err = JsonConvert.DeserializeObject<Error>(json);
                     this.ErrorMessage = err.ErrorMessage ?? json;
                     this.ErrorDescription = err.ErrorDescription ?? String.Empty;
+                    this.StatusCode = string.IsNullOrEmpty(err.StatusCode.ToString()) ? err.StatusCode : HttpStatusCode.BadRequest;
                 }
                 catch (Exception ex)
                 {

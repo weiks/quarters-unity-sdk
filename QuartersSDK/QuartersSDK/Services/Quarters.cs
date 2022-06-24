@@ -74,7 +74,7 @@ namespace QuartersSDK.Services
             return response;
         }
 
-        public string GetAuthorizeURL()
+        public string GetAuthorizeUrl()
         {
             return $"{_api.ApiAuthorizeURL}?response_type=code&" +
                 $"client_id={_app.APP_ID}&" +
@@ -167,9 +167,8 @@ namespace QuartersSDK.Services
             }
         }
 
-        public string MakeTransaction(long coinsQuantity, string description)
+        public ResponseData MakeTransaction(long coinsQuantity, string description)
         {
-            string rdo = string.Empty;
             _logger.LogInformation($"MakeTransaction with quantity: {coinsQuantity}");
 
             try
@@ -186,18 +185,15 @@ namespace QuartersSDK.Services
                 if (!response.IsSuccesful)
                 {
                     _logger.LogError($"ErrorDescription: {response.ErrorResponse.ErrorDescription} |ErrorMessage: {response.ErrorResponse.ErrorMessage}");
-
-                    Error error = new Error(response.ToJSONString());
-
-                    if (error.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
+                    response.IsSuccesful = false;
+                    if (response.ErrorResponse.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
                         _session.RefreshToken = "";
-                    return rdo;
                     // VspAttribution.VspAttribution.SendAttributionEvent("TransactionFailed", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
                 }
 
                 _logger.LogInformation(response.ToJSONString());
                 //VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
-                return response.IdTransaction;
+                return response;
             }
             catch (Exception ex)
             {

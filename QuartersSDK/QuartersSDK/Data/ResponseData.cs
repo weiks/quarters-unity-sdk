@@ -16,7 +16,7 @@ namespace QuartersSDK.Data
         public bool IsSuccesful = false;
         public Error ErrorResponse;
 
-        [JsonProperty("Id")]
+        [JsonProperty("id")]
         public string IdTransaction;
 
         [JsonProperty("refresh_token")]
@@ -36,6 +36,7 @@ namespace QuartersSDK.Data
 
         public ResponseData() { } 
         public ResponseData(Error err) {
+            IsSuccesful = false;
             SetError(err, HttpStatusCode.BadRequest);
         }
         public ResponseData(string json, HttpStatusCode status) 
@@ -63,6 +64,7 @@ namespace QuartersSDK.Data
 
         public void SetError(Error err, HttpStatusCode status)
         {
+            err.StatusCode = status;
             ErrorResponse = err;
             IsSuccesful = false;
         }

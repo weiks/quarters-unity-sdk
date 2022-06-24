@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
+using QuartersSDK.Data;
+using QuartersSDK.Interfaces;
 using QuartersSDK.Services;
 using System;
 using System.Collections.Generic;
@@ -14,6 +17,9 @@ namespace QuartersSDK.Services.Tests
         private PCKE pcke;
         private APIClient client;
         private ILogger<Quarters> logger;
+
+        //Mocks
+        Mock<IQuarters> mockQuarters;
 
         [SetUp]
         public void Setup()
@@ -29,6 +35,25 @@ namespace QuartersSDK.Services.Tests
             ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
             loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
             logger = loggerFactory.CreateLogger<Quarters>();
+
+            // Mocks & fakes data
+            ResponseData fakeSuccessResponseAuthorized = new ResponseData("{id: '01xXXXXXX', Balance: '200', access_token:'u_IK3YYS95r9jo5TCME9h2h2NI3wypR2A69U3-Q9', refresh_token:'1234-567', Scope:'mail'}", System.Net.HttpStatusCode.OK);
+            ResponseData fakeFailResponseTooMuchQuarters = new ResponseData(new Error("{error:'not_enough_quarters', error_description:'The address to debit does not have enough Quarters', status_code:'BadRequest'}"));
+            User fakeUser = new User();
+            fakeUser.Email = "mockuser@poq.gg";
+            fakeUser.GamerTag = "mockuser";
+            fakeUser.Id = "31415666";
+
+            mockQuarters = new Mock<IQuarters>();
+            mockQuarters.Setup(mk => mk.GetRefreshToken("mockCode")).Returns(fakeSuccessResponseAuthorized);
+            mockQuarters.Setup(mk => mk.GetAccessToken()).Returns(fakeSuccessResponseAuthorized);
+            mockQuarters.Setup(mk => mk.GetBuyQuartersUrl()).Returns("https://mocked.url"); 
+            mockQuarters.Setup(mk => mk.GetAuthorizeUrl()).Returns("https://mocked.url");
+            mockQuarters.Setup(mk => mk.GetAccountBalanceCall()).Returns(200);
+            mockQuarters.Setup(mk => mk.GetUserDetailsCall()).Returns(fakeUser);
+            mockQuarters.Setup(mk => mk.MakeTransaction(10, "SDK mock Test receive")).Returns(fakeSuccessResponseAuthorized);
+            mockQuarters.Setup(mk => mk.MakeTransaction(-10, "SDK mock Test send")).Returns(fakeSuccessResponseAuthorized);
+            mockQuarters.Setup(mk => mk.MakeTransaction(-10000, "SDK mock Test send too much")).Returns(fakeFailResponseTooMuchQuarters);
         }
 
         [Test]
@@ -57,12 +82,18 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on refresh token")]
         public void IsRefreshTokenRequestedSuccess()
         {
-            Quarters q = new Quarters(client, logger);
-            string url = q.GetAuthorizeURL();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("YGBAOtaN8Zw7tLotOAjf1oycVgLqNqcr");
+            #region real request to endpoint
+            //Quarters q = new Quarters(client, logger);
+            //string url = q.GetAuthorizeURL();
+            ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            //var res = q.GetRefreshToken("yz4xbO8pT49lBsarMoCKuRh70jhOCsvu");
+            #endregion
+            
+            #region using mock request/response
+            string url = mockQuarters.Object.GetAuthorizeUrl(); 
+            var res = mockQuarters.Object.GetRefreshToken("mockCode");
+            #endregion
 
-            Assert.IsTrue(q._session.DoesHaveAccessToken);
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
         }
@@ -71,16 +102,25 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on access token request")]
         public void IsAccessTokenRequestedSuccess()
         {
-            Quarters q = new Quarters(client, logger);
-            string url = q.GetAuthorizeURL();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
-            
-            var res = q.GetAccessToken();
+            #region real request to endpoint
+            //Quarters q = new Quarters(client, logger);
+            //string url = q.GetAuthorizeUrl();
+            ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            //q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
 
-            Assert.IsTrue(q._session.DoesHaveAccessToken);
+            //var res = q.GetAccessToken();
+            #endregion
+
+            #region using mock request/response
+            string url = mockQuarters.Object.GetAuthorizeUrl();
+            mockQuarters.Object.GetRefreshToken("mockCode");
+
+            var res = mockQuarters.Object.GetAccessToken();
+            #endregion
+
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
+            Assert.IsFalse(string.IsNullOrEmpty(res.AccessToken));
         }
 
         [Test]
@@ -96,16 +136,22 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on get account balance request")]
         public void IsGetUserBalanceCallSuccess()
         {
-            Quarters q = new Quarters(client, logger);
-            string url = q.GetAuthorizeURL();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("J91UOYaoWCPmgcZzQB2IsIm8yxr4Tjw6");
+            #region real request to endpoint
+            //Quarters q = new Quarters(client, logger);
+            //string url = q.GetAuthorizeUrl();
+            ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            //var res = q.GetRefreshToken("J91UOYaoWCPmgcZzQB2IsIm8yxr4Tjw6");
 
-            var balance = q.GetAccountBalanceCall();
+            //var balance = q.GetAccountBalanceCall();
+            #endregion
 
-            Assert.IsTrue(q._session.DoesHaveAccessToken);
+            var res = mockQuarters.Object.GetRefreshToken("mockCode");
+
+            var balance = mockQuarters.Object.GetAccountBalanceCall();
+
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
+            Assert.IsFalse(string.IsNullOrEmpty(res.AccessToken));
 
             Assert.Positive(balance);
         }
@@ -115,14 +161,18 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on get user details request")]
         public void IsGetUserDetailsCallSuccess()
         {
-            Quarters q = new Quarters(client, logger);
-            string url = q.GetAuthorizeURL();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("yCkaNGenHQaTIFT2odQdjjGUujeCVrPU");
+            #region real request to endpoint
+            //Quarters q = new Quarters(client, logger);
+            //string url = q.GetAuthorizeUrl();
+            ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            //var res = q.GetRefreshToken("yCkaNGenHQaTIFT2odQdjjGUujeCVrPU");
 
-            var user = q.GetUserDetailsCall();
+            //var user = q.GetUserDetailsCall();
+            #endregion
 
-            Assert.IsTrue(q._session.DoesHaveAccessToken);
+            var res = mockQuarters.Object.GetRefreshToken("mockCode");
+            var user = mockQuarters.Object.GetUserDetailsCall();
+
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
             
@@ -134,17 +184,20 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on receive quarters transaction (possitive ammount) request")]
         public void IsReceiveTransactionTest()
         {
-            Quarters q = new Quarters(client, logger);
-            string url = q.GetAuthorizeURL();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("vt_bkocQupQD76pmGNcddvuq6xgQ3rpU");
+            #region real request to endpoint
+            //Quarters q = new Quarters(client, logger);
+            //string url = q.GetAuthorizeUrl();
+            ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            //var res = q.GetRefreshToken("vt_bkocQupQD76pmGNcddvuq6xgQ3rpU");
+            //var idTransaction = q.MakeTransaction(10,"SDK Test receive").IdTransaction;
+            #endregion
 
-            var idTransaction = q.MakeTransaction(10,"SDK Test receive");
+            string url = mockQuarters.Object.GetAuthorizeUrl();
+            var res = mockQuarters.Object.GetRefreshToken("mockCode");
+            var idTransaction = mockQuarters.Object.MakeTransaction(10, "SDK mock Test receive").IdTransaction;
 
-            Assert.IsTrue(q._session.DoesHaveAccessToken);
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
-            
             Assert.IsFalse(string.IsNullOrEmpty(idTransaction));
         }
 
@@ -152,17 +205,20 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on send quarters transaction (negative ammount) request")]
         public void IsSendTransactionTest()
         {
-            Quarters q = new Quarters(client, logger);
-            string url = q.GetAuthorizeURL();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("WD1rxegR7Rot2AvJKFrYKAyrh_7vEpSY");
+            #region real request to endpoint
+            //Quarters q = new Quarters(client, logger);
+            //string url = q.GetAuthorizeUrl();
+            ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            //var res = q.GetRefreshToken("WD1rxegR7Rot2AvJKFrYKAyrh_7vEpSY");
+            //var idTransaction = mockQuarters.Object.MakeTransaction(-10, "SDK mock Test send").IdTransaction;
+            #endregion
 
-            var idTransaction = q.MakeTransaction(-10, "SDK send receive");
+            string url = mockQuarters.Object.GetAuthorizeUrl();
+            var res = mockQuarters.Object.GetRefreshToken("mockCode");
+            var idTransaction = mockQuarters.Object.MakeTransaction(-10, "SDK mock Test send").IdTransaction;
 
-            Assert.IsTrue(q._session.DoesHaveAccessToken);
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
-
             Assert.IsFalse(string.IsNullOrEmpty(idTransaction));
         }
 
@@ -170,17 +226,25 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on send too much quarters transaction (negative ammount) request")]
         public void IsSendTooMuchTransactionTest()
         {
-            Quarters q = new Quarters(client, logger);
-            string url = q.GetAuthorizeURL();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("UAsWKwmhJtW5viQM9ClFJG4JYOcFZJQ4");
+            #region real request to endpoint
+            //Quarters q = new Quarters(client, logger);
+            //string url = q.GetAuthorizeUrl();
+            ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            //var res = q.GetRefreshToken("z50gSPzNmUk1GLFDI8-v2gcDOkvIPtkV");
 
-            var idTransaction = q.MakeTransaction(-100000, "SDK Test send too much");
+            //var transactionResponse = q.MakeTransaction(-10000, "SDK Test send too much");
+            #endregion
 
-            Assert.IsTrue(q._session.DoesHaveAccessToken);
+            string url = mockQuarters.Object.GetAuthorizeUrl();
+            var res = mockQuarters.Object.GetRefreshToken("mockCode");
+            var transactionResponse = mockQuarters.Object.MakeTransaction(-10000, "SDK mock Test send too much");
+
             Assert.IsTrue(res.IsSuccesful);
-            Assert.IsTrue(res.ErrorResponse == null);
-            Assert.IsTrue(string.IsNullOrEmpty(idTransaction));
+            Assert.IsTrue(transactionResponse.ErrorResponse.StatusCode == System.Net.HttpStatusCode.BadRequest);
+            Assert.IsTrue(transactionResponse.ErrorResponse.ErrorDescription.StartsWith("The address to debit does"));
+            Assert.IsTrue(transactionResponse.ErrorResponse.ErrorMessage.Equals("not_enough_quarters"));
+            Assert.IsTrue(string.IsNullOrEmpty(transactionResponse.IdTransaction));
+            Assert.IsFalse(transactionResponse.IsSuccesful);
         }
 
         [Test()]
@@ -198,7 +262,7 @@ namespace QuartersSDK.Services.Tests
         public void IsSignedOut()
         {
             Quarters q = new Quarters(client, logger);
-            string url = q.GetAuthorizeURL();
+            string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
             var res = q.GetRefreshToken("6hJHrZxFkZIGtOnHiRhqYkVTzK8t-qbH");
 
