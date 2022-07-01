@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.EventLog;
 using Moq;
 using NUnit.Framework;
 using QuartersSDK.Data;
@@ -25,16 +26,16 @@ namespace QuartersSDK.Services.Tests
         public void Setup()
         {
             pcke = new PCKE();
-            client = new APIClient();
-
-
             var serviceProvider = new ServiceCollection()
                                 .AddLogging()
                                 .BuildServiceProvider();
 
             ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-            loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+            loggerFactory = LoggerFactory.Create(builder => builder.AddConsole()
+                                                    .AddFilter<EventLogLoggerProvider>((Func<LogLevel, bool>)(level => level >= LogLevel.Information))
+                                                );
             logger = loggerFactory.CreateLogger<Quarters>();
+            client = new APIClient(logger);
 
             // Mocks & fakes data
             ResponseData fakeSuccessResponseAuthorized = new ResponseData("{id: '01xXXXXXX', Balance: '200', access_token:'u_IK3YYS95r9jo5TCME9h2h2NI3wypR2A69U3-Q9', refresh_token:'1234-567', Scope:'mail'}", System.Net.HttpStatusCode.OK);
@@ -59,7 +60,8 @@ namespace QuartersSDK.Services.Tests
         [Test]
         public void HasQuartersAPIParams()
         {
-            Quarters q = new Quarters(client, logger);
+            PCKE pCKE = new PCKE();
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier,"");
             Assert.IsTrue(!String.IsNullOrEmpty(q._api.BuyURL));
         }
 
@@ -67,7 +69,7 @@ namespace QuartersSDK.Services.Tests
         [Category("Fail on refresh not authorized token")]
         public void IsRefreshTokenRequestedFail()
         {
-            Quarters q = new Quarters(client, logger);
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             var res = q.GetRefreshToken("NO_AUTHORIZED_TOKEN");
 
             Assert.IsFalse(q._session.DoesHaveAccessToken);
@@ -103,19 +105,19 @@ namespace QuartersSDK.Services.Tests
         public void IsAccessTokenRequestedSuccess()
         {
             #region real request to endpoint
-            //Quarters q = new Quarters(client, logger);
-            //string url = q.GetAuthorizeUrl();
-            ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            //q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            string url = q.GetAuthorizeUrl();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
 
-            //var res = q.GetAccessToken();
+            var res = q.GetAccessToken();
             #endregion
 
             #region using mock request/response
-            string url = mockQuarters.Object.GetAuthorizeUrl();
-            mockQuarters.Object.GetRefreshToken("mockCode");
+            //string url = mockQuarters.Object.GetAuthorizeUrl();
+            //mockQuarters.Object.GetRefreshToken("mockCode");
 
-            var res = mockQuarters.Object.GetAccessToken();
+            //var res = mockQuarters.Object.GetAccessToken();
             #endregion
 
             Assert.IsTrue(res.IsSuccesful);
@@ -127,7 +129,7 @@ namespace QuartersSDK.Services.Tests
         [Category("Fail on refresh not authorized token")]
         public void IsAccessTokenRequestedFail()
         {
-            Quarters q = new Quarters(client, logger);
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             q.GetAccessToken();
             Assert.IsFalse(q._session.DoesHaveAccessToken);
         }
@@ -251,7 +253,7 @@ namespace QuartersSDK.Services.Tests
         [Category("Get Buy Quarters URL")]
         public void IsGetBuyQuartersUrlTest()
         {
-            Quarters q = new Quarters(client, logger);
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string buyUrl = q.GetBuyQuartersUrl();
 
             Assert.IsFalse(string.IsNullOrEmpty(buyUrl));
@@ -261,7 +263,7 @@ namespace QuartersSDK.Services.Tests
         [Category("Sign out and delete session")]
         public void IsSignedOut()
         {
-            Quarters q = new Quarters(client, logger);
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
             var res = q.GetRefreshToken("6hJHrZxFkZIGtOnHiRhqYkVTzK8t-qbH");

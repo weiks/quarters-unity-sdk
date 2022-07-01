@@ -1,7 +1,0 @@
-<linker>
-
-    <assembly fullname="System">
-        <namespace fullname="System.Diagnostics" preserve="all"/>
-    </assembly>
-
-</linker>

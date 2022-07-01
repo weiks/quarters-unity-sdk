@@ -61,7 +61,7 @@ namespace QuartersSDK.Services
             return rdo;
         }
 
-        public HttpWebResponse RequestGet(string url, string request)
+        public string RequestGet(string url, string request)
         {
             throw new NotImplementedException();
         }

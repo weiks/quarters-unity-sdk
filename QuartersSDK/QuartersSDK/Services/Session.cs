@@ -9,24 +9,9 @@ namespace QuartersSDK.Services
 {
     public class Session
     {
+        public string RefreshToken { get; set; }
         public string AccessToken {get; set;}
         public List<Scope> Scopes = new List<Scope>();
-        public string RefreshToken { get; set; }
-
-        //With Unity
-        //public string RefreshToken
-        //{
-        //    get
-        //    {
-        //        return PlayerPrefs.GetString(Constants.REFRESH_TOKEN_KEY, "");
-        //        return Constants.REFRESH_TOKEN_KEY;
-        //    }
-        //    set
-        //    {
-        //        Debug.Log("Storing refresh token: " + value);
-        //        PlayerPrefs.SetString(Constants.REFRESH_TOKEN_KEY, value);
-        //    }
-        //}
 
         public void DoRefresh(string response)
         {
@@ -66,11 +51,6 @@ namespace QuartersSDK.Services
 
         public void SetScope(string scopesString)
         {
-            //With Unity
-            //string scopes = UnityWebRequest.UnEscapeURL(scopesString);
-            //scopes.Split(' ').ToList().ForEach(x => Scopes.Add((Scope)Enum.Parse(typeof(Scope), x)));
-
-            ///Without
             scopesString.Split(' ').ToList().ForEach(x => Scopes.Add((Scope)Enum.Parse(typeof(Scope), x)));
         }
 
@@ -79,18 +59,10 @@ namespace QuartersSDK.Services
             return Scopes.Contains((Scope)Enum.Parse(typeof(Scope), scope));
         }
 
-
-        public void InvalidateGuestSession()
-        {
-            //PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
-            //PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
-        }
-
         public void Invalidate()
         {
-            //PlayerPrefs.DeleteKey(Constants.REFRESH_TOKEN_KEY);
-            //PlayerPrefs.DeleteKey(Constants.GUEST_TOKEN_KEY);
-            //PlayerPrefs.DeleteKey(Constants.GUEST_FIREBASE_TOKEN);
+            this.AccessToken = "";
+            this.RefreshToken = "";
         }
     }
 }

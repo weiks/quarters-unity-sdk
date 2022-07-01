@@ -1,4 +1,5 @@
-﻿using QuartersSDK.Data;
+﻿using Microsoft.Extensions.Logging;
+using QuartersSDK.Data;
 using QuartersSDK.Services;
 using System;
 using System.Collections;
@@ -13,7 +14,7 @@ namespace QuartersSDK.Interfaces
     {
         public ResponseData RequestPost(string url, RequestData request);
 
-        public HttpWebResponse RequestGet(string url, string request);
+        public string RequestGet(string url, string request);
 
         public ResponseData RequestPost(string url, string token, Dictionary<string, object> dic);
 

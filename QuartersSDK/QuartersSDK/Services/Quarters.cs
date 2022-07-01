@@ -6,14 +6,9 @@ using QuartersSDK.Data;
 using QuartersSDK.Data.Enums;
 using QuartersSDK.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Web;
-using UnityEngine;
-using UnityEngine.Networking;
 
 namespace QuartersSDK.Services
 {
@@ -26,52 +21,89 @@ namespace QuartersSDK.Services
         public IAPIClient _apiClient; 
         public ILogger<Quarters> _logger;
         private IConfiguration _configuration;
+        public string CodeChallenge { get; set; }
+        public string CodeVerifier { get; set; }
 
-        public Quarters(IAPIClient apiClient, ILogger<Quarters> logger)
+        public Quarters(IAPIClient apiClient, ILogger<Quarters> logger, string codeChallenge, string codeVerifier, string refreshToken)
+        {
+            LoadConfiguration();
+            //_pcke = new PCKE();
+            _session = new Session();
+            _session.RefreshToken = refreshToken;
+            _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            CodeChallenge = codeChallenge;
+            CodeVerifier = codeVerifier;
+        }
+
+        public Quarters(IAPIClient apiClient, ILogger<Quarters> logger, string refreshToken)
         {
             LoadConfiguration();
             _pcke = new PCKE();
             _session = new Session();
+            _session.RefreshToken = refreshToken;
             _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            CodeChallenge = _pcke.CodeChallenge();
+            CodeVerifier = _pcke.CodeVerifier;
         }
 
         private void LoadConfiguration()
         {
-            IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                       .AddJsonFile("appsettings.json");
+            try
+            {
+                IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json");
 
-            _configuration = builder.Build();
-            _api = new APIParams(_configuration.GetSection("ApiParams"));
-            _app = new AppParams(_configuration.GetSection("AppParams"));
+                _configuration = builder.Build();
+                _api = new APIParams(_configuration.GetSection("ApiParams"));
+                _app = new AppParams(_configuration.GetSection("AppParams"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"LoadConfiguration | Message: {ex.Message} | InnerException: {ex.InnerException.ToString()}");
+                throw ex;
+            }
         }
         
         private string GetStrResponse(string url, string token)
         {
-            var response = _apiClient.RequestGet(url, token);
-            var sr = new StreamReader(response.GetResponseStream());
-            var strResponse = sr.ReadToEnd();
-            if (!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
+            try
             {
-                _logger.LogError(strResponse);
-                _logger.LogError(response.StatusCode.ToString(), response.StatusDescription);
-                throw new Error(response.StatusCode.ToString(), response.StatusDescription);
-            }
+                _logger.LogInformation($"GetStrResponse| url: {url} | token: {token}");
+                var strResponse = _apiClient.RequestGet(url, token);
+                _logger.LogInformation($"GetStrResponse| response: {strResponse}");
 
-            _logger.LogInformation($"url: {url} | strResponse: {strResponse}");
-            return strResponse;
+                if (string.IsNullOrEmpty(strResponse))
+                    _logger.LogError("Quarters|GetStrResponse| strResponse: is null or empty ");
+
+                return strResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GetStrResponse | Message: {ex.Message} | StackTrace: {ex.StackTrace}");
+                throw ex;
+            }
         }
 
         private ResponseData RequestAuthorize(RequestData request)
         {
-            var response = _apiClient.RequestPost(_api.ApiTokenURL, request);
+            try
+            {
+                _logger.LogInformation($"Quarters|RequestAuthorize|_api.ApiTokenURL:  {_api.ApiTokenURL}");
+                var response = _apiClient.RequestPost(_api.ApiTokenURL, request);
 
-            if (!response.IsSuccesful)
+                if (!response.IsSuccesful)
+                    return response;
+
+                _session.DoRefresh(response);
                 return response;
-
-            _logger.LogInformation($"{_api.ApiTokenURL} result {response.ToJSONString()}");
-            _session.DoRefresh(response);
-            return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"RequestAuthorize | Message: {ex.Message} | InnerException: {ex.InnerException.ToString()}");
+                throw ex;
+            }
         }
 
         public string GetAuthorizeUrl()
@@ -81,7 +113,12 @@ namespace QuartersSDK.Services
                 $"redirect_uri={_app.REDIRECT_URL}&" +
                 $"scope=identity+email+transactions+events+wallet&" +
                 $"code_challenge_method=S256&" +
-                $"code_challenge={_pcke.CodeChallenge()}";
+                $"code_challenge={CodeChallenge}";
+        }
+
+        public string GetSchemaUrl()
+        {
+            return _app.SCHEMA_URL;
         }
 
         #region UNITY Methods
@@ -97,16 +134,16 @@ namespace QuartersSDK.Services
                     return new ResponseData(new Error("Missing token", "Missing refresh token on session"));
                 }
 
-                RequestData request = new RequestData(grantType: EnumUtils.ToEnumString(GrantType.REFRESH_TOKEN),
+                RequestData request = new RequestData(grantType: "refresh_token",
                                                        clientId: _app.APP_ID,
                                                        clientSecret: _app.APP_KEY,
                                                        refreshToken: _session.RefreshToken,
-                                                       codeVerifier: _pcke.CodeVerifier);
+                                                       codeVerifier: CodeVerifier);
                 return RequestAuthorize(request);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError($"Error GetAccessToken: {ex.Message} | Stacktrace: {ex.StackTrace} | Desscription: {ex.InnerException}");
                 return new ResponseData(new Error(ex.Message, ex.InnerException.ToString()));
             }
         }
@@ -121,13 +158,13 @@ namespace QuartersSDK.Services
                                                        clientId: _app.APP_ID,
                                                        clientSecret: _app.APP_KEY,
                                                        redirectUri: _app.REDIRECT_URL,
-                                                       codeVerifier: _pcke.CodeVerifier,
+                                                       codeVerifier: CodeVerifier,
                                                        code: code);
                 return RequestAuthorize(request);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError($"Error GetRefreshToken: {ex.Message} | Stacktrace: {ex.StackTrace} | Desscription: {ex.InnerException}");
                 return new ResponseData(new Error(ex.Message, ex.InnerException.ToString()));
             }
         }
@@ -146,7 +183,25 @@ namespace QuartersSDK.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError($"Error GetUserDetailsCall: {ex.Message} | Stacktrace: {ex.StackTrace} | Desscription: {ex.InnerException}");
+                throw new Error(ex.Message, ex.InnerException.ToString());
+            }
+        }
+
+        public string GetUserDetailsCallStr()
+        {
+            _logger.LogInformation($"GetUserDetailsCall - URL:{_api.UserDetailsURL}");
+            try
+            {
+                var responseAccessToken = new ResponseData();
+                if (!_session.DoesHaveAccessToken)
+                    responseAccessToken = GetAccessToken();
+
+                return GetStrResponse(_api.UserDetailsURL, _session.AccessToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error GetUserDetailsCallStr: {ex.Message} | Stacktrace: {ex.StackTrace} | Desscription: {ex.InnerException}");
                 throw new Error(ex.Message, ex.InnerException.ToString());
             }
         }
@@ -162,7 +217,7 @@ namespace QuartersSDK.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError($"Error GetAccountBalanceCall: {ex.Message} | Stacktrace: {ex.StackTrace} | Desscription: {ex.InnerException}");
                 throw new Error(ex.Message, ex.InnerException.ToString());
             }
         }
@@ -188,16 +243,14 @@ namespace QuartersSDK.Services
                     response.IsSuccesful = false;
                     if (response.ErrorResponse.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
                         _session.RefreshToken = "";
-                    // VspAttribution.VspAttribution.SendAttributionEvent("TransactionFailed", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
                 }
 
                 _logger.LogInformation(response.ToJSONString());
-                //VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError($"Error MakeTransaction: {ex.Message} | Stacktrace: {ex.StackTrace} | Desscription: {ex.InnerException}");
                 throw new Error(ex.Message, ex.InnerException.ToString());
             }
         }
@@ -206,33 +259,15 @@ namespace QuartersSDK.Services
         {
             _logger.LogInformation("Buy Quarters");
 
-            string redirectSafeUrl = HttpUtility.UrlEncode(_app.SCHEMA_URL);
+            //string redirectSafeUrl = HttpUtility.UrlEncode(_app.SCHEMA_URL);
+            string redirectSafeUrl = _app.SCHEMA_URL;
             return $"{_api.BuyURL}?redirect={redirectSafeUrl}";
         }
 
         public void SignOut()
         {
             _session.Invalidate();
-            _session = null;
-
             _logger.LogInformation("Quarters user signed out");
-        }
-
-        public Texture GetAvatar(User u)
-        {
-            _logger.LogInformation($"Pull avatar: {_api.AvatarURL(u)}");
-
-            UnityWebRequest request = UnityWebRequestTexture.GetTexture(_api.AvatarURL(u));
-
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                _logger.LogError(request.error);
-                _logger.LogError(request.downloadHandler.text);
-
-                throw new Error(request.downloadHandler.text);
-            }
-
-            return ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
 
         #endregion
