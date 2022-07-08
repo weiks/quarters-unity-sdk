@@ -110,7 +110,7 @@ namespace QuartersSDK.Services
         {
             try
             {
-                _logger.LogInformation($"Quarters|RequestAuthorize|_api.ApiTokenURL:  {_api.ApiTokenURL}");
+                _logger.LogInformation($"Quarters|RequestAuthorize");
                 var response = _apiClient.RequestPost(_api.ApiTokenURL, request);
 
                 if (!response.IsSuccesful)
@@ -172,7 +172,7 @@ namespace QuartersSDK.Services
         {
             try
             {
-                _logger.LogInformation($"Get refresh token with code: {code}");
+                _logger.LogInformation($"Get refresh token with code");
 
                 RequestData request = new RequestData(grantType: EnumUtils.ToEnumString(GrantType.AUTHORIZATION_CODE),
                                                        clientId: _app.APP_ID,

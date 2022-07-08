@@ -30,7 +30,10 @@ namespace QuartersSDK.Services
 
         public bool DoesHaveRefreshToken
         { 
-            get { return !string.IsNullOrEmpty(RefreshToken); } 
+            get 
+            { 
+                return !string.IsNullOrEmpty(RefreshToken); 
+            } 
         }
 
         public bool DoesHaveAccessToken

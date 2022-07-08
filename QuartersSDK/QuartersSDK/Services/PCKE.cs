@@ -20,7 +20,6 @@ namespace QuartersSDK.Services
         {
             System.Random rand = new System.Random();
             string codeVerifier = RandomString(rand.Next(43, 129));
-            //Debug.Log($"Code verifier: {codeVerifier}");
             return codeVerifier;
         }
 
@@ -28,7 +27,6 @@ namespace QuartersSDK.Services
 
         public string CodeChallenge()
         {
-
             byte[] hash = Sha256(CodeVerifier);
 
             string codeChallenge = Convert.ToBase64String(hash);
