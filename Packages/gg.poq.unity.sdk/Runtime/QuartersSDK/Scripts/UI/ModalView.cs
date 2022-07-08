@@ -2,11 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using QuartersSDK;
-using UnityEngine.EventSystems;
-using QuartersSDK.UI;
 
-namespace QuartersSDK {
+namespace QuartersSDK.UI {
     public class ModalView : UIView {
         public static ModalView instance;
 

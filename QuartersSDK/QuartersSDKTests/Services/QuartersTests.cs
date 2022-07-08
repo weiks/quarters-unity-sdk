@@ -105,19 +105,19 @@ namespace QuartersSDK.Services.Tests
         public void IsAccessTokenRequestedSuccess()
         {
             #region real request to endpoint
-            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
-            string url = q.GetAuthorizeUrl();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
+            //Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            //string url = q.GetAuthorizeUrl();
+            ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            //q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
 
-            var res = q.GetAccessToken();
+            //var res = q.GetAccessToken();
             #endregion
 
             #region using mock request/response
-            //string url = mockQuarters.Object.GetAuthorizeUrl();
-            //mockQuarters.Object.GetRefreshToken("mockCode");
+            string url = mockQuarters.Object.GetAuthorizeUrl();
+            mockQuarters.Object.GetRefreshToken("mockCode");
 
-            //var res = mockQuarters.Object.GetAccessToken();
+            var res = mockQuarters.Object.GetAccessToken();
             #endregion
 
             Assert.IsTrue(res.IsSuccesful);
@@ -270,7 +270,7 @@ namespace QuartersSDK.Services.Tests
 
             q.SignOut();
 
-            Assert.IsTrue(q._session == null);
+            Assert.IsTrue(string.IsNullOrEmpty(q._session.AccessToken) && string.IsNullOrEmpty(q._session.RefreshToken));
         }
     }
 }

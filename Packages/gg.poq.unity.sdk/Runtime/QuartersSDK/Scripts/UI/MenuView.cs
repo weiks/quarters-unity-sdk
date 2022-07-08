@@ -1,7 +1,3 @@
-using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-
 namespace QuartersSDK.UI {
     public class MenuView : UIView {
         public UISegue SegueToAuthorizeView;

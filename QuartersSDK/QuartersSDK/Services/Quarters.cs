@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Web;
 
 namespace QuartersSDK.Services
 {
@@ -26,24 +27,41 @@ namespace QuartersSDK.Services
 
         public Quarters(IAPIClient apiClient, ILogger<Quarters> logger, string codeChallenge, string codeVerifier, string refreshToken)
         {
-            LoadConfiguration();
-            //_pcke = new PCKE();
-            _session = new Session();
-            _session.RefreshToken = refreshToken;
             _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            
+            LoadConfiguration();
+            _session = new Session();
+            _session.RefreshToken = refreshToken;
             CodeChallenge = codeChallenge;
             CodeVerifier = codeVerifier;
         }
 
         public Quarters(IAPIClient apiClient, ILogger<Quarters> logger, string refreshToken)
         {
+            _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            
             LoadConfiguration();
             _pcke = new PCKE();
             _session = new Session();
             _session.RefreshToken = refreshToken;
+            CodeChallenge = _pcke.CodeChallenge();
+            CodeVerifier = _pcke.CodeVerifier;
+        }
+
+        public Quarters(IAPIClient apiClient, ILogger<Quarters> logger, string refreshToken, Dictionary<string,string> appSettings, Dictionary<string, string>  apiSettings)
+        {
             _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            if (appSettings.Count == 0 || appSettings == null )throw new ArgumentNullException(nameof(appSettings));
+            if (apiSettings.Count == 0 || apiSettings == null )throw new ArgumentNullException(nameof(apiSettings));
+
+            _pcke = new PCKE();
+            _session = new Session();
+            _app = new AppParams(appSettings);
+            _api = new APIParams(apiSettings);
+            _session.RefreshToken = refreshToken;
             CodeChallenge = _pcke.CodeChallenge();
             CodeVerifier = _pcke.CodeVerifier;
         }
@@ -61,8 +79,10 @@ namespace QuartersSDK.Services
             }
             catch (Exception ex)
             {
+                Error error = new Error();
                 _logger.LogError($"LoadConfiguration | Message: {ex.Message} | InnerException: {ex.InnerException.ToString()}");
-                throw ex;
+                error.ErrorDescription = $"Directory: {Directory.GetCurrentDirectory()} |  Message: {ex.Message} | InnerException: {ex.InnerException.ToString()} ";
+                throw error;
             }
         }
         
@@ -257,17 +277,32 @@ namespace QuartersSDK.Services
 
         public string GetBuyQuartersUrl()
         {
-            _logger.LogInformation("Buy Quarters");
+            try
+            {
+                _logger.LogInformation("Buy Quarters");
 
-            //string redirectSafeUrl = HttpUtility.UrlEncode(_app.SCHEMA_URL);
-            string redirectSafeUrl = _app.SCHEMA_URL;
-            return $"{_api.BuyURL}?redirect={redirectSafeUrl}";
+                string redirectSafeUrl = HttpUtility.UrlEncode(_app.SCHEMA_URL);
+                return $"{_api.BuyURL}?redirect={redirectSafeUrl}";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error GetBuyQuartersUrl: {ex.Message} | Stacktrace: {ex.StackTrace} | Desscription: {ex.InnerException}");
+                throw new Error(ex.Message, ex.InnerException.ToString());
+            }
         }
 
         public void SignOut()
         {
-            _session.Invalidate();
-            _logger.LogInformation("Quarters user signed out");
+            try
+            {
+                _session.Invalidate();
+                _logger.LogInformation("Quarters user signed out");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error SignOut: {ex.Message} | Stacktrace: {ex.StackTrace} | Desscription: {ex.InnerException}");
+                throw new Error(ex.Message, ex.InnerException.ToString());
+            }
         }
 
         #endregion

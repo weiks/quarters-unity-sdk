@@ -77,8 +77,7 @@ namespace QuartersSDK {
             QuartersLink link = QuartersLink.Create(linkActivation.Uri);
 
             if (link.Uri.IsValidDeepLink()) //deep link opened
-                if (OnDeepLink != null)
-                    OnDeepLink(link);
+                OnDeepLink?.Invoke(link);
         }
 
 

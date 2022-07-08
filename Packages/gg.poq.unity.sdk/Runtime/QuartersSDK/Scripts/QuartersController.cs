@@ -1,18 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
-using UnityEngine.Networking;
 using QuartersSDK.Services;
 using QuartersSDK.Data;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.EventLog;
 using Packages.gg.poq.unity.sdk.Runtime.QuartersSDK.Scripts.FileLogger;
 using System.IO;
+using Packages.gg.poq.unity.sdk.Runtime.QuartersSDK.Scripts.ConfigurationSettings;
+using QuartersSDK.UI;
 
 namespace QuartersSDK {
 
@@ -20,12 +17,12 @@ namespace QuartersSDK {
         private Quarters _quarters;
         private User _currentUser;
         public Session _session;
-        public static string URL_SCHEME = "";
 
         public static QuartersController Instance;
         public static Action<User> OnUserLoaded;
         public static Action<long> OnBalanceUpdated;
         public static Action OnSignOut;
+        public static string URL_SCHEME = string.Empty;
 
         public CurrencyConfig CurrencyConfig => QuartersInit.Instance.CurrencyConfig;
         public List<Scope> DefaultScope = new List<Scope> {
@@ -36,19 +33,8 @@ namespace QuartersSDK {
             Scope.wallet
         };
 
-        [HideInInspector] public QuartersWebView QuartersWebView;
-
-        /// <summary>
-        /// Returns the URL of the environment we set
-        /// </summary>
-        public string BASE_URL {
-            get {
-                Environment environment = QuartersInit.Instance.Environment;
-                if (environment == Environment.production) return "https://www.poq.gg";
-                if (environment == Environment.sandbox) return "https://s2w-dev-firebase.herokuapp.com";
-                return null;
-            }
-        }
+        [HideInInspector] 
+        public QuartersWebView QuartersWebView;
 
         /// <summary>
         /// Get or set the current user
@@ -64,41 +50,41 @@ namespace QuartersSDK {
         /// <summary>
         /// Returns true in case the session is valid
         /// </summary>
-        public bool IsAuthorized {
-            get {
-                if (_session != null)
-                    return _session.IsAuthorized;
-                return false;
-            }
+        public bool IsAuthorized() {  
+            return _session != null && _session.IsAuthorized;
         }
-
 
         /// <summary>
         /// Initialization of Quarters user session and instance
         /// </summary>
-        public void Init() {
+        public void Init() 
+        {
             try
             {
                 Instance = this;
                 _session = new Session();
 
-                var serviceProvider = new ServiceCollection()
-                    .AddLogging()
-                    .BuildServiceProvider();
-                ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-                loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+                var loggerFactory = (ILoggerFactory)new LoggerFactory();
+#if UNITY_EDITOR
                 loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logs"));
+#endif
                 var logger = loggerFactory.CreateLogger<Quarters>();
 
                 APIClient apiClient = new APIClient(logger);
-                _quarters = new Quarters(apiClient, logger, _session.RefreshToken);
-                URL_SCHEME =  _quarters.GetSchemaUrl();
+                var apiParamsSettings = new ApiParamsSettings();
+                var appParamsSettings = new AppParamsSettings(QuartersInit.Instance.APP_ID, 
+                                                            QuartersInit.Instance.APP_KEY, 
+                                                            QuartersInit.Instance.APP_UNIQUE_IDENTIFIER, 
+                                                            "Production");
+                _quarters = new Quarters(apiClient, logger, _session.RefreshToken, appParamsSettings.Settings, apiParamsSettings.Settings);
+                URL_SCHEME = appParamsSettings.Settings["REDIRECT_URL"];
             }
             catch (Exception ex)
             {
                 LogError($"Message: {ex.Message} | Description: {ex.InnerException}");
-                throw ex;
+                ModalView.instance.ShowAlert("QuartersController|Init|Error", $"{ex.Message} \n {ex.StackTrace} ", new string[] { "OK" }, null);
             }
+
         }
 
         #region high level calls
@@ -108,9 +94,11 @@ namespace QuartersSDK {
         /// </summary>
         /// <param name="OnComplete">What happens when signing in is successful</param>
         /// <param name="OnError">Checks to see if there was an error in signing in</param>
-        public void SignInWithQuarters(Action OnComplete, Action<string> OnError) {
+        public void SignInWithQuarters(Action OnComplete, Action<string> OnError) 
+        {
             try
             {
+                _session = new Session();
                 _session.Scopes = DefaultScope;
                 Instance.Authorize(_session.Scopes, delegate
                 {
@@ -121,16 +109,17 @@ namespace QuartersSDK {
             catch (Exception ex)
             {
                 LogError($"Message: {ex.Message} | Description: {ex.InnerException}");
-                throw ex;
+                OnError?.Invoke(ex.Message + ex.InnerException + ex.StackTrace);
             }
         }
 
-        private void Authorize(List<Scope> scopes, Action OnSuccess, Action<string> OnError) {
+        private void Authorize(List<Scope> scopes, Action OnSuccess, Action<string> OnError) 
+        {
             try
             {
                 _session = new Session();
 
-                if (IsAuthorized)
+                if (IsAuthorized())
                 {
                     GetAccessToken(delegate { OnSuccess?.Invoke(); }, delegate (string error) { OnError?.Invoke(error); });
                     return;
@@ -157,7 +146,6 @@ namespace QuartersSDK {
                     if (link.QueryString.ContainsKey("code"))
                     {
                         string code = link.QueryString["code"];
-                        //StartCoroutine(GetRefreshToken(code, OnSuccess, OnError));
                         GetRefreshToken(code, OnSuccess, OnError);
                         QuartersWebView.OnDeepLink = null;
                         VspAttribution.VspAttribution.SendAttributionEvent("QuartersAuthorize", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
@@ -172,25 +160,25 @@ namespace QuartersSDK {
             catch (Exception ex)
             {
                 LogError($"Message: {ex.Message} | Description: {ex.InnerException}");
-                throw;
+                OnError?.Invoke(ex.Message);
             }
         }
 
         /// <summary>
         /// Deauthorization and signing out
         /// </summary>
-        public void Deauthorize() {
+        public void Deauthorize() 
+        {
             try
             {
                 _quarters.SignOut();
                 _session.SignOut();
-                CurrentUser = null;
+                _session = null;
 
                 Log("Quarters user signed out");
                 OnSignOut?.Invoke();
 
                 VspAttribution.VspAttribution.SendAttributionEvent("QuartersDeauthorize", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
-
             }
             catch (Exception ex)
             {
@@ -204,7 +192,8 @@ namespace QuartersSDK {
         /// </summary>
         /// <param name="OnSuccessDelegate">Operation was successful and details have been retreived</param>
         /// <param name="OnFailedDelegate">Operation failed and details have not been retreived</param>
-        public void GetUserDetails(Action<User> OnSuccessDelegate, Action<string> OnFailedDelegate) {
+        public void GetUserDetails(Action<User> OnSuccessDelegate, Action<string> OnFailedDelegate) 
+        {
             try
             {
                 StartCoroutine(GetUserDetailsCall(OnSuccessDelegate, OnFailedDelegate));
@@ -212,7 +201,7 @@ namespace QuartersSDK {
             catch (Exception ex)
             {
                 LogError($"Message: {ex.Message} | Description: {ex.InnerException}");
-                throw;
+                OnFailedDelegate?.Invoke(ex.Message);
             }
         }
 
@@ -221,7 +210,8 @@ namespace QuartersSDK {
         /// </summary>
         /// <param name="OnSuccess">Operation was successful and the account balance information has been retreived</param>
         /// <param name="OnError">Operation failed and the account balance information has not been retreived</param>
-        public void GetAccountBalanceCall(Action<long> OnSuccess, Action<string> OnError) {
+        public void GetAccountBalanceCall(Action<long> OnSuccess, Action<string> OnError) 
+        {
             try
             {
                 StartCoroutine(GetAccountBalance(OnSuccess, OnError));
@@ -229,7 +219,7 @@ namespace QuartersSDK {
             catch (Exception ex)
             {
                 LogError($"Message: {ex.Message} | Description: {ex.InnerException}");
-                throw;
+                OnError?.Invoke(ex.Message);
             }
         }
 
@@ -241,16 +231,9 @@ namespace QuartersSDK {
         /// <param name="description">Description of what the transaction is</param>
         /// <param name="OnSuccess">The transaction was successful</param>
         /// <param name="OnError">There was an error in the transaction</param>
-        public void Transaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError) {
-            try
-            {
-                StartCoroutine(MakeTransaction(coinsQuantity, description, OnSuccess, OnError));
-            }
-            catch (Exception ex)
-            {
-                LogError($"Message: {ex.Message} | Description: {ex.InnerException}");
-                throw;
-            }
+        public IEnumerator Transaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError) 
+        {
+            yield return StartCoroutine(MakeTransaction(coinsQuantity, description, OnSuccess, OnError));
         }
 
         #endregion
@@ -281,87 +264,90 @@ namespace QuartersSDK {
             catch (Exception ex)
             {
                 LogError($"Message: {ex.Message} | Description: {ex.InnerException}");
-                throw ex;
+                OnError?.Invoke(ex.Message);
             }
         }
 
-        private void GetAccessToken(Action OnSuccess, Action<string> OnFailed) {
+        private void GetAccessToken(Action OnSuccess, Action<string> OnFailed) 
+        {
             Log("Get Access token");
-                try
+            try
+            {
+                if (!_session.DoesHaveRefreshToken)
                 {
-                    if (!_session.DoesHaveRefreshToken)
-                    {
-                        LogError("Missing refresh token");
-                        OnFailed("Missing refresh token");
-                    }
+                    LogError("Missing refresh token");
+                    OnFailed("Missing refresh token");
+                }
                 
-                    _quarters._session.RefreshToken = _session.RefreshToken;
-                    ResponseData response = _quarters.GetAccessToken();
-                    if (response.IsSuccesful)
-                    {
-                        Log($"GetAccessToken result: {response.ToJSONString()}");
-
-                        _session.RefreshToken = response.RefreshToken;
-                        _session.AccessToken = response.AccessToken;
-                        _session.SetScope(response.Scope);
-                        OnSuccess?.Invoke();
-                    }
-                    else
-                    {
-                        LogError($"Message: {response.ErrorResponse.Message} | Description: {response.ErrorResponse.ErrorDescription}");
-
-                        if (response.ErrorResponse.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
-                            _session.RefreshToken = "";
-
-                        OnFailed?.Invoke(response.ErrorResponse.ErrorDescription);
-                    }
-                }
-                catch(Exception ex)
+                _quarters._session.RefreshToken = _session.RefreshToken;
+                ResponseData response = _quarters.GetAccessToken();
+                if (response.IsSuccesful)
                 {
-                    LogError(ex.Message);
-                    throw ex;
+                    Log($"GetAccessToken result: {response.ToJSONString()}");
+
+                    _session.RefreshToken = response.RefreshToken;
+                    _session.AccessToken = response.AccessToken;
+                    _session.SetScope(response.Scope);
+                    OnSuccess?.Invoke();
+                }
+                else
+                {
+                    LogError($"Message: {response.ErrorResponse.Message} | Description: {response.ErrorResponse.ErrorDescription}");
+
+                    if (response.ErrorResponse.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
+                        _session.RefreshToken = "";
+
+                    OnFailed?.Invoke(response.ErrorResponse.ErrorDescription);
                 }
             }
+            catch(Exception ex)
+            {
+                LogError(ex.Message);
+                OnFailed?.Invoke(ex.Message);
+            }
+        }
 
-            private IEnumerator GetUserDetailsCall(Action<User> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
-                Log("GetUserDetailsCall");
-                try
+        private IEnumerator GetUserDetailsCall(Action<User> OnSuccess, Action<string> OnFailed, bool isRetry = false) 
+        {
+            Log("GetUserDetailsCall");
+            try
+            {
+                if (!_session.DoesHaveAccessToken)
                 {
-                    if (!_session.DoesHaveAccessToken)
-                    {
-                        GetAccessToken(OnSuccess: delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); },
-                                        OnFailed: delegate (string error) { OnFailed(error); });
-                        yield break;
-                    }
-
-                    var userStr = _quarters.GetUserDetailsCallStr();
-                    if (string.IsNullOrEmpty(userStr))
-                    {
-                        LogError($"Error GetUserDetailsCall: {userStr} ");
-
-                        //refresh access code and retry this call in case access code expired
-                        if (!isRetry)
-                            GetAccessToken(delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); }, delegate { OnFailed(userStr); });
-                        else
-                            OnFailed($"Error GetUserDetailsCall: {userStr}");
-                    }
-                    else
-                    {
-                        Log("GetUserDetailsCall result " + userStr);
-
-                        CurrentUser = JsonConvert.DeserializeObject<User>(userStr);
-                        OnSuccess(CurrentUser);
-                    }
+                    GetAccessToken(OnSuccess: delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); },
+                                    OnFailed: delegate (string error) { OnFailed(error); });
+                    yield break;
                 }
-                catch (Exception ex)
+
+                var userStr = _quarters.GetUserDetailsCallStr();
+                if (string.IsNullOrEmpty(userStr))
                 {
-                    LogError($"Message: {ex.Message} | Description: {ex.StackTrace}");
-                    throw ex;
+                    LogError($"Error GetUserDetailsCall: {userStr} ");
+
+                    //refresh access code and retry this call in case access code expired
+                    if (!isRetry)
+                        GetAccessToken(delegate { StartCoroutine(GetUserDetailsCall(OnSuccess, OnFailed, true)); }, delegate { OnFailed(userStr); });
+                    else
+                        OnFailed($"Error GetUserDetailsCall: {userStr}");
+                }
+                else
+                {
+                    Log("GetUserDetailsCall result " + userStr);
+
+                    CurrentUser = JsonConvert.DeserializeObject<User>(userStr);
+                    OnSuccess(CurrentUser);
                 }
             }
+            catch (Exception ex)
+            {
+                LogError($"Message: {ex.Message} | Description: {ex.StackTrace}");
+                OnFailed?.Invoke(ex.Message);
+            }
+        }
 
 
-            private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false) {
+        private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false) 
+        {
             if (CurrentUser == null || string.IsNullOrEmpty(CurrentUser.GamerTag)) 
                     yield return GetUserDetailsCall(delegate { }, OnFailed);
             try
@@ -377,7 +363,6 @@ namespace QuartersSDK {
             {
                 LogError($"QuartersController| GetAccountBalance |Message: {ex.Message} | Description: {ex.StackTrace}");
                 OnFailed(ex.Message);
- 
             }
 
         }
@@ -390,9 +375,9 @@ namespace QuartersSDK {
         /// <param name="description">Description of what the transaction is</param>
         /// <param name="OnSuccess">The transaction was successful</param>
         /// <param name="OnError">There was an error in the transaction</param>
-        public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) {
+        public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) 
+        {
             Log($"MakeTransaction with quantity: {coinsQuantity}");
-
             try
             {
                 if (!_session.DoesHaveRefreshToken)
@@ -415,19 +400,21 @@ namespace QuartersSDK {
 
                     if (response.ErrorResponse.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
                         _session.RefreshToken = "";
+                    OnFailed?.Invoke(response.ErrorResponse.ErrorDescription);
                 }
             }
             catch (Exception ex)
             {
                 LogError($"Message: {ex.Message} | Description: {ex.InnerException}");
-                throw ex;
+                OnFailed?.Invoke(ex.Message);
             }
         }
 
         /// <summary>
         /// When you call this method, the user will be sent to a website where they can exchange money for quarters
         /// </summary>
-        public void BuyQuarters() {
+        public void BuyQuarters() 
+        {
             Log("Buy Quarters");
             try {
                 VspAttribution.VspAttribution.SendAttributionEvent("BuyQuarters", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
@@ -442,13 +429,15 @@ namespace QuartersSDK {
 
         #endregion
 
-        private void Log(string message) {
+        private void Log(string message) 
+        {
             if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
                 Debug.Log(message);
             }
         }
 
-        private void LogError(string message) {
+        private void LogError(string message) 
+        {
             if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
                 Debug.LogError(message);
             }

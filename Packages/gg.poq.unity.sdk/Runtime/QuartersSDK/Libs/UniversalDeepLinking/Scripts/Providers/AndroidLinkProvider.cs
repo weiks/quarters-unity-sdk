@@ -162,6 +162,7 @@ namespace ImaginationOverflow.UniversalDeepLinking.Providers
             }
             catch (Exception e)
             {
+                throw e;
             }
 
             return true;

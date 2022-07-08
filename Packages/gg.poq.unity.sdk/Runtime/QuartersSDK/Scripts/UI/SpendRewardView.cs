@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using QuartersSDK;
+﻿using UnityEngine;
 
 namespace QuartersSDK.UI {
     public class SpendRewardView : UIView {
