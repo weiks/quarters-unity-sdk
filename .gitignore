@@ -98,3 +98,14 @@ QuartersSDK/QuartersSDKTests/obj/
 ProjectSettings/
 
 sampleRun_*
+Assembly-CSharp-Editor.csproj
+
+Assembly-CSharp.csproj
+
+gg.poq.unity.sdk.Editor.csproj
+
+gg.poq.unity.sdk.Runtime.csproj
+
+UniWebView-CSharp.csproj
+
+UniWebView-CSharp.Editor.csproj
