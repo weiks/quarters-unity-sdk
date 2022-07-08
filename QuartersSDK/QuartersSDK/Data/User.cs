@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using QuartersSDK.Data.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace QuartersSDK.Data
 {
@@ -12,7 +10,6 @@ namespace QuartersSDK.Data
         [JsonProperty("gamerTag")] public string GamerTag = "";
         [JsonProperty("email")] public string Email = "";
         [JsonProperty("avatar")] public string AvatarUrl = "";
-
 
         private long balance = 0;
 

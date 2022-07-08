@@ -1,10 +1,6 @@
-﻿using Moq;
-using NUnit.Framework;
-using QuartersSDK.Data;
+﻿using NUnit.Framework;
 using QuartersSDK.Data.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace QuartersSDK.Data.Tests
 {

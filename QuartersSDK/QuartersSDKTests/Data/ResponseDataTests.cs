@@ -1,8 +1,4 @@
 ﻿using NUnit.Framework;
-using QuartersSDK.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace QuartersSDK.Data.Tests
 {
@@ -15,7 +11,7 @@ namespace QuartersSDK.Data.Tests
         {
             string strJson = "{Balance: '200', access_token:'1234567', refresh_token:'1234-567', Scope:'mail'}";
             ResponseData response = new ResponseData(strJson, System.Net.HttpStatusCode.OK);
-            
+
             Assert.That(response.IsSuccesful, Is.True);
             Assert.That(response.Balance, Is.EqualTo(200));
             Assert.That(response.AccessToken, Is.EqualTo("1234567"));
@@ -23,13 +19,12 @@ namespace QuartersSDK.Data.Tests
             Assert.That(response.Scope, Is.EqualTo("mail"));
         }
 
-
         [Test()]
         [Category("Success set error on ResponseData")]
         public void SuccessOnSetErrorResponseData()
         {
             ResponseData response = new ResponseData(new Error("{error:'Test error', error_description:'test description error'}"));
-            
+
             Assert.IsFalse(response.IsSuccesful);
             Assert.IsNotNull(response.ErrorResponse);
         }
@@ -48,6 +43,5 @@ namespace QuartersSDK.Data.Tests
             Assert.That(response.RefreshToken, Is.EqualTo("1234-567"));
             Assert.That(response.Scope, Is.EqualTo("mail"));
         }
-
     }
 }

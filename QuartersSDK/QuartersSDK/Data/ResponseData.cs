@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using QuartersSDK.Data.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
-using System.Text;
 
 namespace QuartersSDK.Data
 {
@@ -29,17 +26,23 @@ namespace QuartersSDK.Data
         public string Scope;
 
         [JsonProperty("balance")]
-        public long Balance {
+        public long Balance
+        {
             get { return _balance; }
             set { _balance = long.Parse(value.ToString()); }
         }
 
-        public ResponseData() { } 
-        public ResponseData(Error err) {
+        public ResponseData()
+        {
+        }
+
+        public ResponseData(Error err)
+        {
             IsSuccesful = false;
             SetError(err, HttpStatusCode.BadRequest);
         }
-        public ResponseData(string json, HttpStatusCode status) 
+
+        public ResponseData(string json, HttpStatusCode status)
         {
             this.SetData(json, status);
         }
@@ -49,7 +52,7 @@ namespace QuartersSDK.Data
             try
             {
                 var aux = JsonConvert.DeserializeObject<ResponseData>(json);
-                Balance = !string.IsNullOrEmpty(aux.Balance.ToString())? aux.Balance : (long)0;
+                Balance = !string.IsNullOrEmpty(aux.Balance.ToString()) ? aux.Balance : (long)0;
                 AccessToken = aux.AccessToken ?? string.Empty;
                 RefreshToken = aux.RefreshToken ?? string.Empty;
                 Scope = aux.Scope ?? string.Empty;

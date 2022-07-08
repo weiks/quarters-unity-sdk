@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QuartersSDK.Data.Interfaces
+﻿namespace QuartersSDK.Data.Interfaces
 {
-    interface ISerializable
+    internal interface ISerializable
     {
         public string ToJSONString();
     }

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-
 namespace QuartersSDK.Services
 {
-
     public class PCKE
     {
         public string CodeVerifier;
@@ -23,7 +20,7 @@ namespace QuartersSDK.Services
             return codeVerifier;
         }
 
-        static readonly char[] padding = { '=' };
+        private static readonly char[] padding = { '=' };
 
         public string CodeChallenge()
         {
@@ -52,6 +49,7 @@ namespace QuartersSDK.Services
             }
             return res.ToString();
         }
+
         public byte[] Sha256(string randomString)
         {
             var crypt = new SHA256Managed();
@@ -59,5 +57,4 @@ namespace QuartersSDK.Services
             return crypto;
         }
     }
-
 }

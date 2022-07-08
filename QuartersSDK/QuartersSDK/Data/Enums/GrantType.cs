@@ -1,5 +1,4 @@
-﻿
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace QuartersSDK.Data.Enums
 {
@@ -7,6 +6,7 @@ namespace QuartersSDK.Data.Enums
     {
         [EnumMember(Value = "refresh_token")]
         REFRESH_TOKEN,
+
         [EnumMember(Value = "authorization_code")]
         AUTHORIZATION_CODE,
     }

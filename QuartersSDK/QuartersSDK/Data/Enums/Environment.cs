@@ -1,5 +1,4 @@
-﻿
-namespace QuartersSDK.Data.Enums
+﻿namespace QuartersSDK.Data.Enums
 {
     public enum Environment
     {

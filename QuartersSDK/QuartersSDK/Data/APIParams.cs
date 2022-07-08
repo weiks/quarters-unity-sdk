@@ -22,11 +22,11 @@ namespace QuartersSDK.Data
         public string ApiTokenURL { get { return $"{BASE_URL}/api/oauth2/token"; } }
         public string ApiAuthorizeURL { get { return $"{BASE_URL}/oauth2/authorize"; } }
 
+        public string AvatarURL(User u)
+        {
+            return $"{AVATAR_URL}/{u.Id}/{u.AvatarUrl}";
+        }
 
-        public string AvatarURL(User u){ 
-            return $"{AVATAR_URL}/{u.Id}/{u.AvatarUrl}"; 
-        } 
-        
         public APIParams(IConfigurationSection confSection)
         {
             DASHBOARD_URL = confSection.GetSection("DASHBOARD_URL").Value;
@@ -38,7 +38,7 @@ namespace QuartersSDK.Data
             TRANSACTIONS_ENDPOINT = confSection.GetSection("TRANSACTIONS_ENDPOINT").Value;
         }
 
-        public APIParams(Dictionary<string,string> settings)
+        public APIParams(Dictionary<string, string> settings)
         {
             DASHBOARD_URL = settings["DASHBOARD_URL"];
             BASE_URL = settings["BASE_URL"];
@@ -48,6 +48,5 @@ namespace QuartersSDK.Data
             BALANCE_ENDPOINT = settings["BALANCE_ENDPOINT"];
             TRANSACTIONS_ENDPOINT = settings["TRANSACTIONS_ENDPOINT"];
         }
-
     }
 }

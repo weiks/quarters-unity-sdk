@@ -1,8 +1,4 @@
 ﻿using NUnit.Framework;
-using QuartersSDK.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace QuartersSDK.Data.Tests
 {
@@ -13,7 +9,7 @@ namespace QuartersSDK.Data.Tests
         [Category("Creates missing token error")]
         public void InstantiatesErrorTest()
         {
-           Error err = new Error("Missing token", "Missing refresh token on session");
+            Error err = new Error("Missing token", "Missing refresh token on session");
 
             Assert.That(err.ErrorMessage.Equals("Missing token"));
             Assert.That(err.ErrorDescription.Equals("Missing refresh token on session"));
@@ -28,6 +24,5 @@ namespace QuartersSDK.Data.Tests
             Assert.That(err.ErrorMessage.Equals("Test error"));
             Assert.That(err.ErrorDescription.Equals("test description error"));
         }
-
     }
 }

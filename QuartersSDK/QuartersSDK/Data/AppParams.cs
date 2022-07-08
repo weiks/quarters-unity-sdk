@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace QuartersSDK.Data
 {
@@ -31,6 +29,7 @@ namespace QuartersSDK.Data
                 Scope.wallet
             };
         }
+
         public AppParams(Dictionary<string, string> settings)
         {
             APP_ID = settings["APP_ID"];

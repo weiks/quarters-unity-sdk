@@ -8,7 +8,6 @@ using QuartersSDK.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using System.Web;
 
 namespace QuartersSDK.Services
@@ -19,7 +18,7 @@ namespace QuartersSDK.Services
         public Session _session;
         public AppParams _app;
         public APIParams _api;
-        public IAPIClient _apiClient; 
+        public IAPIClient _apiClient;
         public ILogger<Quarters> _logger;
         private IConfiguration _configuration;
         public string CodeChallenge { get; set; }
@@ -29,7 +28,7 @@ namespace QuartersSDK.Services
         {
             _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            
+
             LoadConfiguration();
             _session = new Session();
             _session.RefreshToken = refreshToken;
@@ -41,7 +40,7 @@ namespace QuartersSDK.Services
         {
             _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            
+
             LoadConfiguration();
             _pcke = new PCKE();
             _session = new Session();
@@ -50,12 +49,12 @@ namespace QuartersSDK.Services
             CodeVerifier = _pcke.CodeVerifier;
         }
 
-        public Quarters(IAPIClient apiClient, ILogger<Quarters> logger, string refreshToken, Dictionary<string,string> appSettings, Dictionary<string, string>  apiSettings)
+        public Quarters(IAPIClient apiClient, ILogger<Quarters> logger, string refreshToken, Dictionary<string, string> appSettings, Dictionary<string, string> apiSettings)
         {
             _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            if (appSettings.Count == 0 || appSettings == null )throw new ArgumentNullException(nameof(appSettings));
-            if (apiSettings.Count == 0 || apiSettings == null )throw new ArgumentNullException(nameof(apiSettings));
+            if (appSettings.Count == 0 || appSettings == null) throw new ArgumentNullException(nameof(appSettings));
+            if (apiSettings.Count == 0 || apiSettings == null) throw new ArgumentNullException(nameof(apiSettings));
 
             _pcke = new PCKE();
             _session = new Session();
@@ -85,7 +84,7 @@ namespace QuartersSDK.Services
                 throw error;
             }
         }
-        
+
         private string GetStrResponse(string url, string token)
         {
             try
@@ -142,6 +141,7 @@ namespace QuartersSDK.Services
         }
 
         #region UNITY Methods
+
         public ResponseData GetAccessToken()
         {
             try
@@ -305,7 +305,6 @@ namespace QuartersSDK.Services
             }
         }
 
-        #endregion
-
+        #endregion UNITY Methods
     }
 }

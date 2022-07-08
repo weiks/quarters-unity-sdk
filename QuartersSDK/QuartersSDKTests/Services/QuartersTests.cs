@@ -5,10 +5,7 @@ using Moq;
 using NUnit.Framework;
 using QuartersSDK.Data;
 using QuartersSDK.Interfaces;
-using QuartersSDK.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace QuartersSDK.Services.Tests
 {
@@ -20,7 +17,7 @@ namespace QuartersSDK.Services.Tests
         private ILogger<Quarters> logger;
 
         //Mocks
-        Mock<IQuarters> mockQuarters;
+        private Mock<IQuarters> mockQuarters;
 
         [SetUp]
         public void Setup()
@@ -48,7 +45,7 @@ namespace QuartersSDK.Services.Tests
             mockQuarters = new Mock<IQuarters>();
             mockQuarters.Setup(mk => mk.GetRefreshToken("mockCode")).Returns(fakeSuccessResponseAuthorized);
             mockQuarters.Setup(mk => mk.GetAccessToken()).Returns(fakeSuccessResponseAuthorized);
-            mockQuarters.Setup(mk => mk.GetBuyQuartersUrl()).Returns("https://mocked.url"); 
+            mockQuarters.Setup(mk => mk.GetBuyQuartersUrl()).Returns("https://mocked.url");
             mockQuarters.Setup(mk => mk.GetAuthorizeUrl()).Returns("https://mocked.url");
             mockQuarters.Setup(mk => mk.GetAccountBalanceCall()).Returns(200);
             mockQuarters.Setup(mk => mk.GetUserDetailsCall()).Returns(fakeUser);
@@ -61,7 +58,7 @@ namespace QuartersSDK.Services.Tests
         public void HasQuartersAPIParams()
         {
             PCKE pCKE = new PCKE();
-            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier,"");
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             Assert.IsTrue(!String.IsNullOrEmpty(q._api.BuyURL));
         }
 
@@ -79,22 +76,25 @@ namespace QuartersSDK.Services.Tests
             Assert.IsTrue(res.ErrorResponse.ErrorDescription.Equals("Invalid `code`"));
         }
 
-
         [Test]
         [Category("Success on refresh token")]
         public void IsRefreshTokenRequestedSuccess()
         {
             #region real request to endpoint
+
             //Quarters q = new Quarters(client, logger);
             //string url = q.GetAuthorizeURL();
             ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
             //var res = q.GetRefreshToken("yz4xbO8pT49lBsarMoCKuRh70jhOCsvu");
-            #endregion
-            
+
+            #endregion real request to endpoint
+
             #region using mock request/response
-            string url = mockQuarters.Object.GetAuthorizeUrl(); 
+
+            string url = mockQuarters.Object.GetAuthorizeUrl();
             var res = mockQuarters.Object.GetRefreshToken("mockCode");
-            #endregion
+
+            #endregion using mock request/response
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
@@ -105,20 +105,24 @@ namespace QuartersSDK.Services.Tests
         public void IsAccessTokenRequestedSuccess()
         {
             #region real request to endpoint
+
             //Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             //string url = q.GetAuthorizeUrl();
             ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
             //q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
 
             //var res = q.GetAccessToken();
-            #endregion
+
+            #endregion real request to endpoint
 
             #region using mock request/response
+
             string url = mockQuarters.Object.GetAuthorizeUrl();
             mockQuarters.Object.GetRefreshToken("mockCode");
 
             var res = mockQuarters.Object.GetAccessToken();
-            #endregion
+
+            #endregion using mock request/response
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
@@ -139,13 +143,15 @@ namespace QuartersSDK.Services.Tests
         public void IsGetUserBalanceCallSuccess()
         {
             #region real request to endpoint
+
             //Quarters q = new Quarters(client, logger);
             //string url = q.GetAuthorizeUrl();
             ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
             //var res = q.GetRefreshToken("J91UOYaoWCPmgcZzQB2IsIm8yxr4Tjw6");
 
             //var balance = q.GetAccountBalanceCall();
-            #endregion
+
+            #endregion real request to endpoint
 
             var res = mockQuarters.Object.GetRefreshToken("mockCode");
 
@@ -158,26 +164,27 @@ namespace QuartersSDK.Services.Tests
             Assert.Positive(balance);
         }
 
-
         [Test()]
         [Category("Success on get user details request")]
         public void IsGetUserDetailsCallSuccess()
         {
             #region real request to endpoint
+
             //Quarters q = new Quarters(client, logger);
             //string url = q.GetAuthorizeUrl();
             ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
             //var res = q.GetRefreshToken("yCkaNGenHQaTIFT2odQdjjGUujeCVrPU");
 
             //var user = q.GetUserDetailsCall();
-            #endregion
+
+            #endregion real request to endpoint
 
             var res = mockQuarters.Object.GetRefreshToken("mockCode");
             var user = mockQuarters.Object.GetUserDetailsCall();
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
-            
+
             Assert.IsFalse(string.IsNullOrEmpty(user.Id));
             Assert.IsFalse(string.IsNullOrEmpty(user.Email));
         }
@@ -187,12 +194,14 @@ namespace QuartersSDK.Services.Tests
         public void IsReceiveTransactionTest()
         {
             #region real request to endpoint
+
             //Quarters q = new Quarters(client, logger);
             //string url = q.GetAuthorizeUrl();
             ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
             //var res = q.GetRefreshToken("vt_bkocQupQD76pmGNcddvuq6xgQ3rpU");
             //var idTransaction = q.MakeTransaction(10,"SDK Test receive").IdTransaction;
-            #endregion
+
+            #endregion real request to endpoint
 
             string url = mockQuarters.Object.GetAuthorizeUrl();
             var res = mockQuarters.Object.GetRefreshToken("mockCode");
@@ -208,12 +217,14 @@ namespace QuartersSDK.Services.Tests
         public void IsSendTransactionTest()
         {
             #region real request to endpoint
+
             //Quarters q = new Quarters(client, logger);
             //string url = q.GetAuthorizeUrl();
             ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
             //var res = q.GetRefreshToken("WD1rxegR7Rot2AvJKFrYKAyrh_7vEpSY");
             //var idTransaction = mockQuarters.Object.MakeTransaction(-10, "SDK mock Test send").IdTransaction;
-            #endregion
+
+            #endregion real request to endpoint
 
             string url = mockQuarters.Object.GetAuthorizeUrl();
             var res = mockQuarters.Object.GetRefreshToken("mockCode");
@@ -229,13 +240,15 @@ namespace QuartersSDK.Services.Tests
         public void IsSendTooMuchTransactionTest()
         {
             #region real request to endpoint
+
             //Quarters q = new Quarters(client, logger);
             //string url = q.GetAuthorizeUrl();
             ////IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
             //var res = q.GetRefreshToken("z50gSPzNmUk1GLFDI8-v2gcDOkvIPtkV");
 
             //var transactionResponse = q.MakeTransaction(-10000, "SDK Test send too much");
-            #endregion
+
+            #endregion real request to endpoint
 
             string url = mockQuarters.Object.GetAuthorizeUrl();
             var res = mockQuarters.Object.GetRefreshToken("mockCode");

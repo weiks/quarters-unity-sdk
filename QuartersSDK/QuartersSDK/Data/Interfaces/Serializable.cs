@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QuartersSDK.Data.Interfaces
+﻿namespace QuartersSDK.Data.Interfaces
 {
     public abstract class Serializable : ISerializable
     {

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using NetTopologySuite.Utilities;
 using Newtonsoft.Json;
 using QuartersSDK.Data;
-using QuartersSDK.Data.Enums;
 using QuartersSDK.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -47,6 +45,7 @@ namespace QuartersSDK.Services
                 throw ex;
             }
         }
+
         private ResponseData DoPost(HttpContent payload, string subPath, string token)
         {
             var rdo = new ResponseData();
@@ -59,7 +58,7 @@ namespace QuartersSDK.Services
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(payload.Headers.ContentType.MediaType));
 
                     // make request
-                    if(!string.IsNullOrEmpty(token))
+                    if (!string.IsNullOrEmpty(token))
                         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     var request = httpClient.PostAsync(subPath, payload);
                     request.Wait();
@@ -69,7 +68,7 @@ namespace QuartersSDK.Services
                     if (!request.Result.IsSuccessStatusCode)
                     {
                         rdo.SetError(new Error(response.Result), request.Result.StatusCode);
-                        return rdo; 
+                        return rdo;
                     }
                     rdo.SetData(response.Result, request.Result.StatusCode);
                 }
@@ -96,13 +95,14 @@ namespace QuartersSDK.Services
                 throw new Error(ex.Message, ex.InnerException.ToString());
             }
         }
-        public ResponseData RequestPost(string url, string token, Dictionary<string,object> dic)
+
+        public ResponseData RequestPost(string url, string token, Dictionary<string, object> dic)
         {
             try
             {
                 _logger.LogInformation("RequestPost : ");
                 var jsonString = JsonConvert.SerializeObject(dic);
-                var data = new StringContent(jsonString, Encoding.UTF8,"application/json");
+                var data = new StringContent(jsonString, Encoding.UTF8, "application/json");
                 return DoPost(data, url, token);
             }
             catch (Exception ex)
@@ -111,6 +111,7 @@ namespace QuartersSDK.Services
                 throw new Error(ex.Message, ex.InnerException.ToString());
             }
         }
+
         public ResponseData RequestPostMultipartForm(string url, RequestData request)
         {
             var rdo = new ResponseData();
@@ -143,7 +144,7 @@ namespace QuartersSDK.Services
 
                 var httpRequest = (HttpWebRequest)WebRequest.Create(url);
                 _logger.LogInformation($"RequestGet : | timeout: {httpRequest.Timeout}");
-                
+
                 httpRequest.Accept = "application/json";
                 httpRequest.Headers["Authorization"] = $"Bearer {requestToken}";
 

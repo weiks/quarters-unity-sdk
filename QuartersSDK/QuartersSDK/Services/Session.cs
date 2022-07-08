@@ -1,16 +1,15 @@
-﻿using QuartersSDK.Data;
+﻿using Newtonsoft.Json;
+using QuartersSDK.Data;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace QuartersSDK.Services
 {
     public class Session
     {
         public string RefreshToken { get; set; }
-        public string AccessToken {get; set;}
+        public string AccessToken { get; set; }
         public List<Scope> Scopes = new List<Scope>();
 
         public void DoRefresh(string response)
@@ -29,11 +28,11 @@ namespace QuartersSDK.Services
         }
 
         public bool DoesHaveRefreshToken
-        { 
-            get 
-            { 
-                return !string.IsNullOrEmpty(RefreshToken); 
-            } 
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(RefreshToken);
+            }
         }
 
         public bool DoesHaveAccessToken
@@ -69,4 +68,3 @@ namespace QuartersSDK.Services
         }
     }
 }
-
