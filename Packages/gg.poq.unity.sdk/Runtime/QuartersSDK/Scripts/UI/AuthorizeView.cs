@@ -1,11 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using QuartersSDK.UI;
-using QuartersSDK;
-
 
 namespace QuartersSDK.UI {
     public class AuthorizeView : UIView {
@@ -18,23 +13,52 @@ namespace QuartersSDK.UI {
 
 
         private void Start() {
-            QuartersInit.Instance.Init(OnInitComplete, OnInitError);
+            try
+            {
+                QuartersInit.Instance.Init(OnInitComplete, OnInitError);
+            }
+            catch (Exception ex)
+            { 
+                ModalView.instance.ShowAlert("Error", $"{ex.Message} \n {ex.StackTrace} ", new string[] { "OK" }, null);
+            }
         }
 
 
         public void ButtonSignInClicked() {
-            Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
+            try 
+            { 
+                QuartersController.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
+            }
+            catch (Exception ex)
+            {
+                ModalView.instance.ShowAlert("Error", $"{ex.Message} \n {ex.StackTrace} ", new string[] { "OK" }, null);
+            }
         }
 
 
         private void OnInitComplete() {
-            if (AutomaticSignIn || Quarters.Instance.IsAuthorized) {
-                Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
+            try
+            {
+                if (AutomaticSignIn || QuartersController.Instance.IsAuthorized())
+                {
+                    QuartersController.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
+                }
+            }
+            catch (Exception ex)
+            {
+                ModalView.instance.ShowAlert("Error", $"{ex.Message} \n {ex.InnerException}", new string[] { "OK" }, null);
             }
         }
 
         private void OnSignInComplete() {
-            SegueToMainMenu.Perform();
+            try
+            {
+                SegueToMainMenu.Perform();
+            }
+            catch (Exception ex)
+            { 
+                ModalView.instance.ShowAlert("Error", $"{ex.Message} \n {ex.InnerException}", new string[] { "OK" }, null);
+            }
         }
 
 
@@ -44,6 +68,7 @@ namespace QuartersSDK.UI {
 
 
         private void OnSignInError(string signInError) {
+            ModalView.instance.ShowAlert("Error", $"{signInError} ", new string[] { "OK" }, null);
             Debug.Log(signInError);
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuartersSDK.UI;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,41 +60,37 @@ namespace QuartersSDK {
 
         public void Init(Action OnInitComplete, Action<string> OnInitError) {
             Log("Quarters Init:");
-
-            string error = "";
-
-            if (string.IsNullOrEmpty(APP_ID)) LogError("Quarters App Id is empty");
-            if (string.IsNullOrEmpty(APP_KEY)) LogError("Quarters App key is empty");
-
-
-            GameObject quarters = new GameObject("Quarters");
-            quarters.transform.SetParent(transform);
-            DontDestroyOnLoad(quarters.gameObject);
-
-            Quarters quartersComponent = quarters.AddComponent<Quarters>();
-            quartersComponent.Init();
-
-            GameObject quartersWebView = new GameObject("QuartersWebView");
-            quarters.transform.SetParent(transform);
-            QuartersWebView webViewComponent = quarters.AddComponent<QuartersWebView>();
-            quartersComponent.QuartersWebView = webViewComponent;
-            webViewComponent.Init();
-            DontDestroyOnLoad(quartersWebView.gameObject);
+            try
+            {
+                if (string.IsNullOrEmpty(APP_ID)) LogError("Quarters App Id is empty");
+                if (string.IsNullOrEmpty(APP_KEY)) LogError("Quarters App key is empty");
 
 
-            Log("QuartersInit complete");
-            QuartersInit.OnInitComplete?.Invoke();
-            OnInitComplete?.Invoke();
+                GameObject quarters = new GameObject("Quarters");
+                quarters.transform.SetParent(transform);
+                DontDestroyOnLoad(quarters.gameObject);
 
-            try {
+                QuartersController quartersComponent = quarters.AddComponent<QuartersController>();
+                quartersComponent.Init();
+
+                GameObject quartersWebView = new GameObject("QuartersWebView");
+                quarters.transform.SetParent(transform);
+                QuartersWebView webViewComponent = quarters.AddComponent<QuartersWebView>();
+                quartersComponent.QuartersWebView = webViewComponent;
+                webViewComponent.Init();
+                DontDestroyOnLoad(quartersWebView.gameObject);
+
+
+                Log("QuartersInit complete");
+                QuartersInit.OnInitComplete?.Invoke();
+                OnInitComplete?.Invoke();
+
                 VspAttribution.VspAttribution.SendAttributionEvent("SDKInit", Constants.VSP_POQ_COMPANY_NAME, APP_ID);
             }
-            catch (Exception e) {
-   
+            catch (Exception ex) {
+               ModalView.instance.ShowAlert("QuartersInit|Init|Error", $"{ex.Message} \n {ex.StackTrace} ", new string[] { "OK" }, null);
+               // throw ex;
             }
-            
-            
-            
         }
 
         private void Log(string message) {

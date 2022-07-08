@@ -2,11 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using QuartersSDK;
-using UnityEngine.EventSystems;
-using QuartersSDK.UI;
 
-namespace QuartersSDK {
+namespace QuartersSDK.UI {
     public class ModalView : UIView {
         public static ModalView instance;
 
@@ -138,7 +135,7 @@ namespace QuartersSDK {
             string buttonText = button.GetComponentInChildren<Text>().text;
 
             if(buttonText.Equals(Constants.BUY_QUARTERS_BUTTON))
-                Quarters.Instance.BuyQuarters();
+                QuartersController.Instance.BuyQuarters();
 
             Hide(delegate() {
                 if (alertButtonDelegate != null) alertButtonDelegate(buttonText);
@@ -147,7 +144,7 @@ namespace QuartersSDK {
 
 
         public void ShowActivity() {
-            activityIcon.sprite = Quarters.Instance.CurrencyConfig.CurrencyIcon;
+            activityIcon.sprite = QuartersController.Instance.CurrencyConfig.CurrencyIcon;
 
             ViewWillAppear();
             SetVisible(true);

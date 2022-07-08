@@ -14,7 +14,8 @@ namespace QuartersSDK {
         public string DisplayNameSingular;
         public string DisplayNamePlural;
 
-        [Header("Branding")] public Sprite CurrencyIcon;
+        [Header("Branding")] 
+        public Sprite CurrencyIcon;
         
 
     }
