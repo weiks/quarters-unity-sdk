@@ -89,9 +89,8 @@ namespace QuartersSDK.Services
         {
             try
             {
-                _logger.LogInformation($"GetStrResponse| url: {url} | token: {token}");
+                _logger.LogInformation($"GetStrResponse| url: {url} ");
                 var strResponse = _apiClient.RequestGet(url, token);
-                _logger.LogInformation($"GetStrResponse| response: {strResponse}");
 
                 if (string.IsNullOrEmpty(strResponse))
                     _logger.LogError("Quarters|GetStrResponse| strResponse: is null or empty ");
