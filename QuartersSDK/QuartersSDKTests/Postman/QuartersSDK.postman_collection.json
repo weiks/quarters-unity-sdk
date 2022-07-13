@@ -1,0 +1,194 @@
+{
+	"info": {
+		"_postman_id": "c86d7b1e-942a-451c-92ee-9533b5813fa5",
+		"name": "QuartersSDK",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "670688"
+	},
+	"item": [
+		{
+			"name": "GetRefreshToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "code_verifier",
+							"value": "SZZxUEapRFUbraaAG52HJJKyP7Lnam22cvI_WHkUjRrCORoIs9Ftnoi-BcgWlmICkVJX_9XsrTaThR2xXyDPtUKqMwqlZ2wfQcVaoOKZ2aKrk5qd-jW",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "3yh0HFnykT9cL1iwDHhA",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "27UXpxRJqCxiYM4kaLOC93PXqIzvUneD",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://exampleapp.games.poq.gg",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://www.poq.gg/api/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"www",
+						"poq",
+						"gg"
+					],
+					"path": [
+						"api",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAccessToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "code_verifier",
+							"value": "ujOb_vry3DmToFlAHP2l_yM2gqBHU4MV20PkNEbzNII5WOGa4gPs0UI63cNNm8zGc8fSaomHLNjinBcn_A8d-tii6TS94B0bEqEG5fYRnKnQL",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "3yh0HFnykT9cL1iwDHhA",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "81fp2j3qru26kshhumftfj7z0iknweffu",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "r4ngnEtAuApppHLNUcynPN0rlq_3MRjdDFQVtU1M",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://exampleapp.games.poq.gg",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://www.poq.gg/api/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"www",
+						"poq",
+						"gg"
+					],
+					"path": [
+						"api",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAccountBalance",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "u_IK3YYS95r9jo5TCME9h2h2NI3wypR2A69U3-Q9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.poq.gg/api/v1/wallets/@me",
+					"protocol": "https",
+					"host": [
+						"www",
+						"poq",
+						"gg"
+					],
+					"path": [
+						"api",
+						"v1",
+						"wallets",
+						"@me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MakeTransactions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "BHgUMCPZaIW3nbGOI4lDdNS96EZXHNEK6JsWLkiu",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"creditUser\": 10,\r\n    \"description\": \"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://www.poq.gg/api/v1/transactions",
+					"protocol": "https",
+					"host": [
+						"www",
+						"poq",
+						"gg"
+					],
+					"path": [
+						"api",
+						"v1",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
