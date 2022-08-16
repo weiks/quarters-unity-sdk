@@ -137,8 +137,8 @@ When you try to Pay or receive Quarters you get *Missing refresh token* to fix i
 1. Sign Out.
 2. Sign In again with the same account.
 
-### Pay throws *Your app must ve verified to transfer Quarters from users*
-When you try to Pay or receive Quarters you get *Your app must ve verified to transfer Quarters from users* to fix it:
+### Pay throws *Your app must be verified to transfer Quarters from users*
+When you try to Pay or receive Quarters you get *Your app must be verified to transfer Quarters from users* to fix it:
 1. Verify your app [contacting us](#before-you-start).
 
 ### Pressing `Authorize` in Android mobile doesn't redirect to the app.
