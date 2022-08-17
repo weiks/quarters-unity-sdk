@@ -148,3 +148,12 @@ Some mobile internet browsers (like Samsung default internet explorer) don't red
 2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) and finally `Default Apps`
 3. There on the option `Browser App` you will be able to change your default mobile browser
 ![image](https://user-images.githubusercontent.com/3865131/173102296-e0a56135-b621-491f-9326-4aafdcbdd983.png)
+
+### Making a transaction (pay or receive) shows `Transaction error: Debit and credit address cannot be the same.` 
+When you create an app with your developer account supposse `X@domain.com` you login to the integration app using that developer account if you try to make a transaction (as long as it's pay or receive) you will get this message error:
+![image](https://user-images.githubusercontent.com/3865131/185242146-fecfca01-ffcb-43bb-80e3-8353d867a90b.png)
+
+To fix it: 
+1. Log out from the integration app.
+2. Login to the integration app with a different account than the one you used to create the app (`X@domain.com`).  
+
