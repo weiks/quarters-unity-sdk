@@ -1,4 +1,9 @@
-# API Documentation
+# SDK calls to API Documentation
+
+Documentation with the calls and examples that you can use from the SDK to perform the integration.
+
+The PoQ SDK uses the [PoQ API, click here to find its documentation](https://github.com/weiks/poq-docs/blob/main/docs/oauth-api.md#post-apiv1transaction)  
+
 ## Quarters Initialization
 Before making any of the Quarters SDK calls you must call the following:
  ```
@@ -119,7 +124,7 @@ To sign out current Quarters users call
 ```
 Quarters.Instance.Deauthorize();
 ```
-=======
+
 #### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. Additional steps must be taken to authorize a player in the Unity Editor
 
 
