@@ -150,6 +150,39 @@
 			"response": []
 		},
 		{
+			"name": "GetUserDetails",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "u_IK3YYS95r9jo5TCME9h2h2NI3wypR2A69U3-Q9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.poq.gg/api/v1/users/me",
+					"protocol": "https",
+					"host": [
+						"www",
+						"poq",
+						"gg"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "MakeTransactions",
 			"request": {
 				"auth": {
