@@ -98,7 +98,7 @@ In order to make all the operations/transactions with Quarters you will be able 
 ### Sign in with Quarters
 Once Quarters Init is completed successfully you need to sign in your user
 
-In [fully documented SDK calls to API documentation you will find the method to call and an example](/README-Api.md#sign-in-with-quarters).
+In [fully documented SDK calls documentation you will find the method to use and an example](/README-Api.md#sign-in-with-quarters).
 #### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. After successful authorisation please copy and paste the browser url to unity game view and press Authorize.
 ![Capture](https://user-images.githubusercontent.com/41578378/172198600-980454b9-e260-4719-8ad8-621809a2ad14.PNG)
 
