@@ -92,13 +92,13 @@ Unity 2019.4+
 - Android: API 29 and above
 - Unity Editor: due to limitations of Unity Editor on Windows external browser is used to authorize user you can check [sign in doc](#please-note-that-due-to-limitations-of-unity-editor-on-windows-external-browser-is-used-to-authorize-user-after-successful-authorisation-please-copy-and-paste-the-browser-url-to-unity-game-view-and-press-authorize) for details. 
 
-## API Reference
-In order to make all the operations/transactions with Quarters you will be able to consume an API that is [fully documented with methods and examples in this README-Api file](/README-Api.md). Here we will list a quick review of the API operations: 
+## SDK calls to API Reference
+In order to make all the operations/transactions with Quarters you will be able to interact with the SDK calls that consumes an API. To see that calls [fully documented with methods and examples in this README-Api file](/README-Api.md). Here we will list a quick review of the API operations: 
 
 ### Sign in with Quarters
 Once Quarters Init is completed successfully you need to sign in your user
 
-In [API documentation you will find the method to call and an example](/README-Api.md#sign-in-with-quarters).
+In [fully documented SDK calls to API documentation you will find the method to call and an example](/README-Api.md#sign-in-with-quarters).
 #### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. After successful authorisation please copy and paste the browser url to unity game view and press Authorize.
 ![Capture](https://user-images.githubusercontent.com/41578378/172198600-980454b9-e260-4719-8ad8-621809a2ad14.PNG)
 
@@ -107,19 +107,19 @@ In [API documentation you will find the method to call and an example](/README-A
 You can charge user Quarters as well as reward your user with quarters using unified Transaction API call.
 **A negative price takes Quarters from the user's account. Positive price value reward user account with Quarters**
 
-Please go to the [API documentation](/README-Api.md#making-transactions) for method description and a code example.
+Please go to the [SDK calls to API documentation](/README-Api.md#making-transactions) for method description and a code example.
 
 ### Buying Quarters
 User can also purchase Quarters by using the credit card or other methods.
 
 **Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
 
-Please go to the [API documentation](/README-Api.md#buying-quarters) for method description and a code example.
+Please go to the [SDK calls to API documentation](/README-Api.md#buying-quarters) for method description and a code example.
 
 ### Sign Out
 To sign out current Quarters users call
 
-Please go to the [API documentation](/README-Api.md#sign-out) for method description and a code example.
+Please go to the [SDK calls to API documentation](/README-Api.md#sign-out) for method description and a code example.
 
 ## Troubleshooting
 
