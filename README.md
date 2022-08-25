@@ -72,8 +72,8 @@ Running this command should yield something similar to the following image:
 Quarters Unity SDK contains a basic sample app presenting major SDK functionality like
 - Sign In with Quarters
 - Sign Out
-- Spend (*Pay Quarters* menu option): need to register your app manually contacting us on any channel as described in [Before Start section](#before-you-start). For this transaction you won't be able to use the same account that you used as a developer to register the your app. 
-- Receive (*Receive Quarters* menu option) Quarters. For this transaction you won't be able to use the same account that you used as a developer to register the your app.
+- Spend (*Pay Quarters* menu option): need to register your app manually contacting us on any channel as described in [Before Start section](#before-you-start). For this transaction you won't be able to use the same account that you used as a developer to register your app. 
+- Receive (*Receive Quarters* menu option) Quarters. For this transaction you won't be able to use the same account that you used as a developer to register your app.
 - Buying (*Buy Quarters* menu option) Quarters through the website portal
 
 To import the sample scene select Sample Import from Unity Package Manager
