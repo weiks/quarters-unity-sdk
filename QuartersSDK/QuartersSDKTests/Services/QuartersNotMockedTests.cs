@@ -10,7 +10,7 @@ using System;
 namespace QuartersSDK.Services.Tests
 {
     [TestFixture()]
-    public class QuartersTests
+    public class QuartersNotMockedTests
     {
         private PCKE pcke;
         private APIClient client;
@@ -80,8 +80,10 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on refresh token")]
         public void IsRefreshTokenRequestedSuccess()
         {
-            string url = mockQuarters.Object.GetAuthorizeUrl();
-            var res = mockQuarters.Object.GetRefreshToken("mockCode");
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            string url = q.GetAuthorizeUrl();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("yz4xbO8pT49lBsarMoCKuRh70jhOCsvu");
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
@@ -91,10 +93,12 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on access token request")]
         public void IsAccessTokenRequestedSuccess()
         {
-            string url = mockQuarters.Object.GetAuthorizeUrl();
-            mockQuarters.Object.GetRefreshToken("mockCode");
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            string url = q.GetAuthorizeUrl();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
 
-            var res = mockQuarters.Object.GetAccessToken();
+            var res = q.GetAccessToken();
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
@@ -114,9 +118,12 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on get account balance request")]
         public void IsGetUserBalanceCallSuccess()
         {
-            var res = mockQuarters.Object.GetRefreshToken("mockCode");
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            string url = q.GetAuthorizeUrl();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("J91UOYaoWCPmgcZzQB2IsIm8yxr4Tjw6");
 
-            var balance = mockQuarters.Object.GetAccountBalanceCall();
+            var balance = q.GetAccountBalanceCall();
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
@@ -129,12 +136,16 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on get user details request")]
         public void IsGetUserDetailsCallSuccess()
         {
-            var res = mockQuarters.Object.GetRefreshToken("mockCode");
-            var user = mockQuarters.Object.GetUserDetailsCall();
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            string url = q.GetAuthorizeUrl();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("yCkaNGenHQaTIFT2odQdjjGUujeCVrPU");
+
+            var user = q.GetUserDetailsCall();
+
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
-
             Assert.IsFalse(string.IsNullOrEmpty(user.Id));
             Assert.IsFalse(string.IsNullOrEmpty(user.Email));
         }
@@ -143,9 +154,12 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on receive quarters transaction (possitive ammount) request")]
         public void IsReceiveTransactionTest()
         {
-            string url = mockQuarters.Object.GetAuthorizeUrl();
-            var res = mockQuarters.Object.GetRefreshToken("mockCode");
-            var idTransaction = mockQuarters.Object.MakeTransaction(10, "SDK mock Test receive").IdTransaction;
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            string url = q.GetAuthorizeUrl();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("vt_bkocQupQD76pmGNcddvuq6xgQ3rpU");
+            var idTransaction = q.MakeTransaction(10, "SDK Test receive").IdTransaction;
+
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
@@ -156,9 +170,11 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on send quarters transaction (negative ammount) request")]
         public void IsSendTransactionTest()
         {
-            string url = mockQuarters.Object.GetAuthorizeUrl();
-            var res = mockQuarters.Object.GetRefreshToken("mockCode");
-            var idTransaction = mockQuarters.Object.MakeTransaction(-10, "SDK mock Test send").IdTransaction;
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            string url = q.GetAuthorizeUrl();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("WD1rxegR7Rot2AvJKFrYKAyrh_7vEpSY");
+            var idTransaction = q.MakeTransaction(-10, "SDK mock Test send").IdTransaction;
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
@@ -169,9 +185,14 @@ namespace QuartersSDK.Services.Tests
         [Category("Success on send too much quarters transaction (negative ammount) request")]
         public void IsSendTooMuchTransactionTest()
         {
-            string url = mockQuarters.Object.GetAuthorizeUrl();
-            var res = mockQuarters.Object.GetRefreshToken("mockCode");
-            var transactionResponse = mockQuarters.Object.MakeTransaction(-10000, "SDK mock Test send too much");
+
+            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+
+            string url = q.GetAuthorizeUrl();
+            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+            var res = q.GetRefreshToken("z50gSPzNmUk1GLFDI8-v2gcDOkvIPtkV");
+
+            var transactionResponse = q.MakeTransaction(-10000, "SDK Test send too much");
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(transactionResponse.ErrorResponse.StatusCode == System.Net.HttpStatusCode.BadRequest);
@@ -181,28 +202,5 @@ namespace QuartersSDK.Services.Tests
             Assert.IsFalse(transactionResponse.IsSuccesful);
         }
 
-        [Test()]
-        [Category("Get Buy Quarters URL")]
-        public void IsGetBuyQuartersUrlTest()
-        {
-            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
-            string buyUrl = q.GetBuyQuartersUrl();
-
-            Assert.IsFalse(string.IsNullOrEmpty(buyUrl));
-        }
-
-        [Test()]
-        [Category("Sign out and delete session")]
-        public void IsSignedOut()
-        {
-            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
-            string url = q.GetAuthorizeUrl();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("6hJHrZxFkZIGtOnHiRhqYkVTzK8t-qbH");
-
-            q.SignOut();
-
-            Assert.IsTrue(string.IsNullOrEmpty(q._session.AccessToken) && string.IsNullOrEmpty(q._session.RefreshToken));
-        }
     }
 }
