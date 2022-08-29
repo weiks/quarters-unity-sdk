@@ -4,8 +4,8 @@
 In order to have a full integration with QuartersSDK you must follow this steps: 
 - Register your APP following [the steps in poq-docs](https://github.com/weiks/poq-docs/blob/main/docs/unity-sdk-integeration.md).
 - It's mandatory to verify your app before your app can take Quarters from users. Please follow these steps: 
-1. Join our [`PoQ Game Devs` discord server](https://discord.gg/yQxYgRx3n8) 
-2. Send us a message to our public channel [💡┋api-and-integration](https://discord.com/channels/908772014859378708/910205059403509803) where we are going to handle your request. 
+   1. Join our [`PoQ Game Devs` discord server](https://discord.gg/yQxYgRx3n8) 
+   2. Send us a message to our public channel [💡┋api-and-integration](https://discord.com/channels/908772014859378708/910205059403509803) where we are going to handle your request. 
 
 Also if you want you can join [`Pocketful Of Quarters` main discord server](https://discord.com/invite/poq) to be updated with the latest news and meet the rest of the community.
 
@@ -16,8 +16,8 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
 
 ![Screenshot 2022-05-31 at 9 07 02 am](https://user-images.githubusercontent.com/41578378/171151345-c5cc06a3-4b30-48aa-b2ea-ae2542c810fe.png)
 
-1. Enter the URL from [poq-unity-package-manager](https://github.com/weiks/poq-unity-package-manager.git) project repository and press **Add** button. Unity Package Manager will pull Quarters Unity SDK and all of its dependencies to the project.
-2. Add the following prefab to your first loaded scene `Packages/Quarters Unity SDK/Runtime/QuartersSDK/Prefabs/QuartersInit`
+3. Enter the URL from [poq-unity-package-manager](https://github.com/weiks/poq-unity-package-manager.git) project repository and press **Add** button. Unity Package Manager will pull Quarters Unity SDK and all of its dependencies to the project.
+4. Add the following prefab to your first loaded scene `Packages/Quarters Unity SDK/Runtime/QuartersSDK/Prefabs/QuartersInit`
 
 ![Screenshot 2022-05-31 at 9 39 47 am](https://user-images.githubusercontent.com/41578378/171151505-6682fe08-0d13-4feb-8428-3f8b6adbc7d8.png)
 
@@ -47,7 +47,7 @@ For the best user experience, Quarters Unity SDK utilises domain association to 
 account](https://developer.apple.com/account/#!/membership/)
 5. Enter your app bundle id. Example com.mycompany.mygame
 6. Press Submit
-7. Copy your PoQ app's unique identifier to the Quarters Init component APP_UNIQUE_IDENTIFIER field in Unity and press Save
+7. Copy your PoQ app's unique identifier to the Quarters Init component `APP_UNIQUE_IDENTIFIER` field in Unity and press Save
 
 #### Android
 1. Open [your PoQ APPS](https://www.poq.gg/apps)
@@ -72,17 +72,14 @@ Running this command should yield something similar to the following image:
 Quarters Unity SDK contains a basic sample app presenting major SDK functionality like
 - Sign In with Quarters
 - Sign Out
-- Spend (*Pay Quarters* menu option): need to register your app manually contacting us on any channel as described in [Before Start section](#before-you-start) 
-- Receive (*Receive Quarters* menu option) Quarters
+- Spend (*Pay Quarters* menu option): need to register your app manually contacting us on any channel as described in [Before Start section](#before-you-start). For this transaction you won't be able to use the same account that you used as a developer to register your app. 
+- Receive (*Receive Quarters* menu option) Quarters. For this transaction you won't be able to use the same account that you used as a developer to register your app.
 - Buying (*Buy Quarters* menu option) Quarters through the website portal
 
 To import the sample scene select Sample Import from Unity Package Manager
 
 
 https://user-images.githubusercontent.com/41578378/171196202-3669bee8-29bb-4047-a914-326e6ec9d5dd.mov
-
-
-
 
 ## Unity supported versions
 Unity 2019.4+
