@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gg.poq.unity.sdk.Runtime", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniWebView-CSharp", "UniWebView-CSharp.csproj", "{B8140847-478E-7CF2-14E9-7CB323E96A9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asset-store-tools-editor", "asset-store-tools-editor.csproj", "{0BA63C8C-5253-4F65-4B26-5EF2D1DEC08D}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gg.poq.unity.sdk.Editor", "gg.poq.unity.sdk.Editor.csproj", "{78FE1B70-1C36-49F8-B1D7-10D7EF80543C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniWebView-CSharp.Editor", "UniWebView-CSharp.Editor.csproj", "{4A1D006A-62F1-0B55-57FB-DF26BF2EB687}"
@@ -23,6 +25,10 @@ Global
 		{B8140847-478E-7CF2-14E9-7CB323E96A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8140847-478E-7CF2-14E9-7CB323E96A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8140847-478E-7CF2-14E9-7CB323E96A9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA63C8C-5253-4F65-4B26-5EF2D1DEC08D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA63C8C-5253-4F65-4B26-5EF2D1DEC08D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA63C8C-5253-4F65-4B26-5EF2D1DEC08D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA63C8C-5253-4F65-4B26-5EF2D1DEC08D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{78FE1B70-1C36-49F8-B1D7-10D7EF80543C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{78FE1B70-1C36-49F8-B1D7-10D7EF80543C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78FE1B70-1C36-49F8-B1D7-10D7EF80543C}.Release|Any CPU.ActiveCfg = Release|Any CPU
