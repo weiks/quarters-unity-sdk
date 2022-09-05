@@ -1,5 +1,26 @@
 # Quarters Unity SDK
 
+  - [Before you start](#before-you-start)
+  - [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [Setup](#setup)
+      - [iOS](#ios)
+      - [Android](#android)
+  - [Sample app](#sample-app)
+  - [Unity supported versions](#unity-supported-versions)
+  - [SDK supported platforms](#sdk-supported-platforms)
+  - [SDK calls to API Reference](#sdk-calls-to-api-reference)
+    - [Sign in with Quarters](#sign-in-with-quarters)
+    - [Making Transactions](#making-transactions)
+    - [Buying Quarters](#buying-quarters)
+    - [Sign Out](#sign-out)
+  - [Troubleshooting](#troubleshooting)
+    - [Pay or receive Quarters throws *Transaction Error*](#pay-or-receive-quarters-throws-transaction-error)
+    - [Pay or receive Quarters throws *Missing refresh token*](#pay-or-receive-quarters-throws-missing-refresh-token)
+    - [Pay throws *Your app must be verified to transfer Quarters from users*](#pay-throws-your-app-must-be-verified-to-transfer-quarters-from-users)
+    - [Pressing `Authorize` in Android mobile doesn't redirect to the app.](#pressing-authorize-in-android-mobile-doesnt-redirect-to-the-app)
+    - [Making a transaction (pay or receive) shows `Transaction error: Debit and credit address cannot be the same.`](#making-a-transaction-pay-or-receive-shows-transaction-error-debit-and-credit-address-cannot-be-the-same)
+
 ## Before you start
 In order to have a full integration with QuartersSDK you must follow this steps: 
 - Register your APP following [the steps in poq-docs](https://github.com/weiks/poq-docs/blob/main/docs/unity-sdk-integeration.md).
@@ -25,7 +46,7 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
 
 ![Screenshot 2022-05-31 at 9 44 27 am](https://user-images.githubusercontent.com/41578378/171151698-45a22b3d-134f-4894-8859-c4e125e99392.png)
 
-6. Back in Unity Quarters Init component copy the values from app dashboard to the inpector tab of Quarters Init Component:
+6. Back in Unity `QuartersInit` component copy the values from app dashboard to the inpector tab of `QuartersInit` Component:
    - `APP_ID` -> `client_id` 
    - `APP_KEY` -> `client_secret`
    - `APP_UNIQUE_IDENTIFIER` -> It needs to be `App URL` sub-domain (ex. in this case exampleapp as in the image below)  
@@ -47,11 +68,11 @@ For the best user experience, Quarters Unity SDK utilises domain association to 
 account](https://developer.apple.com/account/#!/membership/)
 5. Enter your app bundle id. Example com.mycompany.mygame
 6. Press Submit
-7. Copy your PoQ app's unique identifier to the Quarters Init component `APP_UNIQUE_IDENTIFIER` field in Unity and press Save
+7. Copy your PoQ app's unique identifier to the `QuartersInit` component `APP_UNIQUE_IDENTIFIER` field in Unity and press Save
 
 #### Android
 1. Open [your PoQ APPS](https://www.poq.gg/apps)
-2. Find your app and select iOS under the Auto Manage option
+2. Find your app and select Android under the Auto Manage option
 3. Enter any valid string as your PoQ app's unique identifier if empty
 4. Enter your app package name. Example com.mycompany.mygame
 5. You need to get SHA-256 certificate fingerprint, to do that just run the following command on your terminal (note the keytool comes with the Java SDK or included with Unity Android OpenJDK ex. `C:\Program Files\Unity\Hub\Editor\2021.3.2f1\Editor\Data\PlaybackEngines\AndroidPlayer\OpenJDK\jre\bin` in case of Unity 2021.3.2f1 editor)
@@ -66,7 +87,7 @@ Running this command should yield something similar to the following image:
 6. Press Submit
 7. If you haven't already copy your PoQ app's unique identifier to the Quarter's Init component `APP_UNIQUE_IDENTIFIER` field in Unity and press Save
 
-### That's it you are ready to use Quarters Unity SDK
+**That's it you are ready to use Quarters Unity SDK**
 
 ## Sample app
 Quarters Unity SDK contains a basic sample app presenting major SDK functionality like
@@ -90,13 +111,15 @@ Unity 2019.4+
 - Unity Editor: due to limitations of Unity Editor on Windows external browser is used to authorize user you can check [sign in doc](#please-note-that-due-to-limitations-of-unity-editor-on-windows-external-browser-is-used-to-authorize-user-after-successful-authorisation-please-copy-and-paste-the-browser-url-to-unity-game-view-and-press-authorize) for details. 
 
 ## SDK calls to API Reference
-In order to make all the operations/transactions with Quarters you will be able to interact with the SDK calls that consumes an API. To see that calls [fully documented with methods and examples in this README-Api file](/README-Api.md). Here we will list a quick review of the API operations: 
+In order to make all the operations/transactions with Quarters you will be able to interact with the SDK calls that consumes an API. See that calls [fully documented with methods and examples in this README-Api file](/README-Api.md). Here we will list a quick review of the API operations: 
 
 ### Sign in with Quarters
-Once Quarters Init is completed successfully you need to sign in your user
+Once `QuartersInit` is completed configured you will be able to sign in.
 
-In [fully documented SDK calls documentation you will find the method to use and an example](/README-Api.md#sign-in-with-quarters).
-#### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. After successful authorisation please copy and paste the browser url to unity game view and press Authorize.
+You will find the method to use and an example in [fully documented SDK calls documentation ](/README-Api.md#sign-in-with-quarters).
+
+**Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. After successful authorisation please copy and paste the browser url to unity game view and press Authorize.**
+
 ![Capture](https://user-images.githubusercontent.com/41578378/172198600-980454b9-e260-4719-8ad8-621809a2ad14.PNG)
 
 
@@ -114,7 +137,7 @@ User can also purchase Quarters by using the credit card or other methods.
 Please go to the [SDK calls to API documentation](/README-Api.md#buying-quarters) for method description and a code example.
 
 ### Sign Out
-To sign out current Quarters users call
+To sign out current Quarters users call.
 
 Please go to the [SDK calls to API documentation](/README-Api.md#sign-out) for method description and a code example.
 
