@@ -140,13 +140,45 @@ When you try to Pay or receive Quarters you get *Your app must be verified to tr
 
 ### Pressing `Authorize` in Android mobile doesn't redirect to the app.
 When you `Sign In` with the sample app you are not redirected to the app after pressing `Authorize` button in your browser.
+
+You need to:
+#### A) Set your Android `manifest.xml` settings to open your app url
+Open your Android manifest file and add these lines to enable the link redirection option in your app:
+```
+   <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="https" android:host="#YOUR_APP_LINK.games.poq.gg" android:pathPattern=".*" />
+      </intent-filter>
+```
+If your manifest already had these lines, skip to [step B](set-your-android-default-browser-to-chrome) if that was not the case, save your manifest and build your app to generate the new installer that you will use for steps B and C. 
+
+#### B) Set your Android default browser to Chrome
 Some mobile internet browsers (like Samsung default browser) don't redirect to the app inmediatly. In case you want to be redirected inmediatly to the app change your default internet mobile browser:
 1. On your Android phone, tap `Settings`.
 2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) and finally `Default Apps`
 3. There on the option `Browser App` you will be able to change your default mobile browser
 ![image](https://user-images.githubusercontent.com/3865131/173102296-e0a56135-b621-491f-9326-4aafdcbdd983.png)
 
-If the problem persists please read next troubleshooting case [Still not redirecting to the app after pressing the `Authorize` button](#still-not-redirecting-to-the-app-after-pressing-the-authorize-button)
+#### C) Enable support to web addresses in your app
+1. On your Android phone, tap `Settings`.
+2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) `Default Apps/Openning links`
+3. Choose your app (ex `Quarters SDK`) there you will be able to enable `Open supported links`.
+4. Open `Supported web links` to check that the link of your app is in that list.
+
+You can follow the steps in this video:
+
+
+
+https://user-images.githubusercontent.com/3865131/188503301-94ddc74a-5dbb-45ae-9dc3-dedbd1fe6785.mp4
+
+
+
+
+
+
+If after performing steps A, B and C the problem persists, please read the following troubleshooting case [Still not redirecting to the app after pressing the `Authorize` button](#still-not-redirecting-to-the-app-after-pressing-the-authorize-button)
 
 ### Still not redirecting to the app after pressing the `Authorize` button.
 Besides trying the steps in "[Pressing `Authorize` in Android mobile doesn't redirect to the app](#pressing-authorize-in-android-mobile-doesnt-redirect-to-the-app)" the issue still happens please contact us.
