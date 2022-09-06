@@ -108,7 +108,7 @@ Unity 2019.4+
 ## SDK supported platforms
 - iOS
 - Android: API 29 and above
-- Unity Editor: due to limitations of Unity Editor on Windows external browser is used to authorize user you can check [sign in doc](#please-note-that-due-to-limitations-of-unity-editor-on-windows-external-browser-is-used-to-authorize-user-after-successful-authorisation-please-copy-and-paste-the-browser-url-to-unity-game-view-and-press-authorize) for details. 
+- Unity Editor: due to limitations of Unity Editor on Windows external browser is used to authorize user you can check [sign-in-with-quarters](#please-note-that-due-to-limitations-of-unity-editor-on-windows-external-browser-is-used-to-authorize-user-after-successful-authorisation-please-copy-and-paste-the-browser-url-to-unity-game-view-and-press-authorize) for details. 
 
 ## SDK calls to API Reference
 In order to make all the operations/transactions with Quarters you will be able to interact with the SDK calls that consumes an API. See that calls [fully documented with methods and examples in this README-Api file](/README-Api.md). Here we will list a quick review of the API operations: 
