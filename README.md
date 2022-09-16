@@ -19,6 +19,7 @@
     - [Pay or receive Quarters throws *Missing refresh token*](#pay-or-receive-quarters-throws-missing-refresh-token)
     - [Pay throws *Your app must be verified to transfer Quarters from users*](#pay-throws-your-app-must-be-verified-to-transfer-quarters-from-users)
     - [Pressing `Authorize` in Android mobile doesn't redirect to the app.](#pressing-authorize-in-android-mobile-doesnt-redirect-to-the-app)
+    - [Pressing `Authorize` in iOS mobile doesn't redirect to the app.](#pressing-authorize-in-ios-mobile-doesnt-redirect-to-the-app)
     - [Making a transaction (pay or receive) shows `Transaction error: Debit and credit address cannot be the same.`](#making-a-transaction-pay-or-receive-shows-transaction-error-debit-and-credit-address-cannot-be-the-same)
 
 ## Before you start
@@ -207,15 +208,15 @@ If after performing steps A, B and C the problem persists, please read the follo
 #### In the project target, “Signing & Capability” tab check that 'Associated Domains' is enabled with the right domain.
 <img width="690" alt="Screen Shot 2022-09-16 at 17 31 36" src="https://user-images.githubusercontent.com/3978399/190738163-3b14952a-9461-48e0-93bd-bec4d9bbdb70.png">
 
-#### If you don't have 'Associated Domains' in “Signing & Capability”.
+#### If you don't have 'Associated Domains' in "Signing & Capability".
 
 ##### A) Configure your app to register approved domains
-Enter to https://developer.apple.com/account/resources/identifiers/list
-Find your identifier and enabled  ‘Associated Domains’ 
+Enter to your [Apple Developer Certificates, Identifiers & Profiles](https://developer.apple.com/account/resources/identifiers/list)
+Find your identifier and enable  `Associated Domains` 
 
 <img width="1273" alt="Screen Shot 2022-09-16 at 17 27 27" src="https://user-images.githubusercontent.com/3978399/190743949-a5467b13-cbce-4859-af2e-7eba1b9b9def.png">
 
-##### B) Enable ‘Associated Domain’ in your Xcode project
+##### B) Enable `Associated Domain` in your Xcode project
 <img width="690" alt="Screen Shot 2022-09-16 at 17 29 29" src="https://user-images.githubusercontent.com/3978399/190745229-528e972c-49a8-46ea-93ec-b555391335af.png">
 <img width="731" alt="Screen Shot 2022-09-16 at 17 30 11" src="https://user-images.githubusercontent.com/3978399/190745716-0d362f10-66fd-4f0e-b49e-ce11454f2288.png">
 
