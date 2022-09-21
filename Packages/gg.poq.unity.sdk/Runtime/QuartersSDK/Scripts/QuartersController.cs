@@ -11,9 +11,11 @@ using System.IO;
 using Packages.gg.poq.unity.sdk.Runtime.QuartersSDK.Scripts.ConfigurationSettings;
 using QuartersSDK.UI;
 
-namespace QuartersSDK {
+namespace QuartersSDK
+{
 
-    public class QuartersController : MonoBehaviour {
+    public class QuartersController : MonoBehaviour
+    {
         private Quarters _quarters;
         private User _currentUser;
         public Session _session;
@@ -33,15 +35,17 @@ namespace QuartersSDK {
             Scope.wallet
         };
 
-        [HideInInspector] 
+        [HideInInspector]
         public QuartersWebView QuartersWebView;
 
         /// <summary>
         /// Get or set the current user
         /// </summary>
-        public User CurrentUser {
+        public User CurrentUser
+        {
             get => _currentUser;
-            set {
+            set
+            {
                 _currentUser = value;
                 if (value != null) OnUserLoaded?.Invoke(_currentUser);
             }
@@ -50,14 +54,15 @@ namespace QuartersSDK {
         /// <summary>
         /// Returns true in case the session is valid
         /// </summary>
-        public bool IsAuthorized() {  
+        public bool IsAuthorized()
+        {
             return _session != null && _session.IsAuthorized;
         }
 
         /// <summary>
         /// Initialization of Quarters user session and instance
         /// </summary>
-        public void Init() 
+        public void Init()
         {
             try
             {
@@ -72,9 +77,9 @@ namespace QuartersSDK {
 
                 APIClient apiClient = new APIClient(logger);
                 var apiParamsSettings = new ApiParamsSettings();
-                var appParamsSettings = new AppParamsSettings(QuartersInit.Instance.APP_ID, 
-                                                            QuartersInit.Instance.APP_KEY, 
-                                                            QuartersInit.Instance.APP_UNIQUE_IDENTIFIER, 
+                var appParamsSettings = new AppParamsSettings(QuartersInit.Instance.APP_ID,
+                                                            QuartersInit.Instance.APP_KEY,
+                                                            QuartersInit.Instance.APP_UNIQUE_IDENTIFIER,
                                                             "Production");
                 _quarters = new Quarters(apiClient, logger, _session.RefreshToken, appParamsSettings.Settings, apiParamsSettings.Settings);
                 URL_SCHEME = appParamsSettings.Settings["REDIRECT_URL"];
@@ -94,7 +99,7 @@ namespace QuartersSDK {
         /// </summary>
         /// <param name="OnComplete">What happens when signing in is successful</param>
         /// <param name="OnError">Checks to see if there was an error in signing in</param>
-        public void SignInWithQuarters(Action OnComplete, Action<string> OnError) 
+        public void SignInWithQuarters(Action OnComplete, Action<string> OnError)
         {
             try
             {
@@ -103,7 +108,7 @@ namespace QuartersSDK {
                 Instance.Authorize(_session.Scopes, delegate
                 {
                     OnComplete?.Invoke();
-                    VspAttribution.VspAttribution.SendAttributionEvent("SignInWithQuarters", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+                    VspAttribution.VspAttribution.SendAttributionEvent("SignInWithQuarters", Constants.VSP_POQ_COMPANY_NAME, $"{QuartersInit.Instance.APP_UNIQUE_IDENTIFIER} | {QuartersInit.Instance.APP_ID}");
                 }, OnError);
             }
             catch (Exception ex)
@@ -113,7 +118,7 @@ namespace QuartersSDK {
             }
         }
 
-        private void Authorize(List<Scope> scopes, Action OnSuccess, Action<string> OnError) 
+        private void Authorize(List<Scope> scopes, Action OnSuccess, Action<string> OnError)
         {
             try
             {
@@ -148,7 +153,7 @@ namespace QuartersSDK {
                         string code = link.QueryString["code"];
                         GetRefreshToken(code, OnSuccess, OnError);
                         QuartersWebView.OnDeepLink = null;
-                        VspAttribution.VspAttribution.SendAttributionEvent("QuartersAuthorize", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+                        VspAttribution.VspAttribution.SendAttributionEvent("QuartersAuthorize", Constants.VSP_POQ_COMPANY_NAME, $"{QuartersInit.Instance.APP_UNIQUE_IDENTIFIER} | {QuartersInit.Instance.APP_ID}");
                     }
                     else if (link.QueryString.ContainsKey("error"))
                     {
@@ -167,7 +172,7 @@ namespace QuartersSDK {
         /// <summary>
         /// Deauthorization and signing out
         /// </summary>
-        public void Deauthorize() 
+        public void Deauthorize()
         {
             try
             {
@@ -178,7 +183,7 @@ namespace QuartersSDK {
                 Log("Quarters user signed out");
                 OnSignOut?.Invoke();
 
-                VspAttribution.VspAttribution.SendAttributionEvent("QuartersDeauthorize", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+                VspAttribution.VspAttribution.SendAttributionEvent("QuartersDeauthorize", Constants.VSP_POQ_COMPANY_NAME, $"{QuartersInit.Instance.APP_UNIQUE_IDENTIFIER} | {QuartersInit.Instance.APP_ID}");
             }
             catch (Exception ex)
             {
@@ -192,7 +197,7 @@ namespace QuartersSDK {
         /// </summary>
         /// <param name="OnSuccessDelegate">Operation was successful and details have been retreived</param>
         /// <param name="OnFailedDelegate">Operation failed and details have not been retreived</param>
-        public void GetUserDetails(Action<User> OnSuccessDelegate, Action<string> OnFailedDelegate) 
+        public void GetUserDetails(Action<User> OnSuccessDelegate, Action<string> OnFailedDelegate)
         {
             try
             {
@@ -210,7 +215,7 @@ namespace QuartersSDK {
         /// </summary>
         /// <param name="OnSuccess">Operation was successful and the account balance information has been retreived</param>
         /// <param name="OnError">Operation failed and the account balance information has not been retreived</param>
-        public void GetAccountBalanceCall(Action<long> OnSuccess, Action<string> OnError) 
+        public void GetAccountBalanceCall(Action<long> OnSuccess, Action<string> OnError)
         {
             try
             {
@@ -231,7 +236,7 @@ namespace QuartersSDK {
         /// <param name="description">Description of what the transaction is</param>
         /// <param name="OnSuccess">The transaction was successful</param>
         /// <param name="OnError">There was an error in the transaction</param>
-        public IEnumerator Transaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError) 
+        public IEnumerator Transaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnError)
         {
             yield return StartCoroutine(MakeTransaction(coinsQuantity, description, OnSuccess, OnError));
         }
@@ -240,7 +245,7 @@ namespace QuartersSDK {
 
         #region api calls
 
-        private void GetRefreshToken(string code, Action OnComplete, Action<string> OnError) 
+        private void GetRefreshToken(string code, Action OnComplete, Action<string> OnError)
         {
             Log($"Get refresh token with code: {code}");
             try
@@ -268,7 +273,7 @@ namespace QuartersSDK {
             }
         }
 
-        private void GetAccessToken(Action OnSuccess, Action<string> OnFailed) 
+        private void GetAccessToken(Action OnSuccess, Action<string> OnFailed)
         {
             Log("Get Access token");
             try
@@ -278,7 +283,7 @@ namespace QuartersSDK {
                     LogError("Missing refresh token");
                     OnFailed("Missing refresh token");
                 }
-                
+
                 _quarters._session.RefreshToken = _session.RefreshToken;
                 ResponseData response = _quarters.GetAccessToken();
                 if (response.IsSuccesful)
@@ -300,14 +305,14 @@ namespace QuartersSDK {
                     OnFailed?.Invoke(response.ErrorResponse.ErrorDescription);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogError(ex.Message);
                 OnFailed?.Invoke(ex.Message);
             }
         }
 
-        private IEnumerator GetUserDetailsCall(Action<User> OnSuccess, Action<string> OnFailed, bool isRetry = false) 
+        private IEnumerator GetUserDetailsCall(Action<User> OnSuccess, Action<string> OnFailed, bool isRetry = false)
         {
             Log("GetUserDetailsCall");
             try
@@ -346,10 +351,10 @@ namespace QuartersSDK {
         }
 
 
-        private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false) 
+        private IEnumerator GetAccountBalance(Action<long> OnSuccess, Action<string> OnFailed, bool isRetry = false)
         {
-            if (CurrentUser == null || string.IsNullOrEmpty(CurrentUser.GamerTag)) 
-                    yield return GetUserDetailsCall(delegate { }, OnFailed);
+            if (CurrentUser == null || string.IsNullOrEmpty(CurrentUser.GamerTag))
+                yield return GetUserDetailsCall(delegate { }, OnFailed);
             try
             {
                 long balance = _quarters.GetAccountBalanceCall();
@@ -375,7 +380,7 @@ namespace QuartersSDK {
         /// <param name="description">Description of what the transaction is</param>
         /// <param name="OnSuccess">The transaction was successful</param>
         /// <param name="OnError">There was an error in the transaction</param>
-        public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed) 
+        public IEnumerator MakeTransaction(long coinsQuantity, string description, Action OnSuccess, Action<string> OnFailed)
         {
             Log($"MakeTransaction with quantity: {coinsQuantity}");
             try
@@ -391,7 +396,7 @@ namespace QuartersSDK {
                 if (response.IsSuccesful)
                 {
                     Log(response.ToJSONString());
-                    VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+                    VspAttribution.VspAttribution.SendAttributionEvent("TransactionSuccess", Constants.VSP_POQ_COMPANY_NAME, $"{QuartersInit.Instance.APP_UNIQUE_IDENTIFIER} | {QuartersInit.Instance.APP_ID}");
                     GetAccountBalanceCall(delegate { OnSuccess?.Invoke(); }, OnFailed);
                 }
                 else
@@ -413,11 +418,12 @@ namespace QuartersSDK {
         /// <summary>
         /// When you call this method, the user will be sent to a website where they can exchange money for quarters
         /// </summary>
-        public void BuyQuarters() 
+        public void BuyQuarters()
         {
             Log("Buy Quarters");
-            try {
-                VspAttribution.VspAttribution.SendAttributionEvent("BuyQuarters", Constants.VSP_POQ_COMPANY_NAME, QuartersInit.Instance.APP_ID);
+            try
+            {
+                VspAttribution.VspAttribution.SendAttributionEvent("BuyQuarters", Constants.VSP_POQ_COMPANY_NAME, $"{QuartersInit.Instance.APP_UNIQUE_IDENTIFIER} | {QuartersInit.Instance.APP_ID}");
                 QuartersWebView.OpenURL(_quarters.GetBuyQuartersUrl(), LinkType.External);
             }
             catch (Exception ex)
@@ -429,16 +435,18 @@ namespace QuartersSDK {
 
         #endregion
 
-        private void Log(string message) 
+        private void Log(string message)
         {
-            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
+            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose)
+            {
                 Debug.Log(message);
             }
         }
 
-        private void LogError(string message) 
+        private void LogError(string message)
         {
-            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose) {
+            if (QuartersInit.Instance.ConsoleLogging == QuartersInit.LoggingType.Verbose)
+            {
                 Debug.LogError(message);
             }
         }
