@@ -38,7 +38,7 @@ private void OnInitError(string error) {
 ## Sign in with Quarters
 Once Quarters Init is completed successfully you need to sign in your user calling:
 ```
-Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
+QuartersController.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
 ```
 Where:
 
@@ -57,7 +57,7 @@ private void OnInitComplete() {
 	The player must authorize access to their PoQ wallet to allow Quarters transactions.
     */
 
-    Quarters.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
+    QuartersController.Instance.SignInWithQuarters(OnSignInComplete, OnSignInError);
 }
 
 //Runs if the sign in function was successful. Players can make Quarters transactions at this point.
@@ -97,8 +97,10 @@ public void ButtonTapped() {
 
    long price = -10;
 
-   Quarters.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
-
+   QuartersController.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
+   //Depending on your implementation maybe you would need to call `Transaction` method with an `StartCoroutine` 
+   //ex:  StartCoroutine(QuartersController.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
+   
 }
 
 private void OnTransferSuccessful() {
@@ -116,13 +118,13 @@ User can also purchase Quarters by using the credit card or other methods.
 **Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
 
 ```
-Quarters.Instance.BuyQuarters();
+QuartersController.Instance.BuyQuarters();
 ```
 
 ### Sign Out
 To sign out current Quarters users call
 ```
-Quarters.Instance.Deauthorize();
+QuartersController.Instance.Deauthorize();
 ```
 
 #### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. Additional steps must be taken to authorize a player in the Unity Editor
@@ -142,7 +144,7 @@ The game will then finish the sign in process.
 ### Making Transactions
 You can charge user Quarters as well as reward your user with quarters using unified Transaction API calling this method:
 ``` 
-Quarters.Instance.Transaction(long price, string description, OnTransferSuccessful, OnTransferFailed );
+QuartersController.Instance.Transaction(long price, string description, OnTransferSuccessful, OnTransferFailed );
 ```
 **A negative price takes Quarters from the user's account. Positive price value reward user account with Quarters**
 
@@ -156,7 +158,7 @@ Quarters.Instance.Transaction(long price, string description, OnTransferSuccessf
 ```
 public void ButtonTapped() {
    long price = -10;
-   Quarters.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
+   QuartersController.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
 }
 private void OnTransferSuccessful() {
   
@@ -169,14 +171,14 @@ private void OnTransferFailed(string error) {
 User can also purchase Quarters by using the credit card or other methods calling this API method:
 
 ```
-Quarters.Instance.BuyQuarters();
+QuartersController.Instance.BuyQuarters();
 ```
 **Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
 
 ### Sign Out
 To sign out current Quarters users call
 ```
-Quarters.Instance.Deauthorize();
+QuartersController.Instance.Deauthorize();
 ```
 ## Player Information
 After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These methods can be called after the player has signed into their Quarters account. 
@@ -194,7 +196,7 @@ Grabs the display name of the player, after they have signed in to their Quarter
 private void Example()
 {
 	//Calls the GetUserDetails function in the Quarters script
-	Quarters.Instance.GetUserDetails(delegate (User user)
+	QuartersController.Instance.GetUserDetails(delegate (User user)
         {
 	        //Posts the user’s GamerTag in the console log. user.GamerTag can be referenced as a string
             Debug.Log(user.GamerTag);
@@ -223,7 +225,7 @@ private void Example()
 {
 
 //Runs the GetAccountBalanceCall function in the Quarters script. Returns an error note in the console log, if there were any issues in the function.
-Quarters.Instance.GetAccountBalanceCall(OnSuccess, delegate (string error) { Debug.LogError(error); });
+QuartersController.Instance.GetAccountBalanceCall(OnSuccess, delegate (string error) { Debug.LogError(error); });
 
 }
 
