@@ -176,7 +176,11 @@ Open your Android manifest file and add these lines to enable the link redirecti
         <data android:scheme="https" android:host="#YOUR_APP_LINK.games.poq.gg" android:pathPattern=".*" />
       </intent-filter>
 ```
-If your manifest already had these lines, skip to [step B](#b-set-your-android-default-browser-to-chrome) if that was not the case, save your manifest and rebuild your app (important: just to be sure please delete your build output folder before rebuild)  to generate the new installer that you will use for steps B and C. 
+Then check in your Unity `Player Settings` inside `Publishing Settings/Build` the option `Custom Main Manifest`
+![image](https://user-images.githubusercontent.com/3865131/195446906-39e4d49b-3cb2-4e6d-b97c-2008d807649c.png)
+
+
+If your manifest already had these lines and option checked, skip to [step B](#b-set-your-android-default-browser-to-chrome) if that was not the case, save your manifest and rebuild your app (important: just to be sure please delete your build output folder before rebuild) to generate the new installer that you will use for steps B and C. 
 
 #### B) Set your Android default browser to Chrome
 Some mobile internet browsers (like Samsung default browser) don't redirect to the app inmediatly. In case you want to be redirected inmediatly to the app change your default internet mobile browser:
