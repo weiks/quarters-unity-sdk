@@ -96,7 +96,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            q.GetRefreshToken("K1n95Azm3lJ5HL0HaFvli0rITBELaDLX");
+            q.GetRefreshToken("OpLPv1kFkRNjVnPbguPBAr_vY91rA2jt");
 
             var res = q.GetAccessToken();
 

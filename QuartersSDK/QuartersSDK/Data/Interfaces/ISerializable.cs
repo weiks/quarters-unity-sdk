@@ -2,6 +2,6 @@
 {
     internal interface ISerializable
     {
-        public string ToJSONString();
+        string ToJSONString();
     }
 }

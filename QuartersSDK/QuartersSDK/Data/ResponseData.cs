@@ -6,7 +6,7 @@ using System.Net;
 namespace QuartersSDK.Data
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class ResponseData : HttpWebResponse, ISerializable
+    public class ResponseData :  ISerializable
     {
         private long _balance;
 
