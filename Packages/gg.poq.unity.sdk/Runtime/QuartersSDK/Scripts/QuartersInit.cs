@@ -16,7 +16,7 @@ namespace QuartersSDK
 
         public string APP_KEY = "";
         public string APP_UNIQUE_IDENTIFIER = "";
-        public static string SDK_VERSION => "2.2.3";
+        public static string SDK_VERSION => "2.3.0";
 
         public CurrencyConfig CurrencyConfig;
 
