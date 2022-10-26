@@ -5,11 +5,11 @@ using Newtonsoft.Json;
 using UnityEngine;
 using QuartersSDK.Services;
 using QuartersSDK.Data;
-using Microsoft.Extensions.Logging;
-using Packages.gg.poq.unity.sdk.Runtime.QuartersSDK.Scripts.FileLogger;
 using System.IO;
 using Packages.gg.poq.unity.sdk.Runtime.QuartersSDK.Scripts.ConfigurationSettings;
 using QuartersSDK.UI;
+using Microsoft.Extensions.Logging;
+using Packages.gg.poq.unity.sdk.Runtime.QuartersSDK.Scripts.FileLogger;
 
 namespace QuartersSDK
 {
@@ -68,7 +68,6 @@ namespace QuartersSDK
             {
                 Instance = this;
                 _session = new Session();
-
                 var loggerFactory = (ILoggerFactory)new LoggerFactory();
 #if UNITY_EDITOR
                 loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logs"));
@@ -76,12 +75,13 @@ namespace QuartersSDK
                 var logger = loggerFactory.CreateLogger<Quarters>();
 
                 APIClient apiClient = new APIClient(logger);
+
                 var apiParamsSettings = new ApiParamsSettings();
                 var appParamsSettings = new AppParamsSettings(QuartersInit.Instance.APP_ID,
                                                             QuartersInit.Instance.APP_KEY,
                                                             QuartersInit.Instance.APP_UNIQUE_IDENTIFIER,
                                                             "Production");
-                _quarters = new Quarters(apiClient, logger, _session.RefreshToken, appParamsSettings.Settings, apiParamsSettings.Settings);
+                _quarters = new Quarters(apiClient, _session.RefreshToken, appParamsSettings.Settings, apiParamsSettings.Settings);
                 URL_SCHEME = appParamsSettings.Settings["REDIRECT_URL"];
             }
             catch (Exception ex)

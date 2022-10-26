@@ -18,7 +18,7 @@ namespace QuartersSDK.UI {
                 QuartersInit.Instance.Init(OnInitComplete, OnInitError);
             }
             catch (Exception ex)
-            { 
+            {
                 ModalView.instance.ShowAlert("Error", $"{ex.Message} \n {ex.StackTrace} ", new string[] { "OK" }, null);
             }
         }
