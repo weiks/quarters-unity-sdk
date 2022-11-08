@@ -250,4 +250,61 @@ To fix it:
 1. Log out from the integration app.
 2. Login to the integration app with a different account than the one you used to create the app (`X@domain.com`).  
 
+### Including `QuartersSDK` generates error while building 
+Some plugins or packages (such as `Google Play SDK`) can interfere with `QuartersSDK` and when you try to build your project it generates error like:
+```
+ReflectionTypeLoadException: Exception of type 'System.Reflection.ReflectionTypeLoadException' was thrown.
+Could not load type of field 'Microsoft.Extensions.DependencyInjection.OptionsBuilderConfigurationExtensions+<>c__1`1[TOptions]:<>9__1_0' (1) due to: Could not load file or assembly 'Microsoft.Extensions.Configuration.Binder, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' or one of its dependencies.
+Could not load type of field 'Microsoft.Extensions.DependencyInjection.OptionsBuilderConfigurationExtensions+<>c__DisplayClass3_0`1[TOptions]:configureBinder' (1) due to: Could not load file or assembly 'Microsoft.Extensions.Configuration.Binder, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' or one of its dependencies.
+Could not load type of field 'Microsoft.Extensions.DependencyInjection.OptionsConfigurationServiceCollectionExtensions+<>c__1`1[TOptions]:<>9__1_0' (1) due to: Could not load file or assembly 'Microsoft.Extensions.Configuration.Binder, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' or one of its dependencies.
+Could not load type of field 'Microsoft.Extensions.Options.NamedConfigureFromConfigurationOptions`1+<>c[TOptions]:<>9__0_0' (1) due to: Could not load file or assembly 'Microsoft.Extensions.Configuration.Binder, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' or one of its dependencies.
+Could not load type of field 'Microsoft.Extensions.Options.NamedConfigureFromConfigurationOptions`1+<>c__DisplayClass1_0[TOptions]:configureBinder' (1) due to: Could not load file or assembly 'Microsoft.Extensions.Configuration.Binder, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60' or one of its dependencies.
+System.Reflection.Assembly.GetTypes () (at <e40e5a8f982c4b618a930d29f9bd091c>:0)
+Google.Android.AppBundle.Editor.Internal.BuildAndRunner+<>c.<GetExtensions>b__4_0 (System.Reflection.Assembly assembly) (at Assets/GooglePlayPlugins/com.google.android.appbundle/Editor/Scripts/Internal/BuildAndRunner.cs:102)
+System.Linq.Enumerable+SelectManySingleSelectorIterator`2[TSource,TResult].MoveNext () (at <ad4a992768794363ade575f9e564f6e6>:0)
+System.Linq.Enumerable+WhereSelectEnumerableIterator`2[TSource,TResult].MoveNext () (at <ad4a992768794363ade575f9e564f6e6>:0)
+System.Linq.Enumerable+<CastIterator>d__34`1[TResult].MoveNext () (at <ad4a992768794363ade575f9e564f6e6>:0)
+System.Linq.Enumerable+WhereEnumerableIterator`1[TSource].ToList () (at <ad4a992768794363ade575f9e564f6e6>:0)
+System.Linq.Enumerable.ToList[TSource] (System.Collections.Generic.IEnumerable`1[T] source) (at <ad4a992768794363ade575f9e564f6e6>:0)
+Google.Android.AppBundle.Editor.Internal.BuildAndRunner.GetOverridingExtensions () (at Assets/GooglePlayPlugins/com.google.android.appbundle/Editor/Scripts/Internal/BuildAndRunner.cs:97)
+Google.Android.AppBundle.Editor.Internal.BuildAndRunner.BuildAndRun () (at Assets/GooglePlayPlugins/com.google.android.appbundle/Editor/Scripts/Internal/BuildAndRunner.cs:39)
+Google.Android.AppBundle.Editor.Internal.AppBundleEditorMenu.BuildAndRun () (at Assets/GooglePlayPlugins/com.google.android.appbundle/Editor/Scripts/Internal/AppBundleEditorMenu.cs:72)
+```
+
+If that is the case please follow this steps:
+1. Go to the folder of `Quarters SDK` imported package.
+2. Inside `Plugins` folder delete all the `dlls` (only the `dlls` inside that folder)
+3. Go to your `Asset` project folder
+4. Check if in your `package.config` file you have all this packages (in case not add it):
+```
+<?xml version="1.0" encoding="utf-8"?>
+<packages>
+  <package id="Microsoft.Bcl.AsyncInterfaces" version="6.0.0" />
+  <package id="Microsoft.Extensions.Configuration" version="6.0.0" />
+  <package id="Microsoft.Extensions.Configuration.Abstractions" version="6.0.0" />
+  <package id="Microsoft.Extensions.Configuration.Binder" version="6.0.0" />
+  <package id="Microsoft.Extensions.Configuration.FileExtensions" version="6.0.0" />
+  <package id="Microsoft.Extensions.Configuration.Json" version="6.0.0" />
+  <package id="Microsoft.Extensions.DependencyInjection" version="6.0.1" />
+  <package id="Microsoft.Extensions.DependencyInjection.Abstractions" version="6.0.0" />
+  <package id="Microsoft.Extensions.FileProviders.Abstractions" version="6.0.0" />
+  <package id="Microsoft.Extensions.FileProviders.Physical" version="6.0.0" />
+  <package id="Microsoft.Extensions.FileSystemGlobbing" version="6.0.0" />
+  <package id="Microsoft.Extensions.Logging" version="6.0.0" />
+  <package id="Microsoft.Extensions.Logging.Abstractions" version="6.0.0" />
+  <package id="Microsoft.Extensions.Logging.Configuration" version="6.0.0" />
+  <package id="Microsoft.Extensions.Logging.Console" version="6.0.0" />
+  <package id="Microsoft.Extensions.Options" version="6.0.0" />
+  <package id="Microsoft.Extensions.Options.ConfigurationExtensions" version="6.0.0" />
+  <package id="Microsoft.Extensions.Primitives" version="6.0.0" />
+  <package id="System.Buffers" version="4.5.1" />
+  <package id="System.Diagnostics.DiagnosticSource" version="6.0.0" />
+  <package id="System.Text.Encodings.Web" version="6.0.0" />
+  <package id="System.Memory" version="4.5.4" />
+  <package id="System.Runtime.CompilerServices.Unsafe" version="6.0.0" />
+  <package id="System.Text.Encodings.Web" version="6.0.0" />
+  <package id="System.Text.Json" version="6.0.0" />
+  <package id="System.Threading.Tasks.Extensions" version="4.5.4" />
+</packages>
+```
 
