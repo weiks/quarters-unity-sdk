@@ -164,6 +164,8 @@ When you try to Pay or receive Quarters you get *Your app must be verified to tr
 1. Verify your app [contacting us](#before-you-start).
 
 ### Pressing `Authorize` in Android mobile doesn't redirect to the app.
+If you are not a developer you can jump to [step B](#b-set-your-android-default-browser-to-chrome).
+
 When you `Sign In` with the sample app you are not redirected to the app after pressing `Authorize` button in your browser.
 
 You need to:
