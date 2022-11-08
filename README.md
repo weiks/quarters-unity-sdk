@@ -21,6 +21,7 @@
     - [Pressing `Authorize` in Android mobile doesn't redirect to the app.](#pressing-authorize-in-android-mobile-doesnt-redirect-to-the-app)
     - [Pressing `Authorize` in iOS mobile doesn't redirect to the app.](#pressing-authorize-in-ios-mobile-doesnt-redirect-to-the-app)
     - [Making a transaction (pay or receive) shows `Transaction error: Debit and credit address cannot be the same.`](#making-a-transaction-pay-or-receive-shows-transaction-error-debit-and-credit-address-cannot-be-the-same)
+    - [Including QuartersSDK generates error while building](#including-quarterssdk-generates-error-while-building)
 
 ## Before you start
 In order to have a full integration with QuartersSDK you must follow this steps: 
