@@ -22,6 +22,7 @@
     - [Pressing `Authorize` in iOS mobile doesn't redirect to the app.](#pressing-authorize-in-ios-mobile-doesnt-redirect-to-the-app)
     - [Making a transaction (pay or receive) shows `Transaction error: Debit and credit address cannot be the same.`](#making-a-transaction-pay-or-receive-shows-transaction-error-debit-and-credit-address-cannot-be-the-same)
     - [Including QuartersSDK generates error while building](#including-quarterssdk-generates-error-while-building)
+    - [After click Authorize button receive `Invalid redirect_uri`](#after-click-authorize-button-receive-invalid-redirect_uri)
 
 ## Before you start
 In order to have a full integration with QuartersSDK you must follow this steps: 
@@ -311,3 +312,16 @@ If that is the case please follow this steps:
 </packages>
 ```
 
+### After click Authorize button receive `Invalid redirect_uri`
+
+After tapping/clicking Authorize button we get:
+![image](https://user-images.githubusercontent.com/3865131/201421671-f48511d1-a8c5-4490-ba2f-3c240d98f3b6.png)
+
+If that is the case please check that the app URL that you registered in [PoQ Apps dashboard](https://apps.pocketfulofquarters.com/apps) it is exactly the same to the  parameter `redirect_uri` passed in the authorize link. If it is not the same change it:
+1. Go to [PoQ Apps dashboard](https://apps.pocketfulofquarters.com/apps) 
+
+2. Go to your picture profile and click your app
+![image](https://user-images.githubusercontent.com/3865131/201422726-3b4f0f45-878a-416c-8aeb-c3bb5f812f1c.png)
+
+3. Select `Edit` and search for the URL field put exactly the same in case it hash spaces or slashes remove them.
+![image](https://user-images.githubusercontent.com/3865131/201423102-436313b1-8ebe-4f50-9f5a-705331980b98.png)
