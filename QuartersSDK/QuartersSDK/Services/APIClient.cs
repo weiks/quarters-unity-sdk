@@ -18,7 +18,12 @@ namespace QuartersSDK.Services
 
         public APIClient(ILogger<Quarters> logger)
         {
-            _logger = logger;
+            if (logger != null) {
+                _logger = logger;
+                return;
+            }
+            var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+            _logger = loggerFactory.CreateLogger<Quarters>();
         }
 
         private static Dictionary<string, string> GetRequestContent(RequestData request)
@@ -36,8 +41,6 @@ namespace QuartersSDK.Services
                     data.Add("code_verifier", request.CodeVerifier);
                 if (!String.IsNullOrEmpty(request.Code))
                     data.Add("code", request.Code);
-                else
-                    data.Add("client_secret", request.ClientSecret);
                 return data;
             }
             catch (Exception ex)
