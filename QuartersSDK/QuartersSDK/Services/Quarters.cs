@@ -24,6 +24,19 @@ namespace QuartersSDK.Services
         public string CodeChallenge { get; set; }
         public string CodeVerifier { get; set; }
 
+
+        public Quarters(IAPIClient apiClient, string codeChallenge, string codeVerifier, string refreshToken)
+        {
+            _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+
+            LoadConfiguration();
+            _logger = ((APIClient)apiClient)._logger;
+            _session = new Session();
+            _session.RefreshToken = refreshToken;
+            CodeChallenge = codeChallenge;
+            CodeVerifier = codeVerifier;
+        }
+
         public Quarters(IAPIClient apiClient, ILogger<Quarters> logger, string codeChallenge, string codeVerifier, string refreshToken)
         {
             _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
@@ -44,6 +57,22 @@ namespace QuartersSDK.Services
             LoadConfiguration();
             _pcke = new PCKE();
             _session = new Session();
+            _session.RefreshToken = refreshToken;
+            CodeChallenge = _pcke.CodeChallenge();
+            CodeVerifier = _pcke.CodeVerifier;
+        }
+
+        public Quarters(IAPIClient apiClient, string refreshToken, Dictionary<string, string> appSettings, Dictionary<string, string> apiSettings)
+        {
+            _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+            if (appSettings.Count == 0 || appSettings == null) throw new ArgumentNullException(nameof(appSettings));
+            if (apiSettings.Count == 0 || apiSettings == null) throw new ArgumentNullException(nameof(apiSettings));
+
+            _pcke = new PCKE();
+            _logger = ((APIClient)apiClient)._logger;
+            _session = new Session();
+            _app = new AppParams(appSettings);
+            _api = new APIParams(apiSettings);
             _session.RefreshToken = refreshToken;
             CodeChallenge = _pcke.CodeChallenge();
             CodeVerifier = _pcke.CodeVerifier;
@@ -153,10 +182,10 @@ namespace QuartersSDK.Services
                     return new ResponseData(new Error("Missing token", "Missing refresh token on session"));
                 }
 
-                RequestData request = new RequestData(grantType: "refresh_token",
+                RequestData request = new RequestData(grantType: EnumUtils.ToEnumString(GrantType.REFRESH_TOKEN),
                                                        clientId: _app.APP_ID,
-                                                       clientSecret: _app.APP_KEY,
                                                        refreshToken: _session.RefreshToken,
+                                                       code: _session.Code,
                                                        codeVerifier: CodeVerifier);
                 return RequestAuthorize(request);
             }
@@ -172,10 +201,9 @@ namespace QuartersSDK.Services
             try
             {
                 _logger.LogInformation($"Get refresh token with code");
-
+                _session.Code = code; 
                 RequestData request = new RequestData(grantType: EnumUtils.ToEnumString(GrantType.AUTHORIZATION_CODE),
                                                        clientId: _app.APP_ID,
-                                                       clientSecret: _app.APP_KEY,
                                                        redirectUri: _app.REDIRECT_URL,
                                                        codeVerifier: CodeVerifier,
                                                        code: code);

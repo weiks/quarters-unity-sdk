@@ -10,6 +10,8 @@ namespace QuartersSDK.Services
     {
         public string RefreshToken { get; set; }
         public string AccessToken { get; set; }
+        public string Code { get; set; }
+
         public List<Scope> Scopes = new List<Scope>();
 
         public void DoRefresh(string response)
@@ -51,6 +53,7 @@ namespace QuartersSDK.Services
             }
         }
 
+
         public void SetScope(string scopesString)
         {
             scopesString.Split(' ').ToList().ForEach(x => Scopes.Add((Scope)Enum.Parse(typeof(Scope), x)));
@@ -65,6 +68,7 @@ namespace QuartersSDK.Services
         {
             this.AccessToken = "";
             this.RefreshToken = "";
+            this.Code = "";
         }
     }
 }

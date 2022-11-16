@@ -7,6 +7,8 @@ namespace QuartersSDK.Data
     public class Error : Exception
     {
         public static string INVALID_TOKEN = "Invalid `refresh_token`";
+        public static string INVALID_CREDENTIALS = "Unknown client credentials";
+        
 
         [JsonProperty("error")]
         public string ErrorMessage;
