@@ -43,7 +43,8 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
 3. Enter the URL from [poq-unity-package-manager](https://github.com/weiks/poq-unity-package-manager.git) project repository and press **Add** button. Unity Package Manager will pull Quarters Unity SDK and all of its dependencies to the project.
 4. Add the following prefab to your first loaded scene `Packages/Quarters Unity SDK/Runtime/QuartersSDK/Prefabs/QuartersInit`
 
-![Screenshot 2022-05-31 at 9 39 47 am](https://user-images.githubusercontent.com/41578378/171151505-6682fe08-0d13-4feb-8428-3f8b6adbc7d8.png)
+![image](https://user-images.githubusercontent.com/3865131/202551878-87c3af8c-618f-431a-b6e9-69dec428ab88.png)
+
 
 5. Press **Open App Dashboard** button. The web browser will open [URL to create new Quarters app](https://apps.pocketfulofquarters.com/apps/new). Press **Save** button after populating the form.
 
@@ -51,14 +52,13 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
 
 6. Back in Unity `QuartersInit` component copy the values from app dashboard to the inpector tab of `QuartersInit` Component:
    - `APP_ID` -> `client_id` 
-   - `APP_KEY` -> `client_secret`
    - `APP_UNIQUE_IDENTIFIER` -> It needs to be `App URL` sub-domain (ex. in this case exampleapp as in the image below)  
    Please check the addiotional values you can set in the Unity inspector tab:
    - `Environment` -> select `Production` if your app was registered in [production apps environment](https://apps.pocketfulofquarters.com/) otherwise select `Sandbox`. 
    - `Default scope` -> select the 5 scopes (`Identity`, `Email`, `Transactions`, `Events` and `Wallet`).
    - `Currency config` -> set it in `QuartersCurrency` 
 
-![Screenshot 2022-05-31 at 9 46 25 am](https://user-images.githubusercontent.com/41578378/171151877-db5b23f4-43ff-4b8f-acdb-4e381bdec7a6.png)
+![image](https://user-images.githubusercontent.com/3865131/202552008-67e6bf71-9445-4d15-a0da-1cf8b30d7eb6.png)
 
 ### Setup
 For the best user experience, Quarters Unity SDK utilises domain association to link users back to the app after purchasing and authorisation. Quarters SDK manages browser to app linking automatically. To set up linking please follow the steps for the chosen platform
@@ -107,6 +107,9 @@ https://user-images.githubusercontent.com/41578378/171196202-3669bee8-29bb-4047-
 
 ## Unity supported versions
 Unity 2019.4+
+
+- For Unity 2019.X and 2020.X use [release version 3.2.2019](https://github.com/weiks/poq-unity-package-manager/releases/tag/3.0.2019)
+- For Unity 2020.X and above use [release version 3.2.2021](https://github.com/weiks/poq-unity-package-manager/releases/tag/3.0.2021)
 
 ## SDK supported platforms
 - iOS
