@@ -78,7 +78,7 @@ namespace QuartersSDK
 
                 var apiParamsSettings = new ApiParamsSettings();
                 var appParamsSettings = new AppParamsSettings(QuartersInit.Instance.APP_ID,
-                                                            QuartersInit.Instance.APP_KEY,
+                                                            "KEY-------------",
                                                             QuartersInit.Instance.APP_UNIQUE_IDENTIFIER,
                                                             "Production");
                 _quarters = new Quarters(apiClient, _session.RefreshToken, appParamsSettings.Settings, apiParamsSettings.Settings);
@@ -299,7 +299,8 @@ namespace QuartersSDK
                 {
                     LogError($"Message: {response.ErrorResponse.Message} | Description: {response.ErrorResponse.ErrorDescription}");
 
-                    if (response.ErrorResponse.ErrorDescription == Error.INVALID_TOKEN) //dispose invalid refresh token
+                    //if (response.ErrorResponse.ErrorDescription == Error.INVALID_TOKEN || response.ErrorResponse.ErrorDescription == "Unknown client credentials") //dispose invalid refresh token
+                    if (response.ErrorResponse.ErrorDescription == Error.INVALID_TOKEN ) //dispose invalid refresh token
                         _session.RefreshToken = "";
 
                     OnFailed?.Invoke(response.ErrorResponse.ErrorDescription);

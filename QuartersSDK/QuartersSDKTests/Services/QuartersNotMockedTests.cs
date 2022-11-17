@@ -157,7 +157,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("_g2fB6eoz43qmpHUPi3D6c7UrDW0w1qP");
+            var res = q.GetRefreshToken("NtO18TMahRo-NEUdXhQMM7_yaaZFZ6UJ");
             var idTransaction = q.MakeTransaction(10, "SDK Test receive").IdTransaction;
 
 

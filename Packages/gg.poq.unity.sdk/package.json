@@ -1,8 +1,8 @@
 {
   "name": "gg.poq.unity.sdk",
-  "version": "2.3.0",
+  "version": "3.0.2021",
   "displayName": "Quarters Unity SDK",
-  "unity": "2019.4",
+  "unity": "2021.4",
   "description": "Quarters Unity SDK is a set of development tools with easily accessible API calls allowing developers to connect their games to Quarters ecosystem",
   "samples": [
     {
