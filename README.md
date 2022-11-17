@@ -109,7 +109,7 @@ https://user-images.githubusercontent.com/41578378/171196202-3669bee8-29bb-4047-
 Unity 2019.4+
 
 - For Unity 2019.X and 2020.X use [release version 3.2.2019](https://github.com/weiks/poq-unity-package-manager/releases/tag/3.0.2019)
-- For Unity 2020.X and above use [release version 3.2.2021](https://github.com/weiks/poq-unity-package-manager/releases/tag/3.0.2021)
+- For Unity 2021.X and above use [release version 3.2.2021](https://github.com/weiks/poq-unity-package-manager/releases/tag/3.0.2021)
 
 ## SDK supported platforms
 - iOS
