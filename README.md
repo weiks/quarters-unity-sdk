@@ -282,7 +282,8 @@ If that is the case please follow this steps:
 1. Go to the folder of `Quarters SDK` imported package.
 2. Inside `Plugins` folder delete all the `dlls` (only the `dlls` inside that folder)
 3. Go to your `Asset` project folder
-4. Check if in your `package.config` file you have all this packages (in case not add it):
+4. Search for `package.config` file in case you don't create it. 
+5. Open your `package.config` and check if your file you has all this packages refernces (in case not add them):
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <packages>
