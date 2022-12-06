@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asset-store-tools-editor", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gg.poq.unity.sdk.Editor", "gg.poq.unity.sdk.Editor.csproj", "{78FE1B70-1C36-49F8-B1D7-10D7EF80543C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditMode", "EditMode.csproj", "{C1FC2DF5-2393-6D22-1C42-ECBD1D69A8DD}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniWebView-CSharp.Editor", "UniWebView-CSharp.Editor.csproj", "{4A1D006A-62F1-0B55-57FB-DF26BF2EB687}"
 EndProject
 Global
@@ -33,6 +35,10 @@ Global
 		{78FE1B70-1C36-49F8-B1D7-10D7EF80543C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78FE1B70-1C36-49F8-B1D7-10D7EF80543C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78FE1B70-1C36-49F8-B1D7-10D7EF80543C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1FC2DF5-2393-6D22-1C42-ECBD1D69A8DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1FC2DF5-2393-6D22-1C42-ECBD1D69A8DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1FC2DF5-2393-6D22-1C42-ECBD1D69A8DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1FC2DF5-2393-6D22-1C42-ECBD1D69A8DD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A1D006A-62F1-0B55-57FB-DF26BF2EB687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A1D006A-62F1-0B55-57FB-DF26BF2EB687}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A1D006A-62F1-0B55-57FB-DF26BF2EB687}.Release|Any CPU.ActiveCfg = Release|Any CPU

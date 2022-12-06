@@ -161,9 +161,9 @@
       "url": "https://packages.unity.com"
     },
     "gg.poq.unity.sdk": {
-      "version": "file:gg.poq.unity.sdk",
+      "version": "file:C:/desarrollo/weiks/poq-unity-package-manager",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       }

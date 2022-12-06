@@ -19,12 +19,114 @@ MonoBehaviour:
     width: 1536
     height: 772.8
   m_ShowMode: 4
-  m_Title: NuGet
-  m_RootView: {fileID: 2}
+  m_Title: Game
+  m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 1
 --- !u!114 &2
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: ProjectBrowser
+  m_EditorClassIdentifier: 
+  m_Children: []
+  m_Position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 228.8
+    height: 534.4
+  m_MinSize: {x: 231, y: 271}
+  m_MaxSize: {x: 10001, y: 10021}
+  m_ActualView: {fileID: 19}
+  m_Panes:
+  - {fileID: 19}
+  m_Selected: 0
+  m_LastSelected: 0
+--- !u!114 &3
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12010, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Children:
+  - {fileID: 2}
+  - {fileID: 10}
+  m_Position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 228.8
+    height: 722.8
+  m_MinSize: {x: 100, y: 200}
+  m_MaxSize: {x: 8096, y: 16192}
+  vertical: 1
+  controlID: 429
+--- !u!114 &4
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: TestRunnerWindow
+  m_EditorClassIdentifier: 
+  m_Children: []
+  m_Position:
+    serializedVersion: 2
+    x: 0
+    y: 481.6
+    width: 432.80005
+    height: 241.19998
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 15}
+  m_Panes:
+  - {fileID: 15}
+  m_Selected: 0
+  m_LastSelected: 0
+--- !u!114 &5
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12010, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Children:
+  - {fileID: 14}
+  - {fileID: 4}
+  m_Position:
+    serializedVersion: 2
+    x: 1103.2
+    y: 0
+    width: 432.80005
+    height: 722.8
+  m_MinSize: {x: 100, y: 200}
+  m_MaxSize: {x: 8096, y: 16192}
+  vertical: 1
+  controlID: 250
+--- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -37,9 +139,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Children:
-  - {fileID: 3}
-  - {fileID: 5}
-  - {fileID: 4}
+  - {fileID: 7}
+  - {fileID: 9}
+  - {fileID: 8}
   m_Position:
     serializedVersion: 2
     x: 0
@@ -52,7 +154,7 @@ MonoBehaviour:
   m_TopViewHeight: 30
   m_UseBottomView: 1
   m_BottomViewHeight: 20
---- !u!114 &3
+--- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,7 +176,7 @@ MonoBehaviour:
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
   m_LastLoadedLayoutName: 
---- !u!114 &4
+--- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,7 +197,7 @@ MonoBehaviour:
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
---- !u!114 &5
+--- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,9 +210,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Children:
-  - {fileID: 6}
-  - {fileID: 7}
-  - {fileID: 10}
+  - {fileID: 3}
+  - {fileID: 11}
+  - {fileID: 5}
   m_Position:
     serializedVersion: 2
     x: 0
@@ -120,8 +222,8 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 52
---- !u!114 &6
+  controlID: 86
+--- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,17 +239,17 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 0
-    width: 197.6
-    height: 722.8
+    y: 534.4
+    width: 228.8
+    height: 188.39996
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 12}
+  m_ActualView: {fileID: 17}
   m_Panes:
-  - {fileID: 12}
+  - {fileID: 17}
   m_Selected: 0
   m_LastSelected: 0
---- !u!114 &7
+--- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,19 +262,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Children:
-  - {fileID: 8}
-  - {fileID: 9}
+  - {fileID: 12}
+  - {fileID: 13}
   m_Position:
     serializedVersion: 2
-    x: 197.6
+    x: 228.8
     y: 0
-    width: 584.80005
+    width: 874.39996
     height: 722.8
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 53
---- !u!114 &8
+  controlID: 87
+--- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,17 +291,17 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 584.80005
-    height: 348.8
+    width: 874.39996
+    height: 438.4
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 18}
+  m_ActualView: {fileID: 23}
   m_Panes:
-  - {fileID: 13}
   - {fileID: 18}
+  - {fileID: 23}
   m_Selected: 1
   m_LastSelected: 1
---- !u!114 &9
+--- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -209,24 +311,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 348.8
-    width: 584.80005
-    height: 374
-  m_MinSize: {x: 232, y: 271}
-  m_MaxSize: {x: 10002, y: 10021}
-  m_ActualView: {fileID: 14}
+    y: 438.4
+    width: 874.39996
+    height: 284.4
+  m_MinSize: {x: 102, y: 121}
+  m_MaxSize: {x: 4002, y: 4021}
+  m_ActualView: {fileID: 20}
   m_Panes:
-  - {fileID: 14}
-  - {fileID: 15}
+  - {fileID: 20}
   m_Selected: 0
-  m_LastSelected: 1
---- !u!114 &10
+  m_LastSelected: 0
+--- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -241,20 +342,232 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 782.4
+    x: 0
     y: 0
-    width: 753.6
-    height: 722.8
+    width: 432.80005
+    height: 481.6
   m_MinSize: {x: 101, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 11}
+  m_ActualView: {fileID: 16}
   m_Panes:
-  - {fileID: 11}
   - {fileID: 16}
-  - {fileID: 17}
+  - {fileID: 21}
+  - {fileID: 22}
   m_Selected: 0
-  m_LastSelected: 1
---- !u!114 &11
+  m_LastSelected: 2
+--- !u!114 &15
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 13401, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Test Runner
+    m_Image: {fileID: 0}
+    m_Tooltip: 
+  m_Pos:
+    serializedVersion: 2
+    x: 1103.2001
+    y: 555.2
+    width: 431.80005
+    height: 220.19998
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+  m_Spl:
+    ID: 301
+    splitterInitialOffset: 0
+    currentActiveSplitter: -1
+    realSizes:
+    - 112
+    - 37.600006
+    relativeSizes:
+    - 0.75
+    - 0.25
+    minSizes:
+    - 32
+    - 32
+    maxSizes:
+    - 0
+    - 0
+    lastTotalSize: 149.6
+    splitSize: 6
+    xOffset: 0
+    m_Version: 1
+    oldRealSizes: 
+    oldMinSizes: 
+    oldMaxSizes: 
+    oldSplitSize: 0
+  m_TestTypeToolbarIndex: 1
+  m_PlayModeTestListGUI:
+    m_Window: {fileID: 0}
+    m_NewResultList: []
+    m_ResultText: 
+    m_ResultStacktrace: 
+    m_TestListState:
+      scrollPos: {x: 0, y: 0}
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 
+      m_RenameOverlay:
+        m_UserAcceptedRename: 0
+        m_Name: 
+        m_OriginalName: 
+        m_EditFieldRect:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        m_UserData: 0
+        m_IsWaitingForDelay: 0
+        m_IsRenaming: 0
+        m_OriginalEventType: 11
+        m_IsRenamingFilename: 0
+        m_ClientGUIView: {fileID: 0}
+      m_SearchString: 
+    m_TestRunnerUIFilter:
+      PassedHidden: 0
+      FailedHidden: 0
+      NotRunHidden: 0
+      m_SearchString: 
+      selectedCategoryMask: 0
+      availableCategories: []
+    m_SelectedOption: 0
+  m_EditModeTestListGUI:
+    m_Window: {fileID: 15}
+    m_NewResultList:
+    - id: 1000
+      uniqueId: '[Quarters SDK v3][suite]'
+      name: Quarters SDK v3
+      fullName: Quarters SDK v3
+      resultStatus: 1
+      duration: 279.90176
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 
+      parentUniqueId: 
+    - id: 1003
+      uniqueId: '[EditMode][C:/desarrollo/weiks/quarters-unity-sdk/Library/ScriptAssemblies/EditMode.dll][suite]'
+      name: EditMode.dll
+      fullName: C:/desarrollo/weiks/quarters-unity-sdk/Library/ScriptAssemblies/EditMode.dll
+      resultStatus: 1
+      duration: 279.84705
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1000
+      parentUniqueId: '[Quarters SDK v3][suite]'
+    - id: 1001
+      uniqueId: EditMode.dll/[EditMode][SignInTest][suite]
+      name: SignInTest
+      fullName: SignInTest
+      resultStatus: 1
+      duration: 279.84595
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 1
+      categories: []
+      parentId: 1003
+      parentUniqueId: '[EditMode][C:/desarrollo/weiks/quarters-unity-sdk/Library/ScriptAssemblies/EditMode.dll][suite]'
+    - id: 1002
+      uniqueId: EditMode.dll/SignInTest/[EditMode][SignInTest.SignInTestInstantiates]
+      name: SignInTestInstantiates
+      fullName: SignInTest.SignInTestInstantiates
+      resultStatus: 0
+      duration: 0
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: EditMode.dll/[EditMode][SignInTest][suite]
+    - id: 1003
+      uniqueId: EditMode.dll/SignInTest/[EditMode][SignInTest.SignInTestLogin]
+      name: SignInTestLogin
+      fullName: SignInTest.SignInTestLogin
+      resultStatus: 0
+      duration: 0
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: EditMode.dll/[EditMode][SignInTest][suite]
+    m_ResultText: 'SignInTestSimplePasses (279,845s)
+
+      ---
+
+      You are trying
+      to create a MonoBehaviour using the ''new'' keyword.  This is not allowed. 
+      MonoBehaviours can only be added using AddComponent(). Alternatively, your
+      script can inherit from ScriptableObject or no base class at all'
+    m_ResultStacktrace: 
+    m_TestListState:
+      scrollPos: {x: 0, y: 0}
+      m_SelectedIDs: 7b1fa8a0
+      m_LastClickedID: -1599594629
+      m_ExpandedIDs: c7cc9583fb1821bb527bc65bffffff7f
+      m_RenameOverlay:
+        m_UserAcceptedRename: 0
+        m_Name: 
+        m_OriginalName: 
+        m_EditFieldRect:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 0
+          height: 0
+        m_UserData: 0
+        m_IsWaitingForDelay: 0
+        m_IsRenaming: 0
+        m_OriginalEventType: 11
+        m_IsRenamingFilename: 0
+        m_ClientGUIView: {fileID: 0}
+      m_SearchString: 
+    m_TestRunnerUIFilter:
+      PassedHidden: 0
+      FailedHidden: 0
+      NotRunHidden: 0
+      m_SearchString: 
+      selectedCategoryMask: 0
+      availableCategories:
+      - Uncategorized
+--- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -274,100 +587,82 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 782.4
+    x: 1103.2001
     y: 73.6
-    width: 752.6
-    height: 701.8
+    width: 431.80005
+    height: 460.6
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   hasRefreshed: 1
   availablePackages:
-  - Id: Newtonsoft.Json
-    Version: 13.0.1
-    Title: Json.NET
-    Description: Json.NET is a popular high-performance JSON framework for .NET
+  - Id: System.Runtime.CompilerServices.Unsafe
+    Version: 6.0.0
+    Title: System.Runtime.CompilerServices.Unsafe
+    Description: 'Provides the System.Runtime.CompilerServices.Unsafe class, which
+      provides generic, low-level functionality for manipulating pointers.
+
+
+      Commonly
+      Used Types:
+
+      System.Runtime.CompilerServices.Unsafe'
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://www.nuget.org/packages/System.Runtime.CompilerServices.Unsafe/6.0.0/license
+    DownloadUrl: https://www.nuget.org/api/v2/package/System.Runtime.CompilerServices.Unsafe/6.0.0
+    DownloadCount: 2147483647
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: HiNetCloud.System.Runtime.CompilerServices.Unsafe
+    Version: 22.11.2.8
+    Title: System.Runtime.CompilerServices.Unsafe-Library For Hangzhou NetCloud Technology
+      Co., Ltd
+    Description: "22.11.2.8-HiNetCoreAssembly-MD5\u3010xhDoKLVAAVdNht0u1zDjkg==\u3011"
+    Summary: 
+    ReleaseNotes: System.Runtime.CompilerServices.Unsafe-Library For Hangzhou NetCloud
+      Technology Co., Ltd
+    LicenseUrl: https://www.nuget.org/packages/HiNetCloud.System.Runtime.CompilerServices.Unsafe/22.11.2.8/license
+    DownloadUrl: https://www.nuget.org/api/v2/package/HiNetCloud.System.Runtime.CompilerServices.Unsafe/22.11.2.8
+    DownloadCount: 10957
+    Authors: Eric.Zhang
+    Icon: {fileID: 0}
+    ProjectUrl: http://www.hinetcloud.com/NugetProjectUrls/System.Runtime.CompilerServices.Unsafe.html
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: SafelyUnsafe
+    Version: 1.0.0
+    Title: SafelyUnsafe
+    Description: "SafelyUnsafe provides System.Runtime.CompilerServices.Unsafe with
+      a \"little\" more safety Wrapper Method. And also provides several support
+      methods.\n\n\u2022 It is implemented in the UnsafeUnmanaged class. In most
+      cases, you just replace Unsafe to UnsafeUnmanaged.\n  All type argument is
+      restricted to unmanaged\n\u2022 overload for ref readonly, with an ReadOnly
+      in the suffix.\n\u2022 Utility methods like OffsetOf, Overlaps, NullRef, IsNullRef.\n\u2022
+      .NET Standard 2.0 is supported."
     Summary: 
     ReleaseNotes: 
-    LicenseUrl: https://www.nuget.org/packages/Newtonsoft.Json/13.0.1/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Newtonsoft.Json/13.0.1
-    DownloadCount: 2147483647
-    Authors: James Newton-King
+    LicenseUrl: https://www.nuget.org/packages/SafelyUnsafe/1.0.0/license
+    DownloadUrl: https://www.nuget.org/api/v2/package/SafelyUnsafe/1.0.0
+    DownloadCount: 718
+    Authors: udaken
     Icon: {fileID: 0}
-    ProjectUrl: https://www.newtonsoft.com/json
+    ProjectUrl: https://github.com/udaken/SafelyUnsafe
     RepositoryUrl: 
     RepositoryType: 0
     RepositoryBranch: 
     RepositoryCommit: 
-  - Id: Microsoft.Extensions.DependencyInjection
-    Version: 6.0.1
-    Title: Microsoft.Extensions.DependencyInjection
-    Description: Default implementation of dependency injection for Microsoft.Extensions.DependencyInjection.
-    Summary: 
-    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
-    LicenseUrl: https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/6.0.1/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.DependencyInjection/6.0.1
-    DownloadCount: 1554868718
-    Authors: Microsoft
-    Icon: {fileID: 0}
-    ProjectUrl: https://dot.net/
-    RepositoryUrl: 
-    RepositoryType: 0
-    RepositoryBranch: 
-    RepositoryCommit: 
-  - Id: Microsoft.Extensions.Logging
-    Version: 6.0.0
-    Title: Microsoft.Extensions.Logging
-    Description: Logging infrastructure default implementation for Microsoft.Extensions.Logging.
-    Summary: 
-    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
-    LicenseUrl: https://www.nuget.org/packages/Microsoft.Extensions.Logging/6.0.0/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Logging/6.0.0
-    DownloadCount: 1468824657
-    Authors: Microsoft
-    Icon: {fileID: 0}
-    ProjectUrl: https://dot.net/
-    RepositoryUrl: 
-    RepositoryType: 0
-    RepositoryBranch: 
-    RepositoryCommit: 
-  - Id: System.Text.Json
-    Version: 6.0.6
-    Title: System.Text.Json
-    Description: 'Provides high-performance and low-allocating types that serialize
-      objects to JavaScript Object Notation (JSON) text and deserialize JSON text
-      to objects, with UTF-8 support built-in. Also provides types to read and write
-      JSON text encoded as UTF-8, and to create an in-memory document object model
-      (DOM), that is read-only, for random access of the JSON elements within a structured
-      view of the data.
-
-
-      Commonly Used Types:
-
-      System.Text.Json.JsonSerializer
-
-      System.Text.Json.JsonDocument
-
-      System.Text.Json.JsonElement
-
-      System.Text.Json.Utf8JsonWriter
-
-      System.Text.Json.Utf8JsonReader'
-    Summary: 
-    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
-    LicenseUrl: https://www.nuget.org/packages/System.Text.Json/6.0.6/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/System.Text.Json/6.0.6
-    DownloadCount: 617026580
-    Authors: Microsoft
-    Icon: {fileID: 0}
-    ProjectUrl: https://dot.net/
-    RepositoryUrl: 
-    RepositoryType: 0
-    RepositoryBranch: 
-    RepositoryCommit: 
+  updatePackages:
   - Id: Microsoft.Bcl.AsyncInterfaces
-    Version: 6.0.0
+    Version: 7.0.0
     Title: Microsoft.Bcl.AsyncInterfaces
     Description: 'Provides the IAsyncEnumerable<T> and IAsyncDisposable interfaces
       and helper types for .NET Standard 2.0. This package is not required starting
@@ -383,9 +678,9 @@ MonoBehaviour:
       System.Collections.Generic.IAsyncEnumerator'
     Summary: 
     ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
-    LicenseUrl: https://www.nuget.org/packages/Microsoft.Bcl.AsyncInterfaces/6.0.0/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Bcl.AsyncInterfaces/6.0.0
-    DownloadCount: 592204249
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Bcl.AsyncInterfaces/7.0.0
+    DownloadCount: 648185212
     Authors: Microsoft
     Icon: {fileID: 0}
     ProjectUrl: https://dot.net/
@@ -393,79 +688,16 @@ MonoBehaviour:
     RepositoryType: 0
     RepositoryBranch: 
     RepositoryCommit: 
-  - Id: Serilog
-    Version: 2.12.0
-    Title: Serilog
-    Description: Simple .NET logging with fully-structured events
-    Summary: 
-    ReleaseNotes: 
-    LicenseUrl: https://www.nuget.org/packages/Serilog/2.12.0/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Serilog/2.12.0
-    DownloadCount: 566615364
-    Authors: Serilog Contributors
-    Icon: {fileID: 0}
-    ProjectUrl: https://serilog.net/
-    RepositoryUrl: 
-    RepositoryType: 0
-    RepositoryBranch: 
-    RepositoryCommit: 
-  - Id: Microsoft.EntityFrameworkCore
-    Version: 6.0.10
-    Title: Microsoft.EntityFrameworkCore
-    Description: 'Entity Framework Core is a modern object-database mapper for .NET.
-      It supports LINQ queries, change tracking, updates, and schema migrations.
-      EF Core works with SQL Server, Azure SQL Database, SQLite, Azure Cosmos DB,
-      MySQL, PostgreSQL, and other databases through a provider plugin API.
-
-
-      Commonly
-      Used Types:
-
-      Microsoft.EntityFrameworkCore.DbContext
-
-      Microsoft.EntityFrameworkCore.DbSet'
-    Summary: 
-    ReleaseNotes: 
-    LicenseUrl: https://www.nuget.org/packages/Microsoft.EntityFrameworkCore/6.0.10/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.EntityFrameworkCore/6.0.10
-    DownloadCount: 520605782
-    Authors: Microsoft
-    Icon: {fileID: 0}
-    ProjectUrl: https://docs.microsoft.com/ef/core/
-    RepositoryUrl: 
-    RepositoryType: 0
-    RepositoryBranch: 
-    RepositoryCommit: 
-  - Id: System.Drawing.Common
-    Version: 6.0.0
-    Title: System.Drawing.Common
-    Description: 'Provides access to GDI+ graphics functionality.
-
-
-      Commonly
-      Used Types:
-
-      System.Drawing.Bitmap
-
-      System.Drawing.BitmapData
-
-      System.Drawing.Brush
-
-      System.Drawing.Font
-
-      System.Drawing.Graphics
-
-      System.Drawing.Icon
-
-
-      Unix
-      support is disabled by default. See https://aka.ms/systemdrawingnonwindows
-      for more information.'
+  - Id: Microsoft.Extensions.Configuration
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Configuration
+    Description: Implementation of key-value pair based configuration for Microsoft.Extensions.Configuration.
+      Includes the memory configuration provider.
     Summary: 
     ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
-    LicenseUrl: https://www.nuget.org/packages/System.Drawing.Common/6.0.0/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/System.Drawing.Common/6.0.0
-    DownloadCount: 510378855
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Configuration/7.0.0
+    DownloadCount: 1650682377
     Authors: Microsoft
     Icon: {fileID: 0}
     ProjectUrl: https://dot.net/
@@ -473,21 +705,29 @@ MonoBehaviour:
     RepositoryType: 0
     RepositoryBranch: 
     RepositoryCommit: 
-  - Id: Microsoft.Win32.SystemEvents
-    Version: 6.0.1
-    Title: Microsoft.Win32.SystemEvents
-    Description: 'Provides access to Windows system event notifications.
+  - Id: Microsoft.Extensions.Configuration.Abstractions
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Configuration.Abstractions
+    Description: 'Abstractions of key-value pair based configuration.
 
 
       Commonly
       Used Types:
 
-      Microsoft.Win32.SystemEvents'
+      Microsoft.Extensions.Configuration.IConfiguration
+
+      Microsoft.Extensions.Configuration.IConfigurationBuilder
+
+      Microsoft.Extensions.Configuration.IConfigurationProvider
+
+      Microsoft.Extensions.Configuration.IConfigurationRoot
+
+      Microsoft.Extensions.Configuration.IConfigurationSection'
     Summary: 
     ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
-    LicenseUrl: https://www.nuget.org/packages/Microsoft.Win32.SystemEvents/6.0.1/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Win32.SystemEvents/6.0.1
-    DownloadCount: 470914602
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Configuration.Abstractions/7.0.0
+    DownloadCount: 2147483647
     Authors: Microsoft
     Icon: {fileID: 0}
     ProjectUrl: https://dot.net/
@@ -495,39 +735,16 @@ MonoBehaviour:
     RepositoryType: 0
     RepositoryBranch: 
     RepositoryCommit: 
-  - Id: Castle.Core
-    Version: 5.1.0
-    Title: Castle.Core
-    Description: Castle Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter
-    Summary: 
-    ReleaseNotes: 
-    LicenseUrl: https://www.nuget.org/packages/Castle.Core/5.1.0/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Castle.Core/5.1.0
-    DownloadCount: 447445459
-    Authors: Castle Project Contributors
-    Icon: {fileID: 0}
-    ProjectUrl: http://www.castleproject.org/
-    RepositoryUrl: 
-    RepositoryType: 0
-    RepositoryBranch: 
-    RepositoryCommit: 
-  - Id: System.Windows.Extensions
-    Version: 6.0.0
-    Title: System.Windows.Extensions
-    Description: 'Provides miscellaneous Windows-specific types
-
-
-      Commonly
-      Used Types:
-
-      System.Security.Cryptography.X509Certificates.X509Certificate2UI
-
-      System.Security.Cryptography.X509Certificates.X509SelectionFlag'
+  - Id: Microsoft.Extensions.Configuration.Binder
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Configuration.Binder
+    Description: Functionality to bind an object to data in configuration providers
+      for Microsoft.Extensions.Configuration.
     Summary: 
     ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
-    LicenseUrl: https://www.nuget.org/packages/System.Windows.Extensions/6.0.0/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/System.Windows.Extensions/6.0.0
-    DownloadCount: 366994315
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Configuration.Binder/7.0.0
+    DownloadCount: 1432760785
     Authors: Microsoft
     Icon: {fileID: 0}
     ProjectUrl: https://dot.net/
@@ -535,93 +752,142 @@ MonoBehaviour:
     RepositoryType: 0
     RepositoryBranch: 
     RepositoryCommit: 
-  - Id: Moq
-    Version: 4.18.2
-    Title: 'Moq: an enjoyable mocking library'
-    Description: 'Moq is the most popular and friendly mocking framework for .NET.
-
-
-      Built
-      from https://github.com/moq/moq4/tree/c60833da6'
+  - Id: Microsoft.Extensions.Configuration.FileExtensions
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Configuration.FileExtensions
+    Description: Extension methods for configuring file-based configuration providers
+      for Microsoft.Extensions.Configuration.
     Summary: 
-    ReleaseNotes: A changelog is available at https://github.com/moq/moq4/blob/main/CHANGELOG.md.
-    LicenseUrl: https://raw.githubusercontent.com/moq/moq4/main/License.txt
-    DownloadUrl: https://www.nuget.org/api/v2/package/Moq/4.18.2
-    DownloadCount: 347135007
-    Authors: Daniel Cazzulino, kzu
-    Icon: {fileID: 0}
-    ProjectUrl: https://github.com/moq/moq4
-    RepositoryUrl: 
-    RepositoryType: 0
-    RepositoryBranch: 
-    RepositoryCommit: 
-  - Id: Microsoft.Identity.Client
-    Version: 4.47.2
-    Title: Microsoft Authentication Library for .NET
-    Description: "This package contains the binaries of the Microsoft Authentication
-      Library for .NET (MSAL.NET).\n      MSAL.NET makes it easy to obtain tokens
-      from the Microsoft identity platform for developers (formally Azure AD v2.0)
-      signing-in users with work & school accounts, Microsoft personal accounts,
-      and social identities via Azure AD B2C. These tokens provide access to Microsoft
-      Cloud API and any other API secured by the Microsoft identity platform. This
-      version supports adding authentication functionality to your .NET based clients
-      - .NET, .NET Framework, .NET MAUI, Xamarin iOS, Xamarin Android and UWP"
-    Summary: 
-    ReleaseNotes: The release notes are available at https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/releases
-      and the roadmap at https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki#roadmap.
-      To provide feedback, fill-in the survey at https://ncv.microsoft.com/JrXkdySi0m.
-    LicenseUrl: https://www.nuget.org/packages/Microsoft.Identity.Client/4.47.2/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Identity.Client/4.47.2
-    DownloadCount: 345287811
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Configuration.FileExtensions/7.0.0
+    DownloadCount: 785234817
     Authors: Microsoft
     Icon: {fileID: 0}
-    ProjectUrl: https://go.microsoft.com/fwlink/?linkid=844761
+    ProjectUrl: https://dot.net/
     RepositoryUrl: 
     RepositoryType: 0
     RepositoryBranch: 
     RepositoryCommit: 
-  - Id: AWSSDK.Core
-    Version: 3.7.100.3
-    Title: AWSSDK - Core Runtime
-    Description: The Amazon Web Services SDK for .NET - Core Runtime
+  - Id: Microsoft.Extensions.Configuration.Json
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Configuration.Json
+    Description: JSON configuration provider implementation for Microsoft.Extensions.Configuration.
     Summary: 
-    ReleaseNotes: 
-    LicenseUrl: http://aws.amazon.com/apache2.0/
-    DownloadUrl: https://www.nuget.org/api/v2/package/AWSSDK.Core/3.7.100.3
-    DownloadCount: 339088150
-    Authors: Amazon Web Services
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Configuration.Json/7.0.0
+    DownloadCount: 655084892
+    Authors: Microsoft
     Icon: {fileID: 0}
-    ProjectUrl: https://github.com/aws/aws-sdk-net/
+    ProjectUrl: https://dot.net/
     RepositoryUrl: 
     RepositoryType: 0
     RepositoryBranch: 
     RepositoryCommit: 
-  - Id: Newtonsoft.Json.Bson
-    Version: 1.0.2
-    Title: Newtonsoft.Json.Bson
-    Description: Json.NET BSON adds support for reading and writing BSON
-    Summary: 
-    ReleaseNotes: 
-    LicenseUrl: https://www.nuget.org/packages/Newtonsoft.Json.Bson/1.0.2/license
-    DownloadUrl: https://www.nuget.org/api/v2/package/Newtonsoft.Json.Bson/1.0.2
-    DownloadCount: 326665304
-    Authors: James Newton-King
-    Icon: {fileID: 0}
-    ProjectUrl: http://www.newtonsoft.com/json
-    RepositoryUrl: 
-    RepositoryType: 0
-    RepositoryBranch: 
-    RepositoryCommit: 
-  updatePackages:
   - Id: Microsoft.Extensions.DependencyInjection
-    Version: 6.0.1
+    Version: 7.0.0
     Title: Microsoft.Extensions.DependencyInjection
     Description: Default implementation of dependency injection for Microsoft.Extensions.DependencyInjection.
     Summary: 
     ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
     LicenseUrl: https://licenses.nuget.org/MIT
-    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.DependencyInjection/6.0.1
-    DownloadCount: 1554868718
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.DependencyInjection/7.0.0
+    DownloadCount: 1669722804
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.DependencyInjection.Abstractions
+    Version: 7.0.0
+    Title: Microsoft.Extensions.DependencyInjection.Abstractions
+    Description: 'Abstractions for dependency injection.
+
+
+      Commonly Used Types:
+
+      Microsoft.Extensions.DependencyInjection.IServiceCollection'
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.DependencyInjection.Abstractions/7.0.0
+    DownloadCount: 2147483647
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.FileProviders.Abstractions
+    Version: 7.0.0
+    Title: Microsoft.Extensions.FileProviders.Abstractions
+    Description: 'Abstractions of files and directories.
+
+
+      Commonly Used Types:
+
+      Microsoft.Extensions.FileProviders.IDirectoryContents
+
+      Microsoft.Extensions.FileProviders.IFileInfo
+
+      Microsoft.Extensions.FileProviders.IFileProvider'
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.FileProviders.Abstractions/7.0.0
+    DownloadCount: 1589980086
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.FileProviders.Physical
+    Version: 7.0.0
+    Title: Microsoft.Extensions.FileProviders.Physical
+    Description: File provider for physical files for Microsoft.Extensions.FileProviders.
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.FileProviders.Physical/7.0.0
+    DownloadCount: 938517651
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.FileSystemGlobbing
+    Version: 7.0.0
+    Title: Microsoft.Extensions.FileSystemGlobbing
+    Description: File system globbing to find files matching a specified pattern.
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.FileSystemGlobbing/7.0.0
+    DownloadCount: 981244779
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.Logging
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Logging
+    Description: Logging infrastructure default implementation for Microsoft.Extensions.Logging.
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Logging/7.0.0
+    DownloadCount: 1572846093
     Authors: Microsoft
     Icon: {fileID: 0}
     ProjectUrl: https://dot.net/
@@ -630,7 +896,7 @@ MonoBehaviour:
     RepositoryBranch: 
     RepositoryCommit: 
   - Id: Microsoft.Extensions.Logging.Abstractions
-    Version: 6.0.2
+    Version: 7.0.0
     Title: Microsoft.Extensions.Logging.Abstractions
     Description: 'Logging abstractions for Microsoft.Extensions.Logging.
 
@@ -654,8 +920,178 @@ MonoBehaviour:
     Summary: 
     ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
     LicenseUrl: https://licenses.nuget.org/MIT
-    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Logging.Abstractions/6.0.2
-    DownloadCount: 2074033064
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Logging.Abstractions/7.0.0
+    DownloadCount: 2147483647
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.Logging.Configuration
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Logging.Configuration
+    Description: Configuration support for Microsoft.Extensions.Logging.
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Logging.Configuration/7.0.0
+    DownloadCount: 426061261
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.Logging.Console
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Logging.Console
+    Description: Console logger provider implementation for Microsoft.Extensions.Logging.
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Logging.Console/7.0.0
+    DownloadCount: 350332580
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.Options
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Options
+    Description: Provides a strongly typed way of specifying and accessing settings
+      using dependency injection.
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Options/7.0.0
+    DownloadCount: 2147483647
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.Options.ConfigurationExtensions
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Options.ConfigurationExtensions
+    Description: Provides additional configuration specific functionality related
+      to Options.
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Options.ConfigurationExtensions/7.0.0
+    DownloadCount: 730357260
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: Microsoft.Extensions.Primitives
+    Version: 7.0.0
+    Title: Microsoft.Extensions.Primitives
+    Description: 'Primitives shared by framework extensions. Commonly used types
+      include:
+
+
+      Commonly Used Types:
+
+      Microsoft.Extensions.Primitives.IChangeToken
+
+      Microsoft.Extensions.Primitives.StringValues
+
+      Microsoft.Extensions.Primitives.StringSegment'
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/Microsoft.Extensions.Primitives/7.0.0
+    DownloadCount: 2147483647
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: System.Diagnostics.DiagnosticSource
+    Version: 7.0.0
+    Title: System.Diagnostics.DiagnosticSource
+    Description: 'Provides Classes that allow you to decouple code logging rich (unserializable)
+      diagnostics/telemetry (e.g. framework) from code that consumes it (e.g. tools)
+
+
+      Commonly
+      Used Types:
+
+      System.Diagnostics.DiagnosticListener
+
+      System.Diagnostics.DiagnosticSource'
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/System.Diagnostics.DiagnosticSource/7.0.0
+    DownloadCount: 2147483647
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: System.Text.Encodings.Web
+    Version: 7.0.0
+    Title: System.Text.Encodings.Web
+    Description: 'Provides types for encoding and escaping strings for use in JavaScript,
+      HyperText Markup Language (HTML), and uniform resource locators (URL).
+
+
+      Commonly
+      Used Types:
+
+      System.Text.Encodings.Web.HtmlEncoder
+
+      System.Text.Encodings.Web.UrlEncoder
+
+      System.Text.Encodings.Web.JavaScriptEncoder'
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/System.Text.Encodings.Web/7.0.0
+    DownloadCount: 1149899009
+    Authors: Microsoft
+    Icon: {fileID: 0}
+    ProjectUrl: https://dot.net/
+    RepositoryUrl: 
+    RepositoryType: 0
+    RepositoryBranch: 
+    RepositoryCommit: 
+  - Id: System.Text.Json
+    Version: 7.0.0
+    Title: System.Text.Json
+    Description: 'Provides high-performance and low-allocating types that serialize
+      objects to JavaScript Object Notation (JSON) text and deserialize JSON text
+      to objects, with UTF-8 support built-in. Also provides types to read and write
+      JSON text encoded as UTF-8, and to create an in-memory document object model
+      (DOM), that is read-only, for random access of the JSON elements within a structured
+      view of the data.
+
+
+      The System.Text.Json library is built-in as part
+      of the shared framework in .NET Runtime. The package can be installed when
+      you need to use it in other target frameworks.'
+    Summary: 
+    ReleaseNotes: https://go.microsoft.com/fwlink/?LinkID=799421
+    LicenseUrl: https://licenses.nuget.org/MIT
+    DownloadUrl: https://www.nuget.org/api/v2/package/System.Text.Json/7.0.0
+    DownloadCount: 697404526
     Authors: Microsoft
     Icon: {fileID: 0}
     ProjectUrl: https://dot.net/
@@ -665,7 +1101,7 @@ MonoBehaviour:
     RepositoryCommit: 
   numberToSkip: 0
   defaultIcon: {fileID: 2800000, guid: eec19781926cd2248b7c9abfde8db555, type: 3}
---- !u!114 &12
+--- !u!114 &17
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -686,9 +1122,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 73.6
-    width: 196.6
-    height: 701.8
+    y: 608
+    width: 227.8
+    height: 167.39996
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -696,9 +1132,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 14070000
       m_LastClickedID: 0
-      m_ExpandedIDs: 2cfbffff
+      m_ExpandedIDs: 6cf3ffff66f6ffff2cfbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -714,7 +1150,7 @@ MonoBehaviour:
         m_IsRenaming: 0
         m_OriginalEventType: 11
         m_IsRenamingFilename: 0
-        m_ClientGUIView: {fileID: 6}
+        m_ClientGUIView: {fileID: 10}
       m_SearchString: 
     m_ExpandedScenes: []
     m_CurrenRootInstanceID: 0
@@ -722,7 +1158,7 @@ MonoBehaviour:
       m_IsLocked: 0
     m_CurrentSortingName: TransformSorting
   m_WindowGUID: 4c969a2b90040154d917609493e03593
---- !u!114 &13
+--- !u!114 &18
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -969,9 +1405,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0.46919566, y: 0.19002607, z: -0.012948353}
+    m_Target: {x: 0, y: 0, z: 0}
     speed: 2
-    m_Value: {x: 0.46919566, y: 0.19002607, z: -0.012948353}
+    m_Value: {x: 0, y: 0, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1022,9 +1458,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1.363533
+    m_Target: 0.8660254
     speed: 2
-    m_Value: 1.363533
+    m_Value: 0.8660254
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1049,7 +1485,7 @@ MonoBehaviour:
   m_SceneVisActive: 1
   m_LastLockedObject: {fileID: 0}
   m_ViewIsLockedToObject: 0
---- !u!114 &14
+--- !u!114 &19
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1069,10 +1505,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 197.6
-    y: 422.4
-    width: 582.80005
-    height: 353
+    x: 0
+    y: 73.6
+    width: 227.8
+    height: 513.4
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -1090,22 +1526,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Packages/gg.poq.unity.sdk/Runtime/Plugins
+    - Assets/Tests/EditMode
     m_Globs: []
     m_OriginalText: 
-  m_ViewMode: 1
+  m_ViewMode: 0
   m_StartGridSize: 16
   m_LastFolders:
-  - Packages/gg.poq.unity.sdk/Runtime/Plugins
+  - Assets/Packages
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\desarrollo\weiks\quarters-unity-sdk
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 279}
-    m_SelectedIDs: 38580000
-    m_LastClickedID: 22584
-    m_ExpandedIDs: 00000000525500005455000056550000585500005a5500005c5500005e55000060550000625500006455000066550000685500006a5500006c55000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 143}
+    m_SelectedIDs: 98570000
+    m_LastClickedID: 22424
+    m_ExpandedIDs: 00000000da550000dc550000de550000e0550000e2550000e4550000e6550000e8550000ea550000ec550000ee550000f0550000f2550000f4550000f6550000f8550000fa550000fc550000fe55000000560000025600000456000006560000085600000a5600000c5600000e560000105600001256000014560000165600001856000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1121,7 +1557,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 9}
+      m_ClientGUIView: {fileID: 13}
     m_SearchString: 
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
@@ -1133,7 +1569,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000525500005455000056550000585500005a5500005c5500005e55000060550000625500006455000066550000685500006a5500006c550000
+    m_ExpandedIDs: ffffffff00000000da550000dc550000de550000e0550000e2550000e4550000e6550000e8550000ea550000ec550000ee550000f0550000f2550000f4550000f6550000f8550000fa550000fc550000fe55000000560000025600000456000006560000085600000a5600000c5600000e5600001056000012560000145600001656000018560000a45700000e580000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1177,7 +1613,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 9}
+      m_ClientGUIView: {fileID: 13}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -1188,8 +1624,8 @@ MonoBehaviour:
     m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
-  m_DirectoriesAreaWidth: 340
---- !u!114 &15
+  m_DirectoriesAreaWidth: 241
+--- !u!114 &20
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1209,15 +1645,15 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 197.6
-    y: 422.4
-    width: 582.80005
-    height: 353
+    x: 228.8
+    y: 512
+    width: 872.39996
+    height: 263.4
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
---- !u!114 &16
+--- !u!114 &21
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1237,9 +1673,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1164.8
+    x: 782.4
     y: 73.6
-    width: 370.19995
+    width: 752.6
     height: 701.8
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -1251,14 +1687,14 @@ MonoBehaviour:
     m_CachedPref: 160
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: -1
+  m_LastInspectedObjectInstanceID: 1812
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:
     m_IsLocked: 0
   m_PreviewWindow: {fileID: 0}
---- !u!114 &17
+--- !u!114 &22
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1278,15 +1714,15 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1164.8
+    x: 1205.6
     y: 73.6
-    width: 370.19995
+    width: 329.40002
     height: 701.8
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
---- !u!114 &18
+--- !u!114 &23
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1306,10 +1742,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 197.6
+    x: 228.8
     y: 73.6
-    width: 582.80005
-    height: 327.8
+    width: 872.39996
+    height: 417.4
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -1322,7 +1758,7 @@ MonoBehaviour:
   m_ShowGizmos: 0
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 728.50006, y: 383.5}
+  m_TargetSize: {x: 1090.5, y: 495.5}
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
@@ -1337,10 +1773,10 @@ MonoBehaviour:
     m_VRangeLocked: 0
     hZoomLockedByDefault: 0
     vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -291.40002
-    m_HBaseRangeMax: 291.40002
-    m_VBaseRangeMin: -153.40001
-    m_VBaseRangeMax: 153.40001
+    m_HBaseRangeMin: -436.2
+    m_HBaseRangeMax: 436.2
+    m_VBaseRangeMin: -198.2
+    m_VBaseRangeMax: 198.2
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -1358,23 +1794,23 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 582.80005
-      height: 306.8
-    m_Scale: {x: 0.9999999, y: 0.9999999}
-    m_Translation: {x: 291.40002, y: 153.4}
+      width: 872.39996
+      height: 396.4
+    m_Scale: {x: 0.99999994, y: 0.99999994}
+    m_Translation: {x: 436.19998, y: 198.2}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -291.40005
-      y: -153.40001
-      width: 582.8001
-      height: 306.80002
+      x: -436.2
+      y: -198.20001
+      width: 872.4
+      height: 396.40002
     m_MinimalGUI: 1
-  m_defaultScale: 0.9999999
-  m_LastWindowPixelSize: {x: 728.50006, y: 409.75}
+  m_defaultScale: 0.99999994
+  m_LastWindowPixelSize: {x: 1090.5, y: 521.75}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000100000000000000
