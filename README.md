@@ -190,11 +190,21 @@ Then check in your Unity `Player Settings` inside `Publishing Settings/Build` th
 If your manifest already had these lines and option checked, skip to [step B](#b-set-your-android-default-browser-to-chrome) if that was not the case, save your manifest and rebuild your app (important: just to be sure please delete your build output folder before rebuild) to generate the new installer that you will use for steps B and C. 
 
 #### B) Set your Android default browser to Chrome
-Some mobile internet browsers (like Samsung default browser) don't redirect to the app inmediatly. In case you want to be redirected inmediatly to the app change your default internet mobile browser:
+Some mobile internet browsers (like Samsung default browser) don't redirect to the app inmediatly. 
+
+##### For Samsung devices or similar
+In case you want to be redirected inmediatly to the app change your default internet mobile browser:
 1. On your Android phone, tap `Settings`.
 2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) and finally `Default Apps`
 3. There on the option `Browser App` you will be able to change your default mobile browser
 ![image](https://user-images.githubusercontent.com/3865131/173102296-e0a56135-b621-491f-9326-4aafdcbdd983.png)
+
+##### For Xiaomi devices
+The steps would be similar to [`Samsung Devices`](#for-samsung-devices).
+1. Configure your `Default apps` (set `Chrome` as default browser) and their corresponding `Redirect URLs`
+https://user-images.githubusercontent.com/3865131/207620737-609a95d8-e372-43ee-8ec7-8a56dbd4c921.mp4
+2. App configuration (check for 3 permissions granted):
+https://user-images.githubusercontent.com/3865131/207619186-fc5cff1d-ff17-46d0-a70b-306682989860.mp4
 
 #### C) Enable support to web addresses in your app
 1. On your Android phone, tap `Settings`.
