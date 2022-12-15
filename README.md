@@ -202,8 +202,12 @@ In case you want to be redirected inmediatly to the app change your default inte
 ##### For Xiaomi devices
 The steps would be similar to [`Samsung Devices`](#for-samsung-devices).
 1. Configure your `Default apps` (set `Chrome` as default browser) and their corresponding `Redirect URLs`
+
 https://user-images.githubusercontent.com/3865131/207620737-609a95d8-e372-43ee-8ec7-8a56dbd4c921.mp4
+
 2. App configuration (check for 3 permissions granted):
+
+
 https://user-images.githubusercontent.com/3865131/207619186-fc5cff1d-ff17-46d0-a70b-306682989860.mp4
 
 #### C) Enable support to web addresses in your app
