@@ -181,6 +181,19 @@ In case you want to be redirected inmediatly to the app change your default inte
 2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) and finally `Default Apps`
 3. There on the option `Browser App` you will be able to change your default mobile browser
 ![image](https://user-images.githubusercontent.com/3865131/173102296-e0a56135-b621-491f-9326-4aafdcbdd983.png)
+ 
+Now enable support to web addresses in your app
+1. On your Android phone, tap `Settings`.
+2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) `Default Apps/Openning links`
+3. Choose your app (ex `Quarters SDK`) there you will be able to enable `Open supported links`.
+4. Open `Supported web links` to check that the link of your app is in that list.
+
+You can follow the steps in this video:
+
+
+
+https://user-images.githubusercontent.com/3865131/188503301-94ddc74a-5dbb-45ae-9dc3-dedbd1fe6785.mp4
+
 
 ##### For Xiaomi devices
 The steps would be similar to [`Samsung Devices`](#for-samsung-devices).
@@ -193,19 +206,7 @@ https://user-images.githubusercontent.com/3865131/207620737-609a95d8-e372-43ee-8
 
 https://user-images.githubusercontent.com/3865131/207619186-fc5cff1d-ff17-46d0-a70b-306682989860.mp4
 
-#### B) Enable support to web addresses in your app
-1. On your Android phone, tap `Settings`.
-2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) `Default Apps/Openning links`
-3. Choose your app (ex `Quarters SDK`) there you will be able to enable `Open supported links`.
-4. Open `Supported web links` to check that the link of your app is in that list.
-
-You can follow the steps in this video:
-
-
-
-https://user-images.githubusercontent.com/3865131/188503301-94ddc74a-5dbb-45ae-9dc3-dedbd1fe6785.mp4
-
-#### C) This step is only for developers. Set your Android `manifest.xml` 
+#### B) Set your Android `manifest.xml` (this step is only for developers) 
 In your `Unity Project` set your Android `manifest.xml` settings to open your app url
 Open your Android manifest file and add these lines to enable the link redirection option in your app:
 ```
@@ -220,12 +221,11 @@ Then check in your Unity `Player Settings` inside `Publishing Settings/Build` th
 ![image](https://user-images.githubusercontent.com/3865131/195446906-39e4d49b-3cb2-4e6d-b97c-2008d807649c.png)
 
 
-If your manifest already had these lines and option checked, skip to [step B](#b-set-your-android-default-browser-to-chrome) if that was not the case, save your manifest and rebuild your app (important: just to be sure please delete your build output folder before rebuild) to generate the new installer that you will use for steps B and C. 
+Save your manifest and rebuild your app (important: just to be sure please delete your build output folder before rebuild) to generate the new installer that you will use. 
 
 
 
-
-If after performing steps A, B and C the problem persists, please read the following troubleshooting case [Still not redirecting to the app after pressing the `Authorize` button](#still-not-redirecting-to-the-app-after-pressing-the-authorize-button)
+If after performing steps A and B (for developers) the problem persists, please read the following troubleshooting case [Still not redirecting to the app after pressing the `Authorize` button](#still-not-redirecting-to-the-app-after-pressing-the-authorize-button)
 
 ### Pressing `Authorize` in iOS mobile doesn't redirect to the app.
 #### In the project target, “Signing & Capability” tab check that 'Associated Domains' is enabled with the right domain.
