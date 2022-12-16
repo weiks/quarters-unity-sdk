@@ -168,28 +168,11 @@ When you try to Pay or receive Quarters you get *Your app must be verified to tr
 1. Verify your app [contacting us](#before-you-start).
 
 ### Pressing `Authorize` in Android mobile doesn't redirect to the app.
-If you are not a developer you can jump to [step B](#b-set-your-android-default-browser-to-chrome).
-
 When you `Sign In` with the sample app you are not redirected to the app after pressing `Authorize` button in your browser.
 
 You need to:
-#### A) Set your Android `manifest.xml` settings to open your app url
-Open your Android manifest file and add these lines to enable the link redirection option in your app:
-```
-   <intent-filter android:autoVerify="true">
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="https" android:host="#YOUR_APP_LINK.games.poq.gg" android:pathPattern=".*" />
-      </intent-filter>
-```
-Then check in your Unity `Player Settings` inside `Publishing Settings/Build` the option `Custom Main Manifest`
-![image](https://user-images.githubusercontent.com/3865131/195446906-39e4d49b-3cb2-4e6d-b97c-2008d807649c.png)
 
-
-If your manifest already had these lines and option checked, skip to [step B](#b-set-your-android-default-browser-to-chrome) if that was not the case, save your manifest and rebuild your app (important: just to be sure please delete your build output folder before rebuild) to generate the new installer that you will use for steps B and C. 
-
-#### B) Set your Android default browser to Chrome
+#### A) Set your Android default browser to Chrome
 Some mobile internet browsers (like Samsung default browser) don't redirect to the app inmediatly. 
 
 ##### For Samsung devices or similar
@@ -210,7 +193,7 @@ https://user-images.githubusercontent.com/3865131/207620737-609a95d8-e372-43ee-8
 
 https://user-images.githubusercontent.com/3865131/207619186-fc5cff1d-ff17-46d0-a70b-306682989860.mp4
 
-#### C) Enable support to web addresses in your app
+#### B) Enable support to web addresses in your app
 1. On your Android phone, tap `Settings`.
 2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) `Default Apps/Openning links`
 3. Choose your app (ex `Quarters SDK`) there you will be able to enable `Open supported links`.
@@ -222,7 +205,22 @@ You can follow the steps in this video:
 
 https://user-images.githubusercontent.com/3865131/188503301-94ddc74a-5dbb-45ae-9dc3-dedbd1fe6785.mp4
 
+#### C) This step is only for developers. Set your Android `manifest.xml` 
+In your `Unity Project` set your Android `manifest.xml` settings to open your app url
+Open your Android manifest file and add these lines to enable the link redirection option in your app:
+```
+   <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="https" android:host="#YOUR_APP_LINK.games.poq.gg" android:pathPattern=".*" />
+      </intent-filter>
+```
+Then check in your Unity `Player Settings` inside `Publishing Settings/Build` the option `Custom Main Manifest`
+![image](https://user-images.githubusercontent.com/3865131/195446906-39e4d49b-3cb2-4e6d-b97c-2008d807649c.png)
 
+
+If your manifest already had these lines and option checked, skip to [step B](#b-set-your-android-default-browser-to-chrome) if that was not the case, save your manifest and rebuild your app (important: just to be sure please delete your build output folder before rebuild) to generate the new installer that you will use for steps B and C. 
 
 
 
