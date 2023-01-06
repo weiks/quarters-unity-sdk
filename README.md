@@ -36,17 +36,27 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
 ## Getting Started
 ### Installation
 1. Open Unity package manager
-2. Select **`"+"`** button and then **Add the package from git repository** (or if you have downloaded [QuartersSDK Unity project](https://github.com/weiks/quarters-unity-sdk) you can import it from there selecting `package.json` inside `quarters-unity-sdk-weiks\Packages\gg.poq.unity.sdk`)
+2. Add the package depending on your Unity version:
+    * **For `Unity 2021.3.2 or higher`**
+        1. Select **`"+"`** button and then **Add the package from git URL** 
+        ![Screenshot 2022-05-31 at 9 07 02 am](https://user-images.githubusercontent.com/41578378/171151345-c5cc06a3-4b30-48aa-b2ea-ae2542c810fe.png)
+    
+        2. Enter [QuartersSDK package git URL](https://github.com/weiks/poq-unity-package-manager.git) `https://github.com/weiks/poq-unity-package-manager.git` and press **Add** button. Unity Package Manager will pull Quarters Unity SDK package and all of its dependencies to the project.
+  
+    * **For older Unity versions**: 
+        1. Download the Asset file you need (`zip` or `tar.gz)` from [QuartersSDK package for Unity 2019](https://github.com/weiks/poq-unity-package-manager/releases/tag/3.0.2019) 
+        2. Unzip the package on your local folder 
+        3. Select **`"+"`** button and then **Add the package from disk** option    
+        ![image](https://user-images.githubusercontent.com/3865131/211084461-46eccaf5-71f2-497d-a3cb-96a4e5ec7193.png)
+    
+        4. Select the `package.json` file inside the folder where you unzipped `QuartersSDK package for Unity 2019`.
 
-![Screenshot 2022-05-31 at 9 07 02 am](https://user-images.githubusercontent.com/41578378/171151345-c5cc06a3-4b30-48aa-b2ea-ae2542c810fe.png)
-
-3. Enter the URL from [poq-unity-package-manager](https://github.com/weiks/poq-unity-package-manager.git) project repository and press **Add** button. Unity Package Manager will pull Quarters Unity SDK and all of its dependencies to the project.
-4. Add the following prefab to your first loaded scene `Packages/Quarters Unity SDK/Runtime/QuartersSDK/Prefabs/QuartersInit`
+3. Add the following prefab to your first loaded scene `Packages/Quarters Unity SDK/Runtime/QuartersSDK/Prefabs/QuartersInit`
 
 ![image](https://user-images.githubusercontent.com/3865131/202551878-87c3af8c-618f-431a-b6e9-69dec428ab88.png)
 
 
-5. Press **Open App Dashboard** button. The web browser will open [URL to create new Quarters app](https://apps.pocketfulofquarters.com/apps/new). Press **Save** button after populating the form.
+4. Press **Open App Dashboard** button. The web browser will open [URL to create new Quarters app](https://apps.pocketfulofquarters.com/apps/new). Press **Save** button after populating the form.
 
 ![Screenshot 2022-05-31 at 9 44 27 am](https://user-images.githubusercontent.com/41578378/171151698-45a22b3d-134f-4894-8859-c4e125e99392.png)
 
@@ -168,45 +178,13 @@ When you try to Pay or receive Quarters you get *Your app must be verified to tr
 1. Verify your app [contacting us](#before-you-start).
 
 ### Pressing `Authorize` in Android mobile doesn't redirect to the app.
+If you are not a developer you can jump to [step B](#b-set-your-android-default-browser-to-chrome).
+
 When you `Sign In` with the sample app you are not redirected to the app after pressing `Authorize` button in your browser.
 
 You need to:
 
-#### A) Set your Android default browser to Chrome
-Some mobile internet browsers (like Samsung default browser) don't redirect to the app inmediatly. 
-
-##### For Samsung devices or similar
-In case you want to be redirected inmediatly to the app change your default internet mobile browser:
-1. On your Android phone, tap `Settings`.
-2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) and finally `Default Apps`
-3. There on the option `Browser App` you will be able to change your default mobile browser
-![image](https://user-images.githubusercontent.com/3865131/173102296-e0a56135-b621-491f-9326-4aafdcbdd983.png)
- 
-Now enable support to web addresses in your app
-1. On your Android phone, tap `Settings`.
-2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) `Default Apps/Openning links`
-3. Choose your app (ex `Quarters SDK`) there you will be able to enable `Open supported links`.
-4. Open `Supported web links` to check that the link of your app is in that list.
-
-You can follow the steps in this video:
-
-
-
-https://user-images.githubusercontent.com/3865131/188503301-94ddc74a-5dbb-45ae-9dc3-dedbd1fe6785.mp4
-
-
-##### For Xiaomi devices
-The steps would be similar to [`Samsung Devices`](#for-samsung-devices).
-1. Configure your `Default apps` (set `Chrome` as default browser) and their corresponding `Redirect URLs`
-
-https://user-images.githubusercontent.com/3865131/207620737-609a95d8-e372-43ee-8ec7-8a56dbd4c921.mp4
-
-2. App configuration (check for 3 permissions granted):
-
-
-https://user-images.githubusercontent.com/3865131/207619186-fc5cff1d-ff17-46d0-a70b-306682989860.mp4
-
-#### B) Set your Android `manifest.xml` (this step is only for developers) 
+#### A) Set your Android `manifest.xml` (this step is only for developers) 
 In your `Unity Project` set your Android `manifest.xml` settings to open your app url
 Open your Android manifest file and add these lines to enable the link redirection option in your app:
 ```
@@ -224,8 +202,39 @@ Then check in your Unity `Player Settings` inside `Publishing Settings/Build` th
 Save your manifest and rebuild your app (important: just to be sure please delete your build output folder before rebuild) to generate the new installer that you will use. 
 
 
+#### B) Set your Android default browser and enable support to web addresses in your app
+Some mobile internet browsers (like Samsung default browser) don't redirect to the app inmediatly. 
 
-If after performing steps A and B (for developers) the problem persists, please read the following troubleshooting case [Still not redirecting to the app after pressing the `Authorize` button](#still-not-redirecting-to-the-app-after-pressing-the-authorize-button)
+##### For Samsung devices or Pixel
+In case you want to be redirected inmediatly to the app change your default internet mobile browser:
+1. On your Android phone, tap `Settings`.
+2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) and finally `Default Apps`
+3. There on the option `Browser App` you will be able to change your default mobile browser
+![image](https://user-images.githubusercontent.com/3865131/173102296-e0a56135-b621-491f-9326-4aafdcbdd983.png)
+ 
+Now enable support to web addresses in your app
+1. On your Android phone, tap `Settings`.
+2. Then tap `Apps & Notifications` (or in old Android versions `App Management`) `Default Apps/Openning links`
+3. Choose your app (ex `Quarters SDK`) there you will be able to enable `Open supported links`.
+4. Open `Supported web links` to check that the link of your app is in that list.
+
+You can follow the steps in this video:
+
+https://user-images.githubusercontent.com/3865131/188503301-94ddc74a-5dbb-45ae-9dc3-dedbd1fe6785.mp4
+
+
+##### For Xiaomi devices
+The steps would be similar to [`Samsung Devices`](#for-samsung-devices).
+1. Configure your `Default apps` (set `Chrome` as default browser) and their corresponding `Redirect URLs`
+
+https://user-images.githubusercontent.com/3865131/207620737-609a95d8-e372-43ee-8ec7-8a56dbd4c921.mp4
+
+2. App configuration (check for 3 permissions granted):
+
+
+https://user-images.githubusercontent.com/3865131/207619186-fc5cff1d-ff17-46d0-a70b-306682989860.mp4
+
+If after performing steps A (for developers) and B the problem persists, please read the following troubleshooting case [Still not redirecting to the app after pressing the `Authorize` button](#still-not-redirecting-to-the-app-after-pressing-the-authorize-button)
 
 ### Pressing `Authorize` in iOS mobile doesn't redirect to the app.
 #### In the project target, “Signing & Capability” tab check that 'Associated Domains' is enabled with the right domain.
