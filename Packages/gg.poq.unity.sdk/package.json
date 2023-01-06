@@ -1,0 +1,17 @@
+{
+  "name": "gg.poq.unity.sdk",
+  "version": "3.0.2021",
+  "displayName": "Quarters Unity SDK",
+  "unity": "2021.4",
+  "description": "Quarters Unity SDK is a set of development tools with easily accessible API calls allowing developers to connect their games to Quarters ecosystem",
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "Basic sample containing Quarters user authentication. Pay and Reward functionality as well as Buying Quarters",
+      "path": "Samples/Sample"
+    }
+  ],
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.2"
+  }
+}

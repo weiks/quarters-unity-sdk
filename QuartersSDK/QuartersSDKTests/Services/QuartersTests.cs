@@ -32,7 +32,7 @@ namespace QuartersSDK.Services.Tests
                                                     .AddFilter<EventLogLoggerProvider>((Func<LogLevel, bool>)(level => level >= LogLevel.Information))
                                                 );
             logger = loggerFactory.CreateLogger<Quarters>();
-            client = new APIClient(logger);
+            client = new APIClient(null);
 
             // Mocks & fakes data
             ResponseData fakeSuccessResponseAuthorized = new ResponseData("{id: '01xXXXXXX', Balance: '200', access_token:'u_IK3YYS95r9jo5TCME9h2h2NI3wypR2A69U3-Q9', refresh_token:'1234-567', Scope:'mail'}", System.Net.HttpStatusCode.OK);
@@ -54,11 +54,20 @@ namespace QuartersSDK.Services.Tests
             mockQuarters.Setup(mk => mk.MakeTransaction(-10000, "SDK mock Test send too much")).Returns(fakeFailResponseTooMuchQuarters);
         }
 
+
+        [Test]
+        public void IsQuartersInstantiatingWithoutLogger()
+        {
+            PCKE pCKE = new PCKE();
+            Quarters q = new Quarters(client, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            Assert.IsTrue(!String.IsNullOrEmpty(q._api.BuyURL));
+        }
+
         [Test]
         public void HasQuartersAPIParams()
         {
             PCKE pCKE = new PCKE();
-            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+            Quarters q = new Quarters(client, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             Assert.IsTrue(!String.IsNullOrEmpty(q._api.BuyURL));
         }
 

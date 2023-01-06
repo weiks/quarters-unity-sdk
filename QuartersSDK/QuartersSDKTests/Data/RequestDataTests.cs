@@ -14,7 +14,6 @@ namespace QuartersSDK.Data.Tests
             RequestData request;
             var ex = Assert.Throws<ArgumentNullException>(() => request = new RequestData(grantType: "refresh_token",
                                                        clientId: String.Empty,
-                                                       clientSecret: "secret",
                                                        refreshToken: "",
                                                        codeVerifier: ""));
             Assert.That(ex.ParamName, Is.EqualTo("clientId"));
@@ -27,7 +26,6 @@ namespace QuartersSDK.Data.Tests
             RequestData request;
             var ex = Assert.Throws<ArgumentNullException>(() => request = new RequestData(grantType: "refresh_token",
                                                        clientId: "314",
-                                                       clientSecret: "",
                                                        refreshToken: "",
                                                        codeVerifier: ""));
             Assert.That(ex.ParamName, Is.EqualTo("clientSecret"));
@@ -39,7 +37,6 @@ namespace QuartersSDK.Data.Tests
         {
             RequestData request = new RequestData(grantType: EnumUtils.ToEnumString(GrantType.AUTHORIZATION_CODE),
                                                        clientId: "314",
-                                                       clientSecret: "secret",
                                                        refreshToken: "",
                                                        codeVerifier: "");
             Assert.That(request.GrantType, Is.EqualTo("authorization_code"));
@@ -51,7 +48,6 @@ namespace QuartersSDK.Data.Tests
         {
             RequestData request = new RequestData(grantType: EnumUtils.ToEnumString(GrantType.REFRESH_TOKEN),
                                                        clientId: "314",
-                                                       clientSecret: "secret",
                                                        refreshToken: "",
                                                        codeVerifier: "");
             Assert.That(request.GrantType, Is.EqualTo("refresh_token"));
