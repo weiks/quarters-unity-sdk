@@ -52,7 +52,7 @@ namespace UnityEditor.TestTools.TestRunner
                 }
             }
             EditorUtility.ClearProgressBar();
-            if (connectionResult == -1 && !this.m_oldApplicationIdentifier.Equals("com.UnityTestRunner.UnityTestRunner"))
+            if (connectionResult == -1)
                 throw new TestLaunchFailedException(
                     "Timed out trying to connect to the player. Player failed to launch or crashed soon after launching");
         }
