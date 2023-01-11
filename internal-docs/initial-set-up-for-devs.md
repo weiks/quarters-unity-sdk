@@ -1,5 +1,14 @@
 # Quarters Unity SDK
 
+## Unity supported versions
+
+- For Unity 2021.X and above use [release version 3.2.2021](https://github.com/weiks/poq-unity-package-manager/releases/tag/3.0.2021):
+    
+    The new version of Unity allows us to create a DLL to wapp all the necessary methods that the APP make to the SDK in order to encapsulate the behaviour and have a more clear point of entrance.
+- For Unity 2019.X and 2020.X use [release version 3.2.2019](https://github.com/weiks/poq-unity-package-manager/releases/tag/3.0.2019):
+
+    The oldest version of Unity make the calls to the API's directly without any middleman
+
 ## Getting Started
 
 ### Installation
