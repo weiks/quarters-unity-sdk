@@ -14,7 +14,7 @@
    image1
 4. Select `Android SDKs API Level` 29, 30 and 31. Then, click on **Apply Changes**.
 
-### Prerequisites
+### Starting the app locally in Unity
 
 1. Clone [quarters-unity-sdk](https://github.com/weiks/quarters-unity-sdk) repository preferably into `C:\desarrollo\weiks` path.
 2. Clone [poq-unity-package-manager](https://github.com/weiks/poq-unity-package-manager) into the same path.
@@ -26,5 +26,21 @@
 
 ### How to run it in an Android device locally
 
-1. Open `Visual Studio 2022`
-2. Open the solution
+1. Open `Unity Hub` and select `quarters-unity-sdk` project.
+2. Open `Visual Studio 2022`
+3. Click on **Open a project or solution** in the right menu
+4. Select `quarters-unity-sdk.sln` in your project folder (**_"..\quarters-unity-sdk\quarters-unity-sdk.sln"_**)
+5. Go to Tools -> Android -> Android Device Manager...
+   image3
+6. Start a device. If you do not have any device in the list, create a new one with the default properties but be sure that `Processor` option has the value **x68_64**
+7. Go back to Unity Hub and go to `Build Settings`: File -> Build Settings.
+8. Select **Android Platform** and then click on `Switch Platform` at the right bottom of the window
+9. Click on Player Settings and update the next properties:
+   a. In **Other Settings** set **Scripting Backend** with `IL2CPP` value
+   b. Update **Target Architectures** to only have tick the `x68-64 (Chrome OS)` option
+   c. In **Publishing Settings**, set a **Custom Keystore** browe an existing one that you can find it in `"..\quarters-unity-sdk\Keystore\user.keystore"`. Set `password` as the password value and then select `user` as an alias below and enter the same password again.
+   d. Be sure that **Custom Main Manifest** is checked on **Build** section and has `Assets\Plugins\Android\AndroidManifest.xml` value
+   e. Close the Player Settings window
+10. Refresh the aviabile devices and select the one that you have created a moment before.
+    image4
+11. `Build and Run`, save the APK wherever you want and the app will start on the Emulator Device that you have running.
