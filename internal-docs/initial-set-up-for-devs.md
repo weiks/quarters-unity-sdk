@@ -1,5 +1,10 @@
 # Quarters Unity SDK
 
+## Description
+This solution has two repositories that you need clone:
+- [quarters-unity-sdk](https://github.com/weiks/quarters-unity-sdk.git): it is the main project of the Unity solution. It cointains the `.net` soluction of **QuartersSDK** (You will read about it as `DLL`).
+- [poq-unity-package-manager](https://github.com/weiks/poq-unity-package-manager.git): the purpose of this project is to publish the different releases that will be created.
+
 ## Unity supported versions
 
 - For Unity 2021.X and above use [release version 3.2.2021](https://github.com/weiks/poq-unity-package-manager/releases/tag/3.0.2021):
