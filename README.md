@@ -56,51 +56,27 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
 ![image](https://user-images.githubusercontent.com/3865131/202551878-87c3af8c-618f-431a-b6e9-69dec428ab88.png)
 
 
-4. Press **Open App Dashboard** button. The web browser will open [URL to create new Quarters app](https://apps.pocketfulofquarters.com/apps/new). Press **Save** button after populating the form.
+4. Press **Open App Dashboard** button. The web browser will open [URL to create new Quarters app](https://poq.gg/new_app?edit=false). Press **Save** button after populating the form.
 
-![Screenshot 2022-05-31 at 9 44 27 am](https://user-images.githubusercontent.com/41578378/171151698-45a22b3d-134f-4894-8859-c4e125e99392.png)
+![image](https://user-images.githubusercontent.com/3865131/225713142-614be7b5-6835-4a41-a7c2-2c6c10bf0b10.png)
 
-6. Back in Unity `QuartersInit` component copy the values from app dashboard to the inpector tab of `QuartersInit` Component:
+
+5. Back in Unity `QuartersInit` component copy the values from app dashboard to the inpector tab of `QuartersInit` Component:
    - `APP_ID` -> `client_id` 
    - `APP_UNIQUE_IDENTIFIER` -> It needs to be `App URL` sub-domain (ex. in this case exampleapp as in the image below)  
    Please check the addiotional values you can set in the Unity inspector tab:
-   - `Environment` -> select `Production` if your app was registered in [production apps environment](https://apps.pocketfulofquarters.com/) otherwise select `Sandbox`. 
+   - `Environment` -> select `Production` if your app was registered in [production apps environment](https://www.poq.gg/) otherwise select `Sandbox`. 
    - `Default scope` -> select the 5 scopes (`Identity`, `Email`, `Transactions`, `Events` and `Wallet`).
    - `Currency config` -> set it in `QuartersCurrency` 
 
 ![image](https://user-images.githubusercontent.com/3865131/202552008-67e6bf71-9445-4d15-a0da-1cf8b30d7eb6.png)
 
 ### Setup
-For the best user experience, Quarters Unity SDK utilises domain association to link users back to the app after purchasing and authorisation. Quarters SDK manages browser to app linking automatically. To set up linking please follow the steps for the chosen platform
+In order to make the setup you will need to create your game following the steps in [PoQ docs "Creating APP"](https://github.com/weiks/poq-docs/blob/main/docs/unity-sdk-integration.md#1-creating-the-poq-app).
 
-#### iOS
-1. Open [your PoQ APPS](https://www.poq.gg/apps)
-2. Find your app and select iOS under the Auto Manage option
-3. Enter any valid string as your PoQ app's unique identifier if empty
-4. Enter Apple Team ID. It can be pulled from [Apple 
-account](https://developer.apple.com/account/#!/membership/)
-5. Enter your app bundle id. Example com.mycompany.mygame
-6. Press Submit
-7. Copy your PoQ app's unique identifier to the `QuartersInit` component `APP_UNIQUE_IDENTIFIER` field in Unity and press Save
 
-#### Android
-1. Open [your PoQ APPS](https://www.poq.gg/apps)
-2. Find your app and select Android under the Auto Manage option
-3. Enter any valid string as your PoQ app's unique identifier if empty
-4. Enter your app package name. Example com.mycompany.mygame
-5. You need to get SHA-256 certificate fingerprint, to do that just run the following command on your terminal (note the keytool comes with the Java SDK or included with Unity Android OpenJDK ex. `C:\Program Files\Unity\Hub\Editor\2021.3.2f1\Editor\Data\PlaybackEngines\AndroidPlayer\OpenJDK\jre\bin` in case of Unity 2021.3.2f1 editor)
+⚠️ Note: For the best user experience, Quarters Unity SDK utilises domain association to link users back to the app after purchasing and authorisation. Quarters SDK manages browser to app linking automatically. 
 
-```
-keytool -list -v -keystore mystorekeystore.keystore
-```
-Running this command should yield something similar to the following image:
-
-![3985997309-keystool](https://user-images.githubusercontent.com/41578378/171152564-6ac8e026-dd86-4c06-9c99-43ced71d7005.png)
-
-6. Press Submit
-7. If you haven't already copy your PoQ app's unique identifier to the Quarter's Init component `APP_UNIQUE_IDENTIFIER` field in Unity and press Save
-
-**That's it you are ready to use Quarters Unity SDK**
 
 ## Sample app
 Quarters Unity SDK contains a basic sample app presenting major SDK functionality like
@@ -336,17 +312,3 @@ If that is the case please follow this steps:
   <package id="System.Threading.Tasks.Extensions" version="4.5.4" />
 </packages>
 ```
-
-### After click Authorize button receive `Invalid redirect_uri`
-
-After tapping/clicking Authorize button we get:
-![image](https://user-images.githubusercontent.com/3865131/201421671-f48511d1-a8c5-4490-ba2f-3c240d98f3b6.png)
-
-If that is the case please check that the app URL that you registered in [PoQ Apps dashboard](https://apps.pocketfulofquarters.com/apps) it is exactly the same to the  parameter `redirect_uri` passed in the authorize link. If it is not the same change it:
-1. Go to [PoQ Apps dashboard](https://apps.pocketfulofquarters.com/apps) 
-
-2. Go to your picture profile and click your app
-![image](https://user-images.githubusercontent.com/3865131/201422726-3b4f0f45-878a-416c-8aeb-c3bb5f812f1c.png)
-
-3. Select `Edit` and search for the URL field put exactly the same in case it hash spaces or slashes remove them.
-![image](https://user-images.githubusercontent.com/3865131/201423102-436313b1-8ebe-4f50-9f5a-705331980b98.png)
