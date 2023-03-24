@@ -22,7 +22,7 @@
     - [Pressing `Authorize` in iOS mobile doesn't redirect to the app.](#pressing-authorize-in-ios-mobile-doesnt-redirect-to-the-app)
     - [Making a transaction (pay or receive) shows `Transaction error: Debit and credit address cannot be the same.`](#making-a-transaction-pay-or-receive-shows-transaction-error-debit-and-credit-address-cannot-be-the-same)
     - [Including QuartersSDK generates error while building](#including-quarterssdk-generates-error-while-building)
-    - [After click Authorize button receive `Invalid redirect_uri`](#after-click-authorize-button-receive-invalid-redirect-uri)
+    - [After click Authorize button receive `Invalid redirect_uri`](#after-click-authorize-button-receive-invalid-redirect_uri)
 
 ## Before you start
 In order to have a full integration with QuartersSDK you must follow this steps: 
@@ -63,7 +63,7 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
 
 5. Back in Unity `QuartersInit` component copy the values from app dashboard to the inpector tab of `QuartersInit` Component:
    - `APP_ID` -> `client_id` 
-   - `APP_UNIQUE_IDENTIFIER` -> It needs to be `App URL` sub-domain (ex. in this case exampleapp as in the image below). For more information about this field please read [`Invalid redirect_uri` troubleshooting section](after-click-authorize-button-receive-invalid-redirect_uri).  
+   - `APP_UNIQUE_IDENTIFIER` -> It needs to be `App URL` sub-domain (ex. in this case exampleapp as in the image below). For more information about this field please read [`Invalid redirect_uri` troubleshooting section](#after-click-authorize-button-receive-invalid-redirect_uri).  
    Please check the addiotional values you can set in the Unity inspector tab:
    - `Environment` -> select `Production` if your app was registered in [production apps environment](https://www.poq.gg/) otherwise select `Sandbox`. 
    - `Default scope` -> select the 5 scopes (`Identity`, `Email`, `Transactions`, `Events` and `Wallet`).
