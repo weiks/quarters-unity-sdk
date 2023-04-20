@@ -83,7 +83,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("-y2ipEnxTsyGRMjS-nOgA8LzFirWRNkg");
+            var res = q.GetRefreshToken("VSDMtLvoT9r7JBJtzQrw0YKxPZFA_iZo");
 
             Assert.IsTrue(res.IsSuccesful);
             Assert.IsTrue(res.ErrorResponse == null);
@@ -96,7 +96,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            q.GetRefreshToken("McgOEy_B0oTdl4KFBstVog8WTHl6SMU8");
+            q.GetRefreshToken("_hR2yywIDsGkkaHxGv90GAKOGkFbwrS8");
 
             var res = q.GetAccessToken();
 
@@ -139,7 +139,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("jX6lSKxYZ98BgMPFx326pLki0tAj537n");
+            var res = q.GetRefreshToken("wcVFAxNjUdFVXc2c3k-54zF6tT2YDxwb");
 
             var user = q.GetUserDetailsCall();
 
