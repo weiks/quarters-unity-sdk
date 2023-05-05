@@ -53,7 +53,7 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
 
 3. Add the following prefab to your first loaded scene `Packages/Quarters Unity SDK/Runtime/QuartersSDK/Prefabs/QuartersInit`
 
-![image](https://user-images.githubusercontent.com/3865131/202551878-87c3af8c-618f-431a-b6e9-69dec428ab88.png)
+![image](https://user-images.githubusercontent.com/3865131/236557458-c2d2cdae-b2e9-4c35-9c51-1ed23b8f046c.png)
 
 
 4. Press **Open App Dashboard** button. The web browser will open [URL to create new Quarters app](https://poq.gg/new_app?edit=false). Press **Save** button after populating the form.
@@ -63,7 +63,8 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
 
 5. Back in Unity `QuartersInit` component copy the values from app dashboard to the inpector tab of `QuartersInit` Component:
    - `APP_ID` -> `client_id` 
-   - `APP_UNIQUE_IDENTIFIER` -> It needs to be `App URL` sub-domain (ex. in this case exampleapp as in the image below). For more information about this field please read [`Invalid redirect_uri` troubleshooting section](#after-click-authorize-button-receive-invalid-redirect_uri).  
+   - `APP_UNIQUE_IDENTIFIER` -> It needs to be `App URL` sub-domain (ex. in this case exampleapp as in the image below). For more information about this field please read [`Invalid redirect_uri` troubleshooting section](#after-click-authorize-button-receive-invalid-redirect_uri).
+   - `Is IOS Safari Webview` -> It works only for iOS it will open a Webview browser (for auth or buy flow) and not the mobile default browser.
    Please check the addiotional values you can set in the Unity inspector tab:
    - `Environment` -> select `Production` if your app was registered in [production apps environment](https://www.poq.gg/) otherwise select `Sandbox`. 
    - `Default scope` -> select the 5 scopes (`Identity`, `Email`, `Transactions`, `Events` and `Wallet`).
