@@ -70,7 +70,8 @@ Also if you want you can join [`Pocketful Of Quarters` main discord server](http
    - `Default scope` -> select the 5 scopes (`Identity`, `Email`, `Transactions`, `Events` and `Wallet`).
    - `Currency config` -> set it in `QuartersCurrency` 
 
-![image](https://user-images.githubusercontent.com/3865131/202552008-67e6bf71-9445-4d15-a0da-1cf8b30d7eb6.png)
+![image](https://user-images.githubusercontent.com/3865131/236558084-27e4f696-c065-434c-b08d-3cee85e96f87.png)
+
 
 ### Setup
 In order to make the setup you will need to create your game following the steps in [PoQ docs "Creating APP"](https://github.com/weiks/poq-docs/blob/main/docs/unity-sdk-integration.md#1-creating-the-poq-app).
