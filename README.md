@@ -119,8 +119,8 @@ You will find the method to use and an example in [fully documented SDK calls do
 
 
 ### Making Transactions
-You can charge user Quarters as well as reward your user with quarters using unified Transaction API call.
-**A negative price takes Quarters from the user's account. Positive price value reward user account with Quarters**
+You can charge user Quarters using unified Transaction API call sending a **negative price will make possible to take Quarters from the user's account**.
+In case you want to reward your user with Quarters your game will have to be granted please **ask for permissions in our [Discord channel 💡┋api-and-integration](https://discord.com/channels/908772014859378708/910205059403509803)**. Once your game is granted you can use the transaction endpoint to send Quarters to your users sending a **positive price value reward user account with Quarters**. 
 
 Please go to the [SDK calls to API documentation](/README-Api.md#making-transactions) for method description and a code example.
 
