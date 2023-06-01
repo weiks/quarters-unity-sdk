@@ -139,7 +139,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("jX6lSKxYZ98BgMPFx326pLki0tAj537n");
+            var res = q.GetRefreshToken("SbEurq6DLIWJ8LUkZA2vEUlgqhGYxs7b");
 
             var user = q.GetUserDetailsCall();
 
@@ -157,7 +157,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("NtO18TMahRo-NEUdXhQMM7_yaaZFZ6UJ");
+            var res = q.GetRefreshToken("kU-IZokO8MHtJ8ynbJMPzLxJ_xp3vH2O");
             var idTransaction = q.MakeTransaction(10, "SDK Test receive").IdTransaction;
 
 
@@ -173,7 +173,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("zFkKrjyguPL6SeJYsWABSdCiXDuVHEEg");
+            var res = q.GetRefreshToken("_kha0ZSIYhJh6TuK97aFPmLkWnWkiOka");
             var idTransaction = q.MakeTransaction(-10, "SDK mock Test send").IdTransaction;
 
             Assert.IsTrue(res.IsSuccesful);

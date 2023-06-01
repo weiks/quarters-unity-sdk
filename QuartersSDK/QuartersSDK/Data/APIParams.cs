@@ -13,12 +13,13 @@ namespace QuartersSDK.Data
         public string USER_DETAILS_ENDPOINT { get; private set; }
         public string BALANCE_ENDPOINT { get; private set; }
         public string TRANSACTIONS_ENDPOINT { get; private set; }
+        public string V1_TRANSACTIONS_ENDPOINT { get; private set; }
 
         public string ApiURL { get { return $"{BASE_URL}{API_ENDPOINT}"; } }
         public string BuyURL { get { return $"{BASE_URL}{BUY_ENDPOINT}"; } }
         public string UserDetailsURL { get { return $"{ApiURL}{USER_DETAILS_ENDPOINT}"; } }
         public string BalanceURL { get { return $"{ApiURL}{BALANCE_ENDPOINT}"; } }
-        public string TransactionsURL { get { return $"{ApiURL}{TRANSACTIONS_ENDPOINT}"; } }
+        public string TransactionsURL { get { return $"{BASE_URL}{V1_TRANSACTIONS_ENDPOINT}"; } }
         public string ApiTokenURL { get { return $"{BASE_URL}/api/oauth2/token"; } }
         public string ApiAuthorizeURL { get { return $"{BASE_URL}/oauth2/authorize"; } }
 
@@ -36,6 +37,7 @@ namespace QuartersSDK.Data
             USER_DETAILS_ENDPOINT = confSection.GetSection("USER_DETAILS_ENDPOINT").Value;
             BALANCE_ENDPOINT = confSection.GetSection("BALANCE_ENDPOINT").Value;
             TRANSACTIONS_ENDPOINT = confSection.GetSection("TRANSACTIONS_ENDPOINT").Value;
+            V1_TRANSACTIONS_ENDPOINT = confSection.GetSection("V1_TRANSACTIONS_ENDPOINT").Value;
         }
 
         public APIParams(Dictionary<string, string> settings)
@@ -47,6 +49,7 @@ namespace QuartersSDK.Data
             USER_DETAILS_ENDPOINT = settings["USER_DETAILS_ENDPOINT"];
             BALANCE_ENDPOINT = settings["BALANCE_ENDPOINT"];
             TRANSACTIONS_ENDPOINT = settings["TRANSACTIONS_ENDPOINT"];
+            V1_TRANSACTIONS_ENDPOINT = settings["V1_TRANSACTIONS_ENDPOINT"];
         }
     }
 }
