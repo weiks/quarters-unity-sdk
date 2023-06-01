@@ -88,45 +88,6 @@ The player must click the **Authorize** button to allow Quarters transactions. A
 Debug message for if a player clicks *Cancel* and attempts to exchange Quarters
 
 
-### Making Transactions
-You can charge user Quarters as well as reward your user with quarters using unified Transaction API call.
-**A negative price takes Quarters from the user's account. Positive price value reward user account with Quarters**
-
-```
-public void ButtonTapped() {
-
-   long price = -10;
-
-   QuartersController.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
-   //Depending on your implementation maybe you would need to call `Transaction` method with an `StartCoroutine` 
-   //ex:  StartCoroutine(QuartersController.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
-   
-}
-
-private void OnTransferSuccessful() {
-  
-}
-
-private void OnTransferFailed(string error) {
-
-}
-```
-
-### Buying Quarters
-User can also purchase Quarters by using the credit card or other methods.
-
-**Please note that real money transactions are performed outside the application in the browser to adhere to Apple and Google's guidelines.**
-
-```
-QuartersController.Instance.BuyQuarters();
-```
-
-### Sign Out
-To sign out current Quarters users call
-```
-QuartersController.Instance.Deauthorize();
-```
-
 #### Please note that due to limitations of Unity Editor on Windows external browser is used to authorize user. Additional steps must be taken to authorize a player in the Unity Editor
 
 
@@ -143,7 +104,7 @@ The game will then finish the sign in process.
 
 ### Making Transactions
 
-You can charge user Quarters sending a **negative price value parameter (this will take Quarters from the user's account)** on this method:
+You can **charge users Quarters by sending a negative price value parameter**, which will deduct Quarters from the user's account, using this method:
 ``` 
 QuartersController.Instance.Transaction(long price, string description, OnTransferSuccessful, OnTransferFailed );
 ```
@@ -183,6 +144,7 @@ To sign out current Quarters users call
 ```
 QuartersController.Instance.Deauthorize();
 ```
+
 ## Player Information
 After a player has authorized your game to have access to their account information, you can use that data to keep track of their transactions during game play. These methods can be called after the player has signed into their Quarters account. 
 
