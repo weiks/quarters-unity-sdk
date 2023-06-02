@@ -110,7 +110,7 @@ QuartersController.Instance.Transaction(long price, string description, OnTransf
 ```
 In case you want to reward your user with Quarters your game will have to be granted please **ask for permissions in our [Discord channel 💡┋api-and-integration](https://discord.com/channels/908772014859378708/910205059403509803)**. Once your game is granted you can use the transaction endpoint to send Quarters to your users sending a **positive price value reward user account with Quarters**. 
 
-Have in mind that **a negative price parameter takes Quarters from the user's account and a positive value rewards user account with Quarters**
+Have in mind that **a positive value rewards user account with Quarters and negative price parameter takes Quarters from the user's account (if you asked the permissions)**
 
 | Parameter              | Required | Description                                                |
 | ---------------------- | -------- | ---------------------------------------------------------- |
@@ -121,7 +121,7 @@ Have in mind that **a negative price parameter takes Quarters from the user's ac
 
 ```
 public void ButtonTapped() {
-   long price = -10;
+   long price = 10;
    QuartersController.Instance.Transaction(price, "Example transaction", OnTransferSuccessful, OnTransferFailed );
 }
 private void OnTransferSuccessful() {
