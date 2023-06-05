@@ -275,13 +275,15 @@ namespace QuartersSDK.Services
 
             try
             {
+                if (coinsQuantity >= 0)
+                    throw new Exception("To debit quarters coinsQuantity must be a negative value. If you want to receive Quarters from a wallet contact us on Discord channel #api-and-integration.");
                 if (!_session.DoesHaveRefreshToken)
                     _logger.LogError("Missing refresh token");
 
                 _logger.LogInformation("Transaction url: " + _api.TransactionsURL);
 
                 Dictionary<string, object> postData = new Dictionary<string, object>();
-                postData.Add("creditUser", coinsQuantity);
+                postData.Add("amount", Math.Abs(coinsQuantity));
                 postData.Add("description", description);
                 var response = _apiClient.RequestPost(url: _api.TransactionsURL, token: _session.AccessToken, dic: postData);
                 if (!response.IsSuccesful)
@@ -298,7 +300,7 @@ namespace QuartersSDK.Services
             catch (Exception ex)
             {
                 _logger.LogError($"Error MakeTransaction: {ex.Message} | Stacktrace: {ex.StackTrace} | Desscription: {ex.InnerException}");
-                throw new Error(ex.Message, ex.InnerException.ToString());
+                throw new Error(ex.Message, ex.StackTrace);
             }
         }
 
