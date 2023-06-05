@@ -121,7 +121,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("a9FPo20equw7GTi40EiOHccKuNbGzgDD");
+            var res = q.GetRefreshToken("QNMWKEM62CQQNXPN3zGHNw99PFkCrMhb");
 
             var balance = q.GetAccountBalanceCall();
 
@@ -139,7 +139,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("jX6lSKxYZ98BgMPFx326pLki0tAj537n");
+            var res = q.GetRefreshToken("SbEurq6DLIWJ8LUkZA2vEUlgqhGYxs7b");
 
             var user = q.GetUserDetailsCall();
 
@@ -151,19 +151,24 @@ namespace QuartersSDK.Services.Tests
         }
 
         [Test()]
-        [Category("Success on receive quarters transaction (possitive ammount) request")]
-        public void IsReceiveTransactionTest()
+        [Category("Fail on receive quarters transaction (possitive ammount) request")]
+        public void IsFailReceiveTransactionTest()
         {
-            Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
-            string url = q.GetAuthorizeUrl();
-            //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("NtO18TMahRo-NEUdXhQMM7_yaaZFZ6UJ");
-            var idTransaction = q.MakeTransaction(10, "SDK Test receive").IdTransaction;
+            string idTransaction = "";
+            try
+            {
+                Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+                string url = q.GetAuthorizeUrl();
+                //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
+                var res = q.GetRefreshToken("ayQ44PsJzq3CxqjCpF7WDZKkiZK5UtW4");
+                idTransaction = q.MakeTransaction(10, "SDK Test receive").IdTransaction;
+            }
+            catch (Error err)
+            {
+                Assert.IsTrue(err.ErrorMessage.Contains("To debit quarters coinsQuantity must be a negative value"));
+            }
 
-
-            Assert.IsTrue(res.IsSuccesful);
-            Assert.IsTrue(res.ErrorResponse == null);
-            Assert.IsFalse(string.IsNullOrEmpty(idTransaction));
+            Assert.IsTrue(string.IsNullOrEmpty(idTransaction));
         }
 
         [Test()]
@@ -173,7 +178,7 @@ namespace QuartersSDK.Services.Tests
             Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
             string url = q.GetAuthorizeUrl();
             //IMPORTANT: PASTE URL (url) ON INTERNET EXPLORER => Authorize => PASTE CODE AS PARAMETER HERE
-            var res = q.GetRefreshToken("zFkKrjyguPL6SeJYsWABSdCiXDuVHEEg");
+            var res = q.GetRefreshToken("9q_1N-JbEIiF84csSGtUJ3MIK5Jmd6pJ");
             var idTransaction = q.MakeTransaction(-10, "SDK mock Test send").IdTransaction;
 
             Assert.IsTrue(res.IsSuccesful);

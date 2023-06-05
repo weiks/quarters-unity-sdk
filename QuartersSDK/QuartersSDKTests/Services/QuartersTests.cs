@@ -149,20 +149,27 @@ namespace QuartersSDK.Services.Tests
         }
 
         [Test()]
-        [Category("Success on receive quarters transaction (possitive ammount) request")]
-        public void IsReceiveTransactionTest()
+        [Category("Fail on receive quarters transaction (possitive ammount) request")]
+        public void IsFailReceiveTransactionTest()
         {
-            string url = mockQuarters.Object.GetAuthorizeUrl();
-            var res = mockQuarters.Object.GetRefreshToken("mockCode");
-            var idTransaction = mockQuarters.Object.MakeTransaction(10, "SDK mock Test receive").IdTransaction;
+            string idTransaction = "";
+            try
+            {
+                Quarters q = new Quarters(client, logger, pcke.CodeChallenge(), pcke.CodeVerifier, "");
+                string url = q.GetAuthorizeUrl();
+                var res = q.GetRefreshToken("mockCode");
+                idTransaction = q.MakeTransaction(10, "SDK Test receive").IdTransaction;
+            }
+            catch (Error err)
+            {
+                Assert.IsTrue(err.ErrorMessage.Contains("To debit quarters coinsQuantity must be a negative value"));
+            }
 
-            Assert.IsTrue(res.IsSuccesful);
-            Assert.IsTrue(res.ErrorResponse == null);
-            Assert.IsFalse(string.IsNullOrEmpty(idTransaction));
+            Assert.IsTrue(string.IsNullOrEmpty(idTransaction));
         }
 
         [Test()]
-        [Category("Success on send quarters transaction (negative ammount) request")]
+        [Category("Success on send quarters transaction request")]
         public void IsSendTransactionTest()
         {
             string url = mockQuarters.Object.GetAuthorizeUrl();
@@ -175,7 +182,7 @@ namespace QuartersSDK.Services.Tests
         }
 
         [Test()]
-        [Category("Success on send too much quarters transaction (negative ammount) request")]
+        [Category("Success on send too much quarters transaction request")]
         public void IsSendTooMuchTransactionTest()
         {
             string url = mockQuarters.Object.GetAuthorizeUrl();

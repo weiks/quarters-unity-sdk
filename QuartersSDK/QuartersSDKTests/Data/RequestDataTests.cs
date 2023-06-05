@@ -20,18 +20,6 @@ namespace QuartersSDK.Data.Tests
         }
 
         [Test()]
-        [Category("Error on No ClientSecret on RequestData")]
-        public void IsErrorNoClientSecretRequestDataTest()
-        {
-            RequestData request;
-            var ex = Assert.Throws<ArgumentNullException>(() => request = new RequestData(grantType: "refresh_token",
-                                                       clientId: "314",
-                                                       refreshToken: "",
-                                                       codeVerifier: ""));
-            Assert.That(ex.ParamName, Is.EqualTo("clientSecret"));
-        }
-
-        [Test()]
         [Category("Success Authorization RequestData")]
         public void IsSuccessAuthorizationRequestDataTest()
         {
